@@ -2,7 +2,6 @@ from numpy.linalg import det, norm, inv
 from numpy import dot, cross, ceil, cos, sin
 from pymatgen.core.structure import Structure
 import numpy as np
-import sys
 from .cellcalc import DSCcalc, get_primitive_hkl, get_right_hand, get_pri_vec_inplane
 import os
 
@@ -75,8 +74,7 @@ def cross_plane(lattice, n, lim, orthogonal, tol):
         try:
             normal_v = ltc_p[np.where(abs(dot_list - 1) < tol)[0]][0]
         except:
-            print('failed to find a vector cross the plane. try larger lim or smaller tol or use non-orthogonal cell')
-            sys.exit()
+            raise RuntimeError('failed to find a vector cross the plane. try larger lim or smaller tol or use non-orthogonal cell')
     return normal_v
 
 def get_sites_elements(structure):

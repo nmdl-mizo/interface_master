@@ -1,7 +1,6 @@
 from numpy.linalg import norm, inv
 from numpy import dot, cross, square
 import numpy as np
-import sys
 
 def dia_sym_mtx(U):
     #return the second-diagonal symmetry transformed matrix of U:
@@ -29,8 +28,7 @@ def find_integer_vectors(v,sigma):
         L = int(np.round(L/reduce))
         return now, L
     else:
-        #print('error: failed to find the rational vector of ' + str(v) + '\n within lcd = ' + str(sigma))
-        sys.exit()
+        raise RuntimeError('failed to find the rational vector of ' + str(v) + '\n within lcd = ' + str(sigma))
 
 def find_integer_vectors_nn(v,sigma):
     #A function find the coefficients N so that Nv contains only, ignore gcd
@@ -93,8 +91,7 @@ def solve_DSC_equations(u,v,w,L,B):
                 break
         count += 1
     if not found:
-        print('failed to find integer solutions, something strange happens...')
-        sys.exit()
+        raise RuntimeError('failed to find integer solutions, something strange happens...')
     #DSC basis
     D1 = 1 / g_lambda * B[:,0]
     D2 = alpha / (g_lambda * g_miu) * B[:,0] + 1 / g_miu * B[:,1]
