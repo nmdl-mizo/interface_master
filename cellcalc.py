@@ -67,7 +67,6 @@ def solve_DSC_equations(u,v,w,L,B):
     g_lambda = int(round(g_lambda))
     g_miu = int(round(g_miu))
     #find integer solutions
-    t = (w * g_v) / L
 
     # 0=<gama<g_v
     gamas = np.arange(0, g_v)
@@ -334,7 +333,7 @@ class DSCcalc:
                 #print('sigma ' + str(L * M * N))
                 DSC = Gi
         DSC = get_right_hand(DSC)
-        if to_LLL == True:
+        if to_LLL:
             self.DSC = LLL(DSC)
         else:
             self.DSC = DSC

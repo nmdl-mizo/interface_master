@@ -65,15 +65,15 @@ def cross_plane(lattice, n, lim, orthogonal, tol):
     z = x
     indice = (np.stack(np.meshgrid(x, y, z)).T).reshape(len(x) ** 3, 3)
     indice_0 = indice[np.where(np.sum(abs(indice), axis=1) != 0)[0]]
-    indice_0 = indice_0[np.where(np.gcd.reduce(indice_0, axis=1) == 1)[0]] 
+    indice_0 = indice_0[np.where(np.gcd.reduce(indice_0, axis=1) == 1)[0]]
     ltc_p = dot(indice_0, lattice.T)
     ltc_p = ltc_p[np.argsort(norm(ltc_p, axis=1))]
     dot_list = get_ang_list(ltc_p, n)
-    if orthogonal == False:
+    if not orthogonal:
         normal_v = ltc_p[dot_list >= 0.75][0]
     else:
         try:
-            normal_v = ltc_p[np.where( abs(dot_list - 1) < tol )[0]][0]
+            normal_v = ltc_p[np.where(abs(dot_list - 1) < tol)[0]][0]
         except:
             print('failed to find a vector cross the plane. try larger lim or smaller tol or use non-orthogonal cell')
             sys.exit()
@@ -167,7 +167,6 @@ def cell_expands(lattice, atoms, elements, xyz):
     y_shifts = np.arange(dimY)
     z_shifts = np.arange(dimZ)
 
-    dim_array = np.array([dimX,dimY,dimZ])
     g1_shifts = np.array(np.meshgrid(x_shifts, y_shifts, z_shifts)).T.reshape(-1, 3)
     atoms_expand = atoms.repeat(len(g1_shifts), axis=0) + np.tile(g1_shifts, (len(atoms), 1))
     elements = elements.repeat(len(g1_shifts))
@@ -203,7 +202,6 @@ def get_array_bounds(U):
 
     min3 = np.round(min(Points[:,2]-1),0)
     max3 = np.round(max(Points[:,2]+1),0)
-    a = np.array([[min1,max1], [min2,max2], [min3,max3]])
 
     x = np.arange(min1 - 2, max1 + 2, 1)
     y = np.arange(min2 - 2, max2 + 2, 1)
@@ -212,7 +210,7 @@ def get_array_bounds(U):
     indice = (np.stack(np.meshgrid(x, y, z)).T).reshape(len(x) * len(y) * len(z), 3)
     return indice
 
-def super_cell(U ,lattice, Atoms, elements):
+def super_cell(U, lattice, Atoms, elements):
     """
     make supercell
     argument:
@@ -338,15 +336,12 @@ def print_near_axis(dv, lattice_1, lattice_2, lim=5):
     x = np.arange(-lim, lim, 1)
     y = x
     z = x
-    tol = 1e-10
     indice = (np.stack(np.meshgrid(x, y, z)).T).reshape(len(x) ** 3, 3)
     indice_0 = indice[np.where(np.sum(abs(indice), axis=1) != 0)[0]]
     num = len(indice_0)
     ltc_p_1 = dot(indice_0, lattice_1.T)
     ltc_p_2 = dot(indice_0, lattice_2.T)
 
-    v_index_1 = np.arange(num).repeat(num)
-    v_index_2 = np.tile(np.arange(num), num)
     ltc_p_1_rep = ltc_p_1.repeat(num, axis = 0)
     ltc_p_2_rep = np.tile(ltc_p_2, (num,1))
 
@@ -432,7 +427,6 @@ class core:
         n = ceil(theta_range/dtheta)
         dtheta = theta_range / n / 180 * np.pi
         x = np.arange(n)
-        Ns = np.arange(1, self.sgm2 + 1)
         found = None
         a1 = self.lattice_1.copy()
         a2_0 = self.lattice_2.copy()
@@ -449,7 +443,6 @@ class core:
             file.write('theta = ' + str(theta / np.pi * 180) + '\n')
             file.write('    -----for N-----\n')
             while N <= self.sgm2:
-                tol = 1e-10
                 Uij, N = rational_mtx(U,N)
                 U_p = 1 / N * Uij
                 #print("du'max = " + str(np.max(abs(U_p - U))))
@@ -477,7 +470,6 @@ class core:
                             file.write('--------------------------------\n')
                             file.write('Congrates, we found an appx CSL!\n')
                             sigma1 = int(abs(np.round(det(calc.U1))))
-                            sigma2 = int(abs(np.round(det(calc.U2))))
                             self.D = D
                             self.U1 = np.array(np.round(calc.U1),dtype = int)
                             self.U2 = np.array(np.round(calc.U2),dtype = int)
