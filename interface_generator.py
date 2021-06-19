@@ -5,7 +5,7 @@ from pymatgen.io.cif import CifWriter
 from pymatgen.io.vasp.inputs import Poscar
 import numpy as np
 import sys
-from cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_hand, find_integer_vectors, get_pri_vec_inplane
+from .cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_hand, find_integer_vectors, get_pri_vec_inplane
 import os
 
 def rot(a, Theta):
