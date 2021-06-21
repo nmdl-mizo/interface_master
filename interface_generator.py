@@ -6,7 +6,14 @@ from .cellcalc import DSCcalc, get_primitive_hkl, get_right_hand, get_pri_vec_in
 import os
 
 def rot(a, Theta):
-    #produces a rotation matrix.
+    """
+    produce a rotation matrix
+    arguments:
+    a --- rotation axis
+    Theta --- rotation angle
+    return:
+    a rotation matrix
+    """
     c = float(cos(Theta))
     s = float(sin(Theta))
     a = a / norm(a)
@@ -24,7 +31,8 @@ def rational_mtx(M, N):
     arguments:
     M --- original matrix
     N --- denominator
-    return --- a rational matrix
+    return:
+    a rational matrix
     """
     B = np.eye(3)
     for i in range(3):
@@ -40,13 +48,13 @@ def three_dot(M1, M2, M3):
 
 def ang(v1, v2):
     """
-    compute the cos of angle
+    compute the cos of angle between v1 & v2
     """
     return abs(dot(v1, v2)/norm(v1)/norm(v2))
 
 def get_ang_list(m1, n):
     """
-    compute a list of ang cos between one arrays of vecor and one vector
+    compute a list of ang cos between one list of vecor and one vector
     """
     return 1 / norm(n) * dot(m1, n) / norm(m1, axis = 1)
 
@@ -58,6 +66,8 @@ def cross_plane(lattice, n, lim, orthogonal, tol):
     n --- a normal vector
     lim --- control how many vectors to be generated
     tol --- tolerance judging orthogonal
+    return:
+    a primitve vector normal to the plane
     """
     x = np.arange(-lim, lim, 1)
     y = x
@@ -80,11 +90,14 @@ def cross_plane(lattice, n, lim, orthogonal, tol):
 def get_sites_elements(structure):
     """
     get the coordinates of atoms and the elements
-    argument:
+    arguments:
     structure --- pymatgen structure class
     return:
     atoms --- atom coordinates
     elements --- list of element name of the atoms
+    return:
+    atoms --- fractional coordinates of atoms in the primitive cell
+    elements --- list of element names of the atom
     """
     atoms = np.array([0, 0, 0])
     elements = []
@@ -96,7 +109,7 @@ def get_sites_elements(structure):
 
 def POSCAR_to_cif(Poscar_name, Cif_name):
     """
-    get the cif file for the structure in a POSCAR file
+    generate a cif file for the structure in a POSCAR file
     """
     structure = Structure.from_file(Poscar_name)
     structure.to(filename=Cif_name)
@@ -104,10 +117,10 @@ def POSCAR_to_cif(Poscar_name, Cif_name):
 
 def write_POSCAR(lattice, atoms, elements, filename = 'POSCAR'):
     """
-    write Poscar file
+    write Poscar file of a supercell
     argument:
     lattice --- lattice matrix
-    atoms --- atoms coordinates
+    atoms --- fractional atoms coordinates
     elements --- list of element name of the atoms
     """
     element_species = np.unique(elements)
@@ -148,8 +161,8 @@ def write_POSCAR(lattice, atoms, elements, filename = 'POSCAR'):
 
 def cell_expands(lattice, atoms, elements, xyz):
     """
-    expand certain lattice
-    argument:
+    expand certain supercell
+    arguments:
     lattice --- lattice matrix
     atoms --- list of atom fractional coordinates
     elements --- list of element name of the atoms
@@ -175,10 +188,12 @@ def cell_expands(lattice, atoms, elements, xyz):
 
 def get_array_bounds(U):
     """
-    get the maximum & minimum number in the three directions of a matrix,
-    and generate three arrays of indices
+    get the meshgrid formed by three sets of lower & upper bounds.
+    the bounds cooresponds to the 8 vertices of the cell consisting of the three column vectors of a matrix
     argument:
-    U --- matrix of linear combination making super cell
+    U --- integer matrix
+    return:
+    indice --- meshgrid made by the lower and upper bounds of the indices
     """
     Mo = U.copy()
     # get the coordinates of 8 vertices
@@ -242,7 +257,7 @@ def super_cell(U, lattice, Atoms, elements):
 
 def shift_terminate(lattice, dp, atoms):
     """
-    apply RBT along certain lattice vector to change the terminating planes
+    apply RBT along certain lattice vector to change the terminating planes of a unit cell
     argument:
     lattice --- lattice matrix
     dp --- RBT along the vector cross the plane
@@ -263,11 +278,13 @@ def excess_volume(lattice_1, lattice_bi, atoms_1, atoms_2, dx):
     dx --- length of expands normal to the interface with the same units as lattice para
     """
     n = cross(lattice_1[:,1],lattice_1[:,2])
-    normal_shift = dx / ang(lattice_1[:,0], n) / norm(lattice_1[:,0])
-    lattice_bi[:,0] = (2 * normal_shift + 1) * lattice_bi[:,0]
-    atoms_1[:,0] = 1 / (2 * normal_shift + 1) * atoms_1[:,0]
-    atoms_2[:,0] = 1 / (2 * normal_shift + 1) * atoms_2[:,0]
-    atoms_2[:,0] = atoms_2[:,0] + normal_shift * atoms_2[:,0]
+    normal_shift = dx / ang(lattice_1[:,0], n) / norm(lattice_bi[:,0].copy())
+    normal_shift_cart = normal_shift * lattice_bi[:,0]
+    lattice_bi[:,0] = (normal_shift + 1) * lattice_bi[:,0]
+    atoms_1[:,0] = 1 / (normal_shift + 1) * atoms_1[:,0]
+    atoms_2 = dot(lattice_bi, atoms_2.T).T
+    atoms_2 = atoms_2 + normal_shift_cart
+    atoms_2 = dot(inv(lattice_bi), atoms_2.T).T
 
 def surface_vacuum(lattice_1, lattice_bi, atoms_bi, vx):
     """
@@ -285,7 +302,7 @@ def surface_vacuum(lattice_1, lattice_bi, atoms_bi, vx):
 
 def unit_cell_axis(axis):
     """
-    get an unit orthogonal cell specified one vector axis
+    get an unit orthogonal cell with the x-axis collinear with certain axis
     """
     v1 = axis / norm(axis)
     v2 = np.array([0,0,0],dtype = float)
@@ -360,6 +377,34 @@ def print_near_axis(dv, lattice_1, lattice_2, lim=5):
         norm_2 = norm(close_vecs_2[i])
         print(e1, e2, dv, norm_1, norm_2)
 
+def get_height(lattice):
+    """
+    get the distance of the two surfaces (crossing the first vector) of a cell
+    """
+    n = cross(lattice[:,1], lattice[:,2])
+    height = dot(lattice[:,0], n) / norm(n)
+    return height
+
+def get_plane_vectors(lattice, n):
+    """
+    a function get the two vectors normal to a vector
+    arguments:
+    lattice - lattice matrix
+    n - a vector
+    return - B two plane vectors
+    """
+    tol = 1e-8
+    B = np.eye(3,2)
+    count = 0
+    for i in range(3):
+        if abs(dot(lattice[:,i], n)) < tol:
+            B[:,count] = lattice[:,i]
+            count += 1
+    if count != 2:
+        print('error: the CSL does not include two vectors in the interface')
+        sys.exit()
+    return B
+
 class core:
     def __init__(self, file_1, file_2):
         self.afile_1 = file_1 # cif file name of lattice 1
@@ -394,6 +439,8 @@ class core:
         self.name = str
         self.dd = float
         self.orientation = np.eye(3) # initial disorientation
+        self.a1 = np.eye(3)
+        self.a2_0 = np.eye(3)
         #get the atoms in the primitive cell
         self.atoms_1, self.elements_1 = get_sites_elements(self.structure_1)
         self.atoms_2, self.elements_2 = get_sites_elements(self.structure_2)
@@ -410,7 +457,8 @@ class core:
         self.sgm2 = sgm2
         self.dd = dd
 
-    def search_one_position(self, axis, theta, theta_range, dtheta):
+
+    def search_one_position(self, axis, theta, theta_range, dtheta, two_D = False):
         """
         main loop finding the appx CSL
         arguments:
@@ -420,14 +468,34 @@ class core:
         dtheta -- step varying theta, in degree
         """
         axis = dot(self.lattice_1, axis)
+        print(axis)
         file = open('log.one_position','w')
         theta = theta / 180 * np.pi
         n = ceil(theta_range/dtheta)
         dtheta = theta_range / n / 180 * np.pi
         x = np.arange(n)
         found = None
-        a1 = self.lattice_1.copy()
-        a2_0 = self.lattice_2.copy()
+
+        if two_D == False:
+            a1 = self.lattice_1.copy()
+            a2_0 = self.lattice_2.copy()
+
+        else:
+            #find the two primitive plane bases
+            #miller indices
+            hkl_1 = MID(self.lattice_1, axis)
+            hkl_2 = MID(dot(self.orientation, self.lattice_2), axis)
+            #plane bases
+            plane_B_1 = get_pri_vec_inplane(hkl_1, self.lattice_1)
+            plane_B_2 = get_pri_vec_inplane(hkl_2, dot(self.orientation, self.lattice_2))
+            v_3 = cross(plane_B_1[:,0], plane_B_1[:,1])
+            a1 = np.column_stack((plane_B_1, v_3))
+            a2_0 = np.column_stack((plane_B_2, v_3))
+            self.a1 = a1.copy()
+            self.a2 = a2_0.copy()
+            #a2_0 back to the initial orientation
+            a2_0 = dot(inv(self.orientation), a2_0)
+            self.a2_0 = a2_0.copy()
         # rotation loop
         file.write('---Searching starts---\n')
         file.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
@@ -476,7 +544,10 @@ class core:
                             self.R = R
                             self.theta = theta
                             self.axis = axis
+
                             self.cell_calc = calc
+                            if two_D == True:
+                                self.CNID = calc.compute_CNID([0,0,1])
 
                             file.write('U1 = \n' + \
                                        str(self.U1) + '; sigma_1 = ' + \
@@ -517,7 +588,7 @@ class core:
                   to the log file generated; or try another orientation.')
 
     def get_bicrystal(self, dydz = np.array([0.0,0.0,0.0]), dx = 0, dp1 = 0, dp2 = 0, \
-                      xyz = [1,1,1], vx = 0, filename = 'POSCAR'):
+                      xyz = [1,1,1], vx = 0, filename = 'POSCAR', two_D = 'False'):
         """
         generate a cif file for the bicrystal structure
         argument:
@@ -526,6 +597,7 @@ class core:
         dp1 --- termination of slab 1
         dp2 --- termination of slab 2
         xyz --- expansion
+        two_D --- whether a two CSL
         """
         #get the atoms in the primitive cell
         lattice_1, atoms_1, elements_1 = self.lattice_1.copy(), self.atoms_1.copy(), self.elements_1.copy()
@@ -565,9 +637,23 @@ class core:
 
         #combine the two lattices and translate atoms
         lattice_bi = lattice_1.copy()
-        lattice_bi[:,0] = 2 * lattice_bi[:,0]
-        atoms_1[:,0] = atoms_1[:,0] / 2
-        atoms_2[:,0] = (atoms_2[:,0] + 1) / 2
+
+        if two_D == True:
+            height_1 = get_height(lattice_1)
+            height_2 = get_height(lattice_2)
+            lattice_bi[:,0] = lattice_bi[:,0] * (1 + height_2 / height_1)
+            #convert to cartesian
+            atoms_1 = dot(lattice_1, atoms_1.T).T
+            atoms_2 = dot(lattice_2, atoms_2.T).T
+            #translate
+            atoms_2 = atoms_2 + lattice_1[:,0]
+            #back to the fractional coordinates
+            atoms_1 = dot(inv(lattice_bi), atoms_1.T).T
+            atoms_2 = dot(inv(lattice_bi), atoms_2.T).T
+        else:
+            lattice_bi[:,0] = 2 * lattice_bi[:,0]
+            atoms_1[:,0] = atoms_1[:,0] / 2
+            atoms_2[:,0] = (atoms_2[:,0] + 1) / 2
 
         #excess volume
         if dx != 0:
@@ -648,3 +734,61 @@ class core:
         print(self.bicrystal_U1)
         print('cell 2:')
         print(self.bicrystal_U1)
+
+    def compute_bicrystal(self, hkl, lim = 20, orthogonal = False, tol = 1e-10):
+        """
+        compute the transformation to obtain the supercell of the two slabs forming a interface
+        argument:
+        hkl --- miller indices of the plane expressed in lattice_1
+        lim --- the limit searching for a CSL vector cross the plane
+        orthogonal --- whether to obtain a monoclinic supercell
+        tol --- tolerance judging whether orthogonal
+        """
+        hkl_c = get_primitive_hkl(hkl, self.lattice_1, self.CSL) # miller indices of the plane in CSL
+        hkl_c = np.array(hkl_c)
+        plane_B = get_pri_vec_inplane(hkl_c, self.CSL) # plane bases of the CSL lattice plane
+        plane_n = cross(plane_B[:,0], plane_B[:,1]) # plane normal
+        v3 = cross_plane(self.CSL, plane_n, lim, orthogonal, tol) # a CSL basic vector cross the plane
+        supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
+        supercell = get_right_hand(supercell) # check right-handed
+        self.bicrystal_U1 = np.array(np.round(dot(inv(self.lattice_1), supercell),8),dtype = int)
+        self.bicrystal_U2 = np.array(np.round(dot(inv(self.lattice_2_TD), supercell),8),dtype = int)
+        self.cell_calc.compute_CNID(hkl)
+        CNID = self.cell_calc.CNID
+        self.CNID = dot(self.lattice_1, CNID)
+        print('cell 1:')
+        print(self.bicrystal_U1)
+        print('cell 2:')
+        print(self.bicrystal_U1)
+
+    def compute_bicrystal_two_D(self, lim = 20, orthogonal = False, tol = 1e-10):
+        """
+        compute the transformation to obtain the supercell of the two slabs forming a interface (only two_D periodicity)
+        argument:
+        lim --- the limit searching for a CSL vector cross the plane
+        orthogonal --- whether to obtain a monoclinic supercell
+        tol --- tolerance judging whether orthogonal
+        """
+        #the two slabs with auxilary vector
+        slab_1 = dot(self.a1, self.U1)
+        slab_2 = dot(three_dot(self.R, self.D, self.a2_0), self.U2)
+        #the transformed lattice_2
+        a2 = three_dot(self.R, self.D, self.lattice_2)
+
+        #two of the three vectors other than the auxilary vector
+        B1 = get_plane_vectors(slab_1, self.axis)
+        B2 = get_plane_vectors(slab_2, self.axis)
+
+        #the third vector
+        v3_1 = cross_plane(self.lattice_1, self.axis, lim, orthogonal, tol)
+        v3_2 = cross_plane(a2, self.axis, lim, orthogonal, tol)
+        if dot(v3_1, v3_2) < 0:
+            v3_2 = - v3_2
+
+        #unit slabs
+        cell_1 = np.column_stack((v3_1, B1))
+        cell_2 = np.column_stack((v3_2, B2))
+
+        #supercell index
+        self.bicrystal_U1 = dot(inv(self.lattice_1), cell_1)
+        self.bicrystal_U2 = dot(inv(a2), cell_2)

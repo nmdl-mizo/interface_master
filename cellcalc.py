@@ -191,7 +191,7 @@ def MID(lattice, n):
             Pc1 = lattice[:,i]
             break
     hkl = get_indices_from_n_Pc1(n, lattice, Pc1)
-    hkl = find_integer_vectors_nn(hkl,100)
+    hkl = find_integer_vectors(hkl,10000)[0]
     return hkl
 
 def ext_euclid(a, b):
