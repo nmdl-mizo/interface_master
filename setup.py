@@ -1,10 +1,9 @@
 import setuptools
 
 setuptools.setup(
-    name="interface_master",
+    name="interfacemaster",
     version="1.1.1",
     install_requires=[
-        "numpy",
         "pymatgen",
     ],
     author="Yaoshu Xie",
