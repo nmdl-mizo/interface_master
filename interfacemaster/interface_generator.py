@@ -4,7 +4,6 @@ from pymatgen.core.structure import Structure
 from pymatgen.io.cif import CifWriter
 from pymatgen.io.vasp.inputs import Poscar
 import numpy as np
-import sys
 from cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_hand, find_integer_vectors, get_pri_vec_inplane
 import os
 import matplotlib.pyplot as plt
@@ -88,8 +87,7 @@ def cross_plane(lattice, n, lim, orthogonal, tol):
         try:
             normal_v = ltc_p[np.where(abs(dot_list - 1) < tol)[0]][0]
         except:
-            print('failed to find a vector cross the plane. try larger lim or smaller tol or use non-orthogonal cell')
-            sys.exit()
+            raise RuntimeError('failed to find a vector cross the plane. try larger lim or smaller tol or use non-orthogonal cell')
     return normal_v
 
 def get_sites_elements(structure):
@@ -414,8 +412,7 @@ def get_plane_vectors(lattice, n):
             B[:,count] = lattice[:,i]
             count += 1
     if count != 2:
-        print('error: the CSL does not include two vectors in the interface')
-        sys.exit()
+        raise RuntimeError('error: the CSL does not include two vectors in the interface')
     return B
 
 def reciprocal_lattice(B):
@@ -1026,8 +1023,7 @@ class core:
         #expansion
         if not (np.all(xyz_1 == 1) and np.all(xyz_2 == 1)):
             if not np.all([xyz_1[1], xyz_1[2]] == [xyz_2[1], xyz_2[2]]):
-                print('error: the two slabs must expand to the same dimension in the interface plane')
-                sys.exit()
+                raise RuntimeError('error: the two slabs must expand to the same dimension in the interface plane')
             lattice_1, atoms_1, elements_1 = cell_expands(lattice_1, atoms_1, \
                                                           elements_1, xyz_1)
             lattice_2, atoms_2, elements_2 = cell_expands(lattice_2, atoms_2, \
