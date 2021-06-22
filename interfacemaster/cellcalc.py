@@ -1,5 +1,5 @@
 from numpy.linalg import det, norm, inv
-from numpy import dot, cross, square, ceil, cos, sin
+from numpy import dot, cross, ceil, cos, sin
 import numpy as np
 import sys
 
