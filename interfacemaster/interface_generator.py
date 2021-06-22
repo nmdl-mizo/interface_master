@@ -1,5 +1,5 @@
 from numpy.linalg import det, norm, inv
-from numpy import dot, cross, square, ceil, cos, sin
+from numpy import dot, cross, ceil, cos, sin
 from pymatgen.core.structure import Structure
 from pymatgen.io.cif import CifWriter
 from pymatgen.io.vasp.inputs import Poscar
@@ -78,7 +78,7 @@ def cross_plane(lattice, n, lim, orthogonal, tol):
     z = x
     indice = (np.stack(np.meshgrid(x, y, z)).T).reshape(len(x) ** 3, 3)
     indice_0 = indice[np.where(np.sum(abs(indice), axis=1) != 0)[0]]
-    indice_0 = indice_0[np.where(np.gcd.reduce(indice_0, axis=1) == 1)[0]] 
+    indice_0 = indice_0[np.where(np.gcd.reduce(indice_0, axis=1) == 1)[0]]
     ltc_p = dot(indice_0, lattice.T)
     ltc_p = ltc_p[np.argsort(norm(ltc_p, axis=1))]
     dot_list = get_ang_list(ltc_p, n)
@@ -86,7 +86,7 @@ def cross_plane(lattice, n, lim, orthogonal, tol):
         normal_v = ltc_p[dot_list >= 0.75][0]
     else:
         try:
-            normal_v = ltc_p[np.where( abs(dot_list - 1) < tol )[0]][0]
+            normal_v = ltc_p[np.where(abs(dot_list - 1) < tol)[0]][0]
         except:
             print('failed to find a vector cross the plane. try larger lim or smaller tol or use non-orthogonal cell')
             sys.exit()
@@ -211,7 +211,7 @@ def get_array_bounds(U):
     P6 = P2 + P4
     P7 = P3 + P4
     P8 = P2 + P3 + P4
-    Points = np.vstack((P1,P2,P3,P4,P5,P6,P7,P8)) 
+    Points = np.vstack((P1,P2,P3,P4,P5,P6,P7,P8))
     # enclose the 8 verticies
     min1 = np.round(min(Points[:,0]-1),0)
     max1 = np.round(max(Points[:,0]+1),0)
@@ -230,7 +230,7 @@ def get_array_bounds(U):
     indice = (np.stack(np.meshgrid(x, y, z)).T).reshape(len(x) * len(y) * len(z), 3)
     return indice
 
-def super_cell(U ,lattice, Atoms, elements):
+def super_cell(U, lattice, Atoms, elements):
     """
     make supercell
     argument:
@@ -255,7 +255,7 @@ def super_cell(U ,lattice, Atoms, elements):
     Atoms_try = Atoms + [tol, tol, tol]
     con = (Atoms_try[:,0] < 1) & (Atoms_try[:,0] >= 0) \
         & (Atoms_try[:,1] < 1) & (Atoms_try[:,1] >= 0) \
-        & (Atoms_try[:,2] < 1) & (Atoms_try[:,2] >= 0) 
+        & (Atoms_try[:,2] < 1) & (Atoms_try[:,2] >= 0)
     indices = np.where(con)[0]
     Atoms = Atoms[indices]
     elements = elements[indices]
@@ -301,7 +301,7 @@ def surface_vacuum(lattice_1, lattice_bi, atoms_bi, vx):
     lattice_bi --- lattice matrix of the bicrystal
     atoms_bi --- atom fractional coordinates of the bicrystal
     vx --- length of the vacuum bulk with units as lattice para
-    """   
+    """
     n = cross(lattice_1[:,1],lattice_1[:,2])
     normal_shift = vx / ang(lattice_1[:,0], n) / norm(lattice_1[:,0])
     lattice_bi[:,0] = lattice_bi[:,0] * (1 + normal_shift)
@@ -323,7 +323,7 @@ def unit_cell_axis(axis):
     B = np.column_stack((v1,v2,v3))
     B = get_right_hand(B)
     return B
-    
+
 def unit_v(vector):
     """
     get the unit vector of a vector
@@ -363,7 +363,7 @@ def print_near_axis(dv, lattice_1, lattice_2, lim=5):
     z = x
     tol = 1e-10
     indice = (np.stack(np.meshgrid(x, y, z)).T).reshape(len(x) ** 3, 3)
-    indice_0 = indice[np.where(np.sum(abs(indice), axis=1) != 0)[0]] 
+    indice_0 = indice[np.where(np.sum(abs(indice), axis=1) != 0)[0]]
     num = len(indice_0)
     ltc_p_1 = dot(indice_0, lattice_1.T)
     ltc_p_2 = dot(indice_0, lattice_2.T)
@@ -680,7 +680,7 @@ class core:
         self.lattice_2 = self.structure_2.lattice.matrix.T
         self.lattice_2_TD = self.structure_2.lattice.matrix.T.copy()
         self.CSL = np.eye(3) # CSL cell in cartesian
-        self.du = 0.005 
+        self.du = 0.005
         self.S = 0.005
         self.D = np.eye(3)
         self.sgm1 = 100 # sigma 1
