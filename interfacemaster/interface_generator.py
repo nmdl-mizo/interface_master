@@ -592,7 +592,6 @@ def draw_slab(xs, ys, axes, num, plane_list, lattice_to_screen, \
         #get atoms in this plane
         plane_atoms = plane_list[i]
         plane_atoms = dot(lattice_to_screen, plane_atoms.T).T
-
         #how many different elements in this plane
         plane_elements = elements_list[i]
         element_names = np.unique(plane_elements)
@@ -750,7 +749,7 @@ class core:
         
         if two_D == False:
             a1 = self.lattice_1.copy()
-            a2_0 = dot(self.orientation, self.lattice_2).copy()
+            a2_0 = self.lattice_2.copy()
         
         else:
             #find the two primitive plane bases
@@ -1014,7 +1013,10 @@ class core:
                                                     lattice_1, atoms_1, elements_1)
         atoms_2, elements_2, lattice_2 = super_cell(self.bicrystal_U2, \
                                                     lattice_2, atoms_2, elements_2)
-
+        
+        
+        shift_terminate(lattice_1, 0.005, atoms_1)
+        shift_terminate(lattice_2, 0.005, atoms_2)
         #termination
         if dp1 > 0:
             shift_terminate(lattice_1, dp1, atoms_1)
@@ -1091,7 +1093,7 @@ class core:
         write_POSCAR(lattice_bi, atoms_bi, elements_bi, filename)
     
     def sample_CNID(self, grid, dx = 0, dp1 = 0, dp2 = 0, \
-                      xyz = [1,1,1], vx = 0, filename = 'POSCAR'):
+                      xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, filename = 'POSCAR'):
         """
         sampling the CNID and generate POSCARs
         argument:
@@ -1107,7 +1109,7 @@ class core:
             for j in range(n2):
                 dydz = v1 / n1 * i + v2 / n2 * j
                 self.get_bicrystal(dydz = dydz, dx = dx, dp1 = dp1, dp2 = dp2, \
-                      xyz = xyz, vx = vx, filename = filename + '.' + str(i) + '.' + str(j))
+                      xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, filename = filename + '.' + str(i) + '.' + str(j))
         print('completed')
         
     def set_orientation_axis(self, axis_1, axis_2):
@@ -1135,7 +1137,7 @@ class core:
         self.d1 = d_hkl(self.lattice_1, hkl)
         lattice_2 = three_dot(self.R, self.D, self.lattice_2)
         hkl_2 = get_primitive_hkl(hkl, self.lattice_1, lattice_2)
-        self.d2 = d_hkl(self.lattice_2, hkl_2)
+        self.d2 = d_hkl(lattice_2, hkl_2)
         hkl_c = get_primitive_hkl(hkl, self.lattice_1, self.CSL) # miller indices of the plane in CSL
         hkl_c = np.array(hkl_c)
         plane_B = get_pri_vec_inplane(hkl_c, self.CSL) # plane bases of the CSL lattice plane
