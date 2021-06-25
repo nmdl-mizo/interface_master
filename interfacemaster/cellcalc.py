@@ -4,11 +4,7 @@ import numpy as np
 
 def dia_sym_mtx(U):
     #return the second-diagonal symmetry transformed matrix of U:
-    Ux = np.eye(3)
-    for i in range(3):
-        for j in range(3):
-            Ux[i][j] = U[2-j][2-i]
-    return Ux
+    return U.T[::-1, ::-1]
 
 def find_integer_vectors(v,sigma):
     #A function find the coefficients N so that Nv contains only, divided by gcd
