@@ -6,43 +6,17 @@ def dia_sym_mtx(U):
     #return the second-diagonal symmetry transformed matrix of U:
     return U.T[::-1, ::-1]
 
-def find_integer_vectors(v,sigma):
+def find_integer_vectors(v, n_max, rtol=1e-05, atol=1e-8):
     #A function find the coefficients N so that Nv contains only, divided by gcd
     #integer elements and gcd(v1,v2,v3,N) = 1
-    tol = 1e-8
-    found = False
-    for i in range(1,sigma+1):
-        now = v*i
-        if np.all(abs(now-np.round(now))<tol):
-            u, v, w = np.round(now)
-            L = i
-            found = True
+    for n in range(1, n_max + 1):
+        v_n = np.array(v) * n
+        if np.allclose(v_n, np.round(v_n), rtol=rtol, atol=atol, equal_nan=False):
             break
-    if found:
-        reduce = np.gcd.reduce([int(u),int(v),int(w),int(L)])
-        now = np.array(np.round(now/reduce),dtype = int)
-        L = int(np.round(L/reduce))
-        return now, L
     else:
-        raise RuntimeError('failed to find the rational vector of ' + str(v) + '\n within lcd = ' + str(sigma))
-
-def find_integer_vectors_nn(v,sigma):
-    #A function find the coefficients N so that Nv contains only, ignore gcd
-    tol = 1e-8
-    found = False
-    for i in range(1,sigma+1):
-        now = v*i
-        if np.all(abs(now-np.round(now))<tol):
-            u, v, w = np.round(now)
-            L = i
-            found = True
-            break
-    if found:
-        now = np.array(np.round(now),dtype = int)
-        L = int(np.round(L))
-        return now, L
-    else:
-        raise RuntimeError('failed to find the rational vector of ' + str(v) + '\n within lcd = ' + str(sigma))
+        raise RuntimeError('failed to find the rational vector of ' + str(v) + '\n within lcd = ' + str(n_max))
+    v_n_int = np.round(v_n).astype(int)
+    return v_n_int, n
 
 def solve_DSC_equations(u,v,w,L,B):
     #print('solve dsc equations')
@@ -155,7 +129,7 @@ def get_primitive_hkl(hkl, C_lattice, P_lattice):
     #print('the normal:' + str(n) + ' the point in the plane: ' + str(Pc1))
     #2. get indices from normal
     hkl_p = get_indices_from_n_Pc1(n, P_lattice, Pc1)
-    hkl_p = find_integer_vectors_nn(hkl_p,100000)[0]
+    hkl_p = find_integer_vectors(hkl_p,100000)[0]
     return hkl_p
 
 def get_plane(hkl, lattice):
