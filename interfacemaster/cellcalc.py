@@ -18,59 +18,50 @@ def find_integer_vectors(v, n_max, rtol=1e-05, atol=1e-8):
     v_n_int = np.round(v_n).astype(int)
     return v_n_int, n
 
-def solve_DSC_equations(u,v,w,L,B):
+def solve_DSC_equations(u, v, w, L, B, tol=1e-8):
     #print('solve dsc equations')
     #print('u v w L')
     #print('{0} {1} {2} {3}'.format(u,v,w,L))
     #print('basis')
     #a function solving the integer equations for the DSC basis
-    tol = 1e-8
-    #get g_v, g_miu and g_lambda
-    g_v = L/np.gcd(abs(w), L)
-    g_lambda = np.gcd.reduce([abs(v), abs(w), L])
-    g_miu = np.gcd(abs(w),L)/g_lambda
 
-    g_v = int(round(g_v))
-    g_lambda = int(round(g_lambda))
-    g_miu = int(round(g_miu))
+    #get g_v, g_mu and g_lambda
+    g_v = np.round(L/np.gcd(abs(w), L)).astype(int)
+    g_lambda = np.round(np.gcd.reduce([abs(v), abs(w), L])).astype(int)
+    g_mu = np.round(np.gcd(abs(w),L)/g_lambda).astype(int)
+
     #find integer solutions
-    t = (w * g_v) / L
 
-    # 0=<gama<g_v
-    gamas = np.arange(0, g_v)
-    for i in gamas:
-        gama = i
-        s = (g_miu * v - gama * w) / L
+    # 0=<gamma<g_v
+    gammas = np.arange(0, g_v)
+    for gamma in gammas:
+        s = (g_mu * v - gamma * w) / L
         #check whether s is a integer
-        if abs(s-np.round(s))<tol:
+        if abs(s-np.round(s)) < tol:
             break
+    else:
+        raise RuntimeError('failed to find integer solutions, something strange happens...')
 
-    # 0=<alpha<g_miu, 0=<beta<g_v
-    alphas = np.arange(0,g_miu)
+    # 0=<alpha<g_mu, 0=<beta<g_v
+    alphas = np.arange(0,g_mu)
     betas = np.arange(0,g_v)
-    count = 0
-    found = False
-    while not found and count < len(alphas):
-        alpha = alphas[count]
-        for k in betas:
-            beta = k
+    for alpha in alphas:
+        for beta in betas:
             r = (g_lambda * u - alpha * v - beta * w) / L
             #check whether r is a integer
-            if abs(r-np.round(r))<tol:
-                found = True
+            if abs(r-np.round(r)) < tol:
                 break
-        count += 1
-    if not found:
+    else:
         raise RuntimeError('failed to find integer solutions, something strange happens...')
     #DSC basis
     D1 = 1 / g_lambda * B[:,0]
-    D2 = alpha / (g_lambda * g_miu) * B[:,0] + 1 / g_miu * B[:,1]
-    D3 = (alpha * gama + beta * g_miu) / (g_miu*g_v*g_lambda) * B[:,0] \
-        + gama / (g_miu * g_v) * B[:,1] + 1 / g_v * B[:,2]
-    #print('alpha, beta, gama, lambda, miu, v')
-    #print(alpha, beta, gama, g_lambda, g_miu, g_v)
-    DSC_basis = np.column_stack((D1,D2,D3))
-    return DSC_basis, dot(inv(B),DSC_basis)
+    D2 = alpha / (g_lambda * g_mu) * B[:,0] + 1 / g_mu * B[:,1]
+    D3 = (alpha * gamma + beta * g_mu) / (g_mu*g_v*g_lambda) * B[:,0] \
+        + gamma / (g_mu * g_v) * B[:,1] + 1 / g_v * B[:,2]
+    #print('alpha, beta, gamma, lambda, mu, v')
+    #print(alpha, beta, gamma, g_lambda, g_mu, g_v)
+    DSC_basis = np.column_stack((D1, D2, D3))
+    return DSC_basis, dot(inv(B), DSC_basis)
 
 def projection(u1,u2):
     #get the projection of u1 on u2
