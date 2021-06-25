@@ -145,6 +145,13 @@ def LLL(B):
             k = max(k-1, 1)
     return Bhere
 
+def get_normal_index(hkl, lattice):
+    """
+    get the coordinates in the lattice of a normal vector to the plane (hkl)
+    """
+    n, Pc1 = get_plane(hkl, lattice)
+    return dot(inv(lattice), n)
+
 def get_primitive_hkl(hkl, C_lattice, P_lattice):
     #convert the miller indices from conventional cell to primitive cell
     #1. get normal
