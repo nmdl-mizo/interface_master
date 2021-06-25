@@ -81,7 +81,7 @@ def cross_plane(lattice, n, lim, orthogonal, tol):
     ltc_p = dot(indice_0, lattice.T)
     ltc_p = ltc_p[np.argsort(norm(ltc_p, axis=1))]
     dot_list = get_ang_list(ltc_p, n)
-    if orthogonal == False:
+    if not orthogonal:
         normal_v = ltc_p[np.where(dot_list >= 0.75)[0]]
         normal_v = normal_v[np.argsort(norm(normal_v, axis=1))]
         normal_v = normal_v[0]
@@ -950,7 +950,7 @@ class core:
         Ns = np.arange(1, self.sgm2 + 1)
         found = None
 
-        if two_D == False:
+        if not two_D:
             a1 = self.lattice_1.copy()
             a2_0 = self.lattice_2.copy()
 
@@ -1083,7 +1083,7 @@ class core:
         x = np.arange(n)
         Ns = np.arange(1, self.sgm2 + 1)
 
-        if two_D == False:
+        if not two_D:
             a1 = self.lattice_1.copy()
             a2_0 = dot(self.orientation, self.lattice_2).copy()
 

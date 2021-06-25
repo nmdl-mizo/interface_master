@@ -298,7 +298,7 @@ class DSCcalc:
                 #print('sigma ' + str(L * M * N))
                 DSC = Gi
         DSC = get_right_hand(DSC)
-        if to_LLL == True:
+        if to_LLL:
             self.DSC = LLL(DSC)
         else:
             self.DSC = DSC
