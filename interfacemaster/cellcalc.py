@@ -72,7 +72,7 @@ def solve_DSC_equations(u,v,w,L,B):
         gama = i
         s = (g_miu * v - gama * w) / L
         #check whether s is a integer
-        if abs(s-np.round(s))<tol:
+        if np.isclose(s, np.round(s), atol=tol):
             break
 
     # 0=<alpha<g_miu, 0=<beta<g_v
@@ -86,7 +86,7 @@ def solve_DSC_equations(u,v,w,L,B):
             beta = k
             r = (g_lambda * u - alpha * v - beta * w) / L
             #check whether r is a integer
-            if abs(r-np.round(r))<tol:
+            if np.isclose(r, np.round(r), atol=tol):
                 found = True
                 break
         count += 1
