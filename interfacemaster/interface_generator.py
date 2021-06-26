@@ -103,7 +103,6 @@ def POSCAR_to_cif(Poscar_name, Cif_name):
     """
     structure = Structure.from_file(Poscar_name)
     structure.to(filename=Cif_name)
-    del structure
 
 def write_LAMMPS(lattice, atoms, elements, filename = 'lmp_atoms_file'):
     """
@@ -158,7 +157,6 @@ def write_LAMMPS(lattice, atoms, elements, filename = 'lmp_atoms_file'):
         f.write('{0:.8f} {1:.8f} {2:.8f} xy xz yz \n\n'.format(xy, xz, yz))
         f.write('Atoms \n \n')
         np.savetxt(f, Final_format, fmt='%i %i %.16f %.16f %.16f')
-    f.close()
 
 def write_POSCAR(lattice, atoms, elements, filename = 'POSCAR'):
     """
@@ -202,7 +200,6 @@ def write_POSCAR(lattice, atoms, elements, filename = 'POSCAR'):
         f.write('\n')
         f.write("Direct\n")
         np.savetxt(f, atoms, fmt='%.16f %.16f %.16f')
-    f.close()
 
 def cell_expands(lattice, atoms, elements, xyz):
     """
