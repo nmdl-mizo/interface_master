@@ -1,6 +1,6 @@
 from numpy.linalg import det, norm, inv
 from numpy import dot, cross, ceil, floor, cos, sin, tile, array, arange, meshgrid, delete
-from pymatgen.core.structure import Structure
+from pymatgen.core.structure import Structure, Lattice
 from pymatgen.io.cif import CifWriter
 from pymatgen.io.vasp.inputs import Poscar
 import numpy as np
@@ -1148,7 +1148,7 @@ class core:
 
     def get_bicrystal(self, dydz = np.array([0.0,0.0,0.0]), dx = 0, dp1 = 0, dp2 = 0, \
                       xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, filename = 'POSCAR', \
-                      two_D = False, filetype = 'VASP'):
+                      two_D = False, filetype = 'VASP', to_file=True):
         """
         generate a cif file for the bicrystal structure
         argument:
@@ -1199,12 +1199,15 @@ class core:
 
         self.slab_lattice_1 = lattice_1.copy()
         self.slab_lattice_2 = lattice_2.copy()
+        self.structure_slab_1 = Structure(lattice=Lattice(lattice_1.T),  species=elements_1, coords=atoms_1)
+        self.structure_slab_2 = Structure(lattice=Lattice(lattice_2.T),  species=elements_2, coords=atoms_2)
 
-        write_POSCAR(lattice_1, atoms_1, elements_1, 'POSCAR')
-        POSCAR_to_cif('POSCAR','cell_1.cif')
-        write_POSCAR(lattice_2, atoms_2, elements_2, 'POSCAR')
-        POSCAR_to_cif('POSCAR','cell_2.cif')
-        os.remove('POSCAR')
+        if to_file:
+            write_POSCAR(lattice_1, atoms_1, elements_1, 'POSCAR')
+            POSCAR_to_cif('POSCAR','cell_1.cif')
+            write_POSCAR(lattice_2, atoms_2, elements_2, 'POSCAR')
+            POSCAR_to_cif('POSCAR','cell_2.cif')
+            os.remove('POSCAR')
 
         #combine the two lattices and translate atoms
         lattice_bi = lattice_1.copy()
@@ -1250,16 +1253,18 @@ class core:
         self.lattice_bi = lattice_bi
         self.atoms_bi = atoms_bi
         self.elements_bi = elements_bi
+        self.structure_bi = Structure(lattice=Lattice(self.lattice_bi.T),  species=self.elements_bi, coords=self.atoms_bi)
 
-        if filetype == 'VASP':
-            write_POSCAR(lattice_bi, atoms_bi, elements_bi, filename)
-        elif filetype == 'LAMMPS':
-            write_LAMMPS(lattice_bi, atoms_bi, elements_bi, filename)
-        else:
-            raise RuntimeError("Sorry, we only support for 'VASP' or 'LAMMPS' output")
+        if to_file:
+            if filetype == 'VASP':
+                write_POSCAR(lattice_bi, atoms_bi, elements_bi, filename)
+            elif filetype == 'LAMMPS':
+                write_LAMMPS(lattice_bi, atoms_bi, elements_bi, filename)
+            else:
+                raise RuntimeError("Sorry, we only support for 'VASP' or 'LAMMPS' output")
 
     def sample_CNID(self, grid, dx = 0, dp1 = 0, dp2 = 0, \
-                      xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, two_D = False, filename = 'POSCAR', filetype = 'VASP'):
+                      xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, two_D = False, filename = 'POSCAR', filetype = 'VASP', to_file=True):
         """
         sampling the CNID and generate POSCARs
         argument:
@@ -1271,11 +1276,13 @@ class core:
         n1 = grid[0]
         n2 = grid[1]
         v1, v2 = self.CNID.T
+        self.structures_CNID_sampled = dict()
         for i in range(n1):
             for j in range(n2):
                 dydz = v1 / n1 * i + v2 / n2 * j
                 self.get_bicrystal(dydz = dydz, dx = dx, dp1 = dp1, dp2 = dp2, \
-                      xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D, filename = filename + '.' + str(i) + '.' + str(j), filetype = filetype)
+                      xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D, filename = filename + '.' + str(i) + '.' + str(j), filetype = filetype, to_file=to_file)
+                self.structures_CNID_sampled[(i, j)] = self.structure_bi
         print('completed')
 
     def set_orientation_axis(self, axis_1, axis_2):
