@@ -863,8 +863,6 @@ class core:
         self.d2 = float #lattice plane distance
         self.plane_list_1 = [] #list of terminating plane atoms
         self.plane_list_2 = []
-        self.elements_1 = [] #list of terminating plane atom elements
-        self.elements_2 = []
         self.indices_list_1 = [] #termination plane atoms's indices
         self.indices_list_2 = []
         self.dp_list_1 = [] #list of dp parameter to select termination
