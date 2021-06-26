@@ -51,6 +51,9 @@ def solve_DSC_equations(u, v, w, L, B, tol=1e-8):
             #check whether r is a integer
             if abs(r-np.round(r)) < tol:
                 break
+        else:
+            continue
+        break
     else:
         raise RuntimeError('failed to find integer solutions, something strange happens...')
     #DSC basis
