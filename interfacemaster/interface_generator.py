@@ -824,20 +824,17 @@ def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_
 
 class core:
     def __init__(self, file_1, file_2):
-        self.afile_1 = file_1 # cif file name of lattice 1
+        self.file_1 = file_1 # cif file name of lattice 1
         self.file_2 = file_2 # cif file name of lattice 2
-        self.structure_1 = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
-        self.structure_2 = Structure.from_file(file_2, primitive=True, sort=False, merge_tol=0.0)
-
-        self.conv_lattice_1 = Structure.from_file(file_1, primitive=False, sort=False, merge_tol=0.0) \
-                                .lattice.matrix.T
-
-        self.conv_lattice_2 = Structure.from_file(file_2, primitive=False, sort=False, merge_tol=0.0) \
-                                .lattice.matrix.T
-
+        self.conv_structure_1 = Structure.from_file(self.file_1, primitive=False, sort=False, merge_tol=0.0)
+        self.conv_structure_2 = Structure.from_file(self.file_2, primitive=False, sort=False, merge_tol=0.0)
+        self.structure_1 = self.conv_structure_1.get_primitive_structure()
+        self.structure_2 = self.conv_structure_2.get_primitive_structure()
+        self.conv_lattice_1 = self.conv_structure_1.lattice.matrix.T
+        self.conv_lattice_2 = self.conv_structure_2.lattice.matrix.T
         self.lattice_1 = self.structure_1.lattice.matrix.T
         self.lattice_2 = self.structure_2.lattice.matrix.T
-        self.lattice_2_TD = self.structure_2.lattice.matrix.T.copy()
+        self.lattice_2_TD = self.lattice_2.copy()
         self.CSL = np.eye(3) # CSL cell in cartesian
         self.du = 0.005
         self.S = 0.005
