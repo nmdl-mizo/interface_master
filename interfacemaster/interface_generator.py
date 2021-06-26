@@ -28,21 +28,6 @@ def rot(a, Theta):
                      [az * ax * (1 - c) - ay * s, az * ay * (1 - c) + ax * s,
                       c + az * az * (1 - c)]], dtype = np.float64)
 
-def rational_mtx(M, N):
-    """
-    find a rational matrix close to M
-    arguments:
-    M --- original matrix
-    N --- denominator
-    return:
-    a rational matrix
-    """
-    B = np.eye(3)
-    for i in range(3):
-        for j in range(3):
-            B[i][j] = round(N * M[i][j])
-    return B, N
-
 def three_dot(M1, M2, M3):
     """
     compute the three continuous dot product
@@ -984,7 +969,7 @@ class core:
             file.write('    -----for N-----\n')
             while N <= self.sgm2:
                 tol = 1e-10
-                Uij, N = rational_mtx(U,N)
+                Uij = np.round(N * U)
                 U_p = 1 / N * Uij
                 if np.all((abs(U_p-U)) < self.du):
                     file.write('    N= ' + str(N) + " accepted" + '\n')
@@ -1117,7 +1102,7 @@ class core:
             file.write('    -----for N-----\n')
             while N <= self.sgm2:
                 tol = 1e-10
-                Uij, N = rational_mtx(U,N)
+                Uij = np.round(N * U)
                 U_p = 1 / N * Uij
                 if np.all((abs(U_p-U)) < self.du):
                     file.write('    N= ' + str(N) + " accepted" + '\n')
