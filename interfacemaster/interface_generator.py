@@ -852,7 +852,6 @@ class core:
         self.bicrystal_U1 = np.eye(3) # indices of the slab of lattice 1
         self.bicrystal_U2 = np.eye(3) # indices of the slab of lattice 2
         self.CNID = np.eye(3,2)
-        self.cell_calc = DSCcalc()
         self.name = str
         self.dd = float
         self.orientation = np.eye(3) # initial disorientation
@@ -956,9 +955,8 @@ class core:
                         file.write('    --D accepted--\n')
                         file.write("    D, det(D) = {0} \n".format(det(D)))
                         ax2 = three_dot(R,D,a2_0)
-                        calc = DSCcalc()
                         try:
-                            calc.parse_int_U(a1, ax2, self.sgm2)
+                            calc = DSCcalc(a1, ax2, self.sgm2)
                             calc.compute_CSL()
                         except:
                             file.write('    failed to find CSL here \n')
@@ -1089,9 +1087,8 @@ class core:
                         file.write('    --D accepted--\n')
                         file.write("    D, det(D) = {0} \n".format(det(D)))
                         ax2 = three_dot(R,D,a2_0)
-                        calc = DSCcalc()
                         try:
-                            calc.parse_int_U(a1, ax2, self.sgm2)
+                            calc = DSCcalc(a1, ax2, self.sgm2)
                             calc.compute_CSL()
                         except:
                             file.write('    failed to find CSL here \n')

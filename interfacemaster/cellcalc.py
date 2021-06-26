@@ -208,11 +208,11 @@ def get_right_hand(B):
 
 class DSCcalc:
     #core class computing DSC basis
-    def __init__(self):
-        self.ai1 = np.eye(3) #basis vectors of lattice 1
-        self.ai2 = np.eye(3) #basis vectors of lattice 2
-        self.U = np.eye(3) #ai1U = ai2
-        self.sigma = int #sigma2
+    def __init__(self, ai1, ai2, sigma):
+        self.ai1 = ai1 #basis vectors of lattice 1
+        self.ai2 = ai2 #basis vectors of lattice 2
+        self.sigma = sigma #sigma2
+        self.U = dot(inv(ai1),ai2) #ai1U = ai2
         self.DSC = np.eye(3)
         self.CSL = np.eye(3)
         self.U1 = np.eye(3) #ai1U1 = ai2U2
@@ -220,12 +220,6 @@ class DSCcalc:
         self.U_int = np.array(np.eye(3),dtype=int) #describing ai2 by ai1 with int coe
         self.Ls = np.arange(3) #three cooresponding greatest common denominator
         self.CNID = np.eye(3,2)
-
-    def parse_int_U(self,ai1,ai2,sigma):
-        self.ai1 = ai1
-        self.ai2 = ai2
-        self.sigma = sigma
-        self.U = dot(inv(ai1),ai2)
         #get the integers uij
         for i in range(3):
             v = self.U[:,i]
@@ -311,8 +305,7 @@ class DSCcalc:
         #symmetric matrix along the second diagonal
         Ux = dia_sym_mtx(self.U)
         a20 = dot(self.ai1,Ux)
-        calc_csl = DSCcalc()
-        calc_csl.parse_int_U(self.ai1, a20, self.sigma)
+        calc_csl = DSCcalc(self.ai1, a20, self.sigma)
         calc_csl.compute_DSC()
         DSC_ax = dot(self.ai1,calc_csl.DSC)
         self.U1 = dia_sym_mtx(dot(inv(DSC_ax),a20))
@@ -331,8 +324,7 @@ class DSCcalc:
         n = cross(pb_1[:,0],pb_1[:,1])
         c1 = get_right_hand(np.column_stack((pb_1,n)))
         c2 = get_right_hand(np.column_stack((pb_2,n)))
-        calc_cnid = DSCcalc()
-        calc_cnid.parse_int_U(c1, c2, 10000)
+        calc_cnid = DSCcalc(c1, c2, 10000)
         calc_cnid.compute_DSC()#in c1 frame
         DSC = dot(c1,calc_cnid.DSC)
         count = 0
