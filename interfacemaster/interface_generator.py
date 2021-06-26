@@ -77,26 +77,6 @@ def cross_plane(lattice, n, lim, orthogonal, tol):
             raise RuntimeError('failed to find a vector cross the plane. try larger lim or smaller tol or use non-orthogonal cell')
     return normal_v
 
-def get_sites_elements(structure):
-    """
-    get the coordinates of atoms and the elements
-    arguments:
-    structure --- pymatgen structure class
-    return:
-    atoms --- atom coordinates
-    elements --- list of element name of the atoms
-    return:
-    atoms --- fractional coordinates of atoms in the primitive cell
-    elements --- list of element names of the atom
-    """
-    atoms = np.array([0, 0, 0])
-    elements = []
-    for i in structure.sites:
-        atoms = np.vstack((atoms, i.frac_coords))
-        elements.append(i.species_string)
-    atoms = np.delete(atoms, 0, axis = 0)
-    return atoms, np.array(elements)
-
 def POSCAR_to_cif(Poscar_name, Cif_name):
     """
     generate a cif file for the structure in a POSCAR file
@@ -893,8 +873,8 @@ class core:
         self.slab_lattice_1 = np.eye(3) #lattice matrix of the final slabs forming the interface
         self.slab_lattice_2 = np.eye(3)
         #get the atoms in the primitive cell
-        self.atoms_1, self.elements_1 = get_sites_elements(self.structure_1)
-        self.atoms_2, self.elements_2 = get_sites_elements(self.structure_2)
+        self.atoms_1, self.elements_1 = self.structure_1.frac_coords, np.array(list(map(str, self.structure_1.species)))
+        self.atoms_2, self.elements_2 = self.structure_2.frac_coords, np.array(list(map(str, self.structure_2.species)))
 
         #save the information of the bicrystal box
         self.lattice_bi = np.eye(3)
