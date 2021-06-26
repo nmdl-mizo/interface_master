@@ -213,13 +213,8 @@ class DSCcalc:
         self.ai2 = ai2 #basis vectors of lattice 2
         self.sigma = sigma #sigma2
         self.U = dot(inv(ai1),ai2) #ai1U = ai2
-        self.DSC = np.eye(3)
-        self.CSL = np.eye(3)
-        self.U1 = np.eye(3) #ai1U1 = ai2U2
-        self.U2 = np.eye(3)
         self.U_int = np.array(np.eye(3),dtype=int) #describing ai2 by ai1 with int coe
         self.Ls = np.arange(3) #three cooresponding greatest common denominator
-        self.CNID = np.eye(3,2)
         #get the integers uij
         for i in range(3):
             v = self.U[:,i]
@@ -309,8 +304,8 @@ class DSCcalc:
         calc_csl.compute_DSC()
         DSC_ax = dot(self.ai1,calc_csl.DSC)
         self.U1 = dia_sym_mtx(dot(inv(DSC_ax),a20))
-        self.CSL = dot(self.ai1,self.U1)
-        red_CSL = LLL(self.CSL)
+        CSL = dot(self.ai1,self.U1)
+        red_CSL = LLL(CSL)
         red_CSL = get_right_hand(red_CSL)
         self.U1 = dot(inv(self.ai1),red_CSL)
         self.U2 = dot(inv(self.U),self.U1)
