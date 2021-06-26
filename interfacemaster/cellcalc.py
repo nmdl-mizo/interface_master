@@ -92,7 +92,7 @@ def LLL(B):
     delta = 3/4
     k = 1
     while k <= len(B.T)-1:
-        js = -np.sort(-np.arange(0,k+1-1))
+        js = np.arange(k)[::-1]
         for j in js:
             ukj = projection(Bhere[:,k],Bstar[:,j])
             if abs(ukj) > 1/2:
