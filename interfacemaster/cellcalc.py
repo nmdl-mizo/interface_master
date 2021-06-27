@@ -149,7 +149,7 @@ def get_indices_from_n_Pc1(n, lattice, Pc1):
     #get the miller indices of certain plane with normal n
     #and one in-plane point Pc1 for certain lattice
 
-    hkl = np.array([0,0,0],dtype = float)
+    hkl = np.zeros(3)
     for i in range(3):
         hkl[i] = dot(lattice[:,i], n)/dot(Pc1, n)
     return hkl
@@ -225,9 +225,8 @@ class DSCcalc:
         #print('the U matrix')
         #print(str(self.U_int) + '\'' + str(self.sigma))
         #print('---------------------------------------')
-        ks,L = find_integer_vectors(dot(inv(self.ai1),self.ai2[:,0]),self.sigma)
-        #print('ai2_1 is expressed by ai1 as ' + str(ks) + '/' + str(L))
-        k1,k2,k3 = ks
+        (k1, k2, k3), L = find_integer_vectors(dot(inv(self.ai1),self.ai2[:,0]),self.sigma)
+        #print('ai2_1 is expressed by ai1 as ' + str(ki) + '/' + str(L))
         #solve DSC Ei for the ai2_1 by ai1
         Ei = solve_DSC_equations(k1,k2,k3,L,self.ai1)[0]
         #print('Ei is \n' + str(Ei))
