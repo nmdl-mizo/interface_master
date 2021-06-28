@@ -823,17 +823,20 @@ def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_
             os.chdir(os.path.pardir)
 
 class core:
-    def __init__(self, structure_1, structure_2):
+    def __init__(self, structure_1, structure_2=None):
         if isinstance(structure_1, Structure):
             self.conv_structure_1 = structure_1
         else:
             self.file_1 = structure_1 # cif file name of lattice 1
             self.conv_structure_1 = Structure.from_file(self.file_1, primitive=False, sort=False, merge_tol=0.0)
-        if isinstance(structure_2, Structure):
-            self.conv_structure_2 = structure_2
+        if structure_2 is None:
+            self.conv_structure_2 = self.conv_structure_1.copy()
         else:
-            self.file_2 = structure_2 # cif file name of lattice 2
-            self.conv_structure_2 = Structure.from_file(self.file_2, primitive=False, sort=False, merge_tol=0.0)
+            if isinstance(structure_2, Structure):
+                self.conv_structure_2 = structure_2
+            else:
+                self.file_2 = structure_2 # cif file name of lattice 2
+                self.conv_structure_2 = Structure.from_file(self.file_2, primitive=False, sort=False, merge_tol=0.0)
         self.structure_1 = self.conv_structure_1.get_primitive_structure()
         self.structure_2 = self.conv_structure_2.get_primitive_structure()
         self.conv_lattice_1 = self.conv_structure_1.lattice.matrix.T
