@@ -382,27 +382,3 @@ class DSCcalc:
                 break
         CNID = LLL(CNID)
         self.CNID = dot(inv(self.ai1),CNID)
-
-import unittest
-
-class Tests(unittest.TestCase):
-    def test_get_primitive_hkl(self):
-        hkl = np.array([1, -1, 2])
-        C_lattice = np.array([
-            [5.78100000e+00, 9.29655704e-16, 0.00000000e+00],
-            [0.00000000e+00, 5.78100000e+00, 0.00000000e+00],
-            [3.53984157e-16, 3.53984157e-16, 1.16422000e+01]
-        ])
-        P_lattice = np.array([
-            [ 5.78100000e+00,  9.29655704e-16, -2.89050000e+00],
-            [-0.00000000e+00,  5.78100000e+00, -2.89050000e+00],
-            [-0.00000000e+00,  3.53984157e-16,  5.82110000e+00]
-        ])
-        result = get_primitive_hkl(hkl, C_lattice, P_lattice)
-        self.assertIsNone(np.testing.assert_array_equal(result, np.array([1, -1, 1])))
-#        self.assertEqual(result, np.array([1, -1, 1]))
-
-
-
-if __name__ == "__main__":
-    unittest.main()
