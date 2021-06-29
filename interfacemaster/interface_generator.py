@@ -943,7 +943,6 @@ class core:
                 f_log.write('theta = ' + str(theta / np.pi * 180) + '\n')
                 f_log.write('    -----for N-----\n')
                 for N in range(1, self.sgm2 + 1):
-                    tol = 1e-10
                     Uij = np.round(N * U)
                     U_p = 1 / N * Uij
                     if np.all((abs(U_p-U)) < self.du):
@@ -1067,7 +1066,6 @@ class core:
                 f_log.write('theta = ' + str(theta / np.pi * 180) + '\n')
                 f_log.write('    -----for N-----\n')
                 for N in range(1, self.sgm2 + 1):
-                    tol = 1e-10
                     Uij = np.round(N * U)
                     U_p = 1 / N * Uij
                     if np.all((abs(U_p-U)) < self.du):
