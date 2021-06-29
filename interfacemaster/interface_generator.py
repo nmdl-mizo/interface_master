@@ -907,12 +907,8 @@ class core:
         """
         axis = dot(self.lattice_1, axis)
         print(axis)
-        theta = theta / 180 * np.pi
-        n = ceil(theta_range/dtheta)
-        dtheta = theta_range / n / 180 * np.pi
-        x = np.arange(n)
-        Ns = np.arange(1, self.sgm2 + 1)
         found = None
+        theta_radian_range = np.arange(theta, theta + theta_range, dtheta) / 180 * np.pi
 
         if not two_D:
             a1 = self.lattice_1.copy()
@@ -939,9 +935,9 @@ class core:
             f_log.write('---Searching starts---\n')
             f_log.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
             f_log.write('{0} {1} {2} {3} {4} {5} {6} {7}\n'.\
-                  format(axis, theta, dtheta, n, self.S, self.du, self.sgm1, self.sgm2))
+                  format(axis, theta, dtheta, ceil(theta_range/dtheta), self.S, self.du, self.sgm1, self.sgm2))
             f_log.write('-----------for theta-----------\n')
-            for i in x:
+            for theta in theta_radian_range:
                 R = dot(self.orientation, rot(axis, theta))
                 U = three_dot(inv(a1), R, a2_0)
                 f_log.write('theta = ' + str(theta / np.pi * 180) + '\n')
@@ -989,12 +985,12 @@ class core:
                                 f_log.write('U1 = \n' + \
                                            str(self.U1) + '; sigma_1 = ' + \
                                            str(sigma1) + '\n')
-    
+
                                 f_log.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
                                            + str(sigma1) + '\n')
-    
+
                                 f_log.write('D = \n' + str(np.round(D,8)) + '\n')
-    
+
                                 f_log.write('axis = ' + str(axis) + ' ; theta = ' \
                                            + str(np.round(theta / np.pi * 180,8)) \
                                            + '\n')
@@ -1018,7 +1014,6 @@ class core:
                                 f_log.write('    sigma too large \n')
                 if found:
                     break
-                theta += dtheta
             if not found:
                 print('failed to find a satisfying appx CSL. Try to adjust the limits according \
                       to the log file generated; or try another orientation.')
@@ -1037,11 +1032,7 @@ class core:
         """
         axis = dot(self.lattice_1, axis)
         print(axis)
-        theta = theta / 180 * np.pi
-        n = ceil(theta_range/dtheta)
-        dtheta = theta_range / n / 180 * np.pi
-        x = np.arange(n)
-        Ns = np.arange(1, self.sgm2 + 1)
+        theta_radian_range = np.arange(theta, theta + theta_range, dtheta) / 180 * np.pi
 
         if not two_D:
             a1 = self.lattice_1.copy()
@@ -1068,15 +1059,14 @@ class core:
             f_log.write('---Searching starts---\n')
             f_log.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
             f_log.write('{0} {1} {2} {3} {4} {5} {6} {7}\n'.\
-                  format(axis, theta, dtheta, n, self.S, self.du, self.sgm1, self.sgm2))
+                  format(axis, theta, dtheta, ceil(theta_range/dtheta), self.S, self.du, self.sgm1, self.sgm2))
             f_log.write('-----------for theta-----------\n')
-            for i in x:
-                N = 1
+            for theta in theta_radian_range:
                 R = dot(self.orientation, rot(axis, theta))
                 U = three_dot(inv(a1), R, a2_0)
                 f_log.write('theta = ' + str(theta / np.pi * 180) + '\n')
                 f_log.write('    -----for N-----\n')
-                while N <= self.sgm2:
+                for N in range(1, self.sgm2 + 1):
                     tol = 1e-10
                     Uij = np.round(N * U)
                     U_p = 1 / N * Uij
@@ -1149,8 +1139,6 @@ class core:
                                            + '\n')
                             else:
                                 f_log.write('    sigma too large \n')
-                    N += 1
-                theta += dtheta
 
     def get_bicrystal(self, dydz = np.array([0.0,0.0,0.0]), dx = 0, dp1 = 0, dp2 = 0, \
                       xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, filename = 'POSCAR', \
