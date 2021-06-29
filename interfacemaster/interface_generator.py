@@ -1025,7 +1025,7 @@ class core:
             print('failed to find a satisfying appx CSL. Try to adjust the limits according \
                   to the log file generated; or try another orientation.')
 
-    def search_all_position(self, axis, theta, theta_range, dtheta, two_D = False):
+    def search_all_position(self, axis, theta, theta_range, dtheta, two_D = False, log_filename='log.all_position', results_filename="results"):
         """
         main loop finding all the CSL lattices satisfying the limit
         arguments:
@@ -1039,8 +1039,6 @@ class core:
         """
         axis = dot(self.lattice_1, axis)
         print(axis)
-        file = open('log.all_position','w')
-        file_r = open('results','w')
         theta = theta / 180 * np.pi
         n = ceil(theta_range/dtheta)
         dtheta = theta_range / n / 180 * np.pi
@@ -1068,92 +1066,93 @@ class core:
             a2_0 = dot(inv(self.orientation), a2_0)
             self.a2_0 = a2_0.copy()
         # rotation loop
-        file.write('---Searching starts---\n')
-        file.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
-        file.write('{0} {1} {2} {3} {4} {5} {6} {7}\n'.\
-              format(axis, theta, dtheta, n, self.S, self.du, self.sgm1, self.sgm2))
-        file.write('-----------for theta-----------\n')
-        for i in x:
-            N = 1
-            R = dot(self.orientation, rot(axis, theta))
-            U = three_dot(inv(a1), R, a2_0)
-            file.write('theta = ' + str(theta / np.pi * 180) + '\n')
-            file.write('    -----for N-----\n')
-            while N <= self.sgm2:
-                tol = 1e-10
-                Uij = np.round(N * U)
-                U_p = 1 / N * Uij
-                if np.all((abs(U_p-U)) < self.du):
-                    file.write('    N= ' + str(N) + " accepted" + '\n')
-                    R_p = three_dot(a1, U_p, inv(a2_0))
-                    D = dot(inv(R),R_p)
-                    if (abs(det(D)-1) <= self.S) and \
-                    np.all(abs(D-np.eye(3)) < self.dd):
-                        here_found = True
-                        file.write('    --D accepted--\n')
-                        file.write("    D, det(D) = {0} \n".format(det(D)))
-                        ax2 = three_dot(R,D,a2_0)
-                        try:
-                            calc = DSCcalc(a1, ax2, self.sgm2)
-                            calc.compute_CSL()
-                        except:
-                            file.write('    failed to find CSL here \n')
-                            here_found = False
-                        if here_found and abs(det(calc.U1)) <= self.sgm1:
-                            file.write('--------------------------------\n')
-                            file_r.write('--------------------------------\n')
-                            file.write('Congrates, we found an appx CSL!\n')
-                            sigma1 = int(abs(np.round(det(calc.U1))))
-                            sigma2 = int(abs(np.round(det(calc.U2))))
+        with open(log_filename,'w') as f_log, open(results_filename,'w') as f_results:
+            f_log.write('---Searching starts---\n')
+            f_log.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
+            f_log.write('{0} {1} {2} {3} {4} {5} {6} {7}\n'.\
+                  format(axis, theta, dtheta, n, self.S, self.du, self.sgm1, self.sgm2))
+            f_log.write('-----------for theta-----------\n')
+            for i in x:
+                N = 1
+                R = dot(self.orientation, rot(axis, theta))
+                U = three_dot(inv(a1), R, a2_0)
+                f_log.write('theta = ' + str(theta / np.pi * 180) + '\n')
+                f_log.write('    -----for N-----\n')
+                while N <= self.sgm2:
+                    tol = 1e-10
+                    Uij = np.round(N * U)
+                    U_p = 1 / N * Uij
+                    if np.all((abs(U_p-U)) < self.du):
+                        f_log.write('    N= ' + str(N) + " accepted" + '\n')
+                        R_p = three_dot(a1, U_p, inv(a2_0))
+                        D = dot(inv(R),R_p)
+                        if (abs(det(D)-1) <= self.S) and \
+                        np.all(abs(D-np.eye(3)) < self.dd):
+                            here_found = True
+                            f_log.write('    --D accepted--\n')
+                            f_log.write("    D, det(D) = {0} \n".format(det(D)))
+                            ax2 = three_dot(R,D,a2_0)
+                            try:
+                                calc = DSCcalc(a1, ax2, self.sgm2)
+                                calc.compute_CSL()
+                            except:
+                                f_log.write('    failed to find CSL here \n')
+                                here_found = False
+                            if here_found and abs(det(calc.U1)) <= self.sgm1:
+                                f_log.write('--------------------------------\n')
+                                f_results.write('--------------------------------\n')
+                                f_log.write('Congrates, we found an appx CSL!\n')
+                                sigma1 = int(abs(np.round(det(calc.U1))))
+                                sigma2 = int(abs(np.round(det(calc.U2))))
 
-                            if two_D:
-                                calc.compute_CNID([0,0,1])
-                                self.CNID = dot(a1, calc.CNID)
-                            file.write('U1 = \n' + \
-                                       str(self.U1) + '; sigma_1 = ' + \
-                                       str(sigma1) + '\n')
+                                if two_D:
+                                    calc.compute_CNID([0,0,1])
+                                    self.CNID = dot(a1, calc.CNID)
+                                f_log.write('U1 = \n' + \
+                                           str(self.U1) + '; sigma_1 = ' + \
+                                           str(sigma1) + '\n')
 
-                            file.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                       + str(sigma1) + '\n')
+                                f_log.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
+                                           + str(sigma1) + '\n')
 
-                            file.write('D = \n' + str(np.round(D,8)) + '\n')
+                                f_log.write('D = \n' + str(np.round(D,8)) + '\n')
 
-                            file.write('axis = ' + str(axis) + ' ; theta = ' \
-                                       + str(np.round(theta / np.pi * 180,8)) \
-                                       + '\n')
+                                f_log.write('axis = ' + str(axis) + ' ; theta = ' \
+                                           + str(np.round(theta / np.pi * 180,8)) \
+                                           + '\n')
 
-                            file_r.write('U1 = \n' + \
-                                       str(self.U1) + '; sigma_1 = ' + \
-                                       str(sigma1) + '\n')
+                                f_results.write('U1 = \n' + \
+                                           str(self.U1) + '; sigma_1 = ' + \
+                                           str(sigma1) + '\n')
 
-                            file_r.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                       + str(sigma1) + '\n')
+                                f_results.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
+                                           + str(sigma1) + '\n')
 
-                            file_r.write('D = \n' + str(np.round(D,8)) + '\n')
+                                f_results.write('D = \n' + str(np.round(D,8)) + '\n')
 
-                            file_r.write('axis = ' + str(axis) + ' ; theta = ' \
-                                       + str(np.round(theta / np.pi * 180,8)) \
-                                       + '\n')
-                            if two_D:
-                                file_r.write('CNID = \n' + str(self.CNID) + '\n')
+                                f_results.write('axis = ' + str(axis) + ' ; theta = ' \
+                                           + str(np.round(theta / np.pi * 180,8)) \
+                                           + '\n')
+                                if two_D:
+                                    f_results.write('CNID = \n' + str(self.CNID) + '\n')
 
-                            print('Congrates, we found an appx CSL!\n')
-                            print('U1 = \n' + \
-                                       str(self.U1) + '; sigma_1 = ' + \
-                                       str(sigma1) + '\n')
+                                print('Congrates, we found an appx CSL!\n')
+                                print('U1 = \n' + \
+                                           str(self.U1) + '; sigma_1 = ' + \
+                                           str(sigma1) + '\n')
 
-                            print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                       + str(sigma1) + '\n')
+                                print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
+                                           + str(sigma1) + '\n')
 
-                            print('D = \n' + str(np.round(D,8)) + '\n')
+                                print('D = \n' + str(np.round(D,8)) + '\n')
 
-                            print('axis = ' + str(axis) + ' ; theta = ' \
-                                       + str(np.round(theta / np.pi * 180,8)) \
-                                       + '\n')
-                        else:
-                            file.write('    sigma too large \n')
-                N += 1
-            theta += dtheta
+                                print('axis = ' + str(axis) + ' ; theta = ' \
+                                           + str(np.round(theta / np.pi * 180,8)) \
+                                           + '\n')
+                            else:
+                                f_log.write('    sigma too large \n')
+                    N += 1
+                theta += dtheta
 
     def get_bicrystal(self, dydz = np.array([0.0,0.0,0.0]), dx = 0, dp1 = 0, dp2 = 0, \
                       xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, filename = 'POSCAR', \
