@@ -2,6 +2,39 @@ from numpy.linalg import det, norm, inv
 from numpy import dot, cross, ceil, square
 import numpy as np
 
+def ang(v1, v2):
+    """
+    compute the cos of angle between v1 & v2
+    """
+    return abs(dot(v1, v2)/norm(v1)/norm(v2))
+
+def get_ortho_two_v(B, lim, tol):
+    """
+    get orthogonal cell of a 2D basis
+    """
+    #meshes
+    x = np.arange(-lim, lim + 1, 1)
+    y = x
+
+    indice = (np.stack(np.meshgrid(x, y)).T).reshape(len(x) ** 2, 2)
+    indice_0 = indice[np.where(np.sum(abs(indice), axis=1) != 0)]
+    indice_0 = np.array(indice_0,dtype = np.float64)
+    LP = dot(B, indice_0.T).T
+    LP = LP[np.argsort(norm(LP, axis=1))]
+    found = False
+    count = 0
+    while not found and count < len(LP):
+        v1 = LP[count]
+        for i in LP:
+            if ang(v1, i) < tol:
+                v2 = i
+                found = True
+                break
+        count += 1
+    if found == False:
+        raise RuntimeError('faild to find two orthogonal vectors in the GB plane, maybe you can try to increase the lim')
+    return np.column_stack((v1, v2))
+    
 def dia_sym_mtx(U):
     #return the second-diagonal symmetry transformed matrix of U:
     Ux = np.eye(3)

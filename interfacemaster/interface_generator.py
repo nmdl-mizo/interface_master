@@ -4,7 +4,7 @@ from pymatgen.core.structure import Structure
 from pymatgen.io.cif import CifWriter
 from pymatgen.io.vasp.inputs import Poscar
 import numpy as np
-from cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_hand, find_integer_vectors, get_pri_vec_inplane
+from cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_hand, find_integer_vectors, get_pri_vec_inplane, get_ortho_two_v, ang
 import os
 import matplotlib.pyplot as plt
 
@@ -48,12 +48,6 @@ def three_dot(M1, M2, M3):
     compute the three continuous dot product
     """
     return dot(dot(M1,M2),M3)
-
-def ang(v1, v2):
-    """
-    compute the cos of angle between v1 & v2
-    """
-    return abs(dot(v1, v2)/norm(v1)/norm(v2))
 
 def get_ang_list(m1, n):
     """
@@ -852,7 +846,7 @@ def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_
             atoms_here[right_indices] = atoms_here[right_indices] + v1 * i + v2 * j
             elements_here = original_elements.copy()
             #working folder
-            folder_name = str(i) + ' ' + str(j)
+            folder_name = str(i) + '_' + str(j)
             os.mkdir(folder_name)
             os.chdir(folder_name)
             #generate files
@@ -1337,13 +1331,14 @@ class core:
         R = dot(cell_1, inv(cell_2))
         self.orientation = R
 
-    def compute_bicrystal(self, hkl, lim = 20, orthogonal = False, tol = 1e-10):
+    def compute_bicrystal(self, hkl, lim = 20, normal_ortho = False, plane_ortho = False, tol = 1e-10):
         """
         compute the transformation to obtain the supercell of the two slabs forming a interface
         argument:
         hkl --- miller indices of the plane expressed in lattice_1
         lim --- the limit searching for a CSL vector cross the plane
-        orthogonal --- whether to obtain a monoclinic supercell
+        normal_ortho --- whether limit the vector crossing the GB to be normal to the GB
+        plane_ortho --- whether limit the two vectors in the GB plane to be orthogonal
         tol --- tolerance judging whether orthogonal
         """
         self.d1 = d_hkl(self.lattice_1, hkl)
@@ -1353,8 +1348,10 @@ class core:
         hkl_c = get_primitive_hkl(hkl, self.lattice_1, self.CSL) # miller indices of the plane in CSL
         hkl_c = np.array(hkl_c)
         plane_B = get_pri_vec_inplane(hkl_c, self.CSL) # plane bases of the CSL lattice plane
+        if (plane_ortho == True) and (abs(dot(plane_B[:,0], plane_B[:,1])) > tol):
+            plane_B = get_ortho_two_v(plane_B, lim, tol)
         plane_n = cross(plane_B[:,0], plane_B[:,1]) # plane normal
-        v3 = cross_plane(self.CSL, plane_n, lim, orthogonal, tol) # a CSL basic vector cross the plane
+        v3 = cross_plane(self.CSL, plane_n, lim, normal_ortho, tol) # a CSL basic vector cross the plane
         supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
         supercell = get_right_hand(supercell) # check right-handed
         self.bicrystal_U1 = np.array(np.round(dot(inv(self.lattice_1), supercell),8),dtype = int)
@@ -1367,12 +1364,13 @@ class core:
         print('cell 2:')
         print(self.bicrystal_U1)
 
-    def compute_bicrystal_two_D(self, lim = 20, orthogonal = False, tol = 1e-10):
+    def compute_bicrystal_two_D(self, lim = 20, normal_ortho = False, plane_ortho = False, tol = 1e-10):
         """
         compute the transformation to obtain the supercell of the two slabs forming a interface (only two_D periodicity)
         argument:
         lim --- the limit searching for a CSL vector cross the plane
-        orthogonal --- whether to obtain a monoclinic supercell
+        normal_ortho --- whether limit the vector crossing the GB to be normal to the GB
+        plane_ortho --- whether limit the two vectors in the GB plane to be orthogonal
         tol --- tolerance judging whether orthogonal
         """
         #the two slabs with auxilary vector
@@ -1383,17 +1381,17 @@ class core:
 
         #two of the three vectors other than the auxilary vector
         B1 = get_plane_vectors(slab_1, self.axis)
-        B2 = get_plane_vectors(slab_2, self.axis)
-
+        if (plane_ortho == True) and (abs(dot(B1[:,0], B1[:,1])) > tol):
+            B1 = get_ortho_two_v(B1, lim, tol)
         #the third vector
-        v3_1 = cross_plane(self.lattice_1, self.axis, lim, orthogonal, tol)
-        v3_2 = cross_plane(a2, self.axis, lim, orthogonal, tol)
+        v3_1 = cross_plane(self.lattice_1, self.axis, lim, normal_ortho, tol)
+        v3_2 = cross_plane(a2, self.axis, lim, normal_ortho, tol)
         if dot(v3_1, v3_2) < 0:
             v3_2 = - v3_2
 
         #unit slabs
         cell_1 = np.column_stack((v3_1, B1))
-        cell_2 = np.column_stack((v3_2, B2))
+        cell_2 = np.column_stack((v3_2, B1))
 
         #right_handed
         cell_1 = get_right_hand(cell_1)
