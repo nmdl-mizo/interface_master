@@ -1,12 +1,8 @@
-include ./paras
-label loopa
-variable a loop ${na}
-label loopb
-variable b loop ${nb}
-variable tx equal "((v_a-1) * v_cnidv1x + (v_b-1) * v_cnidv2x)" # displacement in x direction
-variable ty equal "((v_a-1) * v_cnidv1y + (v_b-1) * v_cnidv2y)" # displacement in y direction
-variable tz equal "((v_a-1) * v_cnidv1z + (v_b-1) * v_cnidv2z)" # displacement in z direction
-
+include ./totalnum
+variable cnid_name file cnid_loop
+variable deleting_name file deleting_loop
+variable expansion_name file expansion_loop
+label loop
 #Initialize Simulation --------------------- 
 clear
 units metal 
@@ -16,8 +12,7 @@ atom_style atomic
 atom_modify map array
 
 # ---------- Create Atoms --------------------- 
-box tilt large
-read_data ./atominfile
+read_data ./${expansion_name}/${cnid_name}/${deleting_name}
 include ./blockfile
 mass 1 28.0855 #Si
 # ---------- Define Interatomic Potential --------------------- 
@@ -29,28 +24,92 @@ neigh_modify delay 10 check yes
 # ---------- Compute properties --------------------- 
 #0.excess energy
 compute eng all pe/atom 
-compute teng all reduce sum c_eng
+compute eatoms all reduce sum c_eng 
+compute emiddle middle reduce sum c_eng
+
+#calculate excess values
+#1.excess volume
+compute voro middle voronoi/atom
+compute voro1 middle reduce sum c_voro[1]
+
+#2.excess plane stress
+compute stress middle stress/atom NULL
+compute xx middle reduce sum c_stress[1]
+compute yy middle reduce sum c_stress[2]
+compute zz middle reduce sum c_stress[3]
+compute bstress bulk stress/atom NULL
+compute byy bulk reduce sum c_bstress[2]
+compute bzz bulk reduce sum c_bstress[3]
+
+#3.excess bond-orientation order
+compute orient middle orientorder/atom degrees 3 3 6 7 nnn 4 
+compute boo3 middle reduce sum c_orient[1]
+compute boo6 middle reduce sum c_orient[2]
+compute boo7 middle reduce sum c_orient[3]
 # ---------- Run Minimization ---------------------
 reset_timestep 0
 
-displace_atoms right move ${tx} ${ty} ${tz} units box
+min_style cg 
+minimize 1.0e-10 1.0e-10 50000 100000 
 
 thermo 10000 
-thermo_style custom step lx ly lz c_teng
-
+thermo_style custom step lx ly lz c_emiddle temp c_voro1 c_yy c_zz c_boo3 c_boo6 c_boo7 c_xx c_byy c_bzz 
+dump 		1 all custom 1 dump${num} id type xu yu zu c_eng c_stress[2] c_stress[3] c_voro[1] c_orient[1] c_orient[2] c_orient[3]
 run 0
 
-
 # ---------- Calculate excess values ---------------------
-variable energy equal c_teng
+#per atom properties in Si crystal 
+variable pervolume equal 20.0522655473589
+variable minimumenergy equal -4.63
+variable gbarea equal "ly * lz" 
 
+#0.stress in x direction
+variable sigmaxx equal "c_xx"
+variable xxJm2 equal $(v_sigmaxx * 0.00001/v_gbarea)
 
-print "${tx} ${ty} ${tz} ${energy}" append results
+#1.excess volume
+variable vsum equal $(20.052265547358864239 * count(middle))
+variable exvolume equal $((c_voro1 - v_vsum)/v_gbarea)
 
-next b
-jump proto.in loopb
-variable b delete
-next a
-jump proto.in loopa
+#2.excess plane stress
+variable byy equal "c_byy"
+variable bzz equal "c_bzz"
+variable gbyy equal "c_yy"
+variable yyJm2 equal $( (v_gbyy - count(middle) * v_byy / count(bulk)) * 0.00001/v_gbarea)
+variable gbzz equal "c_zz"
+variable zzJm2 equal $( (v_gbzz - count(middle) * v_bzz / count(bulk)) * 0.00001/v_gbarea)
+
+#3.excess bond-orientation order
+variable exboo3 equal "(c_boo3 - count(middle) * 0.74535599)/v_gbarea"
+variable exboo6 equal "(c_boo6 - count(middle) * 0.62853936)/v_gbarea"
+variable exboo7 equal "(c_boo7 - count(middle) * 0.61195228)/v_gbarea"
+
+#4.excess energy
+variable esum equal "v_minimumenergy * count(middle)" 
+variable xseng equal "c_emiddle - (v_minimumenergy * count(middle))" 
+variable gbe equal "(c_emiddle - (v_minimumenergy * count(middle)))/v_gbarea" 
+variable gbemJm2 equal ${gbe}*16021.7733 
+variable gbernd equal round(${gbemJm2}) 
+
+#num of atoms in the termination
+variable plane_atoms equal "count(all)"
+#print results
+print "GB excess plane stress xx is ${xxJm2} J/m^2"
+print "GB excess volume is ${exvolume} A"
+print "GB excess plane stress yy is ${yyJm2} J/m^2"
+print "GB excess plane stress zz is ${zzJm2} J/m^2"
+print "GB excess bond-order parameter Q3 is ${exboo3} m^-2"
+print "GB excess bond-order parameter Q6 is ${exboo6} m^-2"
+print "GB excess bond-order parameter Q7 is ${exboo7} m^-2"
+print "GB energy is ${gbemJm2} mJ/m^2"	
+
+print "${expansion_name} ${deleting_name} ${cnid_name} ${plane_atoms} ${xxJm2} ${exvolume} ${yyJm2} ${zzJm2} ${exboo3} ${exboo6} ${exboo7} ${gbemJm2}" append results
+
+next expansion_name
+next deleting_name
+next cnid_name
+next num
+jump proto.in loop
+
 
 
