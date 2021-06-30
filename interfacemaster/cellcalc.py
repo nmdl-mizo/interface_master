@@ -1,11 +1,43 @@
 from numpy.linalg import det, norm, inv
-from numpy import dot, cross, square, ceil, cos, sin
+from numpy import dot, cross, ceil, square
 import numpy as np
-import sys
 
+def ang(v1, v2):
+    """
+    compute the cos of angle between v1 & v2
+    """
+    return abs(dot(v1, v2)/norm(v1)/norm(v2))
+
+def get_ortho_two_v(B, lim, tol):
+    """
+    get orthogonal cell of a 2D basis
+    """
+    #meshes
+    x = np.arange(-lim, lim + 1, 1)
+    y = x
+
+    indice = (np.stack(np.meshgrid(x, y)).T).reshape(len(x) ** 2, 2)
+    indice_0 = indice[np.where(np.sum(abs(indice), axis=1) != 0)]
+    indice_0 = np.array(indice_0,dtype = np.float64)
+    LP = dot(B, indice_0.T).T
+    LP = LP[np.argsort(norm(LP, axis=1))]
+    found = False
+    count = 0
+    while not found and count < len(LP):
+        v1 = LP[count]
+        for i in LP:
+            if ang(v1, i) < tol:
+                v2 = i
+                found = True
+                break
+        count += 1
+    if found == False:
+        raise RuntimeError('faild to find two orthogonal vectors in the GB plane, maybe you can try to increase the lim')
+    return np.column_stack((v1, v2))
+    
 def dia_sym_mtx(U):
     #return the second-diagonal symmetry transformed matrix of U:
-    Ux = np.eye(3) 
+    Ux = np.eye(3)
     for i in range(3):
         for j in range(3):
             Ux[i][j] = U[2-j][2-i]
@@ -29,8 +61,7 @@ def find_integer_vectors(v,sigma):
         L = int(np.round(L/reduce))
         return now, L
     else:
-        #print('error: failed to find the rational vector of ' + str(v) + '\n within lcd = ' + str(sigma))
-        sys.exit()
+        raise RuntimeError('failed to find the rational vector of ' + str(v) + '\n within lcd = ' + str(sigma))
 
 def find_integer_vectors_nn(v,sigma):
     #A function find the coefficients N so that Nv contains only, ignore gcd
@@ -48,9 +79,8 @@ def find_integer_vectors_nn(v,sigma):
         L = int(np.round(L))
         return now, L
     else:
-        #print('error: failed to find the rational vector of ' + str(v) + '\n within lcd = ' + str(sigma))
-        sys.exit()
-        
+        raise RuntimeError('failed to find the rational vector of ' + str(v) + '\n within lcd = ' + str(sigma))
+
 def solve_DSC_equations(u,v,w,L,B):
     #print('solve dsc equations')
     #print('u v w L')
@@ -62,13 +92,13 @@ def solve_DSC_equations(u,v,w,L,B):
     g_v = L/np.gcd(abs(w), L)
     g_lambda = np.gcd.reduce([abs(v), abs(w), L])
     g_miu = np.gcd(abs(w),L)/g_lambda
-    
+
     g_v = int(round(g_v))
     g_lambda = int(round(g_lambda))
     g_miu = int(round(g_miu))
     #find integer solutions
     t = (w * g_v) / L
-    
+
     # 0=<gama<g_v
     gamas = np.arange(0, g_v)
     for i in gamas:
@@ -77,7 +107,7 @@ def solve_DSC_equations(u,v,w,L,B):
         #check whether s is a integer
         if abs(s-np.round(s))<tol:
             break
-            
+
     # 0=<alpha<g_miu, 0=<beta<g_v
     alphas = np.arange(0,g_miu)
     betas = np.arange(0,g_v)
@@ -94,8 +124,7 @@ def solve_DSC_equations(u,v,w,L,B):
                 break
         count += 1
     if not found:
-        print('failed to find integer solutions, something strange happens...')
-        sys.exit()
+        raise RuntimeError('failed to find integer solutions, something strange happens...')
     #DSC basis
     D1 = 1 / g_lambda * B[:,0]
     D2 = alpha / (g_lambda * g_miu) * B[:,0] + 1 / g_miu * B[:,1]
@@ -105,7 +134,7 @@ def solve_DSC_equations(u,v,w,L,B):
     #print(alpha, beta, gama, g_lambda, g_miu, g_v)
     DSC_basis = np.column_stack((D1,D2,D3))
     return DSC_basis, dot(inv(B),DSC_basis)
-    
+
 def projection(u1,u2):
     #get the projection of u1 on u2
     return dot(u1,u2)/dot(u2,u2)
@@ -149,6 +178,13 @@ def LLL(B):
             k = max(k-1, 1)
     return Bhere
 
+def get_normal_index(hkl, lattice):
+    """
+    get the coordinates in the lattice of a normal vector to the plane (hkl)
+    """
+    n, Pc1 = get_plane(hkl, lattice)
+    return dot(inv(lattice), n)
+
 def get_primitive_hkl(hkl, C_lattice, P_lattice):
     #convert the miller indices from conventional cell to primitive cell
     #1. get normal
@@ -179,9 +215,9 @@ def get_plane(hkl, lattice):
     return n, points[:,0]
 
 def get_indices_from_n_Pc1(n, lattice, Pc1):
-    #get the miller indices of certain plane with normal n 
+    #get the miller indices of certain plane with normal n
     #and one in-plane point Pc1 for certain lattice
-    
+
     hkl = np.array([0,0,0],dtype = float)
     for i in range(3):
         hkl[i] = dot(lattice[:,i], n)/dot(Pc1, n)
@@ -195,7 +231,7 @@ def MID(lattice, n):
             Pc1 = lattice[:,i]
             break
     hkl = get_indices_from_n_Pc1(n, lattice, Pc1)
-    hkl = find_integer_vectors_nn(hkl,100)
+    hkl = find_integer_vectors(hkl,10000)[0]
     return hkl
 
 def ext_euclid(a, b):
@@ -253,7 +289,7 @@ class DSCcalc:
         self.U_int = np.array(np.eye(3),dtype=int) #describing ai2 by ai1 with int coe
         self.Ls = np.arange(3) #three cooresponding greatest common denominator
         self.CNID = np.eye(3,2)
-        
+
     def parse_int_U(self,ai1,ai2,sigma):
         self.ai1 = ai1
         self.ai2 = ai2
@@ -263,7 +299,7 @@ class DSCcalc:
         for i in range(3):
             v = self.U[:,i]
             self.U_int[:,i], self.Ls[i] = find_integer_vectors(v, self.sigma)
-        
+
     def compute_DSC(self, to_LLL = True):
         #integer LC of ai2_1
         #print('the U matrix')
@@ -272,7 +308,7 @@ class DSCcalc:
         ks,L = find_integer_vectors(dot(inv(self.ai1),self.ai2[:,0]),self.sigma)
         #print('ai2_1 is expressed by ai1 as ' + str(ks) + '/' + str(L))
         k1,k2,k3 = ks
-        #solve DSC Ei for the ai2_1 by ai1 
+        #solve DSC Ei for the ai2_1 by ai1
         Ei = solve_DSC_equations(k1,k2,k3,L,self.ai1)[0]
         #print('Ei is \n' + str(Ei))
         #coefficients of ai2_2 expressed by DSC Ei
@@ -339,7 +375,7 @@ class DSCcalc:
         else:
             self.DSC = DSC
         self.DSC = dot(inv(self.ai1),self.DSC)
-        
+
     def compute_CSL(self):
         #symmetric matrix along the second diagonal
         Ux = dia_sym_mtx(self.U)
@@ -355,7 +391,7 @@ class DSCcalc:
         self.U1 = dot(inv(self.ai1),red_CSL)
         self.U2 = dot(inv(self.U),self.U1)
         self.CSL = get_right_hand(red_CSL)
-    
+
     def compute_CNID(self, hkl):
         pmi_1 = hkl
         pmi_2 = get_primitive_hkl(hkl, self.ai1, self.ai2)
@@ -379,4 +415,4 @@ class DSCcalc:
                 break
         CNID = LLL(CNID)
         self.CNID = dot(inv(self.ai1),CNID)
-    
+

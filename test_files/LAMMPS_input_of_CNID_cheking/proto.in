@@ -1,0 +1,56 @@
+include ./paras
+label loopa
+variable a loop ${na}
+label loopb
+variable b loop ${nb}
+variable tx equal "((v_a-1) * v_cnidv1x + (v_b-1) * v_cnidv2x)" # displacement in x direction
+variable ty equal "((v_a-1) * v_cnidv1y + (v_b-1) * v_cnidv2y)" # displacement in y direction
+variable tz equal "((v_a-1) * v_cnidv1z + (v_b-1) * v_cnidv2z)" # displacement in z direction
+
+#Initialize Simulation --------------------- 
+clear
+units metal 
+dimension 3 
+boundary s p p
+atom_style atomic
+atom_modify map array
+
+# ---------- Create Atoms --------------------- 
+box tilt large
+read_data ./atominfile
+mass 1 28.0855 #Si
+mass 2 12 #C
+# ---------- Define Interatomic Potential --------------------- 
+pair_style tersoff/
+pair_coeff * * Tersoff_SiC Si C
+neighbor 2.0 bin 
+neigh_modify delay 10 check yes 
+
+# ---------- Compute properties --------------------- 
+#0.excess energy
+compute eng all pe/atom 
+compute teng all reduce sum c_eng
+# ---------- Run Minimization ---------------------
+reset_timestep 0
+
+displace_atoms right move ${tx} ${ty} ${tz} units box
+
+thermo 10000 
+thermo_style custom step lx ly lz c_teng
+
+run 0
+
+
+# ---------- Calculate excess values ---------------------
+variable energy equal c_teng
+
+
+print "${tx} ${ty} ${tz} ${energy}" append results
+
+next b
+jump proto.in loopb
+variable b delete
+next a
+jump proto.in loopa
+
+
