@@ -1,5 +1,5 @@
-from numpy.linalg import det, norm, inv
-from numpy import dot, cross, ceil, square
+from numpy.linalg import norm, inv
+from numpy import dot, cross, square
 import numpy as np
 
 def dia_sym_mtx(U):
