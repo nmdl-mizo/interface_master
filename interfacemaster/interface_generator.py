@@ -516,7 +516,7 @@ def terminates_scanner_left(slab, atoms, elements, d, round_n = 5):
     x_coords = np.unique(atoms_round)
     plane_index = 1
     position = x_coords[-plane_index]
-    while position >= height - d * 0.999:
+    while position >= height - d:
         indices_here = np.where(atoms_round == x_coords[-plane_index])[0]
         dp_here = height - position
         dp_list.append(abs(dp_here))
@@ -571,7 +571,7 @@ def terminates_scanner_right(slab, atoms, elements, d, round_n = 5):
     x_coords = np.unique(atoms_round)
     plane_index = 0
     position = 0
-    while position <= d * 1.001:
+    while position <= d:
         indices_here = np.where(atoms_round == x_coords[plane_index])[0]
         dp_here = x_coords[plane_index]
         dp_list.append(abs(dp_here))
