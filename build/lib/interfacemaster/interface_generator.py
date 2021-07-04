@@ -855,11 +855,11 @@ def sampling_deletion(lattice, atoms, elements, xlo, xhi, nearest_d, trans_name)
     del c_atoms_2
     count = 1
     num = len(atoms)
-    write_LAMMPS(lattice, atoms, elements, filename = trans_name + '_0', orthogonal = True)
+    #write_LAMMPS(lattice, atoms, elements, filename = trans_name + '_0', orthogonal = True)
     while nearest_now < nearest_d and num > 1:
         atoms, elements, nearest_now, num, trans_ID, del_ID, displacement, original_atoms = delete_insert(lattice, atoms, elements, xlo, xhi, original_atoms)
-        print(nearest_now)
-        write_LAMMPS(lattice, atoms, elements, filename = trans_name + '_{}'.format(count), orthogonal = True)
+        #print(nearest_now)
+        #write_LAMMPS(lattice, atoms, elements, filename = trans_name + '_{}'.format(count), orthogonal = True)
         data = np.append(data, [trans_ID[0]+1, del_ID[0]+1])
         for i in range(3):
             data = np.append(data, displacement[i])
