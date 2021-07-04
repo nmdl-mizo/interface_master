@@ -726,6 +726,7 @@ def draw_slab_dich(xs, ys, c_xs, c_ys,axes,num1, plane_list_1, lattice_to_screen
 """
 Below is some sampling functions
 """
+ 
 def get_nearest_pair(lattice, atoms, indices):
     """
     a function return the indices of two nearest atoms in a periodic block
@@ -776,13 +777,13 @@ def get_nearest_pair(lattice, atoms, indices):
 
     return indices[pos_1_index_map[distances_id]], indices[pos_2_index_map[distances_id]], \
      pos_1_rep[distances_id], pos_2_rep[distances_id]
-
+ 
 def searching_indices(atoms, coordinates):
 	  """
 	  get the indices of the coordinates in the atoms
 	  """
 	  return np.where( norm((atoms - coordinates), axis = 1) < 1e-8)[0]
-
+ 
 def get_two_IDs_and_new_original_atoms(coordinates_1, coordinates_2, atoms, displacement):
 	  """
 	  get the two IDs of the two coordinates in atoms, and move
@@ -792,7 +793,7 @@ def get_two_IDs_and_new_original_atoms(coordinates_1, coordinates_2, atoms, disp
 	  ID_2 = searching_indices(atoms, coordinates_2)
 	  atoms[ID_1] = atoms[ID_1] + displacement
 	  return ID_1, ID_2, atoms
-
+ 
 def delete_insert(lattice, atoms, elements, xlo, xhi, original_atoms):
     """
     a function delete two nearest atoms and insert one at the middle of them
@@ -834,11 +835,10 @@ def delete_insert(lattice, atoms, elements, xlo, xhi, original_atoms):
     if id1 == id2:
         d_nearest_now = np.inf
     else:
-        d_nearest_now = norm(dot(lattice, (atoms[id1] - atoms[id2])))
-
+        d_nearest_now = norm(start - end)
 
     return atoms, elements, d_nearest_now, len(atoms), ogn_ID_1, ogn_ID_2, displace, original_atoms
-
+ 
 def sampling_deletion(lattice, atoms, elements, xlo, xhi, nearest_d, trans_name):
     """
     looping deletion of atoms until no atoms are nearer than
@@ -855,8 +855,11 @@ def sampling_deletion(lattice, atoms, elements, xlo, xhi, nearest_d, trans_name)
     del c_atoms_2
     count = 1
     num = len(atoms)
+    #write_LAMMPS(lattice, atoms, elements, filename = trans_name + '_0', orthogonal = True)
     while nearest_now < nearest_d and num > 1:
         atoms, elements, nearest_now, num, trans_ID, del_ID, displacement, original_atoms = delete_insert(lattice, atoms, elements, xlo, xhi, original_atoms)
+        #print(nearest_now)
+        #write_LAMMPS(lattice, atoms, elements, filename = trans_name + '_{}'.format(count), orthogonal = True)
         data = np.append(data, [trans_ID[0]+1, del_ID[0]+1])
         for i in range(3):
             data = np.append(data, displacement[i])
@@ -865,6 +868,7 @@ def sampling_deletion(lattice, atoms, elements, xlo, xhi, nearest_d, trans_name)
         np.savetxt(f, data, fmt='%.16f')
     return count
     
+ 
 def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_nearest, xlo, xhi):
     """
     a function generate atom files sampling RBT & deleting atoms
