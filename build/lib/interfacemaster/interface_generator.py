@@ -844,6 +844,7 @@ def sampling_deletion(lattice, atoms, elements, xlo, xhi, nearest_d, trans_name)
     looping deletion of atoms until no atoms are nearer than
     one atom distance
     """
+    data = np.array([-1, -1, -1, -1, -1],dtype = float)
     original_atoms = atoms.copy()
     c_atoms = atoms.copy()
     c_atoms_2 = atoms.copy()
@@ -854,18 +855,15 @@ def sampling_deletion(lattice, atoms, elements, xlo, xhi, nearest_d, trans_name)
     del c_atoms_2
     count = 1
     num = len(atoms)
-    delete_displace_file = open(trans_name, 'w')
-    for i in range(5):
-        delete_displace_file.write('{}\n'.format(0))
     while nearest_now < nearest_d and num > 1:
         atoms, elements, nearest_now, num, trans_ID, del_ID, displacement, original_atoms = delete_insert(lattice, atoms, elements, xlo, xhi, original_atoms)
-        delete_displace_file.write('{}\n'.format(trans_ID[0]+1))
-        delete_displace_file.write('{}\n'.format(del_ID[0]+1))
+        data = np.append(data, [trans_ID[0]+1, del_ID[0]+1])
         for i in range(3):
-            delete_displace_file.write('{}\n'.format(displacement[i]))
+            data = np.append(data, displacement[i])
         count += 1
+    with open(trans_name, 'w') as f:
+        np.savetxt(f, data, fmt='%.16f')
     return count
-    delete_displace_file.close()
     
 def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_nearest, xlo, xhi):
     """
