@@ -1,3 +1,9 @@
 __pycache__/
 .ipynb_checkpoints/
 test_files/.ipynb_checkpoints/
+test_files/POSCAR*
+test_files/log*
+build/
+dist/
+interfacemaster.egg-info/
+.DS_Store
