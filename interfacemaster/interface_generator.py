@@ -2,7 +2,7 @@ from numpy.linalg import det, norm, inv
 from numpy import dot, cross, ceil, floor, cos, sin
 from pymatgen.core.structure import Structure, Lattice
 import numpy as np
-from cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_hand, get_pri_vec_inplane
+from .cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_hand, get_pri_vec_inplane
 import os
 import matplotlib.pyplot as plt
 
