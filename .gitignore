@@ -6,3 +6,4 @@ test_files/log*
 build/
 dist/
 interfacemaster.egg-info/
+.DS_Store
