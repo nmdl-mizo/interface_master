@@ -2,7 +2,7 @@ from numpy.linalg import det, norm, inv
 from numpy import dot, cross, ceil, floor, cos, sin
 from pymatgen.core.structure import Structure, Lattice
 import numpy as np
-from .cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_hand, get_pri_vec_inplane
+from .cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_hand, find_integer_vectors, get_pri_vec_inplane, get_ortho_two_v, ang
 import os
 import matplotlib.pyplot as plt
 
@@ -31,12 +31,6 @@ def three_dot(M1, M2, M3):
     compute the three continuous dot product
     """
     return dot(dot(M1,M2),M3)
-
-def ang(v1, v2):
-    """
-    compute the cos of angle between v1 & v2
-    """
-    return abs(dot(v1, v2)/norm(v1)/norm(v2))
 
 def get_ang_list(m1, n):
     """
@@ -82,13 +76,14 @@ def POSCAR_to_cif(Poscar_name, Cif_name):
     structure = Structure.from_file(Poscar_name)
     structure.to(filename=Cif_name)
 
-def write_LAMMPS(lattice, atoms, elements, filename = 'lmp_atoms_file'):
+def write_LAMMPS(lattice, atoms, elements, filename = 'lmp_atoms_file', orthogonal = False):
     """
     write LAMMPS input atom file file of a supercell
     argument:
     lattice --- lattice matrix
     atoms --- fractional atoms coordinates
     elements --- list of element name of the atoms
+    orthogonal --- whether write orthogonal cell
     """
 
     #list of elements
@@ -132,7 +127,8 @@ def write_LAMMPS(lattice, atoms, elements, filename = 'lmp_atoms_file'):
         f.write('{0:.8f} {1:.8f} xlo xhi \n'.format(xlo, xhi))
         f.write('{0:.8f} {1:.8f} ylo yhi \n'.format(ylo, yhi))
         f.write('{0:.8f} {1:.8f} zlo zhi \n\n'.format(zlo, zhi))
-        f.write('{0:.8f} {1:.8f} {2:.8f} xy xz yz \n\n'.format(xy, xz, yz))
+        if orthogonal == False:
+            f.write('{0:.8f} {1:.8f} {2:.8f} xy xz yz \n\n'.format(xy, xz, yz))
         f.write('Atoms \n \n')
         np.savetxt(f, Final_format, fmt='%i %i %.16f %.16f %.16f')
 
@@ -476,7 +472,7 @@ def terminates_scanner_left(slab, atoms, elements, d, round_n = 5):
     x_coords = np.unique(atoms_round)
     plane_index = 1
     position = x_coords[-plane_index]
-    while position >= height - d * 0.999:
+    while position >= height - d:
         indices_here = np.where(atoms_round == x_coords[-plane_index])[0]
         dp_here = height - position
         dp_list.append(abs(dp_here))
@@ -531,7 +527,7 @@ def terminates_scanner_right(slab, atoms, elements, d, round_n = 5):
     x_coords = np.unique(atoms_round)
     plane_index = 0
     position = 0
-    while position <= d * 1.001:
+    while position <= d:
         indices_here = np.where(atoms_round == x_coords[plane_index])[0]
         dp_here = x_coords[plane_index]
         dp_list.append(abs(dp_here))
@@ -686,6 +682,7 @@ def draw_slab_dich(xs, ys, c_xs, c_ys,axes,num1, plane_list_1, lattice_to_screen
 """
 Below is some sampling functions
 """
+ 
 def get_nearest_pair(lattice, atoms, indices):
     """
     a function return the indices of two nearest atoms in a periodic block
@@ -736,8 +733,24 @@ def get_nearest_pair(lattice, atoms, indices):
 
     return indices[pos_1_index_map[distances_id]], indices[pos_2_index_map[distances_id]], \
      pos_1_rep[distances_id], pos_2_rep[distances_id]
-
-def delete_insert(lattice, atoms, elements, xlo, xhi):
+ 
+def searching_indices(atoms, coordinates):
+	  """
+	  get the indices of the coordinates in the atoms
+	  """
+	  return np.where( norm((atoms - coordinates), axis = 1) < 1e-8)[0]
+ 
+def get_two_IDs_and_new_original_atoms(coordinates_1, coordinates_2, atoms, displacement):
+	  """
+	  get the two IDs of the two coordinates in atoms, and move
+	  the coordinates_1 by displacement
+	  """
+	  ID_1 = searching_indices(atoms, coordinates_1)
+	  ID_2 = searching_indices(atoms, coordinates_2)
+	  atoms[ID_1] = atoms[ID_1] + displacement
+	  return ID_1, ID_2, atoms
+ 
+def delete_insert(lattice, atoms, elements, xlo, xhi, original_atoms):
     """
     a function delete two nearest atoms and insert one at the middle of them
     """
@@ -749,16 +762,24 @@ def delete_insert(lattice, atoms, elements, xlo, xhi):
     selected_atoms = atoms[selected_indices]
     id1, id2, start, end = get_nearest_pair(lattice, selected_atoms, selected_indices)
 
-    #middle
+    #middle & displacement
     middle_atom = (start + end) / 2
-    middle_atom = dot(inv(lattice), middle_atom)
     middle_element = elements[id1]
-
+    close_atom_1 = dot(lattice, atoms[id1])
+    close_atom_2 = dot(lattice, atoms[id2])
+    displace = middle_atom - close_atom_1
+    displace_frac = dot(inv(lattice), displace)
+    
+    #get the original IDs of the pair of atoms and displace the first in the original atoms
+    ogn_ID_1, ogn_ID_2, original_atoms = get_two_IDs_and_new_original_atoms(atoms[id1], atoms[id2], \
+                                                                     original_atoms, displace_frac)
+    
     #delete
     atoms = np.delete(atoms, [id1, id2], axis = 0)
     elements = np.delete(elements, [id1, id2])
 
     #insert
+    middle_atom = dot(inv(lattice), middle_atom)
     atoms = np.vstack((atoms, middle_atom))
     elements = np.append(elements, middle_element)
 
@@ -768,29 +789,42 @@ def delete_insert(lattice, atoms, elements, xlo, xhi):
     selected_atoms = atoms[selected_indices]
     id1, id2, start, end = get_nearest_pair(lattice, selected_atoms, selected_indices)
     if id1 == id2:
-        d_nearest = np.inf
+        d_nearest_now = np.inf
     else:
-        d_nearest = norm(dot(lattice, (atoms[id1] - atoms[id2])))
+        d_nearest_now = norm(start - end)
 
-
-    return atoms, elements, d_nearest, len(atoms)
-
-def sampling_deletion(lattice, atoms, elements, xlo, xhi, nearest_d):
+    return atoms, elements, d_nearest_now, len(atoms), ogn_ID_1, ogn_ID_2, displace, original_atoms
+ 
+def sampling_deletion(lattice, atoms, elements, xlo, xhi, nearest_d, trans_name):
     """
     looping deletion of atoms until no atoms are nearer than
     one atom distance
     """
+    data = np.array([-1, -1, -1, -1, -1],dtype = float)
+    original_atoms = atoms.copy()
     c_atoms = atoms.copy()
+    c_atoms_2 = atoms.copy()
     c_elements = elements.copy()
-    nearest_now = delete_insert(lattice, c_atoms, c_elements, xlo, xhi)[2]
+    nearest_now = delete_insert(lattice, c_atoms, c_elements, xlo, xhi, c_atoms_2)[2]
+    del c_atoms
+    del c_elements
+    del c_atoms_2
     count = 1
     num = len(atoms)
-    write_LAMMPS(lattice, atoms, elements, filename = '0')
+    #write_LAMMPS(lattice, atoms, elements, filename = trans_name + '_0', orthogonal = True)
     while nearest_now < nearest_d and num > 1:
-        atoms, elements, nearest_now, num = delete_insert(lattice, atoms, elements, xlo, xhi)
-        write_LAMMPS(lattice, atoms, elements, filename = str(count))
+        atoms, elements, nearest_now, num, trans_ID, del_ID, displacement, original_atoms = delete_insert(lattice, atoms, elements, xlo, xhi, original_atoms)
+        #print(nearest_now)
+        #write_LAMMPS(lattice, atoms, elements, filename = trans_name + '_{}'.format(count), orthogonal = True)
+        data = np.append(data, [trans_ID[0]+1, del_ID[0]+1])
+        for i in range(3):
+            data = np.append(data, displacement[i])
         count += 1
-
+    with open(trans_name, 'w') as f:
+        np.savetxt(f, data, fmt='%.16f')
+    return count
+    
+ 
 def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_nearest, xlo, xhi):
     """
     a function generate atom files sampling RBT & deleting atoms
@@ -799,6 +833,7 @@ def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_
     original_elements = elements.copy()
     v1 = CNID_frac[:,0] / grid[0]
     v2 = CNID_frac[:,1] / grid[1]
+    delete_nums_per_trans_file = open('del_nums', 'w')
     for i in range(grid[0]):
         for j in range(grid[1]):
             #copy atoms
@@ -807,15 +842,12 @@ def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_
             right_indices = np.where(atoms_here[:,0] > bound / norm(lattice[:,0]))[0]
             atoms_here[right_indices] = atoms_here[right_indices] + v1 * i + v2 * j
             elements_here = original_elements.copy()
-            #working folder
-            folder_name = str(i) + ' ' + str(j)
-            os.mkdir(folder_name)
-            os.chdir(folder_name)
             #generate files
-            sampling_deletion(lattice, atoms_here, \
-                  elements_here, xlo, xhi, d_nearest*0.99)
-            os.chdir(os.path.pardir)
-
+            dele_count = sampling_deletion(lattice, atoms_here, \
+                  elements_here, xlo, xhi, d_nearest*0.99, '{0}_{1}'.format(i+1,j+1))
+            delete_nums_per_trans_file.write('{}\n'.format(dele_count))
+    delete_nums_per_trans_file.close()
+            
 class core:
     def __init__(self, structure_1, structure_2=None):
         if isinstance(structure_1, Structure):
@@ -1134,7 +1166,7 @@ class core:
 
     def get_bicrystal(self, dydz = np.array([0.0,0.0,0.0]), dx = 0, dp1 = 0, dp2 = 0, \
                       xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, filename = 'POSCAR', \
-                      two_D = False, filetype = 'VASP', to_file=True):
+                      two_D = False, filetype = 'VASP', LAMMPS_file_ortho = False, to_file=True):
         """
         generate a cif file for the bicrystal structure
         argument:
@@ -1144,6 +1176,7 @@ class core:
         dp2 --- termination of slab 2
         xyz --- expansion
         two_D --- whether a two CSL
+        LAMMPS_file_ortho --- whether the output LAMMPS has orthogonal cell
         """
         #get the atoms in the primitive cell
         lattice_1, atoms_1, elements_1 = self.lattice_1.copy(), self.atoms_1.copy(), self.elements_1.copy()
@@ -1245,7 +1278,7 @@ class core:
             if filetype == 'VASP':
                 write_POSCAR(lattice_bi, atoms_bi, elements_bi, filename)
             elif filetype == 'LAMMPS':
-                write_LAMMPS(lattice_bi, atoms_bi, elements_bi, filename)
+                write_LAMMPS(lattice_bi, atoms_bi, elements_bi, filename, LAMMPS_file_ortho)
             else:
                 raise RuntimeError("Sorry, we only support for 'VASP' or 'LAMMPS' output")
 
@@ -1284,13 +1317,14 @@ class core:
         R = dot(cell_1, inv(cell_2))
         self.orientation = R
 
-    def compute_bicrystal(self, hkl, lim = 20, orthogonal = False, tol = 1e-10):
+    def compute_bicrystal(self, hkl, lim = 20, normal_ortho = False, plane_ortho = False, tol = 1e-10):
         """
         compute the transformation to obtain the supercell of the two slabs forming a interface
         argument:
         hkl --- miller indices of the plane expressed in lattice_1
         lim --- the limit searching for a CSL vector cross the plane
-        orthogonal --- whether to obtain a monoclinic supercell
+        normal_ortho --- whether limit the vector crossing the GB to be normal to the GB
+        plane_ortho --- whether limit the two vectors in the GB plane to be orthogonal
         tol --- tolerance judging whether orthogonal
         """
         self.d1 = d_hkl(self.lattice_1, hkl)
@@ -1300,8 +1334,10 @@ class core:
         hkl_c = get_primitive_hkl(hkl, self.lattice_1, self.CSL) # miller indices of the plane in CSL
         hkl_c = np.array(hkl_c)
         plane_B = get_pri_vec_inplane(hkl_c, self.CSL) # plane bases of the CSL lattice plane
+        if (plane_ortho == True) and (abs(dot(plane_B[:,0], plane_B[:,1])) > tol):
+            plane_B = get_ortho_two_v(plane_B, lim, tol)
         plane_n = cross(plane_B[:,0], plane_B[:,1]) # plane normal
-        v3 = cross_plane(self.CSL, plane_n, lim, orthogonal, tol) # a CSL basic vector cross the plane
+        v3 = cross_plane(self.CSL, plane_n, lim, normal_ortho, tol) # a CSL basic vector cross the plane
         supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
         supercell = get_right_hand(supercell) # check right-handed
         self.bicrystal_U1 = np.array(np.round(dot(inv(self.lattice_1), supercell),8),dtype = int)
@@ -1314,12 +1350,13 @@ class core:
         print('cell 2:')
         print(self.bicrystal_U1)
 
-    def compute_bicrystal_two_D(self, lim = 20, orthogonal = False, tol = 1e-10):
+    def compute_bicrystal_two_D(self, lim = 20, normal_ortho = False, plane_ortho = False, tol = 1e-10):
         """
         compute the transformation to obtain the supercell of the two slabs forming a interface (only two_D periodicity)
         argument:
         lim --- the limit searching for a CSL vector cross the plane
-        orthogonal --- whether to obtain a monoclinic supercell
+        normal_ortho --- whether limit the vector crossing the GB to be normal to the GB
+        plane_ortho --- whether limit the two vectors in the GB plane to be orthogonal
         tol --- tolerance judging whether orthogonal
         """
         #the two slabs with auxilary vector
@@ -1330,17 +1367,17 @@ class core:
 
         #two of the three vectors other than the auxilary vector
         B1 = get_plane_vectors(slab_1, self.axis)
-        B2 = get_plane_vectors(slab_2, self.axis)
-
+        if (plane_ortho == True) and (abs(dot(B1[:,0], B1[:,1])) > tol):
+            B1 = get_ortho_two_v(B1, lim, tol)
         #the third vector
-        v3_1 = cross_plane(self.lattice_1, self.axis, lim, orthogonal, tol)
-        v3_2 = cross_plane(a2, self.axis, lim, orthogonal, tol)
+        v3_1 = cross_plane(self.lattice_1, self.axis, lim, normal_ortho, tol)
+        v3_2 = cross_plane(a2, self.axis, lim, normal_ortho, tol)
         if dot(v3_1, v3_2) < 0:
             v3_2 = - v3_2
 
         #unit slabs
         cell_1 = np.column_stack((v3_1, B1))
-        cell_2 = np.column_stack((v3_2, B2))
+        cell_2 = np.column_stack((v3_2, B1))
 
         #right_handed
         cell_1 = get_right_hand(cell_1)
@@ -1394,7 +1431,7 @@ class core:
         print('saving high resolution figure will take some time...please wait for a while :D')
         fig.savefig('atomic_planes', dpi = figuredpi)
 
-    def define_lammps_regions(self, region_names, region_los, region_his):
+    def define_lammps_regions(self, region_names, region_los, region_his, ortho = False):
         """
         generate a file defining some regions in the LAMMPS and define the atoms
         inside these regions into some groups.
@@ -1402,6 +1439,7 @@ class core:
         region_names --- list of name of regions
         region_los --- list of the low bounds
         region_his --- list of the hi bounds
+        ortho --- whether the cell is orthogonal
         """
 
         if (len(region_los) != len(region_names)) or (len(region_los) != len(region_his)):
@@ -1413,6 +1451,10 @@ class core:
 
         with open('blockfile', 'w') as fb:
             for i in range(len(region_names)):
-                fb.write('region {0} prism {1:.16f} {2:.16f} EDGE EDGE EDGE EDGE {3:.16f} {4:.16f} {5:.16f} units box \n'.\
+                if ortho == False:
+                    fb.write('region {0} prism {1:.16f} {2:.16f} EDGE EDGE EDGE EDGE {3:.16f} {4:.16f} {5:.16f} units box \n'.\
                 format(region_names[i], region_los[i], region_his[i], xy, xz, yz))
+                else:
+                    fb.write('region {0} block {1:.16f} {2:.16f} EDGE EDGE EDGE EDGE units box \n'.\
+                format(region_names[i], region_los[i], region_his[i]))
                 fb.write('group {0} region {1} \n'.format(region_names[i], region_names[i]))

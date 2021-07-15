@@ -1,0 +1,18 @@
+# Parameters for Si-C interactions from CITATION: P. Erhart, K. Albe, J Phys Condens Matter, 15, 5649 (2003)
+# This set has the paper's Si-I model which was recommended for SiC simulations.
+
+# Parameter values verified by Lucas Hale.
+# The values in SiC_Erhart-Albe.tersoff file of August 22, 2018 LAMMPS distribution are comparable, with higher precisions used here for the derived mixing parameters.
+# Note that the value of n has no effect when B=0.
+
+# Values are in LAMMPS "metal" units.
+
+# e1 e2 e3 m   gamma    lambda3 c        d       costheta0 n   beta lambda2            B                  R    D    lambda1            A
+  C  C  C  1.0 0.11233  0.0     181.910  6.28433 -0.5556   1.0 1.0  1.930900932868363  175.42665059955047 2.0  0.15 4.184262321525742  2019.8449017464711
+  Si Si Si 1.0 0.114354 0.0     2.00494  0.81472 -0.259    1.0 1.0  1.5381049333846057 219.52162426831347 2.82 0.14 2.833189287294444  2145.7127998557976
+  C  Si Si 1.0 0.011877 0.0     273987   180.314 -0.68     1.0 1.0  1.7680742125893942 225.1894805180968  2.4  0.2  3.265633070652611  1779.3614414399558
+  C  C  Si 1.0 0.011877 0.0     273987   180.314 -0.68     0.0 0.0  0.0                0.0                2.4  0.2  0.0                0.0
+  C  Si C  1.0 0.11233  0.0     181.910  6.28433 -0.5556   0.0 0.0  0.0                0.0                2.0  0.15 0.0                0.0
+  Si C  C  1.0 0.011877 0.0     273987   180.314 -0.68     1.0 1.0  1.7680742125893942 225.1894805180968  2.4  0.2  3.265633070652611  1779.3614414399558
+  Si C  Si 1.0 0.114354 0.0     2.00494  0.81472 -0.259    0.0 0.0  0.0                0.0                2.82 0.14 0.0                0.0
+  Si Si C  1.0 0.011877 0.0     273987   180.314 -0.68     0.0 0.0  0.0                0.0                2.4  0.2  0.0                0.0
