@@ -3,7 +3,11 @@ __pycache__/
 test_files/.ipynb_checkpoints/
 test_files/POSCAR*
 test_files/log*
+test_files/sigma5_st_AB/
 build/
 dist/
 interfacemaster.egg-info/
 .DS_Store
+test_files/cell_?.cif
+test_files/atomic_planes.png
+test_files/atominfile
