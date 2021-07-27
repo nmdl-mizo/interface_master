@@ -1125,7 +1125,7 @@ class core:
                                            str(sigma1) + '\n')
 
                                 f_log.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                           + str(sigma1) + '\n')
+                                           + str(sigma2) + '\n')
 
                                 f_log.write('D = \n' + str(np.round(D,8)) + '\n')
 
@@ -1138,7 +1138,7 @@ class core:
                                            str(sigma1) + '\n')
 
                                 f_results.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                           + str(sigma1) + '\n')
+                                           + str(sigma2) + '\n')
 
                                 f_results.write('D = \n' + str(np.round(D,8)) + '\n')
 
@@ -1154,7 +1154,7 @@ class core:
                                            str(sigma1) + '\n')
 
                                 print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                           + str(sigma1) + '\n')
+                                           + str(sigma2) + '\n')
 
                                 print('D = \n' + str(np.round(D,8)) + '\n')
 
