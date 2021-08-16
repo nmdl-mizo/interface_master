@@ -21,7 +21,7 @@ read_data ./atominfile
 mass 1 28.0855 #Si
 mass 2 12 #C
 # ---------- Define Interatomic Potential --------------------- 
-pair_style tersoff/
+pair_style tersoff
 pair_coeff * * Tersoff_SiC Si C
 neighbor 2.0 bin 
 neigh_modify delay 10 check yes 
@@ -33,6 +33,7 @@ compute teng all reduce sum c_eng
 # ---------- Run Minimization ---------------------
 reset_timestep 0
 
+include ./blockfile
 displace_atoms right move ${tx} ${ty} ${tz} units box
 
 thermo 10000 
