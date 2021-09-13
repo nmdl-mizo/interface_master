@@ -865,7 +865,7 @@ def sampling_deletion(lattice, atoms, elements, xlo, xhi, nearest_d, trans_name)
             data = np.append(data, displacement[i])
         count += 1
     with open(trans_name, 'w') as f:
-        np.savetxt(f, data, fmt='%.16f')
+        np.savetxt(f, data, fmt='%s')
     return count
     
  
@@ -1226,7 +1226,7 @@ class core:
 
     def get_bicrystal(self, dydz = np.array([0.0,0.0,0.0]), dx = 0, dp1 = 0, dp2 = 0, \
                       xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, filename = 'POSCAR', \
-                      two_D = False, filetype = 'VASP', LAMMPS_file_ortho = False):
+                      two_D = False, filetype = 'VASP', LAMMPS_file_ortho = False, mirror = False):
         """
         generate a cif file for the bicrystal structure
         argument:
@@ -1248,8 +1248,18 @@ class core:
         #make supercells of the two slabs
         atoms_1, elements_1, lattice_1 = super_cell(self.bicrystal_U1, \
                                                     lattice_1, atoms_1, elements_1)
-        atoms_2, elements_2, lattice_2 = super_cell(self.bicrystal_U2, \
-                                                    lattice_2, atoms_2, elements_2)
+        if mirror == False:
+            atoms_2, elements_2, lattice_2 = super_cell(self.bicrystal_U2, \
+                                                lattice_2, atoms_2, elements_2)
+        else:
+            atoms_2, elements_2, lattice_2 = atoms_1.copy(), elements_1.copy(), lattice_1.copy()
+            atoms_2[:,0] = - atoms_2[:,0] + 1
+            atoms_c, elements_c = atoms_2.copy(), elements_2.copy()
+            elements_c = elements_c[atoms_c[:,0] + 0.000001 > 1]
+            atoms_c = atoms_c[atoms_c[:,0] + 0.000001 > 1]
+            atoms_c[:,0] = atoms_c[:,0] - 1
+            atoms_2 = np.vstack((atoms_2, atoms_c))
+            elements_2 = np.append(elements_2, elements_c)
         #termination
         if dp1 > 0:
             shift_terminate(lattice_1, dp1, atoms_1)
