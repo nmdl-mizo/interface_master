@@ -388,7 +388,7 @@ def adjust_orientation(lattice):
     """
     v1 = lattice[:,0]
     v3 = cross(lattice[:,0],lattice[:,1])
-    v2 = cross(v1,v3)
+    v2 = cross(v3,v1)
 
     v1, v2, v3 = unit_v(v1), unit_v(v2), unit_v(v3)
     this_orientation = np.column_stack((v1,v2,v3))
