@@ -272,7 +272,7 @@ def get_pri_vec_inplane(hkl,lattice):
 
 def get_right_hand(B):
     if dot(B[:,2],cross(B[:,0],B[:,1])) < 0:
-        B[:,0] = - B[:,0]
+        B[:,2] = - B[:,2]
     return B
 
 class DSCcalc:

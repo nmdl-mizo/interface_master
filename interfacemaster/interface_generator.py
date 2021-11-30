@@ -149,9 +149,8 @@ def write_LAMMPS(lattice, atoms, elements, filename = 'lmp_atoms_file', orthogon
 
     #define the box
     #xlo, xhi
-    xx, yy, zz = lattice[0][0], lattice[1][1], lattice[2][2]
-    xhi, yhi, zhi = max(0, xx), max(0, yy), max(0, zz)
-    xlo, ylo, zlo = xhi - abs(xx), yhi - abs(yy), zhi - abs(zz)
+    xhi, yhi, zhi = lattice[0][0], lattice[1][1], lattice[2][2]
+    xlo, ylo, zlo = 0, 0, 0
     xy = lattice[:,1][0]
     xz = lattice[:,2][0]
     yz = lattice[:,2][1]
@@ -386,6 +385,7 @@ def adjust_orientation(lattice):
     adjust the orientation of a lattice so that its first axis is along
     x-direction and the second axis is in the x-y plane
     """
+    lattice_0 = lattice.copy()
     v1 = lattice[:,0]
     v3 = cross(lattice[:,0],lattice[:,1])
     v2 = cross(v1,v3)
@@ -393,8 +393,15 @@ def adjust_orientation(lattice):
     v1, v2, v3 = unit_v(v1), unit_v(v2), unit_v(v3)
     this_orientation = np.column_stack((v1,v2,v3))
     desti_orientation = np.eye(3)
-    R = dot(desti_orientation, inv(this_orientation))
+    R = dot(desti_orientation, inv(this_orientation))     
     lattice = dot(R, lattice)
+    #check that a1 and a2 points to positive:
+    if lattice[:,0][0] < 0:
+        lattice[:,0] = - lattice[:,0]
+    if lattice[:,0][1] < 0:
+        lattice[:,1] = - lattice[:,1]
+    R = dot(lattice, inv(lattice_0))
+    lattice = get_right_hand(lattice)
     return lattice, R
 
 def convert_vector_index(lattice_0, lattice_f, v_0):
@@ -994,7 +1001,8 @@ class core:
             #plane bases
             plane_B_1 = get_pri_vec_inplane(hkl_1, self.lattice_1)
             plane_B_2 = get_pri_vec_inplane(hkl_2, dot(self.orientation, self.lattice_2))
-            v_3 = cross(plane_B_1[:,0], plane_B_1[:,1])
+            v_3 = cross(plane_B_1[:,0], plane_B_1[:,1]) * 100000
+            print(100000)
             a1 = np.column_stack((plane_B_1, v_3))
             a2_0 = np.column_stack((plane_B_2, v_3))
             self.a1 = a1.copy()
@@ -1092,6 +1100,7 @@ class core:
         if not found:
             print('failed to find a satisfying appx CSL. Try to adjust the limits according \
                   to the log file generated; or try another orientation.')
+
 
     def search_all_position(self, axis, theta, theta_range, dtheta, two_D = False):
         """
@@ -1297,6 +1306,7 @@ class core:
 
         #combine the two lattices and translate atoms
         lattice_bi = lattice_1.copy()
+        print(lattice_bi)
         if two_D:
             height_1 = get_height(lattice_1)
             height_2 = get_height(lattice_2)
