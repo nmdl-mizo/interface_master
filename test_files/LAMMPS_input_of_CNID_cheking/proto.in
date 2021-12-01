@@ -18,10 +18,11 @@ atom_modify map array
 # ---------- Create Atoms --------------------- 
 box tilt large
 read_data ./atominfile
+include ./blockfile
 mass 1 28.0855 #Si
 mass 2 12 #C
 # ---------- Define Interatomic Potential --------------------- 
-pair_style tersoff/
+pair_style tersoff
 pair_coeff * * Tersoff_SiC Si C
 neighbor 2.0 bin 
 neigh_modify delay 10 check yes 

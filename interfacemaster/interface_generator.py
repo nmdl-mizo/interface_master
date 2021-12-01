@@ -388,7 +388,7 @@ def adjust_orientation(lattice):
     lattice_0 = lattice.copy()
     v1 = lattice[:,0]
     v3 = cross(lattice[:,0],lattice[:,1])
-    v2 = cross(v1,v3)
+    v2 = cross(v3,v1)
 
     v1, v2, v3 = unit_v(v1), unit_v(v2), unit_v(v3)
     this_orientation = np.column_stack((v1,v2,v3))
@@ -396,12 +396,9 @@ def adjust_orientation(lattice):
     R = dot(desti_orientation, inv(this_orientation))     
     lattice = dot(R, lattice)
     #check that a1 and a2 points to positive:
-    if lattice[:,0][0] < 0:
-        lattice[:,0] = - lattice[:,0]
-    if lattice[:,0][1] < 0:
-        lattice[:,1] = - lattice[:,1]
+    
     R = dot(lattice, inv(lattice_0))
-    lattice = get_right_hand(lattice)
+    
     return lattice, R
 
 def convert_vector_index(lattice_0, lattice_f, v_0):
@@ -1001,7 +998,7 @@ class core:
             #plane bases
             plane_B_1 = get_pri_vec_inplane(hkl_1, self.lattice_1)
             plane_B_2 = get_pri_vec_inplane(hkl_2, dot(self.orientation, self.lattice_2))
-            v_3 = cross(plane_B_1[:,0], plane_B_1[:,1]) * 100000
+            v_3 = cross(plane_B_1[:,0], plane_B_1[:,1])
             print(100000)
             a1 = np.column_stack((plane_B_1, v_3))
             a2_0 = np.column_stack((plane_B_2, v_3))
@@ -1132,6 +1129,7 @@ class core:
             #find the two primitive plane bases
             #miller indices
             hkl_1 = MID(self.lattice_1, axis)
+            print(axis)
             hkl_2 = MID(dot(self.orientation, self.lattice_2), axis)
             #plane bases
             plane_B_1 = get_pri_vec_inplane(hkl_1, self.lattice_1)
@@ -1253,7 +1251,6 @@ class core:
 
         # deform & rotate lattice_2
         lattice_2 = three_dot(self.R, self.D, lattice_2)
-
         #make supercells of the two slabs
         atoms_1, elements_1, lattice_1 = super_cell(self.bicrystal_U1, \
                                                     lattice_1, atoms_1, elements_1)
@@ -1269,6 +1266,8 @@ class core:
             atoms_c[:,0] = atoms_c[:,0] - 1
             atoms_2 = np.vstack((atoms_2, atoms_c))
             elements_2 = np.append(elements_2, elements_c)
+            
+        
         #termination
         if dp1 > 0:
             shift_terminate(lattice_1, dp1, atoms_1)
@@ -1286,7 +1285,18 @@ class core:
 
         #adjust the orientation
         lattice_1, self.orient = adjust_orientation(lattice_1)
+        print('1')
+        print(lattice_1)
+        print('2')
+        print(lattice_2)
         lattice_2 = dot(self.orient, lattice_2)
+        
+        write_POSCAR(lattice_1, atoms_1, elements_1, 'POSCAR')
+        POSCAR_to_cif('POSCAR','cell_1.cif')
+        write_POSCAR(lattice_2, atoms_2, elements_2, 'POSCAR')
+        POSCAR_to_cif('POSCAR','cell_2.cif')
+        os.remove('POSCAR')
+
         self.R_see_plane = get_R_to_screen(lattice_1)
 
         self.plane_list_1, self.elements_list_1, self.indices_list_1, self.dp_list_1 \
@@ -1297,13 +1307,13 @@ class core:
 
         self.slab_lattice_1 = lattice_1.copy()
         self.slab_lattice_2 = lattice_2.copy()
-
+        """
         write_POSCAR(lattice_1, atoms_1, elements_1, 'POSCAR')
         POSCAR_to_cif('POSCAR','cell_1.cif')
         write_POSCAR(lattice_2, atoms_2, elements_2, 'POSCAR')
         POSCAR_to_cif('POSCAR','cell_2.cif')
         os.remove('POSCAR')
-
+        """
         #combine the two lattices and translate atoms
         lattice_bi = lattice_1.copy()
         print(lattice_bi)
@@ -1382,10 +1392,18 @@ class core:
         rotate lattice_2 so that its axis_2 coincident with the axis_1 of lattice_1
         """
         axis_1 = dot(self.lattice_1, axis_1)
+        axis_1 = axis_1 / norm(axis_1)
         axis_2 = dot(self.lattice_2, axis_2)
-
-        cell_1 = unit_cell_axis(axis_1)
-        cell_2 = unit_cell_axis(axis_2)
+        axis_2 = axis_2 / norm(axis_2)
+        c = cross(axis_1, axis_2)
+        c = c / norm(c)
+        b_1 = cross(c, axis_1)
+        b_1 = b_1 / norm(b_1)
+        b_2 = cross(c, axis_2)
+        b_2 = b_2 / norm(b_2)
+        
+        cell_1 = np.column_stack((axis_1, b_1, c))
+        cell_2 = np.column_stack((axis_2, b_2, c))
 
         R = dot(cell_1, inv(cell_2))
         self.orientation = R
