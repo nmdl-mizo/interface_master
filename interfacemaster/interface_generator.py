@@ -312,22 +312,88 @@ def super_cell(U, lattice, Atoms, elements):
     lattice = dot(lattice, U)
     return Atoms, elements, lattice
 
-def shift_terminate(lattice, dp, atoms):
+def shift_termi_left(lattice, dp, atoms, elements):
     """
-    apply RBT along certain lattice vector to change the terminating planes of a unit cell
-    argument:
-    lattice --- lattice matrix
-    dp --- RBT along the vector cross the plane
-    atoms --- atom fractional coordinates
+    changing terminate involves requiring to cut the cell
     """
     n = cross(lattice[:,1],lattice[:,2])
     position_shift = dp / ang(lattice[:,0], n) / norm(lattice[:,0])
     atoms[:,0] = atoms[:,0] + position_shift
     if dp > 0:
-        atoms[:,0] = atoms[:,0] - np.floor(atoms[:,0])
+        inner = (atoms[:,0] < 1) & (atoms[:,0] > 2 * position_shift)
+        elements = elements[inner]
+        print(elements)
+        atoms = atoms[inner]
+        #shift to origin
+        atoms[:,0] = atoms[:,0] - 2 * position_shift
+        #to cartesian
+        atoms = dot(lattice, atoms.T).T
+        #cut
+        lattice[:,0] = lattice[:,0] * (1 - 2 * position_shift)
+        #back
+        atoms = dot(inv(lattice), atoms.T).T
     else:
-        atoms[:,0] = atoms[:,0] + np.ceil(atoms[:,0])
+        atoms_c_1 = atoms.copy()
+        atoms_c_2 = atoms.copy()
+        elements_c = elements.copy()
+        atoms_c_1[:,0] += 1
+        atoms_c_2[:,0] += -1
+        atoms = np.vstack((atoms, atoms_c_1, atoms_c_2))
+        elements = np.append(elements, elements_c)
+        elements = np.append(elements, elements_c)
+        inner = (atoms[:,0] < 1) & (atoms[:,0] > 2 * position_shift)
+        elements = elements[inner]
+        atoms = atoms[inner]
+        #shift to origin
+        atoms[:,0] = atoms[:,0] - 2 * position_shift
+        #to cartesian
+        atoms = dot(lattice, atoms.T).T
+        #cut
+        lattice[:,0] = lattice[:,0] * (1 - 2 * position_shift)
+        #back
+        atoms = dot(inv(lattice), atoms.T).T
+        
+    return atoms, elements
 
+def shift_termi_right(lattice, dp, atoms, elements):
+    """
+    changing terminate involves requiring to cut the cell
+    """
+    n = cross(lattice[:,1],lattice[:,2])
+    position_shift = dp / ang(lattice[:,0], n) / norm(lattice[:,0])
+    atoms[:,0] = atoms[:,0] + position_shift
+    if dp < 0:
+        inner = (atoms[:,0] > 0) & (atoms[:,0] < 1 + 2 * position_shift)
+        elements = elements[inner]
+        print(elements)
+        atoms = atoms[inner]
+        #to cartesian
+        atoms = dot(lattice, atoms.T).T
+        #cut
+        lattice[:,0] = lattice[:,0] * (1 + 2 * position_shift)
+        #back
+        atoms = dot(inv(lattice), atoms.T).T
+    else:
+        atoms_c_1 = atoms.copy()
+        atoms_c_2 = atoms.copy()
+        elements_c = elements.copy()
+        atoms_c_1[:,0] += 1
+        atoms_c_2[:,0] += -1
+        atoms = np.vstack((atoms, atoms_c_1, atoms_c_2))
+        elements = np.append(elements, elements_c)
+        elements = np.append(elements, elements_c)
+        inner = (atoms[:,0] > 0) & (atoms[:,0] < 1 + 2 * position_shift)
+        elements = elements[inner]
+        atoms = atoms[inner]
+        #to cartesian
+        atoms = dot(lattice, atoms.T).T
+        #cut
+        lattice[:,0] = lattice[:,0] * (1 + 2 * position_shift)
+        #back
+        atoms = dot(inv(lattice), atoms.T).T
+        
+    return atoms, elements
+    
 def excess_volume(lattice_1, lattice_bi, atoms_1, atoms_2, dx):
     """
     introduce vacuum between the interfaces
@@ -786,20 +852,20 @@ def get_nearest_pair(lattice, atoms, indices):
      pos_1_rep[distances_id], pos_2_rep[distances_id]
  
 def searching_indices(atoms, coordinates):
-	  """
-	  get the indices of the coordinates in the atoms
-	  """
-	  return np.where( norm((atoms - coordinates), axis = 1) < 1e-8)[0]
+    """
+    get the indices of the coordinates in the atoms
+    """
+    return np.where( norm((atoms - coordinates), axis = 1) < 1e-8)[0]
  
 def get_two_IDs_and_new_original_atoms(coordinates_1, coordinates_2, atoms, displacement):
-	  """
-	  get the two IDs of the two coordinates in atoms, and move
-	  the coordinates_1 by displacement
-	  """
-	  ID_1 = searching_indices(atoms, coordinates_1)
-	  ID_2 = searching_indices(atoms, coordinates_2)
-	  atoms[ID_1] = atoms[ID_1] + displacement
-	  return ID_1, ID_2, atoms
+    """
+    get the two IDs of the two coordinates in atoms, and move
+    the coordinates_1 by displacement
+    """
+    ID_1 = searching_indices(atoms, coordinates_1)
+    ID_2 = searching_indices(atoms, coordinates_2)
+    atoms[ID_1] = atoms[ID_1] + displacement
+    return ID_1, ID_2, atoms
  
 def delete_insert(lattice, atoms, elements, xlo, xhi, original_atoms):
     """
@@ -1272,10 +1338,10 @@ class core:
             
         
         #termination
-        if dp1 > 0:
-            shift_terminate(lattice_1, dp1, atoms_1)
-        if dp2 > 0:
-            shift_terminate(lattice_2, dp2, atoms_2)
+        if dp1 != 0:
+            atoms_1, elements_1 = shift_termi_left(lattice_1, dp1, atoms_1, elements_1)
+        if dp2 != 0:
+            atoms_2, elements_2 = shift_termi_left(lattice_2, dp2, atoms_2, elements_2)
 
         #expansion
         if not (np.all(xyz_1 == 1) and np.all(xyz_2 == 1)):
