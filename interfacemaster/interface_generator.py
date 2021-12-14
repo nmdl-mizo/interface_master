@@ -323,7 +323,10 @@ def shift_terminate(lattice, dp, atoms):
     n = cross(lattice[:,1],lattice[:,2])
     position_shift = dp / ang(lattice[:,0], n) / norm(lattice[:,0])
     atoms[:,0] = atoms[:,0] + position_shift
-    atoms[:,0] = atoms[:,0] - np.floor(atoms[:,0])
+    if dp > 0:
+        atoms[:,0] = atoms[:,0] - np.floor(atoms[:,0])
+    else:
+        atoms[:,0] = atoms[:,0] + np.ceil(atoms[:,0])
 
 def excess_volume(lattice_1, lattice_bi, atoms_1, atoms_2, dx):
     """
