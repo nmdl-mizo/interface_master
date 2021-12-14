@@ -1272,7 +1272,7 @@ class core:
         if dp1 > 0:
             shift_terminate(lattice_1, dp1, atoms_1)
         if dp2 > 0:
-            shift_terminate(lattice_2, -dp2, atoms_2)
+            shift_terminate(lattice_2, dp2, atoms_2)
 
         #expansion
         if not (np.all(xyz_1 == 1) and np.all(xyz_2 == 1)):
