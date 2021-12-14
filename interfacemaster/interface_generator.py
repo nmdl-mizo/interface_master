@@ -1337,12 +1337,6 @@ class core:
             elements_2 = np.append(elements_2, elements_c)
             
         
-        #termination
-        if dp1 != 0:
-            atoms_1, elements_1 = shift_termi_left(lattice_1, dp1, atoms_1, elements_1)
-        if dp2 != 0:
-            atoms_2, elements_2 = shift_termi_left(lattice_2, dp2, atoms_2, elements_2)
-
         #expansion
         if not (np.all(xyz_1 == 1) and np.all(xyz_2 == 1)):
             if not np.all([xyz_1[1], xyz_1[2]] == [xyz_2[1], xyz_2[2]]):
@@ -1351,6 +1345,13 @@ class core:
                                                           elements_1, xyz_1)
             lattice_2, atoms_2, elements_2 = cell_expands(lattice_2, atoms_2, \
                                                           elements_2, xyz_2)
+
+        #termination
+        if dp1 != 0:
+            atoms_1, elements_1 = shift_termi_left(lattice_1, dp1, atoms_1, elements_1)
+        if dp2 != 0:
+            atoms_2, elements_2 = shift_termi_left(lattice_2, dp2, atoms_2, elements_2)
+
 
         #adjust the orientation
         lattice_1, self.orient = adjust_orientation(lattice_1)
