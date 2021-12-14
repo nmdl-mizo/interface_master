@@ -1353,10 +1353,6 @@ class core:
 
         #adjust the orientation
         lattice_1, self.orient = adjust_orientation(lattice_1)
-        print('1')
-        print(lattice_1)
-        print('2')
-        print(lattice_2)
         lattice_2 = dot(self.orient, lattice_2)
         
         write_POSCAR(lattice_1, atoms_1, elements_1, 'POSCAR')
