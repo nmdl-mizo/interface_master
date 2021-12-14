@@ -322,7 +322,6 @@ def shift_termi_left(lattice, dp, atoms, elements):
     if dp > 0:
         inner = (atoms[:,0] < 1) & (atoms[:,0] > 2 * position_shift)
         elements = elements[inner]
-        print(elements)
         atoms = atoms[inner]
         #shift to origin
         atoms[:,0] = atoms[:,0] - 2 * position_shift
@@ -365,7 +364,6 @@ def shift_termi_right(lattice, dp, atoms, elements):
     if dp < 0:
         inner = (atoms[:,0] > 0) & (atoms[:,0] < 1 + 2 * position_shift)
         elements = elements[inner]
-        print(elements)
         atoms = atoms[inner]
         #to cartesian
         atoms = dot(lattice, atoms.T).T
