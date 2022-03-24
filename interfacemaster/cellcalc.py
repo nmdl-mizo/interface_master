@@ -1,6 +1,26 @@
 from numpy.linalg import det, norm, inv
-from numpy import dot, cross, ceil, square
+from numpy import dot, cross, ceil, square, arccos, pi, inf, cos, sin, column_stack
 import numpy as np
+
+def rot(a, Theta):
+    """
+    produce a rotation matrix
+    arguments:
+    a --- rotation axis
+    Theta --- rotation angle
+    return:
+    a rotation matrix
+    """
+    c = float(cos(Theta))
+    s = float(sin(Theta))
+    a = a / norm(a)
+    ax, ay, az = a
+    return np.array([[c + ax * ax * (1 - c), ax * ay * (1 - c) - az * s,
+                      ax * az * (1 - c) + ay * s],
+                    [ay * ax * (1 - c) + az * s, c + ay * ay * (1 - c),
+                        ay * az * (1 - c) - ax * s],
+                     [az * ax * (1 - c) - ay * s, az * ay * (1 - c) + ax * s,
+                      c + az * az * (1 - c)]], dtype = np.float64)
 
 def ang(v1, v2):
     """
@@ -272,9 +292,84 @@ def get_pri_vec_inplane(hkl,lattice):
 
 def get_right_hand(B):
     if dot(B[:,2],cross(B[:,0],B[:,1])) < 0:
-        B[:,0] = - B[:,0]
+        B[:,2] = - B[:,2]
     return B
+    
+def get_normal_from_MI(lattice, hkl):
+    """
+    get the normal vector of a lattice plane with known miller indices
+    """
+    hkl = np.array(hkl)
+    lattice = np.array(lattice,dtype = float)
+    numzeros = len(np.where(hkl==0)[0])
+    if numzeros == 2:
+       non_zero_v_index = np.where(hkl!=0)[0][0]
+       print(non_zero_v_index)
+       return lattice.T[non_zero_v_index]
+    elif numzeros == 1:
+       non_zero_v_index = np.where(hkl!=0)[0]
+       u1 = lattice.T[non_zero_v_index[0]]/hkl[non_zero_v_index[0]]
+       u2 = lattice.T[non_zero_v_index[1]]/hkl[non_zero_v_index[1]]
+       v1 = u1-u2
+       zero_v_index = np.where(hkl==0)[0][0]
+       v2 = lattice.T[zero_v_index]
+       return cross(v1,v2)
+    elif numzeros == 0:
+       P1 = lattice[:,0]/hkl[0]
+       P2 = lattice[:,1]/hkl[1]
+       P3 = lattice[:,2]/hkl[2]
+       v1 = P1-P2
+       v2 = P1-P3
+       return cross(v1,v2)
+    else:
+       raise RuntimeError('hkl error')
 
+def search_MI_n(lattice, n, tol, lim):
+    """
+    get the miller indices of planes of which
+    its normal is close to the input vector n
+    """
+    x = np.arange(-lim, lim + 1, 1)
+    y = x
+    z = x
+    indice = (np.stack(np.meshgrid(x, y, z)).T).reshape(len(x) ** 3, 3)
+    indice_0 = indice[np.where(np.sum(abs(indice), axis=1) != 0)]
+    indice_0 = indice_0[np.argsort(norm(indice_0, axis=1))]
+    found = False
+    for i in indice_0:
+        n_there = get_normal_from_MI(lattice, indice_0)
+        dtheta = arccos(1 - ang(n_there,n))
+        if dtheta < tol:
+            print('plane found, dtheta = {}',format(dtheta))
+            found = True
+            break
+    if not found:
+        RuntimeError('failed to find a close lattice plane for this normal vector, please increase the tol or adjust orientation')
+    return n_there
+    
+def match_rot(deft_rot, axis, tol, exact_rot):
+    """
+    given an exact rotation matrix and a default rotation matrix,
+    find the intermediate rotation matrix so that the operation combining
+    the default rotation + the intermediate rotation is close to the excat rotation
+    """
+    theta = 0
+    found = False
+    min_g = inf
+    while (theta < 2*pi) and (not found):
+        inter_rot = rot(axis, theta)
+        compare_rot = dot(deft_rot, inter_rot)
+        here = compare_rot - exact_rot
+        min_abs = min([min(abs(i)) for i in here])
+        if min_abs < min_g:
+            min_g = min_abs
+        if min_abs < tol:
+            found = True
+        theta += 0.01/180*pi
+    if not found:
+        raise RuntimeError('Disorientation match failed, please try other planes or increase tolerance, min = {}'.format(min_g))
+    return inter_rot
+    
 class DSCcalc:
     #core class computing DSC basis
     def __init__(self):
