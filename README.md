@@ -22,4 +22,5 @@ pip install .
 - python3
 - pymatgen
 - matplotlib
+- gb_code
 - numpy (requirements already satisfied by installing pymatgen)
