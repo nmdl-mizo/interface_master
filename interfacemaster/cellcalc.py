@@ -2,6 +2,12 @@ from numpy.linalg import det, norm, inv
 from numpy import dot, cross, ceil, square, arccos, pi, inf, cos, sin, column_stack
 import numpy as np
 
+def get_odd_sigma(M):
+	  v1 = 1/2*(M[:,0] + M[:,1])
+	  v2 = 1/2*(M[:,1] + M[:,2])
+	  v3 = 1/2*(M[:,2] + M[:,0])
+	  
+
 def rot(a, Theta):
     """
     produce a rotation matrix

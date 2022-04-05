@@ -354,6 +354,13 @@ def shift_termi_left(lattice, dp, atoms, elements):
         
     return atoms, elements
 
+def shift_none_copy(lattice, dp, atoms):
+    n = cross(lattice[:,1],lattice[:,2])
+    position_shift = dp / ang(lattice[:,0], n) / norm(lattice[:,0])
+    atoms[:,0] = atoms[:,0] + position_shift
+    atoms[:,0] = atoms[:,0] - np.floor(atoms[:,0])
+    return atoms
+
 def shift_termi_right(lattice, dp, atoms, elements):
     """
     changing terminate involves requiring to cut the cell
@@ -1552,7 +1559,7 @@ class core:
 
     def get_bicrystal(self, dydz = np.array([0.0,0.0,0.0]), dx = 0, dp1 = 0, dp2 = 0, \
                       xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, filename = 'POSCAR', \
-                      two_D = False, filetype = 'VASP', LAMMPS_file_ortho = False, mirror = False):
+                      two_D = False, filetype = 'VASP', LAMMPS_file_ortho = False, mirror = False, KTI = False):
         """
         generate a cif file for the bicrystal structure
         argument:
@@ -1601,9 +1608,15 @@ class core:
 
         #termination
         if dp1 != 0:
-            atoms_1, elements_1 = shift_termi_left(lattice_1, dp1, atoms_1, elements_1)
+            if KTI == True:
+                atoms_1, elements_1 = shift_termi_left(lattice_1, dp1, atoms_1, elements_1)
+            else:
+                atoms_1 = shift_none_copy(lattice_1, dp1, atoms_1)
         if dp2 != 0:
-            atoms_2, elements_2 = shift_termi_right(lattice_2, dp2, atoms_2, elements_2)
+            if KTI == True:
+                atoms_2, elements_2 = shift_termi_right(lattice_2, dp2, atoms_2, elements_2)
+            else:
+                atoms_2 = shift_none_copy(lattice_2, dp2, atoms_2)
 
 
         #adjust the orientation
@@ -1711,16 +1724,18 @@ class core:
         axis_2 = axis_2 / norm(axis_2)
         print(axis_1, axis_2)
         c = cross(axis_1, axis_2)
-        c = c / norm(c)
-        b_1 = cross(c, axis_1)
-        b_1 = b_1 / norm(b_1)
-        b_2 = cross(c, axis_2)
-        b_2 = b_2 / norm(b_2)
-        
-        cell_1 = np.column_stack((axis_1, b_1, c))
-        cell_2 = np.column_stack((axis_2, b_2, c))
-
-        R = dot(cell_1, inv(cell_2))
+        if 1 - abs(dot(axis_1, axis_2)) < 1e-10:
+            R = eye(3,3)
+        else:
+            c = c / norm(c)
+            b_1 = cross(c, axis_1)
+            b_1 = b_1 / norm(b_1)
+            b_2 = cross(c, axis_2)
+            b_2 = b_2 / norm(b_2)
+            
+            cell_1 = np.column_stack((axis_1, b_1, c))
+            cell_2 = np.column_stack((axis_2, b_2, c))
+            R = dot(cell_1, inv(cell_2))
         self.orientation = R
 
     def compute_bicrystal(self, hkl, lim = 20, normal_ortho = False, plane_ortho = False, tol = 1e-10):
