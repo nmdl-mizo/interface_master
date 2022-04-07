@@ -8,6 +8,41 @@ from interfacemaster.cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_
 import os
 import matplotlib.pyplot as plt
 
+def get_disorientation(L1, L2, v1, hkl1, v2, hkl2, tol=0.01):
+    """
+    produce a rotation matrix so that the hkl1 plane overlap with the hkl2 plane;
+    and the v1 colinear with v2
+    """
+    
+    #normal vector
+    n1 = get_normal_from_MI(L1, hkl1)
+    n2 = get_normal_from_MI(L2, hkl2)
+    
+    #auxiliary lattice
+    Av1 = cross(dot(L1,v1), n1)
+    Av2 = cross(dot(L2,v2), n2)
+
+    #get the auxiliary lattices
+    AL1 = column_stack((dot(L1,v1), n1, Av1))
+    AL2 = column_stack((dot(L2,v2), n2, Av2))
+    
+    #unit mtx
+    AL1 = get_unit_mtx(AL1)
+    AL2 = get_unit_mtx(AL2)
+    
+    return dot(AL1, inv(AL2))
+    
+    
+def get_unit_mtx(lattice):
+    """
+    return a unit lattice so that the 
+    length of every column vectors is 1
+    """
+    lattice_return = np.eye(3,3)
+    for i in range(3):
+        lattice_return[:,i] = lattice[:,i]/norm(lattice[:,i])
+    return lattice_return
+
 def rot(a, Theta):
     """
     produce a rotation matrix
@@ -411,11 +446,12 @@ def excess_volume(lattice_1, lattice_bi, atoms_1, atoms_2, dx):
     n = cross(lattice_1[:,1],lattice_1[:,2])
     normal_shift = dx / ang(lattice_1[:,0], n) / norm(lattice_bi[:,0].copy())
     normal_shift_cart = normal_shift * lattice_bi[:,0]
-    lattice_bi[:,0] = (normal_shift + 1) * lattice_bi[:,0]
-    atoms_1[:,0] = 1 / (normal_shift + 1) * atoms_1[:,0]
-    atoms_2 = dot(lattice_bi, atoms_2.T).T
-    atoms_2 = atoms_2 + normal_shift_cart
+    atoms_2 = dot(lattice_bi.copy(), atoms_2.copy().T).T
+    atoms_2 = atoms_2.copy() + normal_shift_cart
+    lattice_bi[:,0] = (2 * normal_shift + 1) * lattice_bi[:,0]
+    atoms_1[:,0] = 1 / (2 * normal_shift + 1) * atoms_1[:,0]
     atoms_2 = dot(inv(lattice_bi), atoms_2.T).T
+    return lattice_bi, atoms_1, atoms_2
 
 def surface_vacuum(lattice_1, lattice_bi, atoms_bi, vx):
     """
@@ -1030,6 +1066,9 @@ class core:
         self.lattice_bi = np.eye(3)
         self.atoms_bi = np.array([0.0,0.0,0.0])
         self.elements_bi = []
+        self.slab_structure_1 = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
+        self.slab_structure_2 = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
+        self.bicrystal_structure = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
         print('Warning!, this programme will rewrite the POSCAR file in this dir!')
 
     def parse_limit(self, du, S, sgm1, sgm2, dd):
@@ -1281,6 +1320,91 @@ class core:
         if not found:
             print('failed to find a satisfying appx CSL. Try to adjust the limits according \
                   to the log file generated; or try another orientation.')
+
+    def search_fixed(self, R):
+        """
+        main loop finding the appx CSL
+        arguments:
+        axis -- rotation axis
+        theta -- initial rotation angle, in degree
+        theta_range -- range varying theta, in degree
+        dtheta -- step varying theta, in degree
+        """
+        Ns = np.arange(1, self.sgm2 + 1)
+        found = None
+        file = open('log.fixed_search','w')
+        a1 = self.lattice_1.copy()
+        a2_0 = self.lattice_2.copy()
+        # rotation loop
+        file.write('---Searching starts---\n')
+        file.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
+        file.write('{0} {1} {2} {3}\n'.\
+              format(self.S, self.du, self.sgm1, self.sgm2))
+        file.write('-----------for theta-----------\n')
+        N = 1
+        U = three_dot(inv(a1), R, a2_0)
+        file.write('    -----for N-----\n')
+        while N <= self.sgm2:
+            tol = 1e-10
+            Uij, N = rational_mtx(U,N)
+            U_p = 1 / N * Uij
+            if np.all((abs(U_p-U)) < self.du):
+                file.write('N= ' + str(N) + " accepted" + '\n')
+                R_p = three_dot(a1, U_p, inv(a2_0))
+                D = dot(inv(R),R_p)
+                if (abs(det(D)-1) <= self.S) and \
+                np.all(abs(D-np.eye(3)) < self.dd):
+                    here_found = True
+                    file.write('--D accepted--\n')
+                    file.write("D, det(D) = {0} \n".format(det(D)))
+                    ax2 = three_dot(R,D,a2_0)
+                    calc = DSCcalc()
+                    try:
+                        calc.parse_int_U(a1, ax2, self.sgm2)
+                        calc.compute_CSL()
+                    except:
+                        file.write('failed to find CSL here \n')
+                        here_found = False
+                    if here_found and abs(det(calc.U1)) <= self.sgm1:
+                        found = True
+                        file.write('--------------------------------\n')
+                        file.write('Congrates, we found an appx CSL!\n')
+                        sigma1 = int(abs(np.round(det(calc.U1))))
+                        sigma2 = int(abs(np.round(det(calc.U2))))
+                        self.D = D
+                        self.U1 = np.array(np.round(calc.U1),dtype = int)
+                        self.U2 = np.array(np.round(calc.U2),dtype = int)
+                        self.lattice_2_TD = three_dot(R, D, a2_0)
+                        self.CSL = dot(a1, self.U1)
+                        self.R = R
+                        self.cell_calc = calc
+                        file.write('U1 = \n' + \
+                                   str(self.U1) + '; sigma_1 = ' + \
+                                   str(sigma1) + '\n')
+
+                        file.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
+                                   + str(sigma1) + '\n')
+
+                        file.write('D = \n' + str(np.round(D,8)) + '\n')
+
+
+                        print('Congrates, we found an appx CSL!\n')
+                        print('U1 = \n' + \
+                                   str(self.U1) + '; sigma_1 = ' + \
+                                   str(sigma1) + '\n')
+
+                        print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
+                                   + str(sigma1) + '\n')
+
+                        print('D = \n' + str(np.round(D,8)) + '\n')
+
+                        break
+                    else:
+                        file.write('sigma too large \n')
+            N += 1
+        if not found:
+            print('failed to find a satisfying appx CSL. Try to adjust the limits according \
+              to the log file generated; or try another orientation.')
 
     def search_one_position_2D(self, hkl_1, hkl_2, theta_range, dtheta, pre_dt = False, exact_R = eye(3,3), \
     tol = 0.05, start = 0):
@@ -1625,8 +1749,10 @@ class core:
         
         write_POSCAR(lattice_1, atoms_1, elements_1, 'POSCAR')
         POSCAR_to_cif('POSCAR','cell_1.cif')
+        self.slab_structure_1 = Structure.from_file('POSCAR', sort=False, merge_tol=0.0)
         write_POSCAR(lattice_2, atoms_2, elements_2, 'POSCAR')
         POSCAR_to_cif('POSCAR','cell_2.cif')
+        self.slab_structure_2 = Structure.from_file('POSCAR', sort=False, merge_tol=0.0)
         os.remove('POSCAR')
 
         self.R_see_plane = get_R_to_screen(lattice_1)
@@ -1662,7 +1788,7 @@ class core:
 
         #excess volume
         if dx != 0:
-            excess_volume(lattice_1, lattice_bi, atoms_1, atoms_2, dx)
+            lattice_bi, atoms_1, atoms_2 = excess_volume(lattice_1, lattice_bi, atoms_1, atoms_2, dx)
 
         #in-plane translation
         if norm(dydz) > 0:
@@ -1685,7 +1811,9 @@ class core:
         self.lattice_bi = lattice_bi
         self.atoms_bi = atoms_bi
         self.elements_bi = elements_bi
-
+        write_POSCAR(lattice_bi, atoms_bi, elements_bi, filename)
+        self.bicrystal_structure = Structure.from_file('POSCAR', sort=False, merge_tol=0.0)
+        os.remove('POSCAR')
         if filetype == 'VASP':
             write_POSCAR(lattice_bi, atoms_bi, elements_bi, filename)
         elif filetype == 'LAMMPS':
