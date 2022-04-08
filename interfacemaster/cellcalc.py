@@ -69,10 +69,9 @@ def dia_sym_mtx(U):
             Ux[i][j] = U[2-j][2-i]
     return Ux
 
-def find_integer_vectors(v,sigma):
+def find_integer_vectors(v, sigma, tol=1e-8):
     #A function find the coefficients N so that Nv contains only, divided by gcd
     #integer elements and gcd(v1,v2,v3,N) = 1
-    tol = 1e-8
     found = False
     for i in range(1,sigma+1):
         now = v*i
@@ -89,9 +88,8 @@ def find_integer_vectors(v,sigma):
     else:
         raise RuntimeError('failed to find the rational vector of ' + str(v) + '\n within lcd = ' + str(sigma))
 
-def find_integer_vectors_nn(v,sigma):
+def find_integer_vectors_nn(v,sigma, tol = 1e-8):
     #A function find the coefficients N so that Nv contains only, ignore gcd
-    tol = 1e-8
     found = False
     for i in range(1,sigma+1):
         now = v*i
@@ -211,14 +209,14 @@ def get_normal_index(hkl, lattice):
     n, Pc1 = get_plane(hkl, lattice)
     return dot(inv(lattice), n)
 
-def get_primitive_hkl(hkl, C_lattice, P_lattice):
+def get_primitive_hkl(hkl, C_lattice, P_lattice,tol=1e-8):
     #convert the miller indices from conventional cell to primitive cell
     #1. get normal
     n, Pc1 = get_plane(hkl, C_lattice)
     #print('the normal:' + str(n) + ' the point in the plane: ' + str(Pc1))
     #2. get indices from normal
     hkl_p = get_indices_from_n_Pc1(n, P_lattice, Pc1)
-    hkl_p = find_integer_vectors_nn(hkl_p,100000)[0]
+    hkl_p = find_integer_vectors_nn(hkl_p,100000,tol)[0]
     return hkl_p
 
 def get_plane(hkl, lattice):
@@ -310,7 +308,6 @@ def get_normal_from_MI(lattice, hkl):
     numzeros = len(np.where(hkl==0)[0])
     if numzeros == 2:
        non_zero_v_index = np.where(hkl!=0)[0][0]
-       print(non_zero_v_index)
        return lattice.T[non_zero_v_index]
     elif numzeros == 1:
        non_zero_v_index = np.where(hkl!=0)[0]
@@ -353,7 +350,7 @@ def search_MI_n(lattice, n, tol, lim):
         RuntimeError('failed to find a close lattice plane for this normal vector, please increase the tol or adjust orientation')
     return n_there
     
-def match_rot(deft_rot, axis, tol, exact_rot):
+def match_rot(deft_rot, axis, tol, exact_rot, av_perpendicular):
     """
     given an exact rotation matrix and a default rotation matrix,
     find the intermediate rotation matrix so that the operation combining
@@ -362,15 +359,18 @@ def match_rot(deft_rot, axis, tol, exact_rot):
     theta = 0
     found = False
     min_g = inf
-    while (theta < 2*pi) and (not found):
+    while (theta < 2*pi):
         inter_rot = rot(axis, theta)
-        compare_rot = dot(deft_rot, inter_rot)
-        here = compare_rot - exact_rot
-        min_abs = min([min(abs(i)) for i in here])
-        if min_abs < min_g:
-            min_g = min_abs
-        if min_abs < tol:
+        compare_rot = dot(inter_rot,deft_rot)
+        compare_v = dot(compare_rot, av_perpendicular)
+        compare_v = compare_v/norm(compare_v)
+        exact_v = dot(exact_rot,av_perpendicular)
+        exact_v = exact_v/norm(exact_v)
+        if norm(cross(compare_v, exact_v)) < tol:
             found = True
+            if dot(exact_v, compare_v) < 0:
+                inter_rot = rot(axis, theta+pi)
+            break
         theta += 0.01/180*pi
     if not found:
         raise RuntimeError('Disorientation match failed, please try other planes or increase tolerance, min = {}'.format(min_g))
@@ -391,7 +391,7 @@ class DSCcalc:
         self.Ls = np.arange(3) #three cooresponding greatest common denominator
         self.CNID = np.eye(3,2)
 
-    def parse_int_U(self,ai1,ai2,sigma):
+    def parse_int_U(self,ai1,ai2,sigma, tol = 1e-8):
         self.ai1 = ai1
         self.ai2 = ai2
         self.sigma = sigma
@@ -399,14 +399,14 @@ class DSCcalc:
         #get the integers uij
         for i in range(3):
             v = self.U[:,i]
-            self.U_int[:,i], self.Ls[i] = find_integer_vectors(v, self.sigma)
+            self.U_int[:,i], self.Ls[i] = find_integer_vectors(v, self.sigma,tol)
 
-    def compute_DSC(self, to_LLL = True):
+    def compute_DSC(self, to_LLL = True, tol = 1e-8):
         #integer LC of ai2_1
         #print('the U matrix')
         #print(str(self.U_int) + '\'' + str(self.sigma))
         #print('---------------------------------------')
-        ks,L = find_integer_vectors(dot(inv(self.ai1),self.ai2[:,0]),self.sigma)
+        ks,L = find_integer_vectors(dot(inv(self.ai1),self.ai2[:,0]),self.sigma, tol)
         #print('ai2_1 is expressed by ai1 as ' + str(ks) + '/' + str(L))
         k1,k2,k3 = ks
         #solve DSC Ei for the ai2_1 by ai1
@@ -416,7 +416,7 @@ class DSCcalc:
         es = dot(inv(Ei),self.ai2[:,1])
         #print('ai2_2 is expressed by Ei as ' + str(es))
         #integer coefficients
-        ls, M = find_integer_vectors(es,self.sigma)
+        ls, M = find_integer_vectors(es,self.sigma, tol)
         #print('ls: ' + str(ls) + ' M: ' + str(M))
         if M == 1:
             #print('Ei satisfy ai2_2')
@@ -425,7 +425,7 @@ class DSCcalc:
             es = dot(inv(Ei),self.ai2[:,2])
             #print('ai2_3 is expressed by Ei as ' + str(es))
             #integer coeficients
-            ms, M_p = find_integer_vectors(es,self.sigma)
+            ms, M_p = find_integer_vectors(es,self.sigma, tol)
             #print('ms: ' + str(ms) + ' M_p: ' + str(M_p))
             if M_p == 1:
                 #print('Ei satisfy ai2_3')
@@ -453,7 +453,7 @@ class DSCcalc:
             es = dot(inv(Fi),self.ai2[:,2])
             #print('ai2_3 is expressed by Fi as ' + str(es))
             #integer coefficients
-            ns, N = find_integer_vectors(es,self.sigma)
+            ns, N = find_integer_vectors(es,self.sigma, tol)
             #print('ns: ' + str(ns) + ' N: ' + str(N))
             if N == 1:
                 #print('N = 1, DSC got')
@@ -477,13 +477,13 @@ class DSCcalc:
             self.DSC = DSC
         self.DSC = dot(inv(self.ai1),self.DSC)
 
-    def compute_CSL(self):
+    def compute_CSL(self, tol = 1e-8):
         #symmetric matrix along the second diagonal
         Ux = dia_sym_mtx(self.U)
         a20 = dot(self.ai1,Ux)
         calc_csl = DSCcalc()
-        calc_csl.parse_int_U(self.ai1, a20, self.sigma)
-        calc_csl.compute_DSC()
+        calc_csl.parse_int_U(self.ai1, a20, self.sigma, tol)
+        calc_csl.compute_DSC(to_LLL = True, tol = tol)
         DSC_ax = dot(self.ai1,calc_csl.DSC)
         self.U1 = dia_sym_mtx(dot(inv(DSC_ax),a20))
         self.CSL = dot(self.ai1,self.U1)
@@ -493,17 +493,17 @@ class DSCcalc:
         self.U2 = dot(inv(self.U),self.U1)
         self.CSL = get_right_hand(red_CSL)
 
-    def compute_CNID(self, hkl):
+    def compute_CNID(self, hkl, tol = 1e-8):
         pmi_1 = hkl
-        pmi_2 = get_primitive_hkl(hkl, self.ai1, self.ai2)
+        pmi_2 = get_primitive_hkl(hkl, self.ai1, self.ai2, tol)
         pb_1 = get_pri_vec_inplane(pmi_1, self.ai1)
         pb_2 = get_pri_vec_inplane(pmi_2, self.ai2)
         n = cross(pb_1[:,0],pb_1[:,1])
         c1 = get_right_hand(np.column_stack((pb_1,n)))
         c2 = get_right_hand(np.column_stack((pb_2,n)))
         calc_cnid = DSCcalc()
-        calc_cnid.parse_int_U(c1, c2, 10000)
-        calc_cnid.compute_DSC()#in c1 frame
+        calc_cnid.parse_int_U(c1, c2, 10000,tol)
+        calc_cnid.compute_DSC(to_LLL = True, tol=tol)#in c1 frame
         DSC = dot(c1,calc_cnid.DSC)
         count = 0
         CNID = np.eye(3,2)
