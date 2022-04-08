@@ -1040,7 +1040,7 @@ class core:
         self.CNID = np.eye(3,2)
         self.cell_calc = DSCcalc()
         self.name = str
-        self.dd = float
+        self.dd = 0.005
         self.orientation = np.eye(3) # initial disorientation
         self.a1 = np.eye(3)
         self.a2_0 = np.eye(3)
@@ -1344,6 +1344,10 @@ class core:
         N = 1
         U = three_dot(inv(a1), R, a2_0)
         file.write('    -----for N-----\n')
+        if exact == True:
+            self.S=1e-5
+            self.du = 1e-5
+            self.dd = 1e-5
         while N <= self.sgm2:
             Uij, N = rational_mtx(U,N)
             U_p = 1 / N * Uij
@@ -1351,10 +1355,11 @@ class core:
                 file.write('N= ' + str(N) + " accepted" + '\n')
                 R_p = three_dot(a1, U_p, inv(a2_0))
                 D = dot(inv(R),R_p)
-                if exact == True:
-                    D = eye(3,3)
-                if exact == True or ((abs(det(D)-1) <= self.S) and \
+                if ((abs(det(D)-1) <= self.S) and \
                 np.all(abs(D-np.eye(3)) < self.dd)):
+                    if exact == True:
+                        R = dot(R,D)
+                        D = eye(3,3)
                     here_found = True
                     file.write('--D accepted--\n')
                     file.write("D, det(D) = {0} \n".format(det(D)))
@@ -1848,7 +1853,7 @@ class core:
             for j in range(n2):
                 dydz = v1 / n1 * i + v2 / n2 * j
                 self.get_bicrystal(dydz = dydz, dx = dx, dp1 = dp1, dp2 = dp2, \
-                      xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D, filename = 'CNID_inputs/{0}.{1}.{2}'.format(filename, i,j), filetype = filetype)
+                      xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D, filename = 'CNID_inputs/{0}_{1}_{2}'.format(filename, i,j), filetype = filetype)
         print('completed')
 
     def set_orientation_axis(self, axis_1, axis_2):
