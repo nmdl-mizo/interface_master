@@ -1848,7 +1848,7 @@ class core:
             for j in range(n2):
                 dydz = v1 / n1 * i + v2 / n2 * j
                 self.get_bicrystal(dydz = dydz, dx = dx, dp1 = dp1, dp2 = dp2, \
-                      xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D, filename = 'CNID_inputs/{0}.{1}.{2}'.format(filename, i,j), filetype = filetype)
+                      xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D, filename = 'CNID_inputs/{0}_{1}_{2}'.format(filename, i,j), filetype = filetype)
         print('completed')
 
     def set_orientation_axis(self, axis_1, axis_2):
