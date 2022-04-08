@@ -1,0 +1,44 @@
+data_Li10Ge(PS6)2_mp-696128_P42mc
+_audit_creation_date              2021-07-12
+_audit_creation_method            'Materials Studio'
+_symmetry_space_group_name_H-M    'P42MC'
+_symmetry_Int_Tables_number       105
+_symmetry_cell_setting            tetragonal
+loop_
+_symmetry_equiv_pos_as_xyz
+  x,y,z
+  -x,-y,z
+  -y,x,z+1/2
+  y,-x,z+1/2
+  x,-y,z
+  -x,y,z
+  -y,-x,z+1/2
+  y,x,z+1/2
+_cell_length_a                    8.7876
+_cell_length_b                    8.7876
+_cell_length_c                    12.6575
+_cell_angle_alpha                 90.0000
+_cell_angle_beta                  90.0000
+_cell_angle_gamma                 90.0000
+loop_
+_atom_site_label
+_atom_site_type_symbol
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+_atom_site_U_iso_or_equiv
+_atom_site_adp_type
+_atom_site_occupancy
+Li1    Li    0.22870   0.27295   0.29456   0.00000  Uiso   1.00
+Li2   Li    0.25632   0.72477   0.03666   0.00000  Uiso   1.00
+Li3    Li    0.00000   0.00000   0.93973   0.00000  Uiso   1.00
+Li4   Li    0.50000   0.50000   0.54802   0.00000  Uiso   1.00
+Ge1   Ge    0.50000   0.50000   0.80103   0.00000  Uiso   1.00
+P1    P     0.00000   0.50000   0.50407   0.00000  Uiso   1.00
+P2    P     0.00000   0.00000   0.68605   0.00000  Uiso   1.00
+S1     S     0.00000   0.69443   0.41207   0.00000  Uiso   1.00
+S2    S     0.00000   0.80471   0.09410   0.00000  Uiso   1.00
+S3    S     0.00000   0.19195   0.77707   0.00000  Uiso   1.00
+S4    S     0.50000   0.18985   0.09706   0.00000  Uiso   1.00
+S5    S     0.50000   0.29000   0.40324   0.00000  Uiso   1.00
+S6    S     0.50000   0.70738   0.69817   0.00000  Uiso   1.00
