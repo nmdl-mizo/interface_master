@@ -12,14 +12,14 @@
 #
 import os
 import sys
-sys.path.insert(0, '/workspaces/interface_master/interfacemaster')
+sys.path.insert(0, '.')
 
 
 # -- Project information -----------------------------------------------------
 
 project = 'interfacemaster'
-copyright = '2022, Author'
-author = 'Author'
+copyright = '2022, Y. Xie, NMDL'
+author = 'Y. Xie'
 
 
 # -- General configuration ---------------------------------------------------
