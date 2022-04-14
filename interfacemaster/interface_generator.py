@@ -10,8 +10,21 @@ import matplotlib.pyplot as plt
 
 def get_disorientation(L1, L2, v1, hkl1, v2, hkl2):
     """
-    produce a rotation matrix so that the hkl1 plane overlap with the hkl2 plane;
-    and the v1 colinear with v2
+    produce a rotation matrix so that the hkl1 plane overlap with the hkl2 plane and the v1 colinear with v2
+
+    Parameters
+    ----------
+    L1, L2 : numpy array
+        lattice basis sets
+    v1, v2 : numpy array
+        vectors
+    hkl1, hkl2 : numpy array
+        Miller indices
+
+    Returns
+    ----------
+    rot_mat : numpy array
+        a rotation matrix
     """
     
     #normal vector
@@ -35,8 +48,17 @@ def get_disorientation(L1, L2, v1, hkl1, v2, hkl2):
     
 def get_unit_mtx(lattice):
     """
-    return a unit lattice so that the 
-    length of every column vectors is 1
+    return a unit lattice so that the length of every column vectors is 1
+
+    Parameters
+    ----------
+    lattice : numpy array
+        lattice basis set
+
+    Returns
+    ----------
+    lattice_return : numpy array
+        basis set of a unit lattice
     """
     lattice_return = np.eye(3,3)
     for i in range(3):
@@ -46,11 +68,18 @@ def get_unit_mtx(lattice):
 def rot(a, Theta):
     """
     produce a rotation matrix
-    arguments:
-    a --- rotation axis
-    Theta --- rotation angle
-    return:
-    a rotation matrix
+
+    Parameters
+    ----------
+    a : numpy array
+        rotation axis
+    Theta: float
+        rotation angle
+
+    Returns
+    ----------
+    rot_mat : numpy array
+        a rotation matrix
     """
     c = float(cos(Theta))
     s = float(sin(Theta))
@@ -66,11 +95,20 @@ def rot(a, Theta):
 def rational_mtx(M, N):
     """
     find a rational matrix close to M
-    arguments:
-    M --- original matrix
-    N --- denominator
-    return:
-    a rational matrix
+
+    Parameters
+    ----------
+    M : numpy array
+        original matrix
+    N : int
+        denominator
+
+    Returns
+    ----------
+    B : numpy array
+        integer matrix
+    N : int
+        denominator
     """
     B = np.eye(3)
     for i in range(3):
@@ -81,25 +119,56 @@ def rational_mtx(M, N):
 def three_dot(M1, M2, M3):
     """
     compute the three continuous dot product
+
+    Parameters
+    ----------
+    M1, M2, M3 : numpy array
+        matrices
+
+    Returns
+    ----------
+    P : numpy array
+        dot product
     """
     return dot(dot(M1,M2),M3)
 
 def get_ang_list(m1, n):
     """
     compute a list of ang cos between one list of vecor and one vector
+
+    Parameters
+    ----------
+    m1 : numpy array
+        list of vectors
+    n : numpy array
+        a vector
+
+    Returns
+    ----------
+    c : numpy array
+        list of cos
     """
     return 1 / norm(n) * abs(dot(m1, n)) / norm(m1, axis = 1)
 
 def cross_plane(lattice, n, lim, orthogonal, tol):
     """
     get a primitive lattice vector cross a plane
-    argument:
-    lattice --- lattice matrix
-    n --- a normal vector
-    lim --- control how many vectors to be generated
-    tol --- tolerance judging orthogonal
-    return:
-    a primitve vector normal to the plane
+
+    Parameters
+    ----------
+    lattice : numpy array
+        lattice matrix
+    n : numpy array
+        a normal vector
+    lim : int
+        control how many vectors to be generated
+    tol : float
+        tolerance judging orthogonal
+
+    Returns
+    ----------
+    n_p : numpy array
+        a primitve vector normal to the plane
     """
     x = np.arange(-lim, lim, 1)
     y = x
@@ -124,14 +193,19 @@ def cross_plane(lattice, n, lim, orthogonal, tol):
 def get_sites_elements(structure):
     """
     get the coordinates of atoms and the elements
-    arguments:
-    structure --- pymatgen structure class
+
+    Parameters
+    ----------
+    structure : pymatgen structure class
+        input structure
+
+    Returns
+    ----------
+    atoms : numpy array
+        fractional coordinates of atoms in the primitive cell
+    elements : numpy aray
+        list of element name of the atoms
     return:
-    atoms --- atom coordinates
-    elements --- list of element name of the atoms
-    return:
-    atoms --- fractional coordinates of atoms in the primitive cell
-    elements --- list of element names of the atom
     """
     atoms = np.array([0, 0, 0])
     elements = []
@@ -144,6 +218,13 @@ def get_sites_elements(structure):
 def POSCAR_to_cif(Poscar_name, Cif_name):
     """
     generate a cif file for the structure in a POSCAR file
+
+    Parameters
+    ----------
+    Poscar_name : str
+        name of a POSCAR file
+    Cif_name : str
+        name of a cif file
     """
     structure = Structure.from_file(Poscar_name)
     structure.to(filename=Cif_name)
@@ -152,11 +233,19 @@ def POSCAR_to_cif(Poscar_name, Cif_name):
 def write_LAMMPS(lattice, atoms, elements, filename = 'lmp_atoms_file', orthogonal = False):
     """
     write LAMMPS input atom file file of a supercell
-    argument:
-    lattice --- lattice matrix
-    atoms --- fractional atoms coordinates
-    elements --- list of element name of the atoms
-    orthogonal --- whether write orthogonal cell
+
+    Parameters
+    ----------
+    lattice : numpy array
+        lattice matrix
+    atoms : numpy array
+        fractional atoms coordinates
+    elements : numpy array
+        list of element name of the atoms
+    filename : str
+        filename of LAMMPS input atom file to write, default "lmp_atoms_file"
+    orthogonal : bool
+        whether write orthogonal cell, default False
     """
 
     #list of elements
@@ -208,10 +297,17 @@ def write_LAMMPS(lattice, atoms, elements, filename = 'lmp_atoms_file', orthogon
 def write_POSCAR(lattice, atoms, elements, filename = 'POSCAR'):
     """
     write Poscar file of a supercell
-    argument:
-    lattice --- lattice matrix
-    atoms --- fractional atoms coordinates
-    elements --- list of element name of the atoms
+
+    Parameters
+    ----------
+    lattice : numpy array
+        lattice matrix
+    atoms : numpy array
+        fractional atoms coordinates
+    elements : numpy array
+        list of element name of the atoms
+    filename : str
+        filename of POSCAR filename to wirte, default "POSCAR"
     """
     element_species = np.unique(elements)
     atoms_list = []
@@ -252,15 +348,26 @@ def write_POSCAR(lattice, atoms, elements, filename = 'POSCAR'):
 def cell_expands(lattice, atoms, elements, xyz):
     """
     expand certain supercell
-    arguments:
-    lattice --- lattice matrix
-    atoms --- list of atom fractional coordinates
-    elements --- list of element name of the atoms
-    xyz --- expansions
-    return:
-    lattice --- lattice matrix
-    atoms --- atom coordinates
-    elements --- list of element name of the atoms
+
+    Parameters
+    ----------
+    lattice : numpy array
+        lattice matrix
+    atoms : numpy array
+        list of atom fractional coordinates
+    elements : numpy array
+        list of element name of the atoms
+    xyz : list of int
+        list of expansion factor for the x, y, z directions
+
+    Returns
+    ----------
+    lattice : numpy array
+        lattice matrix
+    atoms : numpy array
+        atom coordinates
+    elements : numpy array
+        list of element name of the atoms
     """
     mtx = lattice.copy()
     dimX, dimY, dimZ = xyz
@@ -280,11 +387,18 @@ def cell_expands(lattice, atoms, elements, xyz):
 def get_array_bounds(U):
     """
     get the meshgrid formed by three sets of lower & upper bounds.
+    
     the bounds cooresponds to the 8 vertices of the cell consisting of the three column vectors of a matrix
-    argument:
-    U --- integer matrix
-    return:
-    indice --- meshgrid made by the lower and upper bounds of the indices
+
+    Parameters
+    ----------
+    U : numpy array
+        integer matrix
+
+    Returns
+    ----------
+    indice : numpy array
+        meshgrid made by the lower and upper bounds of the indices
     """
     Mo = U.copy()
     # get the coordinates of 8 vertices
@@ -318,14 +432,24 @@ def get_array_bounds(U):
 def super_cell(U, lattice, Atoms, elements):
     """
     make supercell
-    argument:
-    U --- coefficients of the LC of three vectors from the basis
-    atoms --- fractional coordinates of atoms
-    elements --- list of the element names of these atoms
-    return:
-    lattice --- lattice matrix
-    atoms --- atom coordinates
-    elements --- list of element name of the atoms
+
+    Parameters
+    ----------
+    U : numpy array
+        coefficients of the LC of three vectors from the basis
+    atoms : numpy array
+        fractional coordinates of atoms
+    elements : numpy array
+        list of the element names of these atoms
+
+    Returns
+    ----------
+    lattice : numpy array
+        lattice matrix
+    atoms : numpy array
+        atom coordinates
+    elements : numpy array
+        list of element name of the atoms
     """
     indice = get_array_bounds(U)
 
