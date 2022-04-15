@@ -1557,14 +1557,7 @@ class core:
         self.set_orientation_axis(dot(inv(self.lattice_1),n1), dot(inv(self.lattice_2),n2))
         if pre_dt == True:
             #auxiliary vector
-            if abs(n2[1]) < 1e-8 and abs(n2[2]) < 1e-8:
-                av_perpendicular = array([0,1,0])
-            else:
-                av_perpendicular = array([0,-n2[2],n2[1]])
-            #match disorientation
-            inter_rot = match_rot(self.orientation, n1, match_tol, exact_R, av_perpendicular)
-            #reset the orientation
-            self.orientation = dot(inter_rot, self.orientation)
+            self.orientation = exact_R
         #auxilary vector
         av_1 = cross(b1[:,0], b1[:,1])
         av_2_0 = cross(b2_0[:,0], b2_0[:,1])
@@ -1992,7 +1985,7 @@ class core:
         if norm(c) < 1e-10:
             R = eye(3,3)
         else:
-            angle = arccos(ang(axis_1, axis_2))
+            angle = arccos(dot(axis_1, axis_2))
             R = rot(c, angle)
         self.orientation = R
         
@@ -2042,7 +2035,7 @@ class core:
         self.d1 = d_hkl(self.lattice_1, hkl_1)
         lattice_2 = dot(self.a2_transform, self.lattice_2)
         normal_1 = get_normal_from_MI(self.lattice_1, hkl_1)
-        hkl_2 = MID(lattice_2, normal_1)
+        hkl_2 = MID(lattice_2, normal_1, tol_integer)
         self.d2 = d_hkl(lattice_2, hkl_2)
         #the two slabs with auxilary vector
         plane_1 = dot(self.lattice_1, self.U1)

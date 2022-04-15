@@ -3,10 +3,10 @@ from numpy import dot, cross, ceil, square, arccos, pi, inf, cos, sin, column_st
 import numpy as np
 
 def get_odd_sigma(M):
-	  v1 = 1/2*(M[:,0] + M[:,1])
-	  v2 = 1/2*(M[:,1] + M[:,2])
-	  v3 = 1/2*(M[:,2] + M[:,0])
-	  
+    v1 = 1/2*(M[:,0] + M[:,1])
+    v2 = 1/2*(M[:,1] + M[:,2])
+    v3 = 1/2*(M[:,2] + M[:,0])
+    
 
 def rot(a, Theta):
     """
@@ -438,7 +438,7 @@ def get_indices_from_n_Pc1(n, lattice, Pc1):
         hkl[i] = dot(lattice[:,i], n)/dot(Pc1, n)
     return hkl
 
-def MID(lattice, n):
+def MID(lattice, n, tol):
     """
     get the Miller indices with a normal n for the lattice
     
@@ -448,19 +448,20 @@ def MID(lattice, n):
         lattice basis set
     n : numpy array
         normal vector
+    tol : float
+        tolerance
 
     Returns
     ----------
     hkl : numpy array
         the Miller indices
     """
-    tol = 1e-10
     for i in range(3):
         if abs(dot(lattice[:,i],n)) > tol:
             Pc1 = lattice[:,i]
             break
     hkl = get_indices_from_n_Pc1(n, lattice, Pc1)
-    hkl = find_integer_vectors(hkl,10000)[0]
+    hkl = find_integer_vectors(hkl,10000, tol)[0]
     return hkl
 
 def ext_euclid(a, b):
@@ -564,8 +565,8 @@ def get_normal_from_MI(lattice, hkl):
     lattice = np.array(lattice,dtype = float)
     numzeros = len(np.where(hkl==0)[0])
     if numzeros == 2:
-       non_zero_v_index = np.where(hkl!=0)[0][0]
-       return lattice.T[non_zero_v_index]
+       zero_v_index = np.where(hkl==0)[0]
+       return cross(lattice.T[zero_v_index[0]],lattice.T[zero_v_index[1]])
     elif numzeros == 1:
        non_zero_v_index = np.where(hkl!=0)[0]
        u1 = lattice.T[non_zero_v_index[0]]/hkl[non_zero_v_index[0]]
@@ -653,11 +654,13 @@ def match_rot(deft_rot, axis, tol, exact_rot, av_perpendicular):
     min_g = inf
     while (theta < 2*pi):
         inter_rot = rot(axis, theta)
-        compare_rot = dot(inter_rot,deft_rot)
+        compare_rot = dot(deft_rot,inter_rot)
         compare_v = dot(compare_rot, av_perpendicular)
         compare_v = compare_v/norm(compare_v)
         exact_v = dot(exact_rot,av_perpendicular)
         exact_v = exact_v/norm(exact_v)
+        if norm(cross(compare_v, exact_v)) < min_g:
+            min_g = norm(cross(compare_v, exact_v))
         if norm(cross(compare_v, exact_v)) < tol:
             found = True
             if dot(exact_v, compare_v) < 0:
