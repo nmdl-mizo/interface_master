@@ -52,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: module_document.pdf
-          path: docs/_build/latex/interface_master.pdf
+          path: docs/_build/latex/interfacemaster.pdf
 
       - name: Create release draft
         id: create_release
@@ -74,6 +74,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: docs/_build/latex/interface_master.pdf
+          asset_path: docs/_build/latex/interfacemaster.pdf
           asset_name: interface_master.pdf
           asset_content_type: application/pdf
