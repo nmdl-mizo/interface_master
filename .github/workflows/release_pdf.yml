@@ -51,7 +51,7 @@ jobs:
       - name: upload pdf
         uses: actions/upload-artifact@v3
         with:
-          name: module_document.pdf
+          name: interface_master.pdf
           path: docs/_build/latex/interfacemaster.pdf
 
       - name: Create release draft
