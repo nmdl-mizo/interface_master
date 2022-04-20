@@ -36,8 +36,8 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      - name: Install dependencies
-        run: python3 -m pip install -r ./requirements.txt
+      - name: Install package
+        run: python3 -m pip install .
 
       - name: Install sphinx
         run: python3 -m pip install -r ./.devcontainer/requirements.txt
