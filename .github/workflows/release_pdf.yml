@@ -44,9 +44,7 @@ jobs:
         run: sudo apt-get install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra latexmk 
 
       - name: build tex files and compile pdf
-        run: |
-          sphinx-build -M latexpdf docs docs/_build
-          make -f docs/_build/latex/Makefile
+        run: sphinx-build -M latexpdf docs docs/_build
 
       - name: upload pdf
         uses: actions/upload-artifact@v3
