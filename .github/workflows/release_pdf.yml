@@ -57,6 +57,7 @@ jobs:
       - name: Create release draft
         id: create_release
         uses: actions/create-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         with:
@@ -70,6 +71,7 @@ jobs:
       - name: upload release asset pdf
         id: upload_release_asset_pdf
         uses: actions/upload-release-asset@v1
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
