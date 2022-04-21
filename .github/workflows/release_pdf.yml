@@ -2,6 +2,8 @@ name: create release draft and compile pdf
 
 on:
   push:
+    branches:
+      - release
     tags:
       - '*'
   pull_request:
@@ -73,5 +75,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: docs/_build/latex/interfacemaster.pdf
-          asset_name: interface_master.pdf
+          asset_name: pdf_document
           asset_content_type: application/pdf
