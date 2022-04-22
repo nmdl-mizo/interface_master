@@ -1344,10 +1344,6 @@ class core:
         N = 1
         U = three_dot(inv(a1), R, a2_0)
         file.write('    -----for N-----\n')
-        if exact == True:
-            self.S=1e-5
-            self.du = 1e-5
-            self.dd = 1e-5
         while N <= self.sgm2:
             Uij, N = rational_mtx(U,N)
             U_p = 1 / N * Uij
@@ -1358,8 +1354,8 @@ class core:
                 if ((abs(det(D)-1) <= self.S) and \
                 np.all(abs(D-np.eye(3)) < self.dd)):
                     if exact == True:
-                        R = dot(R,D)
                         D = eye(3,3)
+                        R = R_p
                     here_found = True
                     file.write('--D accepted--\n')
                     file.write("D, det(D) = {0} \n".format(det(D)))
