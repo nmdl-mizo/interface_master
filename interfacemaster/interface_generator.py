@@ -1066,6 +1066,7 @@ class core:
         self.lattice_bi = np.eye(3)
         self.atoms_bi = np.array([0.0,0.0,0.0])
         self.elements_bi = []
+        self.bicrystal_ortho = False #whether the bicrystal supercell is orthogonal
         self.slab_structure_1 = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
         self.slab_structure_2 = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
         self.bicrystal_structure = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
@@ -1344,10 +1345,6 @@ class core:
         N = 1
         U = three_dot(inv(a1), R, a2_0)
         file.write('    -----for N-----\n')
-        if exact == True:
-            self.S=1e-5
-            self.du = 1e-5
-            self.dd = 1e-5
         while N <= self.sgm2:
             Uij, N = rational_mtx(U,N)
             U_p = 1 / N * Uij
@@ -1358,8 +1355,8 @@ class core:
                 if ((abs(det(D)-1) <= self.S) and \
                 np.all(abs(D-np.eye(3)) < self.dd)):
                     if exact == True:
-                        R = dot(R,D)
                         D = eye(3,3)
+                        R = R_p
                     here_found = True
                     file.write('--D accepted--\n')
                     file.write("D, det(D) = {0} \n".format(det(D)))
@@ -1691,7 +1688,7 @@ class core:
 
     def get_bicrystal(self, dydz = np.array([0.0,0.0,0.0]), dx = 0, dp1 = 0, dp2 = 0, \
                       xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, filename = 'POSCAR', \
-                      two_D = False, filetype = 'VASP', LAMMPS_file_ortho = False, mirror = False, KTI = False):
+                      two_D = False, filetype = 'VASP',  mirror = False, KTI = False):
         """
         generate a cif file for the bicrystal structure
         argument:
@@ -1834,7 +1831,7 @@ class core:
         if filetype == 'VASP':
             write_POSCAR(lattice_bi, atoms_bi, elements_bi, filename)
         elif filetype == 'LAMMPS':
-            write_LAMMPS(lattice_bi, atoms_bi, elements_bi, filename, LAMMPS_file_ortho)
+            write_LAMMPS(lattice_bi, atoms_bi, elements_bi, filename, self.bicrystal_ortho)
         else:
             raise RuntimeError("Sorry, we only support for 'VASP' or 'LAMMPS' output")
 
@@ -1885,6 +1882,8 @@ class core:
         plane_ortho --- whether limit the two vectors in the GB plane to be orthogonal
         tol --- tolerance judging whether orthogonal
         """
+        if normal_ortho == True and plane_ortho == True:
+            self.bicrystal_ortho = True
         self.d1 = d_hkl(self.lattice_1, hkl)
         lattice_2 = three_dot(self.R, self.D, self.lattice_2)
         hkl_2 = get_primitive_hkl(hkl, self.lattice_1, lattice_2, tol_integer)
@@ -1918,6 +1917,8 @@ class core:
         plane_ortho --- whether limit the two vectors in the GB plane to be orthogonal
         tol --- tolerance judging whether orthogonal
         """
+        if normal_ortho == True and plane_ortho == True:
+            self.bicrystal_ortho = True
         self.d1 = d_hkl(self.lattice_1, hkl_1)
         lattice_2 = dot(self.a2_transform, self.lattice_2)
         normal_1 = get_normal_from_MI(self.lattice_1, hkl_1)
