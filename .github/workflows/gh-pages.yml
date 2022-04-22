@@ -3,7 +3,6 @@ name: GitHub Pages
 on:
   push:
     branches:
-      - main
       - master
       - develop
   pull_request:
@@ -36,23 +35,24 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      - name: Install dependencies
-        run: python3 -m pip install -r ./requirements.txt
+      - name: Install package
+        run: python3 -m pip install .
 
       - name: Install sphinx
         run: python3 -m pip install -r ./.devcontainer/requirements.txt
 
-      - run: sphinx-build docs docs/_build/
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/main' }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/_build
+      - name: Build sphinx html document
+        run: sphinx-build docs docs/_build/
 
       - name: upload docs archive
         uses: actions/upload-artifact@v3
         with:
           name: docs_archive
           path: docs/_build/
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/master' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/_build

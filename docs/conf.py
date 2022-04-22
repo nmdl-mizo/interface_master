@@ -12,15 +12,19 @@
 #
 import os
 import sys
-sys.path.insert(0, '.')
-
+import configparser
+sys.path.insert(0, os.path.abspath('.'))
+from interfacemaster import __version__
+config = configparser.ConfigParser()
+config.read('../setup.cfg')
 
 # -- Project information -----------------------------------------------------
 
-project = 'interfacemaster'
+project = config['metadata']['name']
 copyright = '2022, Y. Xie, NMDL'
-author = 'Y. Xie'
-
+author = config['metadata']['author']
+version = __version__
+release = '.'.join(__version__.split('.')[:2])
 
 # -- General configuration ---------------------------------------------------
 
