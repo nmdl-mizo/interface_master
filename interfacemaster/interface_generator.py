@@ -1723,8 +1723,18 @@ class core:
             atoms_c[:,0] = atoms_c[:,0] - 1
             atoms_2 = np.vstack((atoms_2, atoms_c))
             elements_2 = np.append(elements_2, elements_c)
-            
-        
+
+            # delete overwrapping atoms
+            elements_2 = elements_2[np.where(atoms_2[:,0] + 0.000001 < 1)]
+            atoms_2 = atoms_2[atoms_2[:,0] + 0.000001 < 1]
+
+        #termination
+        if dp1 > 0:
+            shift_terminate(lattice_1, dp1, atoms_1)
+        if dp2 > 0:
+            shift_terminate(lattice_2, -dp2, atoms_2)
+
+
         #expansion
         if not (np.all(xyz_1 == 1) and np.all(xyz_2 == 1)):
             if not np.all([xyz_1[1], xyz_1[2]] == [xyz_2[1], xyz_2[2]]):
