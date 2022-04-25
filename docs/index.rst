@@ -11,6 +11,7 @@ Welcome to interfacemaster's documentation!
    :caption: Contents:
 
    interfacemaster
+   tutorials
 
 
 Indices and tables
