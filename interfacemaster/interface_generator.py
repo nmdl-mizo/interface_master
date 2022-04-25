@@ -1410,8 +1410,8 @@ class core:
             print('failed to find a satisfying appx CSL. Try to adjust the limits according \
               to the log file generated; or try another orientation.')
 
-    def search_one_position_2D(self, hkl_1, hkl_2, theta_range, dtheta, pre_dt = False, exact_R = eye(3,3), \
-    match_tol = 0.05, integer_tol = 1e-8, start = 0):
+    def search_one_position_2D(self, hkl_1, hkl_2, theta_range, dtheta, pre_dt = False, pre_R = eye(3,3), \
+    match_tol = 0.05, integer_tol = 1e-8, start = 0, exact = False):
         """
         main loop finding the appx CSL
         arguments:
@@ -1430,7 +1430,7 @@ class core:
         self.set_orientation_axis(dot(inv(self.lattice_1),n1), dot(inv(self.lattice_2),n2))
         if pre_dt == True:
             #auxiliary vector
-            self.orientation = exact_R
+            self.orientation = pre_R
         #auxilary vector
         av_1 = cross(b1[:,0], b1[:,1])
         av_2_0 = cross(b2_0[:,0], b2_0[:,1])
@@ -1476,6 +1476,9 @@ class core:
                     file.write('    N= ' + str(N) + " accepted" + '\n')
                     R_p = three_dot(a1, U_p, inv(a2_0))
                     D = dot(inv(R),R_p)
+                    if exact == True:
+                        D = eye(3,3)
+                        R = R_p
                     if (abs(det(D)-1) <= self.S) and \
                     np.all(abs(D-np.eye(3)) < self.dd):
                         self.a2_transform = three_dot(R, D, self.orientation)
@@ -1728,12 +1731,6 @@ class core:
             # delete overwrapping atoms
             elements_2 = elements_2[np.where(atoms_2[:,0] + 0.000001 < 1)]
             atoms_2 = atoms_2[atoms_2[:,0] + 0.000001 < 1]
-
-        #termination
-        if dp1 > 0:
-            shift_terminate(lattice_1, dp1, atoms_1)
-        if dp2 > 0:
-            shift_terminate(lattice_2, -dp2, atoms_2)
 
 
         #expansion
