@@ -7,10 +7,11 @@ Welcome to interfacemaster's documentation!
 ===========================================
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 3
    :caption: Contents:
 
    interfacemaster
+   tutorials
 
 
 Indices and tables
