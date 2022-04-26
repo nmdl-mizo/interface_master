@@ -247,7 +247,7 @@ def get_indices_from_n_Pc1(n, lattice, Pc1):
         hkl[i] = dot(lattice[:,i], n)/dot(Pc1, n)
     return hkl
 
-def MID(lattice, n, tol):
+def MID(lattice, n, tol = 1e-8):
     #get the miller indices with a normal n for the lattice
     tol = 1e-10
     for i in range(3):
