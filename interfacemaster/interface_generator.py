@@ -1,10 +1,11 @@
 from numpy.linalg import det, norm, inv
-from numpy import dot, cross, ceil, floor, cos, sin, tile, array, arange, meshgrid, delete, column_stack, eye, arccos
+from numpy import dot, cross, ceil, floor, cos, sin, tile, array, arange, meshgrid, delete, column_stack, eye, arccos, unique, around, vstack, where
 from pymatgen.core.structure import Structure
 from pymatgen.io.cif import CifWriter
 from pymatgen.io.vasp.inputs import Poscar
 import numpy as np
-from interfacemaster.cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_hand, find_integer_vectors, get_pri_vec_inplane, get_ortho_two_v, ang, search_MI_n, get_normal_from_MI, match_rot
+from interfacemaster.cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_hand, find_integer_vectors, get_pri_vec_inplane, \
+get_ortho_two_v, ang, search_MI_n, get_normal_from_MI, match_rot
 import os
 import matplotlib.pyplot as plt
 
@@ -1007,7 +1008,9 @@ def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_
                   elements_here, xlo, xhi, d_nearest*0.99, '{0}_{1}'.format(i+1,j+1))
             delete_nums_per_trans_file.write('{}\n'.format(dele_count))
     delete_nums_per_trans_file.close()
-            
+
+
+        
 class core:
     def __init__(self, file_1, file_2):
         self.afile_1 = file_1 # cif file name of lattice 1
@@ -1071,7 +1074,13 @@ class core:
         self.slab_structure_2 = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
         self.bicrystal_structure = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
         print('Warning!, this programme will rewrite the POSCAR file in this dir!')
-
+        
+    def scale(self, factor_1, factor_2):
+        self.lattice_1 = self.lattice_1 * factor_1
+        self.lattice_2 = self.lattice_2 * factor_2
+        self.conv_lattice_1 = self.conv_lattice_1 * factor_1
+        self.conv_lattice_2 = self.conv_lattice_2 * factor_2
+        
     def parse_limit(self, du, S, sgm1, sgm2, dd):
         """
         set the limitation to accept an appx CSL
@@ -1409,7 +1418,7 @@ class core:
         if not found:
             print('failed to find a satisfying appx CSL. Try to adjust the limits according \
               to the log file generated; or try another orientation.')
-
+    
     def search_one_position_2D(self, hkl_1, hkl_2, theta_range, dtheta, pre_dt = False, pre_R = eye(3,3), \
     match_tol = 0.05, integer_tol = 1e-8, start = 0, exact = False):
         """
@@ -1869,7 +1878,8 @@ class core:
             R = rot(c, angle)
         self.orientation = R
         
-    def compute_bicrystal(self, hkl, lim = 20, normal_ortho = False, plane_ortho = False, tol_ortho = 1e-10, tol_integer = 1e-8):
+    def compute_bicrystal(self, hkl, lim = 20, normal_ortho = False, plane_ortho = False, \
+    tol_ortho = 1e-10, tol_integer = 1e-8, align_rotation_axis = False, rotation_axis = [1,1,1]):
         """
         compute the transformation to obtain the supercell of the two slabs forming a interface
         argument:
@@ -1889,7 +1899,12 @@ class core:
         hkl_c = np.array(hkl_c)
         plane_B = get_pri_vec_inplane(hkl_c, self.CSL) # plane bases of the CSL lattice plane
         if (plane_ortho == True) and (abs(dot(plane_B[:,0], plane_B[:,1])) > tol_ortho):
-            plane_B = get_ortho_two_v(plane_B, lim, tol_ortho)
+            plane_B = get_ortho_two_v(plane_B, lim, tol_ortho, align_rotation_axis, rotation_axis)
+        if align_rotation_axis == True:
+        	  if norm(cross(plane_B[:,0], rotation_axis) > 1e-3):
+        	      change_v = plane_B[:,1].copy()
+        	      plane_B[:,1] = plane_B[:,0]
+        	      plane_B[:,0] = change_v
         plane_n = cross(plane_B[:,0], plane_B[:,1]) # plane normal
         v3 = cross_plane(self.CSL, plane_n, lim, normal_ortho, tol_ortho) # a CSL basic vector cross the plane
         supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
@@ -2014,9 +2029,9 @@ class core:
         with open('blockfile', 'w') as fb:
             for i in range(len(region_names)):
                 if ortho == False:
-                    fb.write('region {0} prism {1:.16f} {2:.16f} EDGE EDGE EDGE EDGE {3:.16f} {4:.16f} {5:.16f} units box \n'.\
+                    fb.write('region {0} prism {1} {2} EDGE EDGE EDGE EDGE {3} {4} {5} units box \n'.\
                 format(region_names[i], region_los[i], region_his[i], xy, xz, yz))
                 else:
-                    fb.write('region {0} block {1:.16f} {2:.16f} EDGE EDGE EDGE EDGE units box \n'.\
+                    fb.write('region {0} block {1} {2} EDGE EDGE EDGE EDGE units box \n'.\
                 format(region_names[i], region_los[i], region_his[i]))
                 fb.write('group {0} region {1} \n'.format(region_names[i], region_names[i]))

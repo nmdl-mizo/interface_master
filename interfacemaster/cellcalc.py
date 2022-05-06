@@ -34,7 +34,7 @@ def ang(v1, v2):
     """
     return abs(dot(v1, v2)/norm(v1)/norm(v2))
 
-def get_ortho_two_v(B, lim, tol):
+def get_ortho_two_v(B, lim, tol, align_rotation_axis = False, rotation_axis = [1,1,1]):
     """
     get orthogonal cell of a 2D basis
     """
@@ -49,13 +49,22 @@ def get_ortho_two_v(B, lim, tol):
     LP = LP[np.argsort(norm(LP, axis=1))]
     found = False
     count = 0
+    if align_rotation_axis == True:
+        for i in LP:
+            if norm(cross(i, rotation_axis)) < tol:
+                v1 = i
+                break
+    
     while not found and count < len(LP):
-        v1 = LP[count]
+        if align_rotation_axis == False:
+            v1 = LP[count]
         for i in LP:
             if ang(v1, i) < tol:
                 v2 = i
                 found = True
                 break
+        if align_rotation_axis:
+            break
         count += 1
     if found == False:
         raise RuntimeError('faild to find two orthogonal vectors in the GB plane, maybe you can try to increase the lim')
