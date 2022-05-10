@@ -7,10 +7,15 @@ import shutil
 def find_pairs_with_closest_distances(atoms_here, bicrystal_lattice):
     """
     Find the pairs of atoms with closest distance
-    output:
-    disp_ids: ids of atoms to do displacement
-    del_ids: ids of atoms to be deleted
-    dsps: displacements to be done
+    arguments:
+    atoms_here --- cartesian coordinates
+    bicrystal_lattice --- lattice matrix of the bicrystal cell
+    return:
+    array_id_del --- ids of atoms to delete
+    array_id_dsp --- ids of atoms to displace
+    dsps --- displacements to be done
+    distances_round[1] --- cutoff this turn
+    distances_round[2] --- cloest distance after deletion
     """
     transL = bicrystal_lattice
     reps = array([-1, 0, 1])
@@ -71,6 +76,10 @@ def screen_out_non_repeated_pairs(ids_1, ids_2):
     """
     input two pairs of ids with self-paring
     output the indices involving non-repeating pairs
+    arguments:
+    ids_1, ids_2 --- two pairs of ids
+    return:
+    screened_ids --- ids in ids_1 without repeating
     """
     arrays = arange(len(ids_1))
     screened_ids = []
@@ -88,7 +97,14 @@ def screen_out_non_repeated_pairs(ids_1, ids_2):
     return screened_ids
 
 class GB_runner():
+    """
+    a class doing brute-foce searching for elemental GBs
+    """
     def __init__(self, my_interface):
+        """
+        argument:
+        my_interface --- interface core object
+        """
         if len(unique(my_interface.elements_bi)) > 1:
             raise RuntimeError('error: only available for monoatomic systems')
         self.interface = my_interface
@@ -98,6 +114,10 @@ class GB_runner():
         self.terminations = []
         
     def get_terminations(self, changing_termination = False):
+        """
+        argument:
+        changing_termination --- whether to sample different terminating planes
+        """
         if changing_termination == False:
             self.terminations = [[0,0]]
         else:
@@ -106,6 +126,10 @@ class GB_runner():
                                  [self.interface.dp_list_1[0] + 0.0001, 0]]
         
     def get_RBT_list(self, grid_size):
+        """
+        argument:
+        grid_size --- size of grid sampling RBT
+        """
         CNID = dot(self.interface.orient,self.interface.CNID)
         v1 = CNID[:,0]
         v2 = CNID[:,1]
@@ -116,7 +140,10 @@ class GB_runner():
             for j in range(n2):
                 self.RBT_list.append(v1*i/n1 + v2*j/n2)
         
-    def divide_region(self):        
+    def divide_region(self):
+        """
+        divide simulation regions
+        """
         all_atoms = dot(self.interface.lattice_bi.copy(), self.interface.atoms_bi.copy().T).T
         middle_ids = where((all_atoms[:,0] < self.boundary + self.clst_atmc_dstc)\
                            & (all_atoms[:,0] > self.boundary - self.clst_atmc_dstc))[0]
@@ -126,6 +153,11 @@ class GB_runner():
         self.bulk_atoms = all_atoms.copy()[where( (all_atoms[:,0] <= self.boundary - self.clst_atmc_dstc) \
                                      | (all_atoms[:,0] >= self.boundary + self.clst_atmc_dstc) )[0]]   
     def main_run(self, core_num):
+        """
+        main loop
+        argument:
+        core_num --- number of cores for simulation
+        """
         count = 1
         os.mkdir('dump')
         for i in self.terminations:
@@ -148,20 +180,35 @@ class GB_runner():
         get_lowest()
 
 def run_LAMMPS(core_num, count):
+    """
+    LAMMPS run command
+    """
     os.system('mpirun -np {0} lmp_mpi -in GB.in -v count {1}'.format(core_num, count))
 
 def read_energy():
+    """
+    LAMMPS run command
+    """
     energy = loadtxt('energy_here.dat')
     return energy
 
 def write_data_here(count, energy, dy, dz, dp1, dp2, delete_cutoff):
+    """
+    write data for each simulation
+    argument:
+    count --- index of simulation
+    energy --- GB energy
+    dy, dz --- RBT
+    dp1, dp2 --- terminating shift
+    delete_cutoff --- cutoff to merge atoms
+    """
     with open('results.dat', 'a') as f:
         f.write('{0} {1} {2} {3} {4} {5} {6} \n'.format(count, energy, dy, dz, dp1, dp2, delete_cutoff))
 
 def merge_operation(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc, 
                     RBT, bulk_atoms, core_num, dp1, dp2):
     """
-    input the starting GB_atoms, generate command files for merging atom operation
+    merge loop
     """
     count = count_start
     #os.mkdir(foldername)
@@ -195,6 +242,9 @@ def merge_operation(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc,
     return count
     
 def get_lowest():
+    """
+    get the lowest GB energy
+    """
     count, energy, dy, dz, dp1, dp2, delete_cutoff = loadtxt('results.dat', unpack = True)
     lowest_count = count[where(energy == min(energy))[0][0]]
     lowest_energy = energy[where(energy == min(energy))[0][0]]

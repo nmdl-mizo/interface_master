@@ -8,6 +8,15 @@ from cellcalc import MID, rot
 from interfacemaster.interface_generator import core
 
 def compute_sigma(axis, theta, maxsigma=100):
+    """
+    compute sigma values for a given disorientation
+    arguments:
+    axis --- rotation axis
+    theta --- rotation angle
+    maxsigma --- maximum sigma value for searching
+    return:
+    sigma
+    """
     print(theta/pi*180)
     R = rot(axis,theta)
     my_interface = core('cif_files/Si_mp-149_conventional_standard.cif',\
@@ -17,10 +26,29 @@ def compute_sigma(axis, theta, maxsigma=100):
     return det(my_interface.U1)
 
 def get_hkl(P, axis, tol = 1e-3):
+    """
+    given a referring point and a rotation matrix, get the miller indices
+    for this symmetric tilt GB
+    arguments:
+    P --- referring point
+    axis --- rotation axis
+    return:
+    miller indices
+    """
     n = cross(axis, P)
     return MID(lattice=eye(3,3), n=n, tol=tol)
 
 def sample_STGB(axis, lim, maxsigma, max_index):
+    """
+    sampling the symmetric tilt GBs for a given rotation axis
+    arguments:
+    axis --- rotation axis
+    lim --- control the number of generated referring points
+    maxsigma --- maximum sigma value
+    max_index --- maximum value of miller indices
+    return:
+    angle list, sigma list, (hkl) list
+    """
     Ps, sigmas, thetas, original_sigmas = get_Ps_sigmas_thetas(lim,axis)
     sampled_indices = where((sigmas < maxsigma))[0]
     Ps = Ps[sampled_indices]
@@ -37,6 +65,14 @@ def sample_STGB(axis, lim, maxsigma, max_index):
     return thetas[argsort(thetas,kind='stable')], sigmas[argsort(thetas,kind='stable')], hkls[argsort(thetas,kind='stable')]
 
 def generate_arrays_x_y(x_min, y_min, lim):
+    """
+    generate x, y meshgrids
+    arguments:
+    x_min, y_min --- minimum x,y
+    lim --- maximum x,y
+    return:
+    meshgrid
+    """
     x = arange(x_min, x_min + lim, 1)
     y = arange(y_min, y_min + lim, 1)
     indice = (stack(meshgrid(x, y)).T).reshape(len(x) *len(y), 2)
@@ -47,7 +83,16 @@ def generate_arrays_x_y(x_min, y_min, lim):
     return array(indice_gcd_one)
 
 def get_Ps_sigmas_thetas(lim, axis, maxsigma = 100000):
-    
+    """
+    for a rotation axis, get the geometric information of all the symmetric tilt GBs
+    within a searching limitation
+    arguments:
+    lim --- control the number of generated referring points
+    axis --- rotation axis
+    maxsigma --- maximum sigma
+    return:
+    list of referring points, sigma list, angle list, original list of the 'in-plane' sigmas
+    """
     if norm(cross(axis, [0,0,1])) < 1e-8:
         x = arange(2, 2 + lim, 1)
         indice = []

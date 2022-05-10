@@ -17,6 +17,8 @@ def get_disorientation(L1, L2, v1, hkl1, v2, hkl2):
     L1, L2 --- lattice 1, lattice 2
     hkl1, hkl2 --- miller indices of the coplanar planes
     v1, v2 --- direction indices of the collinear vectors lying in hkl1 & hkl2
+    return:
+    rotation matrix of target disorientation
     """
     
     #normal vector
@@ -42,8 +44,6 @@ def get_unit_mtx(lattice):
     """
     return a unit lattice so that the 
     length of every column vectors is 1
-    arguments:
-    lattice --- a matrix with column lattice vectors
     """
     lattice_return = np.eye(3,3)
     for i in range(3):
@@ -93,7 +93,7 @@ def three_dot(M1, M2, M3):
 
 def get_ang_list(m1, n):
     """
-    compute a list of ang cos between one list of vectors and one vector
+    return a list of ang cos between one list of vectors and one vector
     arguments:
     m1 --- a list of vectors
     n --- one vector
@@ -136,9 +136,6 @@ def get_sites_elements(structure):
     get the coordinates of atoms and the elements
     arguments:
     structure --- pymatgen structure class
-    return:
-    atoms --- atom coordinates
-    elements --- list of element name of the atoms
     return:
     atoms --- fractional coordinates of atoms in the primitive cell
     elements --- list of element names of the atom
@@ -365,6 +362,8 @@ def shift_termi_left(lattice, dp, atoms, elements):
     dp --- height of termination shift
     atoms --- fractional coordinates of the atoms
     elements --- list of element names
+    return:
+    shifted atom coordinates, corresponding list of elements
     """
     n = cross(lattice[:,1],lattice[:,2])
     position_shift = dp / ang(lattice[:,0], n) / norm(lattice[:,0])
@@ -411,6 +410,8 @@ def shift_none_copy(lattice, dp, atoms):
     lattice --- a matrix with column lattice vectors
     dp --- height of termination shift
     atoms --- fractional coordinates of the atoms
+    return:
+    shifted atom coordinates
     """
     n = cross(lattice[:,1],lattice[:,2])
     position_shift = dp / ang(lattice[:,0], n) / norm(lattice[:,0])
@@ -426,6 +427,8 @@ def shift_termi_right(lattice, dp, atoms, elements):
     dp --- height of termination shift
     atoms --- fractional coordinates of the atoms
     elements --- list of element names
+    return:
+    shifted atom coordinates, corresponding list of elements
     """
     n = cross(lattice[:,1],lattice[:,2])
     position_shift = dp / ang(lattice[:,0], n) / norm(lattice[:,0])
@@ -469,6 +472,10 @@ def excess_volume(lattice_1, lattice_bi, atoms_1, atoms_2, dx):
     lattice_bi --- lattice matrix of the bicrystal
     atoms_1, atoms_2 --- atom fractional coordinates of slab 1, slab 2
     dx --- length of expands normal to the interface with the same units as lattice para
+    return:
+    lattice_bi --- lattice matrix of bicrystal supercell
+    atoms_1 --- atom coordinates of left slab
+    atoms_2 --- atom coordinates of right slab
     """
     n = cross(lattice_1[:,1],lattice_1[:,2])
     normal_shift = dx / ang(lattice_1[:,0], n) / norm(lattice_bi[:,0].copy())
@@ -523,6 +530,8 @@ def adjust_orientation(lattice):
     x-direction and the second axis is in the x-y plane
     argument:
     lattice --- a matrix with column lattice vectors
+    return:
+    rotated lattice, rotation matrix
     """
     lattice_0 = lattice.copy()
     v1 = lattice[:,0]
@@ -646,7 +655,6 @@ def terminates_scanner_left(slab, atoms, elements, d, round_n = 5):
     element_list --- list of elements in each plane
     indices_list --- list of indices of atoms in each plane
     dp_list --- list of dp parameters as input to select corresponding termination
-    tol
     """
     plane_list = []
     element_list = []
@@ -702,7 +710,6 @@ def terminates_scanner_right(slab, atoms, elements, d, round_n = 5):
     plane_list --- list of planes of atom fraction coordinates
     element_list --- list of elements in each plane
     indices_list -- list of indices of atoms in each plane
-    tol
     """
     plane_list = []
     element_list = []
@@ -2127,9 +2134,9 @@ def get_surface_slab(structure, hkl, replica = [1,1,1], inclination_tol = sqrt(2
     v3 = cross_plane(lattice, cross(plane_B[:,0], plane_B[:,1]), lim, normal_perp, normal_tol, inclination_tol)
     supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
     supercell = get_right_hand(supercell)
-    U = around(dot(inv(lattice), supercell))
+    U = array(around(dot(inv(lattice), supercell)), dtype = int)
+    print('cross vector: \n' + str(array([U[:,0]]).T) + '\nlength: ' + str(norm(v3)))
     print('plane basis: \n' + str(U[:,[1,2]]) + '\nlength: ' + str(norm(supercell[:,1])) + ' ' + str(norm(supercell[:,2])))
-    print('cross vector: \n' + str(U[:,0].T) + '\nlength: ' + str(norm(v3)))
     atoms, elements, lattice = super_cell(U, lattice, atoms, elements)
     lattice, orient = adjust_orientation(lattice)
     if not np.all(replica == 1):
