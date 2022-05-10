@@ -13,6 +13,10 @@ def get_disorientation(L1, L2, v1, hkl1, v2, hkl2):
     """
     produce a rotation matrix so that the hkl1 plane overlap with the hkl2 plane;
     and the v1 colinear with v2
+    arguments:
+    L1, L2 --- lattice 1, lattice 2
+    hkl1, hkl2 --- miller indices of the coplanar planes
+    v1, v2 --- direction indices of the collinear vectors lying in hkl1 & hkl2
     """
     
     #normal vector
@@ -38,6 +42,8 @@ def get_unit_mtx(lattice):
     """
     return a unit lattice so that the 
     length of every column vectors is 1
+    arguments:
+    lattice --- a matrix with column lattice vectors
     """
     lattice_return = np.eye(3,3)
     for i in range(3):
@@ -87,14 +93,17 @@ def three_dot(M1, M2, M3):
 
 def get_ang_list(m1, n):
     """
-    compute a list of ang cos between one list of vecor and one vector
+    compute a list of ang cos between one list of vectors and one vector
+    arguments:
+    m1 --- a list of vectors
+    n --- one vector
     """
     return 1 / norm(n) * abs(dot(m1, n)) / norm(m1, axis = 1)
 
 def cross_plane(lattice, n, lim, orthogonal, tol, inclination_tol = sqrt(2)/2):
     """
     get a primitive lattice vector cross a plane
-    argument:
+    arguments:
     lattice --- lattice matrix
     n --- a normal vector
     lim --- control how many vectors to be generated
@@ -350,7 +359,12 @@ def super_cell(U, lattice, Atoms, elements):
 
 def shift_termi_left(lattice, dp, atoms, elements):
     """
-    changing terminate involves requiring to cut the cell
+    changing terminate involves requiring to cut or extend the cell for identical interfaces
+    arguments:
+    lattice --- a matrix with column lattice vectors
+    dp --- height of termination shift
+    atoms --- fractional coordinates of the atoms
+    elements --- list of element names
     """
     n = cross(lattice[:,1],lattice[:,2])
     position_shift = dp / ang(lattice[:,0], n) / norm(lattice[:,0])
@@ -391,6 +405,13 @@ def shift_termi_left(lattice, dp, atoms, elements):
     return atoms, elements
 
 def shift_none_copy(lattice, dp, atoms):
+    """
+    changing terminate involves without requiring to cut or extend the cell for identical interfaces
+    arguments:
+    lattice --- a matrix with column lattice vectors
+    dp --- height of termination shift
+    atoms --- fractional coordinates of the atoms
+    """
     n = cross(lattice[:,1],lattice[:,2])
     position_shift = dp / ang(lattice[:,0], n) / norm(lattice[:,0])
     atoms[:,0] = atoms[:,0] + position_shift
@@ -399,7 +420,12 @@ def shift_none_copy(lattice, dp, atoms):
 
 def shift_termi_right(lattice, dp, atoms, elements):
     """
-    changing terminate involves requiring to cut the cell
+    changing terminate involves requiring to cut or extend the cell for identical interfaces
+    arguments:
+    lattice --- a matrix with column lattice vectors
+    dp --- height of termination shift
+    atoms --- fractional coordinates of the atoms
+    elements --- list of element names
     """
     n = cross(lattice[:,1],lattice[:,2])
     position_shift = dp / ang(lattice[:,0], n) / norm(lattice[:,0])
@@ -495,6 +521,8 @@ def adjust_orientation(lattice):
     """
     adjust the orientation of a lattice so that its first axis is along
     x-direction and the second axis is in the x-y plane
+    argument:
+    lattice --- a matrix with column lattice vectors
     """
     lattice_0 = lattice.copy()
     v1 = lattice[:,0]
@@ -519,11 +547,10 @@ def convert_vector_index(lattice_0, lattice_f, v_0):
     v_0 = dot(lattice_0, v_0)
     v_f = dot(inv(lattice_f), v_0)
     return v_f
-
+    
+"""
 def print_near_axis(dv, lattice_1, lattice_2, lim=5):
-    """
-    searching for near coincident lattice vectors
-    """
+    #searching for near coincident lattice vectors
     x = np.arange(-lim, lim, 1)
     y = x
     z = x
@@ -555,6 +582,7 @@ def print_near_axis(dv, lattice_1, lattice_2, lim=5):
         norm_1 = norm(close_vecs_1[i])
         norm_2 = norm(close_vecs_2[i])
         print(e1, e2, dv, norm_1, norm_2)
+"""
 
 def get_height(lattice):
     """
@@ -568,7 +596,7 @@ def get_plane_vectors(lattice, n):
     """
     a function get the two vectors normal to a vector
     arguments:
-    lattice - lattice matrix
+    lattice - lattice matrix with column lattice vecotrs
     n - a vector
     return - B two plane vectors
     """
@@ -708,10 +736,16 @@ from here functions to draw atomic planes
 """
 
 def draw_cell(subfig,xs,ys,alpha = 0.3, color = 'k', width = 0.5):
+    """
+    draw the two-dimensional cell
+    """
     for i in range(4):
         subfig.plot(xs[i],ys[i],c=color,linewidth=width,alpha = alpha)
 
 def clean_fig(num1,num2,axes):
+    """
+    hide the frames
+    """
     for a in range(num1 * num2):
         for b in range(3):
             axes[a][b].spines['top'].set_visible(False)
@@ -723,6 +757,9 @@ def clean_fig(num1,num2,axes):
             axes[a][b].set(facecolor = "w")
 
 def Xs_Ys_cell(lattice):
+    """
+    get the Xs and Ys arrays to draw a cell for a given lattice
+    """
     #four verticies
     P1 = np.array([0,0,0])
     P2 = lattice[:,1]
@@ -751,7 +788,20 @@ def Xs_Ys_cell(lattice):
 
 def draw_slab(xs, ys, axes, num, plane_list, lattice_to_screen, \
               elements_list, column, colors, all_elements, \
-              elements_indices, l_r, titlesize, legendsize):
+              l_r, titlesize, legendsize):
+    """
+    draw the terminating planes in the plane list for a slab
+    arguments:
+    xs, ys --- x,y arrays to draw the two-dimensional cell
+    axes --- list of figures
+    num --- number of terminations
+    plane_list --- list of planes of atoms
+    elements_list --- list of names of elments for these atoms
+    lattice_to_screen --- rotated lattice with the interface lying in the screen
+    l_r --- left or right slab
+    titlesize --- fontsize of title
+    legendsize -- fontsize of legend
+    """
     for i in range(num):
         #get atoms in this plane
         plane_atoms = plane_list[i]
@@ -781,6 +831,9 @@ def draw_slab(xs, ys, axes, num, plane_list, lattice_to_screen, \
 def write_trans_file(v1, v2, n1, n2):
     """
     write a file including translation information for LAMMPS
+    arguments:
+    v1, v2 --- CNID vectors
+    n1, n2 --- num of grids for v1 & v2
     """
     with open('paras', 'w') as f:
         f.write('variable cnidv1x equal {} \n'.format(v1[0]/n1))
@@ -799,6 +852,20 @@ def draw_slab_dich(xs, ys, c_xs, c_ys,axes,num1, plane_list_1, lattice_to_screen
               elements_list_1, colors, all_elements, elements_indices,\
                   num2, plane_list_2, lattice_to_screen_2,\
                   elements_list_2, titlesize):
+    """
+    draw the dichromatic patterns
+    arguments:
+    xs, ys --- x,y arrays to draw the interface cell
+    c_xs, c_ys --- x,y arrays to draw the CNID cell
+    axes --- list of figures
+    num1, num2 --- number of terminations
+    plane_list_1, plane_list_2 --- list of atom coordinates of the terminating planes
+    elements_list_1, elements_list_2 --- list of corresponding element names
+    lattice_to_screen_1, lattice_to_screen_2 --- rotated lattices facing its interface orientation to the screen
+    colors --- colors to classify different elements
+    all_elements --- list of all the elements for all the atoms
+    titlesize --- fontsize of the title
+    """
     for i in range(num1):
         for j in range(num2):
             #get atoms in this plane
@@ -847,7 +914,11 @@ Below is some sampling functions
 def get_nearest_pair(lattice, atoms, indices):
     """
     a function return the indices of two nearest atoms in a periodic block
-    from https://github.com/oekosheri/GB_code
+    inspired from https://github.com/oekosheri/GB_code
+    arguments:
+    lattice --- lattice matrix
+    atoms --- fractional coordinates
+    indices --- indices of atoms
     """
 
     #get Cartesian
@@ -894,27 +965,22 @@ def get_nearest_pair(lattice, atoms, indices):
 
     return indices[pos_1_index_map[distances_id]], indices[pos_2_index_map[distances_id]], \
      pos_1_rep[distances_id], pos_2_rep[distances_id]
- 
+
+"""
 def searching_indices(atoms, coordinates):
-    """
-    get the indices of the coordinates in the atoms
-    """
+    #get the indices of the atoms corresponding to the coordinates
     return np.where( norm((atoms - coordinates), axis = 1) < 1e-8)[0]
  
 def get_two_IDs_and_new_original_atoms(coordinates_1, coordinates_2, atoms, displacement):
-    """
-    get the two IDs of the two coordinates in atoms, and move
-    the coordinates_1 by displacement
-    """
+    #get the two IDs of the two coordinates in atoms, and move
+    #the coordinates_1 by displacement
     ID_1 = searching_indices(atoms, coordinates_1)
     ID_2 = searching_indices(atoms, coordinates_2)
     atoms[ID_1] = atoms[ID_1] + displacement
     return ID_1, ID_2, atoms
  
 def delete_insert(lattice, atoms, elements, xlo, xhi, original_atoms):
-    """
-    a function delete two nearest atoms and insert one at the middle of them
-    """
+    #a function delete two nearest atoms and insert one at the middle of them
     xlo = xlo / norm(lattice[:,0])
     xhi = xhi / norm(lattice[:,0])
 
@@ -957,10 +1023,8 @@ def delete_insert(lattice, atoms, elements, xlo, xhi, original_atoms):
     return atoms, elements, d_nearest_now, len(atoms), ogn_ID_1, ogn_ID_2, displace, original_atoms
  
 def sampling_deletion(lattice, atoms, elements, xlo, xhi, nearest_d, trans_name):
-    """
-    looping deletion of atoms until no atoms are nearer than
-    one atom distance
-    """
+    #looping deletion of atoms until no atoms are nearer than
+    #one atom distance
     data = np.array([-1, -1, -1, -1, -1],dtype = float)
     original_atoms = atoms.copy()
     c_atoms = atoms.copy()
@@ -987,9 +1051,7 @@ def sampling_deletion(lattice, atoms, elements, xlo, xhi, nearest_d, trans_name)
     
  
 def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_nearest, xlo, xhi):
-    """
-    a function generate atom files sampling RBT & deleting atoms
-    """
+    #a function generate atom files sampling RBT & deleting atoms
     original_atoms = atoms.copy()
     original_elements = elements.copy()
     v1 = CNID_frac[:,0] / grid[0]
@@ -1008,7 +1070,7 @@ def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_
                   elements_here, xlo, xhi, d_nearest*0.99, '{0}_{1}'.format(i+1,j+1))
             delete_nums_per_trans_file.write('{}\n'.format(dele_count))
     delete_nums_per_trans_file.close()
-
+"""
 
         
 class core:
@@ -2060,7 +2122,7 @@ def get_surface_slab(structure, hkl, replica = [1,1,1], inclination_tol = sqrt(2
     atoms, elements = get_sites_elements(structure)
     lattice = structure.lattice.matrix.T
     plane_B = get_pri_vec_inplane(hkl, lattice)
-    if (plane_normal == True) and (abs(dot(plane_B[:,0], plane_B[:,1])) > tol_ortho):
+    if (plane_normal == True) and (abs(dot(plane_B[:,0], plane_B[:,1])) > normal_tol):
         plane_B = get_ortho_two_v(plane_B, lim, normal_tol, False)
     v3 = cross_plane(lattice, cross(plane_B[:,0], plane_B[:,1]), lim, normal_perp, normal_tol, inclination_tol)
     supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
