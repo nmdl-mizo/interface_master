@@ -1,5 +1,5 @@
 from numpy.linalg import det, norm, inv
-from numpy import dot, cross, ceil, floor, cos, sin, tile, array, arange, meshgrid, delete, column_stack, eye, arccos, unique, around, vstack, where
+from numpy import dot, cross, ceil, floor, cos, sin, tile, array, arange, meshgrid, delete, column_stack, eye, arccos, unique, around, vstack, where, sqrt
 from pymatgen.core.structure import Structure
 from pymatgen.io.cif import CifWriter
 from pymatgen.io.vasp.inputs import Poscar
@@ -91,7 +91,7 @@ def get_ang_list(m1, n):
     """
     return 1 / norm(n) * abs(dot(m1, n)) / norm(m1, axis = 1)
 
-def cross_plane(lattice, n, lim, orthogonal, tol):
+def cross_plane(lattice, n, lim, orthogonal, tol, inclination_tol = sqrt(2)/2):
     """
     get a primitive lattice vector cross a plane
     argument:
@@ -112,7 +112,7 @@ def cross_plane(lattice, n, lim, orthogonal, tol):
     ltc_p = ltc_p[np.argsort(norm(ltc_p, axis=1))]
     dot_list = get_ang_list(ltc_p, n)
     if orthogonal == False:
-        normal_v = ltc_p[np.where(dot_list >= 0.5)[0]]
+        normal_v = ltc_p[np.where(dot_list >= inclination_tol)[0]]
         normal_v = normal_v[np.argsort(norm(normal_v, axis=1))]
         normal_v = normal_v[0]
     else:
@@ -1013,7 +1013,7 @@ def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_
         
 class core:
     def __init__(self, file_1, file_2):
-        self.afile_1 = file_1 # cif file name of lattice 1
+        self.file_1 = file_1 # cif file name of lattice 1
         self.file_2 = file_2 # cif file name of lattice 2
         self.structure_1 = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
         self.structure_2 = Structure.from_file(file_2, primitive=True, sort=False, merge_tol=0.0)
@@ -1879,7 +1879,7 @@ class core:
         self.orientation = R
         
     def compute_bicrystal(self, hkl, lim = 20, normal_ortho = False, plane_ortho = False, \
-    tol_ortho = 1e-10, tol_integer = 1e-8, align_rotation_axis = False, rotation_axis = [1,1,1]):
+    tol_ortho = 1e-10, tol_integer = 1e-8, align_rotation_axis = False, rotation_axis = [1,1,1], inclination_tol = sqrt(2)/2):
         """
         compute the transformation to obtain the supercell of the two slabs forming a interface
         argument:
@@ -1888,6 +1888,7 @@ class core:
         normal_ortho --- whether limit the vector crossing the GB to be normal to the GB
         plane_ortho --- whether limit the two vectors in the GB plane to be orthogonal
         tol --- tolerance judging whether orthogonal
+        inclination_tol --- control the angle between the interface and the cross vector
         """
         if normal_ortho == True and plane_ortho == True:
             self.bicrystal_ortho = True
@@ -1906,7 +1907,7 @@ class core:
         	      plane_B[:,1] = plane_B[:,0]
         	      plane_B[:,0] = change_v
         plane_n = cross(plane_B[:,0], plane_B[:,1]) # plane normal
-        v3 = cross_plane(self.CSL, plane_n, lim, normal_ortho, tol_ortho) # a CSL basic vector cross the plane
+        v3 = cross_plane(self.CSL, plane_n, lim, normal_ortho, tol_ortho, inclination_tol) # a CSL basic vector cross the plane
         supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
         supercell = get_right_hand(supercell) # check right-handed
         self.bicrystal_U1 = np.array(np.round(dot(inv(self.lattice_1), supercell),8),dtype = int)
@@ -1920,7 +1921,7 @@ class core:
         print(array(np.round(self.bicrystal_U2,8),dtype = int))
 
     def compute_bicrystal_two_D(self, hkl_1, hkl_2, lim = 20, normal_ortho = False, \
-                                plane_ortho = False, tol_ortho = 1e-10, tol_integer = 1e-8):
+                                plane_ortho = False, tol_ortho = 1e-10, tol_integer = 1e-8, inclination_tol = sqrt(2)/2):
         """
         compute the transformation to obtain the supercell of the two slabs forming a interface (only two_D periodicity)
         argument:
@@ -1928,6 +1929,7 @@ class core:
         normal_ortho --- whether limit the vector crossing the GB to be normal to the GB
         plane_ortho --- whether limit the two vectors in the GB plane to be orthogonal
         tol --- tolerance judging whether orthogonal
+        inclination_tol --- control the angle between the interface and the cross vector
         """
         if normal_ortho == True and plane_ortho == True:
             self.bicrystal_ortho = True
@@ -1943,8 +1945,8 @@ class core:
         a2 = dot(self.a2_transform, self.lattice_2)
         plane_2 = dot(a2, self.U2)
         
-        v3_1 = cross_plane(self.lattice_1, normal_1, lim, normal_ortho, tol_ortho)
-        v3_2 = cross_plane(a2, normal_1, lim, normal_ortho, tol_ortho)
+        v3_1 = cross_plane(self.lattice_1, normal_1, lim, normal_ortho, tol_ortho, inclination_tol)
+        v3_2 = cross_plane(a2, normal_1, lim, normal_ortho, tol_ortho, inclination_tol)
         if dot(v3_1, v3_2) < 0:
             v3_2 = - v3_2
 
@@ -2035,3 +2037,58 @@ class core:
                     fb.write('region {0} block {1} {2} EDGE EDGE EDGE EDGE units box \n'.\
                 format(region_names[i], region_los[i], region_his[i]))
                 fb.write('group {0} region {1} \n'.format(region_names[i], region_names[i]))
+
+
+def get_surface_slab(structure, hkl, replica = [1,1,1], inclination_tol = sqrt(2)/2, termi_shift = 0, vacuum_height = 0, plane_normal = False, normal_perp = False, \
+                     normal_tol = 1e-3, lim = 20, filename = 'POSCAR', filetype = 'VASP'):
+    """
+    get a superlattice of a slab containing a desired surface as crystal plane hkl
+    argument:
+    structure --- Structure object of the unit cell structure
+    hkl --- miller indices of the surface plane
+    replica --- expansion of the primitive slab cell
+    inclination_tol --- required minimum cos value of the angle between the basic crossing vector and the surface
+    termi_shift --- shift the termination of the surface
+    vacuum_height --- height of vaccum
+    plane_normal --- whether requiring the two vectors in the surface plane to be perpendicular
+    normal_perp --- whether requiring the crossing vector to be perpendicular to the plane
+    normal_tol --- tolerance to judge whether perpendicular
+    lim --- control the number of generated vectors to search for the crossing vectors and perpendicular vectors
+    filename --- name of the generated atom files
+    filetype --- type of the generated atom files (for VASP or LAMMPS)
+    """
+    atoms, elements = get_sites_elements(structure)
+    lattice = structure.lattice.matrix.T
+    plane_B = get_pri_vec_inplane(hkl, lattice)
+    if (plane_normal == True) and (abs(dot(plane_B[:,0], plane_B[:,1])) > tol_ortho):
+        plane_B = get_ortho_two_v(plane_B, lim, normal_tol, False)
+    v3 = cross_plane(lattice, cross(plane_B[:,0], plane_B[:,1]), lim, normal_perp, normal_tol, inclination_tol)
+    supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
+    supercell = get_right_hand(supercell)
+    U = around(dot(inv(lattice), supercell))
+    print('plane basis: \n' + str(U[:,[1,2]]) + '\nlength: ' + str(norm(supercell[:,1])) + ' ' + str(norm(supercell[:,2])))
+    print('cross vector: \n' + str(U[:,0].T) + '\nlength: ' + str(norm(v3)))
+    atoms, elements, lattice = super_cell(U, lattice, atoms, elements)
+    lattice, orient = adjust_orientation(lattice)
+    if not np.all(replica == 1):
+       lattice, atoms, elements = cell_expands(lattice, atoms, elements, replica)
+       
+    if termi_shift == True:
+       atoms = shift_none_copy(lattice, termi_shift, atoms)
+       
+    if vacuum_height > 0:
+       surface_vacuum(lattice, lattice, atoms, vacuum_height)
+    
+    write_POSCAR(lattice, atoms, elements, 'POSCAR')
+    slab_structure = Structure.from_file('POSCAR', sort=False, merge_tol=0.0)
+    os.remove('POSCAR')
+    if filetype == 'VASP':
+        write_POSCAR(lattice, atoms, elements, filename)
+    elif filetype == 'LAMMPS':
+        orthogonal = False
+        if plane_normal and normal_perp:
+            orthogonal = True
+        write_LAMMPS(lattice, atoms, elements, filename, orthogonal)
+    else:
+        raise RuntimeError("Sorry, we only support for 'VASP' or 'LAMMPS' output")
+    return slab_structure
