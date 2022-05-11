@@ -475,13 +475,22 @@ def super_cell(U, lattice, Atoms, elements):
 def shift_termi_left(lattice, dp, atoms, elements):
     """
     changing terminate involves requiring to cut or extend the cell for identical interfaces
-    arguments:
-    lattice --- a matrix with column lattice vectors
-    dp --- height of termination shift
-    atoms --- fractional coordinates of the atoms
-    elements --- list of element names
-    return:
-    shifted atom coordinates, corresponding list of elements
+
+    Parameters
+    ----------
+    lattice : numpy array
+        a matrix with column lattice vectors
+    dp : float
+        height of termination shift
+    atoms : numpy array
+        fractional coordinates of the atoms
+    elements : list
+        list of element names
+
+    Returns
+    ----------
+    atoms, elements : tuple of numpy array and list
+        shifted atom coordinates, corresponding list of elements
     """
     n = cross(lattice[:,1],lattice[:,2])
     position_shift = dp / ang(lattice[:,0], n) / norm(lattice[:,0])
@@ -524,12 +533,20 @@ def shift_termi_left(lattice, dp, atoms, elements):
 def shift_none_copy(lattice, dp, atoms):
     """
     changing terminate involves without requiring to cut or extend the cell for identical interfaces
-    arguments:
-    lattice --- a matrix with column lattice vectors
-    dp --- height of termination shift
-    atoms --- fractional coordinates of the atoms
-    return:
-    shifted atom coordinates
+
+    Parameters
+    ----------
+    lattice : numpy array
+        a matrix with column lattice vectors
+    dp : foat
+        height of termination shift
+    atoms : numpy array
+        fractional coordinates of the atoms
+
+    Returns
+    ----------
+    atoms : numpy array
+        shifted atom coordinates
     """
     n = cross(lattice[:,1],lattice[:,2])
     position_shift = dp / ang(lattice[:,0], n) / norm(lattice[:,0])
@@ -540,13 +557,22 @@ def shift_none_copy(lattice, dp, atoms):
 def shift_termi_right(lattice, dp, atoms, elements):
     """
     changing terminate involves requiring to cut or extend the cell for identical interfaces
-    arguments:
-    lattice --- a matrix with column lattice vectors
-    dp --- height of termination shift
-    atoms --- fractional coordinates of the atoms
-    elements --- list of element names
-    return:
-    shifted atom coordinates, corresponding list of elements
+
+    Parameters
+    ----------
+    lattice : numpy array
+        a matrix with column lattice vectors
+    dp : float
+        height of termination shift
+    atoms : numpy array
+        fractional coordinates of the atoms
+    elements : list
+        list of element names
+
+    Returns
+    ----------
+    atoms, elements : numpy array
+        shifted atom coordinates, corresponding list of elements
     """
     n = cross(lattice[:,1],lattice[:,2])
     position_shift = dp / ang(lattice[:,0], n) / norm(lattice[:,0])
@@ -585,15 +611,22 @@ def shift_termi_right(lattice, dp, atoms, elements):
 def excess_volume(lattice_1, lattice_bi, atoms_1, atoms_2, dx):
     """
     introduce vacuum between the interfaces
-    argument:
-    lattice_1 --- lattice matrix of the first slab
-    lattice_bi --- lattice matrix of the bicrystal
-    atoms_1, atoms_2 --- atom fractional coordinates of slab 1, slab 2
-    dx --- length of expands normal to the interface with the same units as lattice para
-    return:
-    lattice_bi --- lattice matrix of bicrystal supercell
-    atoms_1 --- atom coordinates of left slab
-    atoms_2 --- atom coordinates of right slab
+
+    Parameters
+    ----------
+    lattice_1 : numpy array
+        lattice matrix of the first slab
+    lattice_bi : numpy array
+        lattice matrix of the bicrystal
+    atoms_1, atoms_2 : numpy array
+        atom fractional coordinates of slab 1, slab 2
+    dx : float
+        length of expands normal to the interface with the same units as lattice para
+
+    Returns
+    ----------
+    lattice_bi, atoms_1, atoms2: numpyarray
+        lattice matrix of bicrystal supercell, atom coordinates of left slab, and atom coordinates of right slab
     """
     n = cross(lattice_1[:,1],lattice_1[:,2])
     normal_shift = dx / ang(lattice_1[:,0], n) / norm(lattice_bi[:,0].copy())
