@@ -13,7 +13,7 @@
 import os
 import sys
 import configparser
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('..'))
 from interfacemaster import __version__
 config = configparser.ConfigParser()
 config.read('../setup.cfg')
