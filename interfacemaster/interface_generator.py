@@ -641,11 +641,17 @@ def excess_volume(lattice_1, lattice_bi, atoms_1, atoms_2, dx):
 def surface_vacuum(lattice_1, lattice_bi, atoms_bi, vx):
     """
     introduce vacuum at one of the tails of the bicrystal cell
-    argument:
-    lattice_1 --- lattice matrix of the first slab
-    lattice_bi --- lattice matrix of the bicrystal
-    atoms_bi --- atom fractional coordinates of the bicrystal
-    vx --- length of the vacuum bulk with units as lattice para
+
+    Parameters
+    ----------
+    lattice_1 : numpy array
+        lattice matrix of the first slab
+    lattice_bi : numpy array
+        lattice matrix of the bicrystal
+    atoms_bi : numpy array
+        atom fractional coordinates of the bicrystal
+    vx : float
+        length of the vacuum bulk with units as lattice para
     """
     n = cross(lattice_1[:,1],lattice_1[:,2])
     normal_shift = vx / ang(lattice_1[:,0], n) / norm(lattice_1[:,0])
@@ -679,10 +685,16 @@ def adjust_orientation(lattice):
     """
     adjust the orientation of a lattice so that its first axis is along
     x-direction and the second axis is in the x-y plane
-    argument:
-    lattice --- a matrix with column lattice vectors
-    return:
-    rotated lattice, rotation matrix
+
+    Parameters
+    ----------
+    lattice : numpy array
+        a matrix with column lattice vectors
+
+    Returns
+    ----------
+    lattice, R: numpy array
+        rotated lattice, rotation matrix
     """
     lattice_0 = lattice.copy()
     v1 = lattice[:,0]
@@ -755,10 +767,17 @@ def get_height(lattice):
 def get_plane_vectors(lattice, n):
     """
     a function get the two vectors normal to a vector
-    arguments:
-    lattice - lattice matrix with column lattice vecotrs
-    n - a vector
-    return - B two plane vectors
+
+    Parameters
+    ----------
+    lattice : numpy array
+        lattice matrix with column lattice vecotrs
+    n : numpy array
+        a vector
+    Returns
+    ----------
+    B, indices : numpy array
+        B two plane vectors
     """
     tol = 1e-8
     B = np.eye(3,2)
@@ -795,17 +814,30 @@ def d_hkl(lattice, hkl):
 def terminates_scanner_left(slab, atoms, elements, d, round_n = 5):
     """
     find all different atomic planes within 1 lattice plane displacing (in the interface), for the left slab
-    arguments:
-    slab --- basic vectors of the slab
-    atoms --- fractional coordinates of atoms
-    elements --- list of name of the atoms
-    d --- 1 lattice plane displacing
-    round_n -- num of bits to round the fraction coordinates to judge identical planes
-    return:
-    plane_list --- list of planes of atom fraction coordinates
-    element_list --- list of elements in each plane
-    indices_list --- list of indices of atoms in each plane
-    dp_list --- list of dp parameters as input to select corresponding termination
+
+    Parameters
+    ----------
+    slab : numpy array
+        basic vectors of the slab
+    atoms : numpy array
+        fractional coordinates of atoms
+    elements : list
+        list of name of the atoms
+    d : float
+        1 lattice plane displacing
+    round_n : int
+        num of bits to round the fraction coordinates to judge identical planes
+
+    Returns
+    ----------
+    plane_list : list
+        list of planes of atom fraction coordinates
+    element_list : list
+        list of elements in each plane
+    indices_list : list
+        list of indices of atoms in each plane
+    dp_list : list
+        list of dp parameters as input to select corresponding termination
     """
     plane_list = []
     element_list = []
@@ -851,16 +883,28 @@ def get_R_to_screen(lattice):
 def terminates_scanner_right(slab, atoms, elements, d, round_n = 5):
     """
     find all different atomic planes within 1 lattice plane displacing (in the interface), for the right slab
-    arguments:
-    slab --- basic vectors of the slab
-    atoms --- fractional coordinates of atoms
-    elements --- list of name of the atoms
-    d --- 1 lattice plane displacing
-    round_n -- num of bits to round the fraction coordinates to judge identical planes
-    return:
-    plane_list --- list of planes of atom fraction coordinates
-    element_list --- list of elements in each plane
-    indices_list -- list of indices of atoms in each plane
+
+    Parameters
+    ----------
+    slab : numpy array
+        basic vectors of the slab
+    atoms : numpy array
+        fractional coordinates of atoms
+    elements : list
+        list of name of the atoms
+    d : float
+        1 lattice plane displacing
+    round_n : int
+        num of bits to round the fraction coordinates to judge identical planes
+
+    Returns
+    ----------
+    plane_list : list
+        list of planes of atom fraction coordinates
+    element_list : list
+        list of elements in each plane
+    indices_list : list
+        list of indices of atoms in each plane
     """
     plane_list = []
     element_list = []
@@ -949,16 +993,27 @@ def draw_slab(xs, ys, axes, num, plane_list, lattice_to_screen, \
               l_r, titlesize, legendsize):
     """
     draw the terminating planes in the plane list for a slab
-    arguments:
-    xs, ys --- x,y arrays to draw the two-dimensional cell
-    axes --- list of figures
-    num --- number of terminations
-    plane_list --- list of planes of atoms
-    elements_list --- list of names of elments for these atoms
-    lattice_to_screen --- rotated lattice with the interface lying in the screen
-    l_r --- left or right slab
-    titlesize --- fontsize of title
-    legendsize -- fontsize of legend
+
+    Parameters
+    ----------
+    xs, ys : numpy array
+        x,y arrays to draw the two-dimensional cell
+    axes : list
+        list of figures
+    num : int
+        number of terminations
+    plane_list : list 
+        list of planes of atoms
+    elements_list : list
+        list of names of elments for these atoms
+    lattice_to_screen : numpy array
+        rotated lattice with the interface lying in the screen
+    l_r : str
+        left or right slab
+    titlesize : int
+        fontsize of title
+    legendsize : int
+        fontsize of legend
     """
     for i in range(num):
         #get atoms in this plane
@@ -989,9 +1044,13 @@ def draw_slab(xs, ys, axes, num, plane_list, lattice_to_screen, \
 def write_trans_file(v1, v2, n1, n2):
     """
     write a file including translation information for LAMMPS
-    arguments:
-    v1, v2 --- CNID vectors
-    n1, n2 --- num of grids for v1 & v2
+
+    Parameters
+    ----------
+    v1, v2 : numpy array
+        CNID vectors
+    n1, n2 : int
+        num of grids for v1 & v2
     """
     with open('paras', 'w') as f:
         f.write('variable cnidv1x equal {} \n'.format(v1[0]/n1))
@@ -1012,17 +1071,29 @@ def draw_slab_dich(xs, ys, c_xs, c_ys,axes,num1, plane_list_1, lattice_to_screen
                   elements_list_2, titlesize):
     """
     draw the dichromatic patterns
-    arguments:
-    xs, ys --- x,y arrays to draw the interface cell
-    c_xs, c_ys --- x,y arrays to draw the CNID cell
-    axes --- list of figures
-    num1, num2 --- number of terminations
-    plane_list_1, plane_list_2 --- list of atom coordinates of the terminating planes
-    elements_list_1, elements_list_2 --- list of corresponding element names
-    lattice_to_screen_1, lattice_to_screen_2 --- rotated lattices facing its interface orientation to the screen
-    colors --- colors to classify different elements
-    all_elements --- list of all the elements for all the atoms
-    titlesize --- fontsize of the title
+
+    Parameters
+    ----------
+    xs, ys : numpy array
+        x,y arrays to draw the interface cell
+    c_xs, c_ys : numpy array
+        x,y arrays to draw the CNID cell
+    axes : list
+        list of figures
+    num1, num2 : int
+        number of terminations
+    plane_list_1, plane_list_2 : numpy array
+        list of atom coordinates of the terminating planes
+    elements_list_1, elements_list_2 : list
+        list of corresponding element names
+    lattice_to_screen_1, lattice_to_screen_2 : numpy array
+        rotated lattices facing its interface orientation to the screen
+    colors : str
+        colors to classify different elements
+    all_elements : list
+        list of all the elements for all the atoms
+    titlesize : int
+        fontsize of the title
     """
     for i in range(num1):
         for j in range(num2):
@@ -1073,10 +1144,15 @@ def get_nearest_pair(lattice, atoms, indices):
     """
     a function return the indices of two nearest atoms in a periodic block
     inspired from https://github.com/oekosheri/GB_code
-    arguments:
-    lattice --- lattice matrix
-    atoms --- fractional coordinates
-    indices --- indices of atoms
+
+    Parameters
+    ----------
+    lattice : numpy array
+        lattice matrix
+    atoms : numpy array
+        fractional coordinates
+    indices : numpy array
+        indices of atoms
     """
 
     #get Cartesian
@@ -1304,7 +1380,11 @@ class core:
     def parse_limit(self, du, S, sgm1, sgm2, dd):
         """
         set the limitation to accept an appx CSL
-        arguments -- see the paper
+
+        Parameters
+        ----------
+        du, S, sgm1, sgm2, dd : parameters
+            see the paper
         """
         self.du = du
         self.S = S
@@ -1315,11 +1395,17 @@ class core:
     def search_one_position(self, axis, theta, theta_range, dtheta, two_D = False):
         """
         main loop finding the appx CSL
-        arguments:
-        axis -- rotation axis
-        theta -- initial rotation angle, in degree
-        theta_range -- range varying theta, in degree
-        dtheta -- step varying theta, in degree
+
+        Parameters
+        ----------
+        axis : numpy array
+            rotation axis
+        theta : float
+            initial rotation angle, in degree
+        theta_range : float 
+            range varying theta, in degree
+        dtheta : float
+            step varying theta, in degree
         """
         axis = dot(self.lattice_1, axis)
         print(axis)
@@ -1447,11 +1533,17 @@ class core:
     def search_one_position_3D(self, R, theta_range, dtheta):
         """
         main loop finding the appx CSL
-        arguments:
-        axis -- rotation axis
-        theta -- initial rotation angle, in degree
-        theta_range -- range varying theta, in degree
-        dtheta -- step varying theta, in degree
+
+        Parameters
+        ----------
+        axis : numpy array
+            rotation axis
+        theta : float
+            initial rotation angle, in degree
+        theta_range : float
+            range varying theta, in degree
+        dtheta : float
+            step varying theta, in degree
         """
         axis = dot(self.lattice_1, axis)
         print(axis)
@@ -1554,11 +1646,17 @@ class core:
     def search_fixed(self, R, exact = False, tol = 1e-8):
         """
         main loop finding the appx CSL
-        arguments:
-        axis -- rotation axis
-        theta -- initial rotation angle, in degree
-        theta_range -- range varying theta, in degree
-        dtheta -- step varying theta, in degree
+
+        Parameters
+        ----------
+        axis : numpy array
+            rotation axis
+        theta : float
+            initial rotation angle, in degree
+        theta_range : float
+            range varying theta, in degree
+        dtheta : float
+            step varying theta, in degree
         """
         Ns = np.arange(1, self.sgm2 + 1)
         found = None
@@ -1643,11 +1741,17 @@ class core:
     match_tol = 0.05, integer_tol = 1e-8, start = 0, exact = False):
         """
         main loop finding the appx CSL
-        arguments:
-        axis -- rotation axis
-        theta -- initial rotation angle, in degree
-        theta_range -- range varying theta, in degree
-        dtheta -- step varying theta, in degree
+
+        Parameters
+        ----------
+        axis : numpy array
+            rotation axis
+        theta : float
+            initial rotation angle, in degree
+        theta_range : float 
+            range varying theta, in degree
+        dtheta : float
+            step varying theta, in degree
         """
         #get the normal of the two slabs
         n1 = get_normal_from_MI(self.lattice_1, hkl_1)
@@ -1789,14 +1893,24 @@ class core:
     def search_all_position(self, axis, theta, theta_range, dtheta, two_D = False):
         """
         main loop finding all the CSL lattices satisfying the limit
-        arguments:
-        axis -- rotation axis
-        theta -- initial rotation angle, in degree
-        theta_range -- range varying theta, in degree
-        dtheta -- step varying theta, in degree
-        output:
-        log.all_position --- all the searching information
-        results --- information of the found approximate CSL
+
+        Parameters
+        ----------
+        axis : numpy array
+            rotation axis
+        theta : float
+            initial rotation angle, in degree
+        theta_range : list
+            range varying theta, in degree
+        dtheta : float
+            step varying theta, in degree
+
+        Notes
+        ----------
+        log.all_position :
+            all the searching information
+        results :
+            information of the found approximate CSL
         """
         axis = dot(self.lattice_1, axis)
         print(axis)
@@ -1923,14 +2037,29 @@ class core:
                       two_D = False, filetype = 'VASP',  mirror = False, KTI = False):
         """
         generate a cif file for the bicrystal structure
-        argument:
-        dydz --- translation vector in the interface
-        dx --- translation normal to the interface
-        dp1 --- termination of slab 1
-        dp2 --- termination of slab 2
-        xyz --- expansion
-        two_D --- whether a two CSL
-        LAMMPS_file_ortho --- whether the output LAMMPS has orthogonal cell
+
+        Parameters
+        ----------
+        dydz : numpy array
+            translation vector in the interface
+        dx : float
+            translation normal to the interface
+        dp1, dp2 : float
+            termination of slab 1, 2
+        xyz1, xyz2 : list
+            expansion of slab 1, 2
+        vx : float
+            vacuum spacing, default 0
+        filename : str
+            filename, default 'POSCAR'
+        two_D : bool
+            whether a two CSL
+        filetype : str
+            filetype, 'VASP' or 'LAMMPS', default 'VASP'
+        mirror : bool
+            mirror, default False
+        KTI : bool
+            KTI, default False
         """
         #get the atoms in the primitive cell
         lattice_1, atoms_1, elements_1 = self.lattice_1.copy(), self.atoms_1.copy(), self.elements_1.copy()
@@ -2065,8 +2194,11 @@ class core:
                       xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, two_D = False, filename = 'POSCAR', filetype = 'VASP'):
         """
         sampling the CNID and generate POSCARs
-        argument:
-        grid --- 2D grid of sampling
+
+        Parameters
+        ----------
+        grid : numpy array
+            2D grid of sampling
         """
         os.mkdir('CNID_inputs')
         print('CNID')
@@ -2102,13 +2234,27 @@ class core:
     tol_ortho = 1e-10, tol_integer = 1e-8, align_rotation_axis = False, rotation_axis = [1,1,1], inclination_tol = sqrt(2)/2):
         """
         compute the transformation to obtain the supercell of the two slabs forming a interface
-        argument:
-        hkl --- miller indices of the plane expressed in lattice_1
-        lim --- the limit searching for a CSL vector cross the plane
-        normal_ortho --- whether limit the vector crossing the GB to be normal to the GB
-        plane_ortho --- whether limit the two vectors in the GB plane to be orthogonal
-        tol --- tolerance judging whether orthogonal
-        inclination_tol --- control the angle between the interface and the cross vector
+
+        Parameters
+        ----------
+        hkl : numpy array
+            miller indices of the plane expressed in lattice_1
+        lim : int
+            the limit searching for a CSL vector cross the plane, default 20
+        normal_ortho : bool
+            whether limit the vector crossing the GB to be normal to the GB, default False
+        plane_ortho : bool
+            whether limit the two vectors in the GB plane to be orthogonal, default False
+        tol_ortho : float
+            tolerance judging whether orthogonal, default 1e-10
+        tol_integer : float
+            tolerance judging integer, default 1e-8
+        align_rotation_axis : bool
+            whether to align to rotation axis, default False
+        rotation_axis : list
+            rotation axis, defalt [1, 1, 1]
+        inclination_tol : float
+            control the angle between the interface and the cross vector, default sqrt(2)/2
         """
         if normal_ortho == True and plane_ortho == True:
             self.bicrystal_ortho = True
@@ -2144,12 +2290,23 @@ class core:
                                 plane_ortho = False, tol_ortho = 1e-10, tol_integer = 1e-8, inclination_tol = sqrt(2)/2):
         """
         compute the transformation to obtain the supercell of the two slabs forming a interface (only two_D periodicity)
-        argument:
-        lim --- the limit searching for a CSL vector cross the plane
-        normal_ortho --- whether limit the vector crossing the GB to be normal to the GB
-        plane_ortho --- whether limit the two vectors in the GB plane to be orthogonal
-        tol --- tolerance judging whether orthogonal
-        inclination_tol --- control the angle between the interface and the cross vector
+
+        Parameters
+        ----------
+        hkl1, hkl2 : numpy array
+            miller indices of the plane expressed in lattice_1 and lattice_2
+        lim : int
+            the limit searching for a CSL vector cross the plane, default 20
+        normal_ortho : bool
+            whether limit the vector crossing the GB to be normal to the GB, default False
+        plane_ortho : bool
+            whether limit the two vectors in the GB plane to be orthogonal, default False
+        tol_ortho : float
+            tolerance judging whether orthogonal, default 1e-10
+        tol_integer : float
+            tolerance judging integer, default 1e-8
+        inclination_tol : float
+            control the angle between the interface and the cross vector, default sqrt(2)/2
         """
         if normal_ortho == True and plane_ortho == True:
             self.bicrystal_ortho = True
@@ -2234,11 +2391,17 @@ class core:
         """
         generate a file defining some regions in the LAMMPS and define the atoms
         inside these regions into some groups.
-        argument:
-        region_names --- list of name of regions
-        region_los --- list of the low bounds
-        region_his --- list of the hi bounds
-        ortho --- whether the cell is orthogonal
+
+        Parameters
+        ----------
+        region_names : list
+            list of name of regions
+        region_los : list
+            list of the low bounds
+        region_his : list
+            list of the hi bounds
+        ortho : bool
+            whether the cell is orthogonal
         """
 
         if (len(region_los) != len(region_names)) or (len(region_los) != len(region_his)):
@@ -2263,19 +2426,38 @@ def get_surface_slab(structure, hkl, replica = [1,1,1], inclination_tol = sqrt(2
                      normal_tol = 1e-3, lim = 20, filename = 'POSCAR', filetype = 'VASP'):
     """
     get a superlattice of a slab containing a desired surface as crystal plane hkl
-    argument:
-    structure --- Structure object of the unit cell structure
-    hkl --- miller indices of the surface plane
-    replica --- expansion of the primitive slab cell
-    inclination_tol --- required minimum cos value of the angle between the basic crossing vector and the surface
-    termi_shift --- shift the termination of the surface
-    vacuum_height --- height of vaccum
-    plane_normal --- whether requiring the two vectors in the surface plane to be perpendicular
-    normal_perp --- whether requiring the crossing vector to be perpendicular to the plane
-    normal_tol --- tolerance to judge whether perpendicular
-    lim --- control the number of generated vectors to search for the crossing vectors and perpendicular vectors
-    filename --- name of the generated atom files
-    filetype --- type of the generated atom files (for VASP or LAMMPS)
+
+    Parameters
+    ----------
+    structure : Structure object
+        Structure object of the unit cell structure
+    hkl : numpy array
+        miller indices of the surface plane
+    replica : list
+        expansion of the primitive slab cell, default [1, 1, 1]
+    inclination_tol : float
+        required minimum cos value of the angle between the basic crossing vector and the surface, default sqrt(2)/2
+    termi_shift : float
+        shift the termination of the surface, default 0
+    vacuum_height : float
+        height of vaccum
+    plane_normal : bool
+        whether requiring the two vectors in the surface plane to be perpendicular, default False
+    normal_perp : bool
+        whether requiring the crossing vector to be perpendicular to the plane, default False
+    normal_tol : 
+        tolerance to judge whether perpendicular, default 1e-3
+    lim : int
+        control the number of generated vectors to search for the crossing vectors and perpendicular vectors, default 20
+    filename : str
+        name of the generated atom files
+    filetype : str, "VASP" or "LAMMPS"
+        type of the generated atom files (for VASP or LAMMPS)
+
+    Returns
+    ----------
+        slab_structure : structure object
+            slab structure
     """
     atoms, elements = get_sites_elements(structure)
     lattice = structure.lattice.matrix.T
