@@ -16,3 +16,19 @@ interfacemaster.interface\_generator module
    :members:
    :undoc-members:
    :show-inheritance:
+
+interfacemaster.symmetric\_tilt module
+-------------------------------------------
+
+.. automodule:: interfacemaster.symmetric_tilt
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+interfacemaster.brute\_force module
+-------------------------------------------
+
+.. automodule:: interfacemaster.brute_force
+   :members:
+   :undoc-members:
+   :show-inheritance:
