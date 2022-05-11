@@ -1,7 +1,7 @@
 from numpy import array, dot, round, var, average, pi, savetxt, repeat, tile, meshgrid, \
 unique, sqrt, ceil, where, delete, vstack, loadtxt, arange, around
 from numpy.linalg import inv, norm
-from interfacemaster.interface_generator import write_LAMMPS
+from .interface_generator import write_LAMMPS
 import os
 import shutil
 def find_pairs_with_closest_distances(atoms_here, bicrystal_lattice):

@@ -4,8 +4,8 @@ Get the [001], [111], [110] symmetric tilt GBs
 
 from numpy import *
 from numpy.linalg import inv, norm, det
-from cellcalc import MID, rot
-from interfacemaster.interface_generator import core
+from .cellcalc import MID, rot
+from .interface_generator import core
 
 def compute_sigma(axis, theta, maxsigma=100):
     """
