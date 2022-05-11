@@ -7,3 +7,8 @@ build/
 dist/
 interfacemaster.egg-info/
 .DS_Store
+docs/_build/
+test_files/cell_1.cif
+test_files/cell_2.cif
+test_files/Tutorial_Making bicrystal for a known GB - Si symmetric tilt - using.ipynb
+test_files/Tutorial_Sampling the system energy of interface in the CNID by LAMMPS - Approximate.ipynb
