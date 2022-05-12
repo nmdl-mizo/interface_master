@@ -1,7 +1,7 @@
-interfacemaster package
+API Reference
 =======================
 
-interfacemaster.cellcalc module
+interfacemaster.cellcalc
 -------------------------------
 
 .. automodule:: interfacemaster.cellcalc
@@ -9,7 +9,7 @@ interfacemaster.cellcalc module
    :undoc-members:
    :show-inheritance:
 
-interfacemaster.interface\_generator module
+interfacemaster.interface\_generator
 -------------------------------------------
 
 .. automodule:: interfacemaster.interface_generator
@@ -17,7 +17,7 @@ interfacemaster.interface\_generator module
    :undoc-members:
    :show-inheritance:
 
-interfacemaster.symmetric\_tilt module
+interfacemaster.symmetric\_tilt
 -------------------------------------------
 
 .. automodule:: interfacemaster.symmetric_tilt
@@ -25,7 +25,7 @@ interfacemaster.symmetric\_tilt module
    :undoc-members:
    :show-inheritance:
 
-interfacemaster.brute\_force module
+interfacemaster.brute\_force
 -------------------------------------------
 
 .. automodule:: interfacemaster.brute_force
