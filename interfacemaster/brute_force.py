@@ -218,12 +218,14 @@ def merge_operation(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc,
     while cloest_distance_now < 0.99 * clst_atmc_dstc:
         if merge_operation_count > 0:
             
-            array_id_del, array_id_dsp, dsps, delete_cutoff, cloest_distance_now = \
+            array_id_del, array_id_dsp, dsps, delete_cutoff, a = \
             find_pairs_with_closest_distances(GB_atoms_here, bicrystal_lattice)
             if len(array_id_del) > 0:
                 GB_atoms_here[array_id_dsp] += dsps[0]
                 GB_atoms_here = delete(GB_atoms_here, array_id_del, axis = 0)
                 atoms = vstack((GB_atoms_here, bulk_atoms))
+                array_id_del, array_id_dsp, dsps, cloest_distance_now, a = \
+            find_pairs_with_closest_distances(GB_atoms_here, bicrystal_lattice)
                 write_LAMMPS(bicrystal_lattice, dot(inv(bicrystal_lattice),atoms.T).T, repeat(['Si'],\
                          len(atoms)), filename = 'GB.dat', orthogonal = True)
                 run_LAMMPS(core_num, count)
