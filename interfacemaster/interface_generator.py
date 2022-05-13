@@ -1340,6 +1340,7 @@ class core:
         self.cell_calc = DSCcalc()
         self.name = str
         self.dd = 0.005
+        self.min_perp_length = 0.0
         self.orientation = np.eye(3) # initial disorientation
         self.a1 = np.eye(3)
         self.a2_0 = np.eye(3)
@@ -2213,7 +2214,23 @@ class core:
                 self.get_bicrystal(dydz = dydz, dx = dx, dp1 = dp1, dp2 = dp2, \
                       xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D, filename = 'CNID_inputs/{0}_{1}_{2}'.format(filename, i,j), filetype = filetype)
         print('completed')
-
+        
+    def sample_lattice_planes(self, dx = 0,
+                      xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, two_D = False, filename = 'POSCAR', filetype = 'VASP'):
+        """
+        sampling non-identical lattice planes terminating at the GB 
+        """
+        os.mkdir('terminating_shift_inputs')
+        print('terminating_sampling...')
+        position_here = 0
+        count = 1
+        while abs(position_here) < 1/2 * self.min_perp_length:
+		        self.get_bicrystal(dx = dx, dp2 = position_here, \
+		              xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D, filename = 'terminating_shift_inputs/{0}_{1}'.format(filename, count), filetype = filetype)
+		        position_here += -self.d2
+		        count += 1
+        print('completed')
+        
     def set_orientation_axis(self, axis_1, axis_2):
         """
         rotate lattice_2 so that its axis_2 coincident with the axis_1 of lattice_1
@@ -2276,6 +2293,8 @@ class core:
         v3 = cross_plane(self.CSL, plane_n, lim, normal_ortho, tol_ortho, inclination_tol) # a CSL basic vector cross the plane
         supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
         supercell = get_right_hand(supercell) # check right-handed
+        if normal_ortho == True:
+            self.min_perp_length = norm(v3)
         self.bicrystal_U1 = np.array(np.round(dot(inv(self.lattice_1), supercell),8),dtype = int)
         self.bicrystal_U2 = np.array(np.round(dot(inv(self.lattice_2_TD), supercell),8),dtype = int)
         self.cell_calc.compute_CNID(hkl,tol_integer)
@@ -2310,6 +2329,8 @@ class core:
         """
         if normal_ortho == True and plane_ortho == True:
             self.bicrystal_ortho = True
+        if normal_ortho == True:
+            self.min_perp_length = norm(v3)
         self.d1 = d_hkl(self.lattice_1, hkl_1)
         lattice_2 = dot(self.a2_transform, self.lattice_2)
         normal_1 = get_normal_from_MI(self.lattice_1, hkl_1)
@@ -2342,7 +2363,7 @@ class core:
         print(array(np.round(self.bicrystal_U1,8),dtype = int))
         print('cell 2:')
         print(array(np.round(self.bicrystal_U2,8),dtype = int))
-
+    
     def draw_terminations(self, titlesize = 50, legendsize = 50, single_element_size=100, \
                           left_element_size = 50, right_element_size = 100, figuresize = (30,30), figuredpi = 600):
         num1 = len(self.dp_list_1)
