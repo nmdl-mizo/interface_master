@@ -5,11 +5,18 @@ import numpy as np
 def rot(a, Theta):
     """
     produce a rotation matrix
-    arguments:
-    a --- rotation axis
-    Theta --- rotation angle
-    return:
-    a rotation matrix
+
+    Parameters
+    ----------
+    a : numpy array
+        rotation axis
+    Theta : float
+        rotation angle
+
+    Returns
+    ----------
+    rot_mat : numpy array
+        a rotation matrix
     """
     c = float(cos(Theta))
     s = float(sin(Theta))
@@ -24,21 +31,41 @@ def rot(a, Theta):
 
 def ang(v1, v2):
     """
-    compute the absolute value of the cos between v1 & v2
+    compute the cos of angle between v1 & v2
+
+    Parameters
+    ----------
+    v1, v2 : numpy array
+        vectors
+
+    Returns
+    ----------
+    cos_12 : float
+        the cos of angle between v1 and v2
     """
     return abs(dot(v1, v2)/norm(v1)/norm(v2))
 
 def get_ortho_two_v(B, lim, tol, align_rotation_axis = False, rotation_axis = [1,1,1]):
     """
     get orthogonal cell of a 2D basis
-    arguments:
-    B --- a 2D basis
-    lim --- control the number of generated vectors
-    tol --- tolerance to judge perpendicular
-    align_rotation_axis --- whether to specify a vector
-    rotation_axis --- specified vector
-    return:
-    a perpendicular 2D basis
+
+    Parameters
+    ----------
+    B : numpy array
+        matrix of 2D basis vectors
+    lim : int
+        maximum coefficient
+    tol : float
+        tolerance
+    align_rotation_axis : bool
+        whether to specify a vector, default False
+    rotation_axis :
+        specified vector, default [1, 1, 1]
+
+    Returns
+    ----------
+    cell_ortho : numpy array
+        a perpendicular 2D basis
     """
     #meshes
     x = np.arange(-lim, lim + 1, 1)
@@ -75,6 +102,17 @@ def get_ortho_two_v(B, lim, tol, align_rotation_axis = False, rotation_axis = [1
 def dia_sym_mtx(U):
     """
     return the second-diagonal symmetry transformed matrix of U
+
+    Parameters
+    ----------
+    U : numpy array
+        matrix
+
+    Returns
+    ----------
+    Ux : numpy array
+        the second-diagonal symmetry transformed matrix of U
+
     """
     Ux = np.eye(3)
     for i in range(3):
@@ -84,14 +122,23 @@ def dia_sym_mtx(U):
 
 def find_integer_vectors(v, sigma, tol=1e-8):
     """
-    A function find the coefficients N so that Nv contains only integers
-    where gcd(v1,v2,v3,N) = 1
-    arguments:
-    v --- a 3D array
-    sigma --- maximum N
-    tol --- tolerance to judge integer
-    return:
-    an integer array, corresponding N
+    A function for finding the coefficients N so that Nv contains only integer elements and gcd(v1,v2,v3,N) = 1
+
+    Parameters
+    ----------
+    v : numpy array
+        a 3D vector
+    sigma : int
+        maximum limt of N for searching
+    tol : float
+        tolerancea to judge integer, default 1e-8
+
+    Returns
+    ----------
+    Nv : numpy array
+        vector of integer elements Nv
+    N : numpy array
+        integer coefficients N
     """
     found = False
     for i in range(1,sigma+1):
@@ -111,14 +158,23 @@ def find_integer_vectors(v, sigma, tol=1e-8):
 
 def find_integer_vectors_nn(v,sigma, tol = 1e-8):
     """
-    A function find the coefficients N so that Nv contains only integers
-    without divided by gcd
-    arguments:
-    v --- a 3D array
-    sigma --- maximum N
-    tol --- tolerance to judge integer
-    return:
-    an integer array, corresponding N
+    A function for finding the coefficients N so that Nv contains only integer elements, ignore gcd
+
+    Parameters
+    ----------
+    v : numpy array
+        a 3D array
+    sigma : int
+        maximum limt of N for searching
+    tol : float
+        tolerance, default 1e-8
+
+    Returns
+    ----------
+    Nv : numpy array
+        vector of integer elements Nv
+    N : numpy array
+        integer coefficients N
     """
     found = False
     for i in range(1,sigma + 1):
@@ -137,11 +193,21 @@ def find_integer_vectors_nn(v,sigma, tol = 1e-8):
 
 def solve_DSC_equations(u,v,w,L,B):
     """
-    solve the dsc equation
-    arguments:
-    u,v,w,L,B --- see the paper
-    return:
-    DSC basis, DSC indices
+    a function for solving the integer equations for the DSC basis
+
+    Parameters
+    ----------
+    u, v, w, L: int
+        integer numbers
+    B : numpy array
+        basis set
+    tol : float
+        tolerance
+
+    Returns
+    ----------
+    DSC_basis1, DSC_basis2 : numpy array
+        DSC_basis sets
     """
     tol = 1e-8
     #get g_v, g_miu and g_lambda
@@ -194,12 +260,32 @@ def solve_DSC_equations(u,v,w,L,B):
 def projection(u1,u2):
     """
     get the projection of u1 on u2
+
+    Parameters
+    ----------
+    u1, u2 : numpy array
+        vectors
+
+    Returns
+    ----------
+    p12 : numpy array
+        the projection of u1 on u2
     """
     return dot(u1,u2)/dot(u2,u2)
 
 def Gram_Schmidt(B0):
     """
     Gram–Schmidt process
+
+    Parameters
+    ----------
+    B0 : numpy array
+        matrix
+
+    Returns
+    ----------
+    Bstar : numpy array
+        the orthogonalized basis for B0
     """
     Bstar = np.eye(3,len(B0.T))
     for i in range(len(B0.T)):
@@ -215,8 +301,18 @@ def Gram_Schmidt(B0):
 def LLL(B):
     """
     LLL lattice reduction algorithm
-    https://en.wikipedia.org/wiki/Lenstra%E2%80%93Le-
-    nstra%E2%80%93Lov%C3%A1sz_lattice_basis_reduction_algorithm
+    
+    https://en.wikipedia.org/wiki/Lenstra%E2%80%93Lenstra%E2%80%93Lov%C3%A1sz_lattice_basis_reduction_algorithm
+
+    Parameters
+    ----------
+    B : numpy array
+        matrix
+
+    Returns
+    ----------
+    Bhere : numpy array
+        the basis obtained for B
     """
     Bhere = B.copy()
     Bstar = Gram_Schmidt(Bhere)
@@ -243,21 +339,43 @@ def LLL(B):
 def get_normal_index(hkl, lattice):
     """
     get the coordinates in the lattice of a normal vector to the plane (hkl)
+
+    Parameters
+    ----------
+    hkl : array_like
+        input index
+    lattice : array_like
+        the basis of the lattice
+
+    Returns
+    ----------
+    v_n : numpy array
+        the coordinates in the lattice of a normal vector to the plane (hkl)
     """
     n, Pc1 = get_plane(hkl, lattice)
     return dot(inv(lattice), n)
 
 def get_primitive_hkl(hkl, C_lattice, P_lattice,tol=1e-8):
     """
-    convert the miller indices from an old lattice to a new lattice
-    arguments:
-    hkl --- old miller indices in the old lattice
-    C_lattice --- old lattice
-    P_lattice --- new lattice
-    tol --- tolerance to judge integer
-    return:
-    new miller indices in the new lattice
+    convert the miller indices from conventional cell to primitive cell
+    
+    Parameters
+    ----------
+    hkl : array_like
+        input index
+    C_lattice : numpy array
+        conventional cell basis set
+    P_lattice : numpy array
+        primitive cell basis set
+    tol : float
+        tolerance to judge integer, default 1e-8
+
+    Returns
+    ----------
+    hkl_p : numpy array
+        the Miller indices in primitive cell
     """
+    #1. get normal
     n, Pc1 = get_plane(hkl, C_lattice)
     #print('the normal:' + str(n) + ' the point in the plane: ' + str(Pc1))
     #2. get indices from normal
@@ -268,11 +386,20 @@ def get_primitive_hkl(hkl, C_lattice, P_lattice,tol=1e-8):
 def get_plane(hkl, lattice):
     """
     get the normal vector and one in-plane point for the (hkl) plane of the lattice
-    arguments:
-    hkl --- miller indices
-    lattice --- lattice matrix
-    return:
-    normal vector, a point lying in the (hkl) plane
+    
+    Parameters
+    ----------
+    hkl : array_like
+        input index
+    lattice : numpy array
+        lattice basis set
+
+    Returns
+    ----------
+    n : numpy array
+        the normal vector
+    p : numpy array
+        an in-plane point in the (hkl) plane
     """
     points = np.eye(3)
     for i in range(3):
@@ -293,31 +420,45 @@ def get_plane(hkl, lattice):
 
 def get_indices_from_n_Pc1(n, lattice, Pc1):
     """
-    get the miller indices of certain plane with normal n
-    and one in-plane point Pc1 for certain lattice
-    arguments:
-    n --- normal
-    lattice --- lattice matrix
-    Pc1 --- a point in the (hkl) plane
-    return:
-    miller indices of desired plane
+    get the Miller indices of certain plane with normal n and one in-plane point Pc1 for certain lattice
+    
+    Parameters
+    ----------
+    n : numpy array
+        normal vector
+    lattice : numpy array
+        lattice basis set
+    Pc1 : numpy array
+        an in-plane point in the (hkl) plane
+
+    Returns
+    ----------
+    hkl : numpy array
+        the Miller indices of the desired plane
     """
     hkl = np.array([0,0,0],dtype = float)
     for i in range(3):
         hkl[i] = dot(lattice[:,i], n)/dot(Pc1, n)
     return hkl
 
-def MID(lattice, n, tol = 1e-8):
+def MID(lattice, n, tol=1e-8):
     """
-    get the miller indices with a normal n for the lattice
-    arguments:
-    lattice --- lattice matrix
-    n --- normal
-    tol --- tolerance to judge integer
-    return:
-    miller indices of desired plane
+    get the Miller indices with a normal n for the lattice
+    
+    Parameters
+    ----------
+    lattice : numpy array
+        lattice basis set
+    n : numpy array
+        normal vector
+    tol : float
+        tolerance to judge integer, default 1e-8
+
+    Returns
+    ----------
+    hkl : numpy array
+        the Miller indices of desired plane
     """
-    tol = 1e-10
     for i in range(3):
         if abs(dot(lattice[:,i],n)) > tol:
             Pc1 = lattice[:,i]
@@ -329,7 +470,18 @@ def MID(lattice, n, tol = 1e-8):
 def ext_euclid(a, b):
     """
     extended euclidean algorithm
+
     from https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
+    
+    Parameters
+    ----------
+    a, b : int
+        two input integers
+
+    Returns
+    ----------
+    old_s, old_t, old_r : int
+        the output integers
     """
     old_s,s=1,0
     old_t,t=0,1
@@ -348,11 +500,18 @@ def get_pri_vec_inplane(hkl,lattice):
     """
     get two primitive lattice vector for the (hkl) plane
     from Banadaki A D, Patala S. An efficient algorithm for computing the primitive bases of a general lattice plane[J]. Journal of Applied Crystallography, 2015, 48(2): 585-588.
-    arguments:
-    hkl --- miller indices
-    lattice --- lattice matrix
-    return:
-    a 2D basis
+    
+    Parameters
+    ----------
+    hkl : numpy array
+        the Miller indices
+    lattice : numpy array
+        lattice basis set
+
+    Returns
+    ----------
+    v1, v2 : numpy array
+        the two primitive lattice vectors
     """
     h,k,l = hkl
     if k == 0 and l == 0:
@@ -374,7 +533,17 @@ def get_pri_vec_inplane(hkl,lattice):
 
 def get_right_hand(B):
     """
-    ensure a right-handed lattice
+    get right handed lattice of B
+
+    Parameters
+    ----------
+    B : numpy array
+        lattice basis set
+
+    Returns
+    ----------
+    B_r : numpy array
+        the right_handed basis set of lattice B
     """
     if dot(B[:,2],cross(B[:,0],B[:,1])) < 0:
         B[:,2] = - B[:,2]
@@ -383,11 +552,18 @@ def get_right_hand(B):
 def get_normal_from_MI(lattice, hkl):
     """
     get the normal vector of a lattice plane with known miller indices
-    argument:
-    lattice --- lattice matrix
-    hkl --- miller indices
-    return
-    a normal to the (hkl) plane
+
+    Parameters
+    ----------
+    lattice : numpy array
+        lattice basis set
+    hkl : numpy array
+        the Miller indices
+
+    Returns
+    ----------
+    n : numpy array
+        a normal vector to the (hkl) plane
     """
     hkl = np.array(hkl)
     lattice = np.array(lattice,dtype = float)
@@ -415,15 +591,23 @@ def get_normal_from_MI(lattice, hkl):
 
 def search_MI_n(lattice, n, tol, lim):
     """
-    get the miller indices of planes of which
-    its normal is close to the input vector n
-    arguments:
-    lattice --- lattice matrix
-    n --- normal
-    tol --- tolerance to judge perpendicular
-    lim --- control number of generated vectors for searching
-    return:
-    miller indices
+    get the miller indices of planes whose normal vector is close to the input vector n
+
+    Parameters
+    ----------
+    lattice : numpy array
+        lattice basis set
+    n : numpy array
+        the normal vector
+    tol : float
+        tolerance to judge perpendicular
+    lim : int
+        upper limit of indices serching
+
+    Returns
+    ----------
+    hkl : numpy array
+        the Miller indices
     """
     x = np.arange(-lim, lim + 1, 1)
     y = x
@@ -445,17 +629,29 @@ def search_MI_n(lattice, n, tol, lim):
     
 def match_rot(deft_rot, axis, tol, exact_rot, av_perpendicular):
     """
+    find the intermediate rotation
+
     given an exact rotation matrix and a default rotation matrix,
     find the intermediate rotation matrix so that the operation combining
     the default rotation + the intermediate rotation is close to the excat rotation
-    argument:
-    deft_rot --- initial orientation
-    axis --- rotation axis
-    tol --- tolerance to judge coincidence
-    exact_rot --- target orientation
-    av_perpendicular --- auxilliary vector
-    return:
-    intermediate rotation matrix
+    
+    Parameters
+    ----------
+    deft_rot : numpy array
+        initial orientation matrix
+    axis : numpy array
+        the rotation axix
+    tol : float
+        tolerance to judge coincidence
+    exact_rot : numpy array
+        target orientation matrix
+    av_perpendicular : numpy array
+        auxilliary vector
+
+    Returns
+    ----------
+    inter_rot : numpy array
+        intermediate rotation matrix
     """
     theta = 0
     found = False
@@ -480,7 +676,9 @@ def match_rot(deft_rot, axis, tol, exact_rot, av_perpendicular):
     return inter_rot
     
 class DSCcalc:
-    #core class computing DSC basis
+    """
+    core class computing DSC basis
+    """
     def __init__(self):
         self.ai1 = np.eye(3) #basis vectors of lattice 1
         self.ai2 = np.eye(3) #basis vectors of lattice 2
@@ -497,9 +695,17 @@ class DSCcalc:
     def parse_int_U(self,ai1,ai2,sigma, tol = 1e-8):
         """
         initiate computation
-        arguments:
-        ai1, ai2, sigma --- see the paper
-        tol --- tolerance to judge integer
+
+        Parameters
+        ----------
+        ai1 : numpy array
+            lattice 1 basis set
+        ai2 : numpy array
+            lattice 2 basis set
+        sigma : int
+            sigma value
+        tol : float
+            tolerance to judge coincidence, default 1e-8
         """
         self.ai1 = ai1
         self.ai2 = ai2
@@ -513,9 +719,13 @@ class DSCcalc:
     def compute_DSC(self, to_LLL = True, tol = 1e-8):
         """
         solve the DSC equation
-        arguments:
-        to_LLL --- whether do LLL algorithm for the found basis
-        tol --- tolerance to judge integer
+
+        Parameters
+        ----------
+        to_LLL : bool
+            whether do LLL algorithm for the found basis, default True
+        tol : float
+            tolerance to judge coincidence, default 1e-8
         """
         #integer LC of ai2_1
         #print('the U matrix')
@@ -595,8 +805,11 @@ class DSCcalc:
     def compute_CSL(self, tol = 1e-8):
         """
         compute CSL
-        argument:
-        tol --- tolerance to judge integer
+
+        Parameters
+        ----------
+        tol : float
+            tolerance to judge coincidence, default 1e-8
         """
         #symmetric matrix along the second diagonal
         Ux = dia_sym_mtx(self.U)
@@ -616,9 +829,13 @@ class DSCcalc:
     def compute_CNID(self, hkl, tol = 1e-8):
         """
         compute 2D DSC
-        argument:
-        hkl --- miller indices of the plane to compute
-        tol --- tolerance to judge integer
+
+        Parameters
+        ----------
+        hkl :
+            miller indices of the plane to compute
+        tol : float
+            tolerance to judge coincidence, default 1e-8
         """
         pmi_1 = hkl
         pmi_2 = get_primitive_hkl(hkl, self.ai1, self.ai2, tol)

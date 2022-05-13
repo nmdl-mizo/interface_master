@@ -25,3 +25,11 @@ Sampling in the CNID
    :glob:
 
    tutorials/Tutorial_Sampling*
+
+Making surface slabs
+===========================================
+
+.. toctree::
+   :glob:
+
+   tutorials/Tutorial_Making_surface_slab*
