@@ -1,13 +1,15 @@
 """
-Get the [001], [111], [110] symmetric tilt GBs
+Get the [001], [111], [110] symmetric tilt GBs;
+Get the csl for bilayer twisted graphenes
 """
 
 from numpy import *
 from numpy.linalg import inv, norm, det
-from .cellcalc import MID, rot
-from .interface_generator import core
+from interfacemaster.cellcalc import MID, rot
+from interfacemaster.interface_generator import core
 
-def compute_sigma(axis, theta, maxsigma=100):
+def compute_sigma(axis, theta, filename = \
+ 'cif_files/Si_mp-149_conventional_standard.cif', maxsigma=10000):
     """
     compute sigma values for a given disorientation
     arguments:
@@ -19,8 +21,8 @@ def compute_sigma(axis, theta, maxsigma=100):
     """
     print(theta/pi*180)
     R = rot(axis,theta)
-    my_interface = core('cif_files/Si_mp-149_conventional_standard.cif',\
-                        'cif_files/Si_mp-149_conventional_standard.cif')
+    my_interface = core(filename,\
+                        filename)
     my_interface.parse_limit(du = 1e-4, S  = 1e-4, sgm1=maxsigma, sgm2=maxsigma, dd = 1e-4)
     my_interface.search_fixed(R, exact=True, tol = 1e-3)
     return det(my_interface.U1)
@@ -63,7 +65,7 @@ def sample_STGB(axis, lim, maxsigma, max_index):
     thetas = thetas[sampled_indices]
     hkls = hkls[sampled_indices]
     return thetas[argsort(thetas,kind='stable')], sigmas[argsort(thetas,kind='stable')], hkls[argsort(thetas,kind='stable')]
-
+    
 def generate_arrays_x_y(x_min, y_min, lim):
     """
     generate x, y meshgrids
@@ -81,6 +83,54 @@ def generate_arrays_x_y(x_min, y_min, lim):
         if gcd.reduce(i) == 1:
             indice_gcd_one.append(i)
     return array(indice_gcd_one)
+
+def get_csl_twisted_graphenes(lim, filename, maxsigma = 100):
+    """
+    get the geometric information of all the CS twisted graphene
+    within a searching limitation
+    arguments:
+    lim --- control the number of generated referring points
+    maxsigma --- maximum sigma
+    return:
+    sigma list, angle list, num of atoms in supercell, CNID lengths
+    """
+    #mirror_plane_1
+    xy_arrays = generate_arrays_x_y(1,1,lim)
+    indice = column_stack((xy_arrays,zeros(len(xy_arrays))))
+    xs = xy_arrays[:,0]
+    ys = xy_arrays[:,1]
+    basis1 = column_stack(([-1/2, 0, 1/2], [-1, 1/2, 1/2], [1,1,1]))
+    P1 = dot(basis1, indice.T).T
+    thetas1 = 2*arccos(dot(P1,[-1, 1/2, 1/2])/norm(P1, axis=1)/norm([-1, 1/2, 1/2]))
+    
+    #mirror_plane_2
+    xy_arrays = generate_arrays_x_y(1,1,lim)
+    indice = column_stack((xy_arrays,zeros(len(xy_arrays))))
+    xs = xy_arrays[:,0]
+    ys = xy_arrays[:,1]
+    basis = column_stack(([-1/2,1/2,0], [-1,1/2,1/2], [1,1,1]))
+    P = dot(basis, indice.T).T
+    thetas = 2*arccos(dot(P,[-1/2,1/2,0])/norm(P, axis=1)/norm([-1/2,1/2,0]))
+    P = vstack((P1,P))
+    thetas = append(thetas1, thetas)
+    sigmas = []
+    for i in range(len(thetas)):
+        sigmas.append(compute_sigma(array([0,0,1]), thetas[i], filename))
+    sigmas = around(sigmas)
+    sigmas = array(sigmas,dtype = int)
+    unique_sigmas = unique(sigmas)
+    selected_thetas = []
+    for i in unique_sigmas:
+        selected_thetas.append(thetas[where(sigmas==i)[0][0]])
+    selected_thetas = array(selected_thetas)
+    sigmas = unique_sigmas
+    thetas = selected_thetas[sigmas <= maxsigma]
+    sigmas = sigmas[sigmas <= maxsigma]
+    my_interface = core(filename,\
+                        filename)
+    A_cnid = norm(cross(my_interface.lattice_1[:,1], my_interface.lattice_1[:,0])) / sigmas
+    anum = sigmas * 4
+    return sigmas, thetas, A_cnid, anum
 
 def get_Ps_sigmas_thetas(lim, axis, maxsigma = 100000):
     """

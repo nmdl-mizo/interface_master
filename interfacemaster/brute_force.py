@@ -1,7 +1,7 @@
 from numpy import array, dot, round, var, average, pi, savetxt, repeat, tile, meshgrid, \
 unique, sqrt, ceil, where, delete, vstack, loadtxt, arange, around
 from numpy.linalg import inv, norm
-from .interface_generator import write_LAMMPS
+from interfacemaster.interface_generator import write_LAMMPS
 import os
 import shutil
 def find_pairs_with_closest_distances(atoms_here, bicrystal_lattice):
@@ -179,6 +179,36 @@ class GB_runner():
                                         core_num, i[0], i[1])
         get_lowest()
 
+    def main_run_terminations(self, core_num):
+        """
+        main loop by hata's method
+        
+        Parameters
+        __________
+        core_num : int
+            number of cores for computation
+        __________
+        """
+        count = 1
+        os.mkdir('dump')
+        position_here = 0
+        self.interface.get_bicrystal()
+        while abs(position_here) < 1/2 * self.interface.min_perp_length:
+            x_dimension = ceil(100/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,0]))
+            y_dimension = ceil(40/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,1]))
+            z_dimension = ceil(40/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,2]))
+            for i in self.terminations:
+                self.interface.get_bicrystal(xyz_1 = [x_dimension,y_dimension,z_dimension], \
+                                       xyz_2 = [x_dimension,y_dimension,z_dimension], filetype='LAMMPS',\
+                                       filename = 'GB.dat', dp1 = i[0], dp2 = i[1] + position_here)
+                self.divide_region()
+                GB_atoms = vstack((self.left_atoms, self.right_atoms))
+                count = merge_operation_no_RBT(count, GB_atoms, self.interface.lattice_bi, \
+                                        self.clst_atmc_dstc, self.bulk_atoms, core_num, i[0], i[1] + position_here)
+                                        
+            position_here += -self.interface.d2
+            print('terminate displace max')
+            print(position_here, self.interface.d2, str(1/2 * self.interface.min_perp_length))
 def run_LAMMPS(core_num, count):
     """
     LAMMPS run command
@@ -242,7 +272,45 @@ def merge_operation(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc,
             count += 1
         merge_operation_count += 1
     return count
-    
+
+def merge_operation_no_RBT(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc,
+                     bulk_atoms, core_num, dp1, dp2):
+    """
+    merge loop without doing RBT
+    """
+    count = count_start
+    #os.mkdir(foldername)
+    cloest_distance_now = 0
+    merge_operation_count = 0
+    GB_atoms_here = GB_atoms.copy()
+    while cloest_distance_now < 0.99 * clst_atmc_dstc:
+        if merge_operation_count > 0:
+            
+            array_id_del, array_id_dsp, dsps, delete_cutoff, a = \
+            find_pairs_with_closest_distances(GB_atoms_here, bicrystal_lattice)
+            if len(array_id_del) > 0:
+                GB_atoms_here[array_id_dsp] += dsps[0]
+                GB_atoms_here = delete(GB_atoms_here, array_id_del, axis = 0)
+                atoms = vstack((GB_atoms_here, bulk_atoms))
+                array_id_del, array_id_dsp, dsps, cloest_distance_now, a = \
+            find_pairs_with_closest_distances(GB_atoms_here, bicrystal_lattice)
+                write_LAMMPS(bicrystal_lattice, dot(inv(bicrystal_lattice),atoms.T).T, repeat(['Si'],\
+                         len(atoms)), filename = 'GB.dat', orthogonal = True)
+                run_LAMMPS(core_num, count)
+                energy_here = read_energy()
+                write_data_here(count, energy_here, 0, 0, dp1, dp2, delete_cutoff)
+                count += 1
+        else:
+            atoms = vstack((GB_atoms_here, bulk_atoms))
+            write_LAMMPS(bicrystal_lattice, dot(inv(bicrystal_lattice),atoms.T).T, repeat(['Si'],\
+                     len(atoms)), filename = 'GB.dat', orthogonal = True)
+            run_LAMMPS(core_num, count)
+            energy_here = read_energy()
+            write_data_here(count, energy_here, 0, 0, dp1, dp2, 0)
+            count += 1
+        merge_operation_count += 1
+    return count
+
 def get_lowest():
     """
     get the lowest GB energy
