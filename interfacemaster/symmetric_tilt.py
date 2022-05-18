@@ -12,12 +12,19 @@ def compute_sigma(axis, theta, filename = \
  'cif_files/Si_mp-149_conventional_standard.cif', maxsigma=10000):
     """
     compute sigma values for a given disorientation
-    arguments:
-    axis --- rotation axis
-    theta --- rotation angle
-    maxsigma --- maximum sigma value for searching
-    return:
-    sigma
+    
+    Parameters
+    __________
+    axis : numpy array
+        rotation axis
+    theta : float
+        rotation angle
+    maxsigma : int
+        maximum sigma value for searching
+    
+    Returns
+    __________
+    sigma : int
     """
     print(theta/pi*180)
     R = rot(axis,theta)
@@ -31,11 +38,18 @@ def get_hkl(P, axis, tol = 1e-3):
     """
     given a referring point and a rotation matrix, get the miller indices
     for this symmetric tilt GB
-    arguments:
-    P --- referring point
-    axis --- rotation axis
-    return:
-    miller indices
+    
+    Parameters
+    __________
+    P : numpy array
+        referring point
+    axis : numpy array
+        rotation axis
+        
+    Returns
+    __________
+    hkl : numpy array
+          miller indices
     """
     n = cross(axis, P)
     return MID(lattice=eye(3,3), n=n, tol=tol)
@@ -43,13 +57,25 @@ def get_hkl(P, axis, tol = 1e-3):
 def sample_STGB(axis, lim, maxsigma, max_index):
     """
     sampling the symmetric tilt GBs for a given rotation axis
-    arguments:
-    axis --- rotation axis
-    lim --- control the number of generated referring points
-    maxsigma --- maximum sigma value
-    max_index --- maximum value of miller indices
-    return:
-    angle list, sigma list, (hkl) list
+    
+    Parameters
+    __________
+    axis : numpy array
+           rotation axis
+    lim : int
+          control the number of generated referring points
+    maxsigma : int
+               maximum sigma value
+    max_index : int
+               maximum value of miller indices
+    Returns
+    __________
+    list1 : numpy array
+           angle list
+    list2 : numpy array
+           sigma list
+    list3 : numpy array
+           hkl list
     """
     Ps, sigmas, thetas, original_sigmas = get_Ps_sigmas_thetas(lim,axis)
     sampled_indices = where((sigmas < maxsigma))[0]
@@ -69,11 +95,18 @@ def sample_STGB(axis, lim, maxsigma, max_index):
 def generate_arrays_x_y(x_min, y_min, lim):
     """
     generate x, y meshgrids
-    arguments:
-    x_min, y_min --- minimum x,y
-    lim --- maximum x,y
-    return:
-    meshgrid
+    
+    Parameters
+    __________
+    x_min, y_min : int
+        minimum x,y
+    lim : int
+        maximum x,y
+        
+    Returns
+    __________
+    meshgrid : numpy array
+        x,y meshgrid
     """
     x = arange(x_min, x_min + lim, 1)
     y = arange(y_min, y_min + lim, 1)
@@ -88,11 +121,24 @@ def get_csl_twisted_graphenes(lim, filename, maxsigma = 100):
     """
     get the geometric information of all the CS twisted graphene
     within a searching limitation
-    arguments:
-    lim --- control the number of generated referring points
-    maxsigma --- maximum sigma
-    return:
-    sigma list, angle list, num of atoms in supercell, CNID lengths
+    
+    Parameters
+    __________
+    lim : int
+        control the number of generated referring points
+    maxsigma : int
+        maximum sigma
+        
+    Return
+    __________
+    list1 : numpy array
+        sigma list
+    list2 : numpy array
+        angle list
+    list3 : numpy array
+        CNID areas
+    list4 : numpy array
+        num of atoms in supercell
     """
     #mirror_plane_1
     xy_arrays = generate_arrays_x_y(1,1,lim)
@@ -136,12 +182,26 @@ def get_Ps_sigmas_thetas(lim, axis, maxsigma = 100000):
     """
     for a rotation axis, get the geometric information of all the symmetric tilt GBs
     within a searching limitation
-    arguments:
-    lim --- control the number of generated referring points
-    axis --- rotation axis
-    maxsigma --- maximum sigma
-    return:
-    list of referring points, sigma list, angle list, original list of the 'in-plane' sigmas
+    
+    Parameters
+    __________
+    lim : int
+        control the number of generated referring points
+    axis : numpy array
+        rotation axis
+    maxsigma : int
+        maximum sigma
+    
+    Returns
+    __________
+    list1 : numpy array
+        list of referring points
+    list2 : numpy array
+        sigma list
+    list3 : numpy array
+        angle list
+    list4 : numpy array
+        original list of the 'in-plane' sigmas
     """
     if norm(cross(axis, [0,0,1])) < 1e-8:
         x = arange(2, 2 + lim, 1)

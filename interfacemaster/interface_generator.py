@@ -1846,13 +1846,13 @@ class core:
                             self.lattice_2_TD = three_dot(R, D, self.orientation)
                             self.lattice_2_TD = dot(self.lattice_2_TD, self.lattice_2)
                             self.CSL = dot(a1, self.U1)
+                            self.cell_calc = calc
                             self.cell_calc.compute_CNID([0,0,1],tol)
                             CNID = self.cell_calc.CNID
                             self.CNID = dot(a1, CNID)
                             self.R = R
                             self.theta = theta
                             self.axis = n1
-                            self.cell_calc = calc
                             file.write('U1 = \n' + \
                                        str(self.U1) + '; sigma_1 = ' + \
                                        str(sigma1) + '\n')
@@ -2306,7 +2306,7 @@ class core:
         print(array(np.round(self.bicrystal_U2,8),dtype = int))
 
     def compute_bicrystal_two_D(self, hkl_1, hkl_2, lim = 20, normal_ortho = False, \
-                                plane_ortho = False, tol_ortho = 1e-10, tol_integer = 1e-8, inclination_tol = sqrt(2)/2):
+                                tol_ortho = 1e-10, tol_integer = 1e-8, inclination_tol = sqrt(2)/2):
         """
         compute the transformation to obtain the supercell of the two slabs forming a interface (only two_D periodicity)
 
@@ -2318,8 +2318,6 @@ class core:
             the limit searching for a CSL vector cross the plane, default 20
         normal_ortho : bool
             whether limit the vector crossing the GB to be normal to the GB, default False
-        plane_ortho : bool
-            whether limit the two vectors in the GB plane to be orthogonal, default False
         tol_ortho : float
             tolerance judging whether orthogonal, default 1e-10
         tol_integer : float
@@ -2327,10 +2325,6 @@ class core:
         inclination_tol : float
             control the angle between the interface and the cross vector, default sqrt(2)/2
         """
-        if normal_ortho == True and plane_ortho == True:
-            self.bicrystal_ortho = True
-        if normal_ortho == True:
-            self.min_perp_length = norm(v3)
         self.d1 = d_hkl(self.lattice_1, hkl_1)
         lattice_2 = dot(self.a2_transform, self.lattice_2)
         normal_1 = get_normal_from_MI(self.lattice_1, hkl_1)
@@ -2363,7 +2357,7 @@ class core:
         print(array(np.round(self.bicrystal_U1,8),dtype = int))
         print('cell 2:')
         print(array(np.round(self.bicrystal_U2,8),dtype = int))
-    
+    """
     def draw_terminations(self, titlesize = 50, legendsize = 50, single_element_size=100, \
                           left_element_size = 50, right_element_size = 100, figuresize = (30,30), figuredpi = 600):
         num1 = len(self.dp_list_1)
@@ -2407,7 +2401,7 @@ class core:
                           self.elements_list_2,titlesize)
         print('saving high resolution figure will take some time...please wait for a while :D')
         fig.savefig('atomic_planes', dpi = figuredpi)
-
+    """
     def define_lammps_regions(self, region_names, region_los, region_his, ortho = False):
         """
         generate a file defining some regions in the LAMMPS and define the atoms

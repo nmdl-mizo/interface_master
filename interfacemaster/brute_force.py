@@ -7,15 +7,26 @@ import shutil
 def find_pairs_with_closest_distances(atoms_here, bicrystal_lattice):
     """
     Find the pairs of atoms with closest distance
-    arguments:
-    atoms_here --- cartesian coordinates
-    bicrystal_lattice --- lattice matrix of the bicrystal cell
-    return:
-    array_id_del --- ids of atoms to delete
-    array_id_dsp --- ids of atoms to displace
-    dsps --- displacements to be done
-    distances_round[1] --- cutoff this turn
-    distances_round[2] --- cloest distance after deletion
+    
+    Parameters
+    __________
+    atoms_here : numpy array
+                 cartesian coordinates
+    bicrystal_lattice : numpy array
+                 lattice matrix of the bicrystal cell
+                 
+    Returns
+    __________
+    array_id_del : numpy array
+                   ids of atoms to delete
+    array_id_dsp : numpy array
+                   ids of atoms to displace
+    dsps : numpy array
+                   displacements to be done
+    distances_round[1] : float
+                   cutoff this turn
+    distances_round[2] : float
+                   cloest distance after merge
     """
     transL = bicrystal_lattice
     reps = array([-1, 0, 1])
@@ -76,10 +87,15 @@ def screen_out_non_repeated_pairs(ids_1, ids_2):
     """
     input two pairs of ids with self-paring
     output the indices involving non-repeating pairs
-    arguments:
-    ids_1, ids_2 --- two pairs of ids
-    return:
-    screened_ids --- ids in ids_1 without repeating
+    
+    Parameters
+    __________
+    ids_1, ids_2 : numpy arrays
+                   two pairs of ids
+    Returns
+    __________
+    screened_ids : numpy array
+                   ids in ids_1 without repeating pairs
     """
     arrays = arange(len(ids_1))
     screened_ids = []
@@ -115,8 +131,12 @@ class GB_runner():
         
     def get_terminations(self, changing_termination = False):
         """
-        argument:
-        changing_termination --- whether to sample different terminating planes
+        generate termination selections
+        
+        Parameters
+        __________
+        changing_termination : bool
+            whether to sample different terminating planes
         """
         if changing_termination == False:
             self.terminations = [[0,0]]
@@ -124,11 +144,23 @@ class GB_runner():
             self.terminations = [[0, 0],\
                                  [0, - (self.interface.dp_list_1[0] - 0.0001)],\
                                  [self.interface.dp_list_1[0] + 0.0001, 0]]
-        
+"""
+    def get_terminations_twist(self, changing_termination = False, axis):
+        """
+        #argument:
+        #changing_termination --- whether to sample different terminating planes
+        #axis --- rotation axis
+        """
+"""
+    
     def get_RBT_list(self, grid_size):
         """
-        argument:
-        grid_size --- size of grid sampling RBT
+        generate RBT operation list
+        
+        Parameters
+        __________
+        grid_size : float
+             size of grid sampling RBT in angstrom
         """
         CNID = dot(self.interface.orient,self.interface.CNID)
         v1 = CNID[:,0]
@@ -151,12 +183,16 @@ class GB_runner():
         self.left_atoms = self.middle_atoms.copy()[where(self.middle_atoms[:,0] < self.boundary)[0]]
         self.right_atoms = self.middle_atoms.copy()[where(self.middle_atoms[:,0] >= self.boundary)[0]]
         self.bulk_atoms = all_atoms.copy()[where( (all_atoms[:,0] <= self.boundary - self.clst_atmc_dstc) \
-                                     | (all_atoms[:,0] >= self.boundary + self.clst_atmc_dstc) )[0]]   
+                                     | (all_atoms[:,0] >= self.boundary + self.clst_atmc_dstc) )[0]]
+                                     
     def main_run(self, core_num):
         """
-        main loop
-        argument:
-        core_num --- number of cores for simulation
+        main loop doing RBT & merging
+        
+        Parameters
+        __________
+        core_num : int
+            number of CPU cores for simulation
         """
         count = 1
         os.mkdir('dump')
@@ -178,7 +214,37 @@ class GB_runner():
                                         self.clst_atmc_dstc, self.RBT_list[j], bulk_atoms_here, \
                                         core_num, i[0], i[1])
         get_lowest()
-
+ """
+    def main_run_twist(self, core_num):
+        """
+        #main loop for twist GBs
+        
+        #Parameters
+        #__________
+        #core_num : int
+            #number of CPU cores for computation
+        """
+        count = 1
+        os.mkdir('dump')
+        for i in self.terminations:
+            x_dimension = ceil(100/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,0]))
+            y_dimension = ceil(40/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,1]))
+            z_dimension = ceil(40/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,2]))
+            self.interface.get_bicrystal(xyz_1 = [x_dimension,y_dimension,z_dimension], \
+                                       xyz_2 = [x_dimension,y_dimension,z_dimension], filetype='LAMMPS',\
+                                       filename = 'GB.dat', dp1 = i[0], dp2 = i[1])
+            self.divide_region()
+            for j in range(len(self.RBT_list)):
+                bulk_atoms_here = self.bulk_atoms.copy()
+                bulk_right_ids = where(bulk_atoms_here[:,0] > self.boundary)[0]
+                bulk_atoms_here[bulk_right_ids] += self.RBT_list[j]
+                displaced_atoms = self.right_atoms.copy() + self.RBT_list[j]
+                GB_atoms = vstack((self.left_atoms, displaced_atoms))
+                count = merge_operation(count, GB_atoms, self.interface.lattice_bi, \
+                                        self.clst_atmc_dstc, self.RBT_list[j], bulk_atoms_here, \
+                                        core_num, i[0], i[1])
+        get_lowest()
+ """
     def main_run_terminations(self, core_num):
         """
         main loop by hata's method
@@ -187,7 +253,6 @@ class GB_runner():
         __________
         core_num : int
             number of cores for computation
-        __________
         """
         count = 1
         os.mkdir('dump')
@@ -209,6 +274,7 @@ class GB_runner():
             position_here += -self.interface.d2
             print('terminate displace max')
             print(position_here, self.interface.d2, str(1/2 * self.interface.min_perp_length))
+            
 def run_LAMMPS(core_num, count):
     """
     LAMMPS run command
@@ -225,12 +291,19 @@ def read_energy():
 def write_data_here(count, energy, dy, dz, dp1, dp2, delete_cutoff):
     """
     write data for each simulation
-    argument:
-    count --- index of simulation
-    energy --- GB energy
-    dy, dz --- RBT
-    dp1, dp2 --- terminating shift
-    delete_cutoff --- cutoff to merge atoms
+    
+    Parameters
+    __________
+    count : int
+        index of simulation
+    energy : float
+        GB energy
+    dy, dz : float
+        RBT
+    dp1, dp2 : float
+        terminating shift
+    delete_cutoff : float
+        cutoff to merge atoms
     """
     with open('results.dat', 'a') as f:
         f.write('{0} {1} {2} {3} {4} {5} {6} \n'.format(count, energy, dy, dz, dp1, dp2, delete_cutoff))
@@ -276,7 +349,7 @@ def merge_operation(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc,
 def merge_operation_no_RBT(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc,
                      bulk_atoms, core_num, dp1, dp2):
     """
-    merge loop without doing RBT
+    merge loop by hata's method
     """
     count = count_start
     #os.mkdir(foldername)
