@@ -2436,6 +2436,22 @@ class core:
                 format(region_names[i], region_los[i], region_his[i]))
                 fb.write('group {0} region {1} \n'.format(region_names[i], region_names[i]))
 
+def terminates_scanner_slab_structure(structure, hkl):
+    atoms, elements = get_sites_elements(structure)
+    lattice = structure.lattice.matrix.T
+    plane_B = get_pri_vec_inplane(hkl, lattice)
+    d = d_hkl(lattice, hkl)
+    v3 = cross_plane(lattice, cross(plane_B[:,0], plane_B[:,1]), 10, False, 0.001, 0.001)
+    supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
+    supercell = get_right_hand(supercell)
+    U = array(around(dot(inv(lattice), supercell)), dtype = int)
+    print('cross vector: \n' + str(array([U[:,0]]).T) + '\nlength: ' + str(norm(v3)))
+    print('plane basis: \n' + str(U[:,[1,2]]) + '\nlength: ' + str(norm(supercell[:,1])) + ' ' + str(norm(supercell[:,2])))
+    atoms, elements, lattice = super_cell(U, lattice, atoms, elements)
+    write_POSCAR(lattice, atoms, elements, 'POSCAR_primitive')
+    lattice, orient = adjust_orientation(lattice)
+    plane_list, element_list, indices_list, dp_list = terminates_scanner_left(supercell, atoms, elements, d, round_n = 5)
+    return plane_list, element_list, dp_list
 
 def get_surface_slab(structure, hkl, replica = [1,1,1], inclination_tol = sqrt(2)/2, termi_shift = 0, vacuum_height = 0, plane_normal = False, normal_perp = False, \
                      normal_tol = 1e-3, lim = 20, filename = 'POSCAR', filetype = 'VASP'):
