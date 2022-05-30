@@ -2490,7 +2490,7 @@ def get_surface_slab(structure, hkl, replica = [1,1,1], inclination_tol = sqrt(2
     if not np.all(replica == 1):
        lattice, atoms, elements = cell_expands(lattice, atoms, elements, replica)
        
-    if termi_shift == True:
+    if termi_shift !=0:
        atoms = shift_none_copy(lattice, termi_shift, atoms)
        
     if vacuum_height > 0:
