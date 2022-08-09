@@ -149,9 +149,8 @@ def find_integer_vectors(v, sigma, tol=1e-8):
             found = True
             break
     if found:
-        reduce = np.gcd.reduce([int(u),int(v),int(w),int(L)])
+        reduce = np.gcd.reduce([int(u),int(v),int(w)])
         now = np.array(np.round(now/reduce),dtype = int)
-        L = int(np.round(L/reduce))
         return now, L
     else:
         raise RuntimeError('failed to find the rational vector of ' + str(v) + '\n within lcd = ' + str(sigma))
@@ -355,7 +354,7 @@ def get_normal_index(hkl, lattice):
     n, Pc1 = get_plane(hkl, lattice)
     return dot(inv(lattice), n)
 
-def get_primitive_hkl(hkl, C_lattice, P_lattice,tol=1e-8):
+def get_primitive_hkl(hkl, C_lattice, P_lattice, tol=1e-8):
     """
     convert the miller indices from conventional cell to primitive cell
     
@@ -380,7 +379,7 @@ def get_primitive_hkl(hkl, C_lattice, P_lattice,tol=1e-8):
     #print('the normal:' + str(n) + ' the point in the plane: ' + str(Pc1))
     #2. get indices from normal
     hkl_p = get_indices_from_n_Pc1(n, P_lattice, Pc1)
-    hkl_p = find_integer_vectors_nn(hkl_p,100000,tol)[0]
+    hkl_p = find_integer_vectors(hkl_p,100000,tol)[0]
     return hkl_p
 
 def get_plane(hkl, lattice):

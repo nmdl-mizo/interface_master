@@ -1308,11 +1308,11 @@ def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_
 
         
 class core:
-    def __init__(self, file_1, file_2):
+    def __init__(self, file_1, file_2, prim_1 = True, prim_2 = True):
         self.file_1 = file_1 # cif file name of lattice 1
         self.file_2 = file_2 # cif file name of lattice 2
-        self.structure_1 = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
-        self.structure_2 = Structure.from_file(file_2, primitive=True, sort=False, merge_tol=0.0)
+        self.structure_1 = Structure.from_file(file_1, primitive = prim_1, sort=False, merge_tol=0.0)
+        self.structure_2 = Structure.from_file(file_2, primitive = prim_2, sort=False, merge_tol=0.0)
 
         self.conv_lattice_1 = Structure.from_file(file_1, primitive=False, sort=False, merge_tol=0.0) \
                                 .lattice.matrix.T
@@ -2281,6 +2281,7 @@ class core:
         self.d2 = d_hkl(lattice_2, hkl_2)
         hkl_c = get_primitive_hkl(hkl, self.lattice_1, self.CSL, tol_integer) # miller indices of the plane in CSL
         hkl_c = np.array(hkl_c)
+        print('hkl in CSL:', hkl_c)
         plane_B = get_pri_vec_inplane(hkl_c, self.CSL) # plane bases of the CSL lattice plane
         if (plane_ortho == True) and (abs(dot(plane_B[:,0], plane_B[:,1])) > tol_ortho):
             plane_B = get_ortho_two_v(plane_B, lim, tol_ortho, align_rotation_axis, rotation_axis)

@@ -182,26 +182,12 @@ def get_Ps_sigmas_thetas(lim, axis, maxsigma = 100000):
     """
     for a rotation axis, get the geometric information of all the symmetric tilt GBs
     within a searching limitation
-    
-    Parameters
-    __________
-    lim : int
-        control the number of generated referring points
-    axis : numpy array
-        rotation axis
-    maxsigma : int
-        maximum sigma
-    
-    Returns
-    __________
-    list1 : numpy array
-        list of referring points
-    list2 : numpy array
-        sigma list
-    list3 : numpy array
-        angle list
-    list4 : numpy array
-        original list of the 'in-plane' sigmas
+    arguments:
+    lim --- control the number of generated referring points
+    axis --- rotation axis
+    maxsigma --- maximum sigma
+    return:
+    list of referring points, sigma list, angle list, original list of the 'in-plane' sigmas
     """
     if norm(cross(axis, [0,0,1])) < 1e-8:
         x = arange(2, 2 + lim, 1)
@@ -246,25 +232,17 @@ def get_Ps_sigmas_thetas(lim, axis, maxsigma = 100000):
         ys = xy_arrays[:,1]
         basis1 = column_stack(([-1/2, 0, 1/2], [-1, 1/2, 1/2], [1,1,1]))
         P1 = dot(basis1, indice.T).T
-        thetas1 = 2*arccos(dot(P1,[-1, 1/2, 1/2])/norm(P1, axis=1)/norm([-1, 1/2, 1/2]))
-        
-        #mirror_plane_2
-        xy_arrays = generate_arrays_x_y(1,1,lim)
-        indice = column_stack((xy_arrays,zeros(len(xy_arrays))))
-        xs = xy_arrays[:,0]
-        ys = xy_arrays[:,1]
-        basis = column_stack(([-1/2,1/2,0], [-1,1/2,1/2], [1,1,1]))
-        P = dot(basis, indice.T).T
-        thetas = 2*arccos(dot(P,[-1/2,1/2,0])/norm(P, axis=1)/norm([-1/2,1/2,0]))
-        P = vstack((P1,P))
-        thetas = append(thetas1, thetas)
+        basis2 = column_stack(([-1/2, 0, 1/2] * 3 - [-1, 1/2, 1/2], [-1/2, 0, 1/2], [1, 1, 1]))
+        P2 = dot(basis2, indice.T).T
+        P = vstack((P1, P2))
+        thetas = 2*arccos(dot(P1,[-1, 1/2, 1/2])/norm(P1, axis=1)/norm([-1, 1/2, 1/2]))
         sigmas = []
         for i in range(len(thetas)):
             sigmas.append(compute_sigma(array([1.0,1.0,1.0]), thetas[i], maxsigma))
         sigmas = around(sigmas)
         sigmas = array(sigmas,dtype = int)
     else:
-    	  raise RuntimeError('error: only available for [001], [110] and [110] rotation axis')
+          raise RuntimeError('error: only available for [001], [110] and [110] rotation axis')
     
     original_sigmas = 6*norm(P,axis=1)**2
     sigmas = sigmas/(2**(abs(sigmas%2-1)))
