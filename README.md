@@ -24,3 +24,12 @@ pip install .
 - matplotlib
 - gb_code
 - numpy (requirements already satisfied by installing pymatgen)
+
+## How to cite
+ If you use the interface_master, please cite the following articles [1][2].  
+[1] "interface_master: Python package building CSL and approximate CSL interfaces of any two lattices -- an effective tool for interface engineers"  
+ Y. S. Xie, K. Shibata, and T. Mizoguchi, ArXiv:2211.15173 (https://arxiv.org/abs/2211.15173). 
+
+[2] "A brute-force code searching for cell of non-identical displacement for CSL grain boundaries and interfaces"  
+ YS. Xie, K. Shibata, and T. Mizoguchi  
+ Comp. Phys. Comm. 273 (2022) 108260-1-8 (https://www.sciencedirect.com/science/article/pii/S0010465521003726)
