@@ -86,7 +86,7 @@ def sample_STGB(axis, lim, maxsigma, max_index):
     for i in Ps:
         hkls.append(get_hkl(i, axis, tol =1e-4))
     hkls = np.array(hkls)
-    sampled_indices = all(abs(hkls)<max_index, axis=1)
+    sampled_indices = np.all(np.abs(hkls)<max_index, axis=1)
     sigmas = sigmas[sampled_indices]
     thetas = thetas[sampled_indices]
     hkls = hkls[sampled_indices]
