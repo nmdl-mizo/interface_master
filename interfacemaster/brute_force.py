@@ -1,9 +1,10 @@
+import os
+import shutil
 from numpy import array, dot, repeat, tile, meshgrid, \
 unique, sqrt, ceil, where, delete, vstack, loadtxt, arange, around
 from numpy.linalg import inv, norm
 from interfacemaster.interface_generator import write_LAMMPS
-import os
-import shutil
+
 def find_pairs_with_closest_distances(atoms_here, bicrystal_lattice):
     """
     Find the pairs of atoms with closest distance
@@ -101,7 +102,7 @@ def screen_out_non_repeated_pairs(ids_1, ids_2):
     screened_ids = []
     for i in range(len(arrays)):
         if i == 0:
-                screened_ids.append(arrays[i])
+            screened_ids.append(arrays[i])
         else:
             not_in = True
             for j in screened_ids:
@@ -109,7 +110,7 @@ def screen_out_non_repeated_pairs(ids_1, ids_2):
                     not_in = False
                     break
             if not_in:
-                    screened_ids.append(arrays[i])
+                screened_ids.append(arrays[i])
     return screened_ids
 
 class GB_runner():
@@ -138,7 +139,7 @@ class GB_runner():
         changing_termination : bool
             whether to sample different terminating planes
         """
-        if changing_termination == False:
+        if not changing_termination:
             self.terminations = [[0,0]]
         else:
             self.terminations = [[0, 0],\
@@ -241,7 +242,7 @@ def run_LAMMPS(core_num, count):
     """
     LAMMPS run command
     """
-    os.system('mpirun -np {0} lmp_mpi -in GB.in -v count {1}'.format(core_num, count))
+    os.system(f'mpirun -np {core_num} lmp_mpi -in GB.in -v count {count}')
 
 def read_energy():
     """
@@ -268,7 +269,7 @@ def write_data_here(count, energy, dy, dz, dp1, dp2, delete_cutoff):
         cutoff to merge atoms
     """
     with open('results.dat', 'a') as f:
-        f.write('{0} {1} {2} {3} {4} {5} {6} \n'.format(count, energy, dy, dz, dp1, dp2, delete_cutoff))
+        f.write(f'{count} {energy} {dy} {dz} {dp1} {dp2} {delete_cutoff} \n')
 
 def merge_operation(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc,
                     RBT, bulk_atoms, core_num, dp1, dp2):
