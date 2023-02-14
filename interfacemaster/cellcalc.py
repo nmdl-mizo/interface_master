@@ -78,14 +78,14 @@ def get_ortho_two_v(B, lim, tol, align_rotation_axis = False, rotation_axis = [1
     LP = LP[np.argsort(norm(LP, axis=1))]
     found = False
     count = 0
-    if align_rotation_axis == True:
+    if align_rotation_axis:
         for i in LP:
             if norm(cross(i, rotation_axis)) < tol:
                 v1 = i
                 break
 
     while not found and count < len(LP):
-        if align_rotation_axis == False:
+        if not align_rotation_axis:
             v1 = LP[count]
         for i in LP:
             if ang(v1, i) < tol:
@@ -95,7 +95,7 @@ def get_ortho_two_v(B, lim, tol, align_rotation_axis = False, rotation_axis = [1
         if align_rotation_axis:
             break
         count += 1
-    if found == False:
+    if not found:
         raise RuntimeError('faild to find two orthogonal vectors in the GB plane, maybe you can try to increase the lim')
     return np.column_stack((v1, v2))
 
@@ -795,7 +795,7 @@ class DSCcalc:
                 #print('sigma ' + str(L * M * N))
                 DSC = Gi
         DSC = get_right_hand(DSC)
-        if to_LLL == True:
+        if to_LLL:
             self.DSC = LLL(DSC)
         else:
             self.DSC = DSC
