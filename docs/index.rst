@@ -10,8 +10,8 @@ Welcome to interfacemaster's documentation!
    :maxdepth: 3
    :caption: Contents:
 
-   interfacemaster
    tutorials
+   interfacemaster
 
 
 Indices and tables

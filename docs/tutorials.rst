@@ -1,7 +1,4 @@
 ===========================================
-Tutorials
-===========================================
-
 Making bicrystal for a known GB
 ===========================================
 
@@ -10,6 +7,7 @@ Making bicrystal for a known GB
 
    tutorials/Tutorial_Making bicrystal for a known GB*
 
+===========================================
 Two-dimensional CSL interfaces
 ===========================================
 
@@ -18,6 +16,7 @@ Two-dimensional CSL interfaces
 
    tutorials/Tutorial_Two-dimensional CSL interfaces*
 
+===========================================
 Sampling in the CNID
 ===========================================
 
@@ -26,6 +25,7 @@ Sampling in the CNID
 
    tutorials/Tutorial_Sampling*
 
+===========================================
 Making surface slabs
 ===========================================
 
