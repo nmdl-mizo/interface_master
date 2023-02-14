@@ -144,14 +144,6 @@ class GB_runner():
             self.terminations = [[0, 0],\
                                  [0, - (self.interface.dp_list_1[0] - 0.0001)],\
                                  [self.interface.dp_list_1[0] + 0.0001, 0]]
-"""
-    def get_terminations_twist(self, changing_termination = False, axis):
-        """
-        #argument:
-        #changing_termination --- whether to sample different terminating planes
-        #axis --- rotation axis
-        """
-"""
     
     def get_RBT_list(self, grid_size):
         """
@@ -214,37 +206,7 @@ class GB_runner():
                                         self.clst_atmc_dstc, self.RBT_list[j], bulk_atoms_here, \
                                         core_num, i[0], i[1])
         get_lowest()
- """
-    def main_run_twist(self, core_num):
-        """
-        #main loop for twist GBs
-        
-        #Parameters
-        #__________
-        #core_num : int
-            #number of CPU cores for computation
-        """
-        count = 1
-        os.mkdir('dump')
-        for i in self.terminations:
-            x_dimension = ceil(100/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,0]))
-            y_dimension = ceil(40/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,1]))
-            z_dimension = ceil(40/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,2]))
-            self.interface.get_bicrystal(xyz_1 = [x_dimension,y_dimension,z_dimension], \
-                                       xyz_2 = [x_dimension,y_dimension,z_dimension], filetype='LAMMPS',\
-                                       filename = 'GB.dat', dp1 = i[0], dp2 = i[1])
-            self.divide_region()
-            for j in range(len(self.RBT_list)):
-                bulk_atoms_here = self.bulk_atoms.copy()
-                bulk_right_ids = where(bulk_atoms_here[:,0] > self.boundary)[0]
-                bulk_atoms_here[bulk_right_ids] += self.RBT_list[j]
-                displaced_atoms = self.right_atoms.copy() + self.RBT_list[j]
-                GB_atoms = vstack((self.left_atoms, displaced_atoms))
-                count = merge_operation(count, GB_atoms, self.interface.lattice_bi, \
-                                        self.clst_atmc_dstc, self.RBT_list[j], bulk_atoms_here, \
-                                        core_num, i[0], i[1])
-        get_lowest()
- """
+
     def main_run_terminations(self, core_num):
         """
         main loop by hata's method
