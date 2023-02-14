@@ -568,25 +568,25 @@ def get_normal_from_MI(lattice, hkl):
     lattice = np.array(lattice,dtype = float)
     numzeros = len(np.where(hkl==0)[0])
     if numzeros == 2:
-       zero_v_index = np.where(hkl==0)[0]
-       return cross(lattice.T[zero_v_index[0]],lattice.T[zero_v_index[1]])
+        zero_v_index = np.where(hkl==0)[0]
+        return cross(lattice.T[zero_v_index[0]],lattice.T[zero_v_index[1]])
     elif numzeros == 1:
-       non_zero_v_index = np.where(hkl!=0)[0]
-       u1 = lattice.T[non_zero_v_index[0]]/hkl[non_zero_v_index[0]]
-       u2 = lattice.T[non_zero_v_index[1]]/hkl[non_zero_v_index[1]]
-       v1 = u1-u2
-       zero_v_index = np.where(hkl==0)[0][0]
-       v2 = lattice.T[zero_v_index]
-       return cross(v1,v2)
+        non_zero_v_index = np.where(hkl!=0)[0]
+        u1 = lattice.T[non_zero_v_index[0]]/hkl[non_zero_v_index[0]]
+        u2 = lattice.T[non_zero_v_index[1]]/hkl[non_zero_v_index[1]]
+        v1 = u1-u2
+        zero_v_index = np.where(hkl==0)[0][0]
+        v2 = lattice.T[zero_v_index]
+        return cross(v1,v2)
     elif numzeros == 0:
-       P1 = lattice[:,0]/hkl[0]
-       P2 = lattice[:,1]/hkl[1]
-       P3 = lattice[:,2]/hkl[2]
-       v1 = P1-P2
-       v2 = P1-P3
-       return cross(v1,v2)
+        P1 = lattice[:,0]/hkl[0]
+        P2 = lattice[:,1]/hkl[1]
+        P3 = lattice[:,2]/hkl[2]
+        v1 = P1-P2
+        v2 = P1-P3
+        return cross(v1,v2)
     else:
-       raise RuntimeError('hkl error')
+        raise RuntimeError('hkl error')
 
 def search_MI_n(lattice, n, tol, lim):
     """
@@ -624,7 +624,7 @@ def search_MI_n(lattice, n, tol, lim):
             break
     if not found:
         RuntimeError('failed to find a close lattice plane for this normal vector, please increase the tol or adjust orientation')
-    return (MID(lattice, n_there, tol))
+    return MID(lattice, n_there, tol)
 
 def match_rot(deft_rot, axis, tol, exact_rot, av_perpendicular):
     """
@@ -655,7 +655,7 @@ def match_rot(deft_rot, axis, tol, exact_rot, av_perpendicular):
     theta = 0
     found = False
     min_g = inf
-    while (theta < 2*pi):
+    while theta < 2 * pi:
         inter_rot = rot(axis, theta)
         compare_rot = dot(deft_rot,inter_rot)
         compare_v = dot(compare_rot, av_perpendicular)
@@ -671,7 +671,7 @@ def match_rot(deft_rot, axis, tol, exact_rot, av_perpendicular):
             break
         theta += 0.01/180*pi
     if not found:
-        raise RuntimeError('Disorientation match failed, please try other planes or increase tolerance, min = {}'.format(min_g))
+        raise RuntimeError(f'Disorientation match failed, please try other planes or increase tolerance, min = {min_g}')
     return inter_rot
 
 class DSCcalc:
@@ -858,4 +858,3 @@ class DSCcalc:
                 break
         CNID = LLL(CNID)
         self.CNID = dot(inv(self.ai1),CNID)
-
