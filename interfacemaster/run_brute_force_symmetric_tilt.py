@@ -1,11 +1,12 @@
-from symmetric_tilt import *
-from brute_force import *
-from numpy import arange
-from interfacemaster.cellcalc import get_primitive_hkl, rot
-from interfacemaster.interface_generator import core
-import argparse
 import os
 import shutil
+import argparse
+import numpy as np
+from numpy.linalg import norm
+from symmetric_tilt import sample_STGB
+from brute_force import GB_runner
+from interfacemaster.cellcalc import get_primitive_hkl, rot
+from interfacemaster.interface_generator import core
 parser = argparse.ArgumentParser(description = 'manual to this script')
 parser.add_argument("--axis", type = int, default = [0,0,1])
 parser.add_argument("--lim", type = int, default = 10)
@@ -30,14 +31,14 @@ print('-----detected GBs-----')
 print('theta     sigma    hkl')
 print(len(hkls))
 for i in range(len(hkls)):
-    print(around(thetas[i]/pi*180,2), sigmas[i], hkls[i])
+    print(np.around(thetas[i]/np.pi*180,2), sigmas[i], hkls[i])
 
 axis = [args.axis[0], args.axis[1], args.axis[2]]
 if args.distribute == 'n':
     tasks = hkls
 else:
-    tasks = hkls[arange(initial-1, final)[0]]
-for i in range(tasks):
+    tasks = hkls[np.arange(args.initial - 1, args.final)[0]]
+for i in range(len(tasks)):
     os.mkdir(str(i+1))
     for j in copy_files:
         shutil.copy(j, os.path.join(str(i+1), j))
@@ -51,9 +52,9 @@ for i in range(tasks):
     hkl = get_primitive_hkl(tasks[i], my_interface.conv_lattice_1, my_interface.lattice_1, tol = 1e-3)
     my_interface.compute_bicrystal(hkl, normal_ortho =True, plane_ortho=True, tol_ortho = 1e-3, tol_integer = 1e-3, \
                                    align_rotation_axis = True, rotation_axis = axis)
-    x_dimension = ceil(100/norm(dot(my_interface.lattice_1,my_interface.bicrystal_U1)[:,0]))
-    y_dimension = ceil(40/norm(dot(my_interface.lattice_1,my_interface.bicrystal_U1)[:,1]))
-    z_dimension = ceil(40/norm(dot(my_interface.lattice_1,my_interface.bicrystal_U1)[:,2]))
+    x_dimension = np.ceil(100/norm(np.dot(my_interface.lattice_1,my_interface.bicrystal_U1)[:,0]))
+    y_dimension = np.ceil(40/norm(np.dot(my_interface.lattice_1,my_interface.bicrystal_U1)[:,1]))
+    z_dimension = np.ceil(40/norm(np.dot(my_interface.lattice_1,my_interface.bicrystal_U1)[:,2]))
     my_interface.get_bicrystal(xyz_1 = [x_dimension,y_dimension,z_dimension], \
                                xyz_2 = [x_dimension,y_dimension,z_dimension])
     my_run = GB_runner(my_interface)
@@ -65,7 +66,7 @@ for i in range(tasks):
         my_run.get_terminations(True)
     else:
         my_run.get_terminations(False)
-        
+
     my_run.get_RBT_list(args.rbt_grid)
     my_run.main_run_terminations(args.core_num)
     os.chdir(mother_path)
