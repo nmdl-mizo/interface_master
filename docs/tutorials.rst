@@ -1,35 +1,27 @@
-===========================================
-Making bicrystal for a known GB
+Tutorials
 ===========================================
 
 .. toctree::
+   :caption: Making bicrystals of known GBs
    :glob:
 
    tutorials/Tutorial_Making bicrystal for a known GB*
 
-===========================================
-Two-dimensional CSL interfaces
-===========================================
-
 .. toctree::
+   :caption: Making 2D CSL interfaces
    :glob:
 
    tutorials/Tutorial_Two-dimensional CSL interfaces*
 
-===========================================
-Sampling in the CNID
-===========================================
-
 .. toctree::
+   :caption: Sampling in the CNID
    :glob:
 
    tutorials/Tutorial_Sampling*
 
-===========================================
-Making surface slabs
-===========================================
 
 .. toctree::
+   :caption: Making surface slabs
    :glob:
 
    tutorials/Tutorial_Making_surface_slab*
