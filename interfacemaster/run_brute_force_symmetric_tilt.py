@@ -2,8 +2,7 @@ from symmetric_tilt import *
 from brute_force import *
 from numpy import arange
 from interfacemaster.cellcalc import get_primitive_hkl, rot
-from interfacemaster.interface_generator import core, convert_vector_index,\
-                                                write_LAMMPS, write_trans_file
+from interfacemaster.interface_generator import core
 import argparse
 import os
 import shutil

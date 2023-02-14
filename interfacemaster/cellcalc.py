@@ -1,5 +1,5 @@
-from numpy.linalg import det, norm, inv
-from numpy import dot, cross, ceil, square, arccos, pi, inf, cos, sin, column_stack
+from numpy.linalg import norm, inv
+from numpy import dot, cross, square, arccos, pi, inf, cos, sin
 import numpy as np
 
 def rot(a, Theta):
@@ -83,7 +83,7 @@ def get_ortho_two_v(B, lim, tol, align_rotation_axis = False, rotation_axis = [1
             if norm(cross(i, rotation_axis)) < tol:
                 v1 = i
                 break
-    
+
     while not found and count < len(LP):
         if align_rotation_axis == False:
             v1 = LP[count]
@@ -98,7 +98,7 @@ def get_ortho_two_v(B, lim, tol, align_rotation_axis = False, rotation_axis = [1
     if found == False:
         raise RuntimeError('faild to find two orthogonal vectors in the GB plane, maybe you can try to increase the lim')
     return np.column_stack((v1, v2))
-    
+
 def dia_sym_mtx(U):
     """
     return the second-diagonal symmetry transformed matrix of U
@@ -300,7 +300,7 @@ def Gram_Schmidt(B0):
 def LLL(B):
     """
     LLL lattice reduction algorithm
-    
+
     https://en.wikipedia.org/wiki/Lenstra%E2%80%93Lenstra%E2%80%93Lov%C3%A1sz_lattice_basis_reduction_algorithm
 
     Parameters
@@ -357,7 +357,7 @@ def get_normal_index(hkl, lattice):
 def get_primitive_hkl(hkl, C_lattice, P_lattice, tol=1e-8):
     """
     convert the miller indices from conventional cell to primitive cell
-    
+
     Parameters
     ----------
     hkl : array_like
@@ -385,7 +385,7 @@ def get_primitive_hkl(hkl, C_lattice, P_lattice, tol=1e-8):
 def get_plane(hkl, lattice):
     """
     get the normal vector and one in-plane point for the (hkl) plane of the lattice
-    
+
     Parameters
     ----------
     hkl : array_like
@@ -420,7 +420,7 @@ def get_plane(hkl, lattice):
 def get_indices_from_n_Pc1(n, lattice, Pc1):
     """
     get the Miller indices of certain plane with normal n and one in-plane point Pc1 for certain lattice
-    
+
     Parameters
     ----------
     n : numpy array
@@ -443,7 +443,7 @@ def get_indices_from_n_Pc1(n, lattice, Pc1):
 def MID(lattice, n, tol=1e-8):
     """
     get the Miller indices with a normal n for the lattice
-    
+
     Parameters
     ----------
     lattice : numpy array
@@ -471,7 +471,7 @@ def ext_euclid(a, b):
     extended euclidean algorithm
 
     from https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
-    
+
     Parameters
     ----------
     a, b : int
@@ -499,7 +499,7 @@ def get_pri_vec_inplane(hkl,lattice):
     """
     get two primitive lattice vector for the (hkl) plane
     from Banadaki A D, Patala S. An efficient algorithm for computing the primitive bases of a general lattice plane[J]. Journal of Applied Crystallography, 2015, 48(2): 585-588.
-    
+
     Parameters
     ----------
     hkl : numpy array
@@ -547,7 +547,7 @@ def get_right_hand(B):
     if dot(B[:,2],cross(B[:,0],B[:,1])) < 0:
         B[:,2] = - B[:,2]
     return B
-    
+
 def get_normal_from_MI(lattice, hkl):
     """
     get the normal vector of a lattice plane with known miller indices
@@ -625,7 +625,7 @@ def search_MI_n(lattice, n, tol, lim):
     if not found:
         RuntimeError('failed to find a close lattice plane for this normal vector, please increase the tol or adjust orientation')
     return (MID(lattice, n_there, tol))
-    
+
 def match_rot(deft_rot, axis, tol, exact_rot, av_perpendicular):
     """
     find the intermediate rotation
@@ -633,7 +633,7 @@ def match_rot(deft_rot, axis, tol, exact_rot, av_perpendicular):
     given an exact rotation matrix and a default rotation matrix,
     find the intermediate rotation matrix so that the operation combining
     the default rotation + the intermediate rotation is close to the excat rotation
-    
+
     Parameters
     ----------
     deft_rot : numpy array
@@ -673,7 +673,7 @@ def match_rot(deft_rot, axis, tol, exact_rot, av_perpendicular):
     if not found:
         raise RuntimeError('Disorientation match failed, please try other planes or increase tolerance, min = {}'.format(min_g))
     return inter_rot
-    
+
 class DSCcalc:
     """
     core class computing DSC basis

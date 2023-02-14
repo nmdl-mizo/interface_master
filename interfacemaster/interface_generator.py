@@ -1,13 +1,10 @@
 from numpy.linalg import det, norm, inv
-from numpy import dot, cross, ceil, floor, cos, sin, tile, array, arange, meshgrid, delete, column_stack, eye, arccos, unique, around, vstack, where, sqrt
+from numpy import dot, cross, ceil, floor, cos, sin, array, column_stack, eye, arccos, around, sqrt
 from pymatgen.core.structure import Structure
-from pymatgen.io.cif import CifWriter
-from pymatgen.io.vasp.inputs import Poscar
 import numpy as np
-from interfacemaster.cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_hand, find_integer_vectors, get_pri_vec_inplane, \
-get_ortho_two_v, ang, search_MI_n, get_normal_from_MI, match_rot
+from interfacemaster.cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_hand, get_pri_vec_inplane, \
+get_ortho_two_v, ang, get_normal_from_MI
 import os
-import matplotlib.pyplot as plt
 
 def get_disorientation(L1, L2, v1, hkl1, v2, hkl2):
     """
@@ -27,26 +24,26 @@ def get_disorientation(L1, L2, v1, hkl1, v2, hkl2):
     rot_mat : numpy array
         a rotation matrix
     """
-    
+
     #normal vector
     n1 = get_normal_from_MI(L1, hkl1)
     n2 = get_normal_from_MI(L2, hkl2)
-    
+
     #auxiliary lattice
     Av1 = cross(dot(L1,v1), n1)
     Av2 = cross(dot(L2,v2), n2)
-    
+
     #get the auxiliary lattices
     AL1 = column_stack((dot(L1,v1), n1, Av1))
     AL2 = column_stack((dot(L2,v2), n2, Av2))
-    
+
     #unit mtx
     AL1 = get_unit_mtx(AL1)
     AL2 = get_unit_mtx(AL2)
-    
+
     return dot(AL1, inv(AL2))
-    
-    
+
+
 def get_unit_mtx(lattice):
     """
     return a unit lattice so that the length of every column vectors is 1
@@ -388,7 +385,7 @@ def cell_expands(lattice, atoms, elements, xyz):
 def get_array_bounds(U):
     """
     get the meshgrid formed by three sets of lower & upper bounds.
-    
+
     the bounds cooresponds to the 8 vertices of the cell consisting of the three column vectors of a matrix
 
     Parameters
@@ -527,7 +524,7 @@ def shift_termi_left(lattice, dp, atoms, elements):
         lattice[:,0] = lattice[:,0] * (1 - 2 * position_shift)
         #back
         atoms = dot(inv(lattice), atoms.T).T
-        
+
     return atoms, elements
 
 def shift_none_copy(lattice, dp, atoms):
@@ -605,9 +602,9 @@ def shift_termi_right(lattice, dp, atoms, elements):
         lattice[:,0] = lattice[:,0] * (1 + 2 * position_shift)
         #back
         atoms = dot(inv(lattice), atoms.T).T
-        
+
     return atoms, elements
-    
+
 def excess_volume(lattice_1, lattice_bi, atoms_1, atoms_2, dx):
     """
     introduce vacuum between the interfaces
@@ -704,12 +701,12 @@ def adjust_orientation(lattice):
     v1, v2, v3 = unit_v(v1), unit_v(v2), unit_v(v3)
     this_orientation = np.column_stack((v1,v2,v3))
     desti_orientation = np.eye(3)
-    R = dot(desti_orientation, inv(this_orientation))     
+    R = dot(desti_orientation, inv(this_orientation))
     lattice = dot(R, lattice)
     #check that a1 and a2 points to positive:
-    
+
     R = dot(lattice, inv(lattice_0))
-    
+
     return lattice, R
 
 def convert_vector_index(lattice_0, lattice_f, v_0):
@@ -719,7 +716,7 @@ def convert_vector_index(lattice_0, lattice_f, v_0):
     v_0 = dot(lattice_0, v_0)
     v_f = dot(inv(lattice_f), v_0)
     return v_f
-    
+
 """
 def print_near_axis(dv, lattice_1, lattice_2, lim=5):
     #searching for near coincident lattice vectors
@@ -1002,7 +999,7 @@ def draw_slab(xs, ys, axes, num, plane_list, lattice_to_screen, \
         list of figures
     num : int
         number of terminations
-    plane_list : list 
+    plane_list : list
         list of planes of atoms
     elements_list : list
         list of names of elments for these atoms
@@ -1139,7 +1136,7 @@ def draw_slab_dich(xs, ys, c_xs, c_ys,axes,num1, plane_list_1, lattice_to_screen
 """
 Below is some sampling functions
 """
- 
+
 def get_nearest_pair(lattice, atoms, indices):
     """
     a function return the indices of two nearest atoms in a periodic block
@@ -1204,7 +1201,7 @@ def get_nearest_pair(lattice, atoms, indices):
 def searching_indices(atoms, coordinates):
     #get the indices of the atoms corresponding to the coordinates
     return np.where( norm((atoms - coordinates), axis = 1) < 1e-8)[0]
- 
+
 def get_two_IDs_and_new_original_atoms(coordinates_1, coordinates_2, atoms, displacement):
     #get the two IDs of the two coordinates in atoms, and move
     #the coordinates_1 by displacement
@@ -1212,7 +1209,7 @@ def get_two_IDs_and_new_original_atoms(coordinates_1, coordinates_2, atoms, disp
     ID_2 = searching_indices(atoms, coordinates_2)
     atoms[ID_1] = atoms[ID_1] + displacement
     return ID_1, ID_2, atoms
- 
+
 def delete_insert(lattice, atoms, elements, xlo, xhi, original_atoms):
     #a function delete two nearest atoms and insert one at the middle of them
     xlo = xlo / norm(lattice[:,0])
@@ -1230,11 +1227,11 @@ def delete_insert(lattice, atoms, elements, xlo, xhi, original_atoms):
     close_atom_2 = dot(lattice, atoms[id2])
     displace = middle_atom - close_atom_1
     displace_frac = dot(inv(lattice), displace)
-    
+
     #get the original IDs of the pair of atoms and displace the first in the original atoms
     ogn_ID_1, ogn_ID_2, original_atoms = get_two_IDs_and_new_original_atoms(atoms[id1], atoms[id2], \
                                                                      original_atoms, displace_frac)
-    
+
     #delete
     atoms = np.delete(atoms, [id1, id2], axis = 0)
     elements = np.delete(elements, [id1, id2])
@@ -1255,7 +1252,7 @@ def delete_insert(lattice, atoms, elements, xlo, xhi, original_atoms):
         d_nearest_now = norm(start - end)
 
     return atoms, elements, d_nearest_now, len(atoms), ogn_ID_1, ogn_ID_2, displace, original_atoms
- 
+
 def sampling_deletion(lattice, atoms, elements, xlo, xhi, nearest_d, trans_name):
     #looping deletion of atoms until no atoms are nearer than
     #one atom distance
@@ -1282,8 +1279,8 @@ def sampling_deletion(lattice, atoms, elements, xlo, xhi, nearest_d, trans_name)
     with open(trans_name, 'w') as f:
         np.savetxt(f, data, fmt='%s')
     return count
-    
- 
+
+
 def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_nearest, xlo, xhi):
     #a function generate atom files sampling RBT & deleting atoms
     original_atoms = atoms.copy()
@@ -1306,7 +1303,7 @@ def RBT_deletion_one_by_one(lattice, atoms, elements, CNID_frac, grid, bound, d_
     delete_nums_per_trans_file.close()
 """
 
-        
+
 class core:
     def __init__(self, file_1, file_2, prim_1 = True, prim_2 = True):
         self.file_1 = file_1 # cif file name of lattice 1
@@ -1371,13 +1368,13 @@ class core:
         self.slab_structure_2 = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
         self.bicrystal_structure = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
         print('Warning!, this programme will rewrite the POSCAR file in this dir!')
-        
+
     def scale(self, factor_1, factor_2):
         self.lattice_1 = self.lattice_1 * factor_1
         self.lattice_2 = self.lattice_2 * factor_2
         self.conv_lattice_1 = self.conv_lattice_1 * factor_1
         self.conv_lattice_2 = self.conv_lattice_2 * factor_2
-        
+
     def parse_limit(self, du, S, sgm1, sgm2, dd):
         """
         set the limitation to accept an appx CSL
@@ -1403,7 +1400,7 @@ class core:
             rotation axis
         theta : float
             initial rotation angle, in degree
-        theta_range : float 
+        theta_range : float
             range varying theta, in degree
         dtheta : float
             step varying theta, in degree
@@ -1737,7 +1734,7 @@ class core:
         if not found:
             print('failed to find a satisfying appx CSL. Try to adjust the limits according \
               to the log file generated; or try another orientation.')
-    
+
     def search_one_position_2D(self, hkl_1, hkl_2, theta_range, dtheta, pre_dt = False, pre_R = eye(3,3), \
     match_tol = 0.05, integer_tol = 1e-8, start = 0, exact = False):
         """
@@ -1749,7 +1746,7 @@ class core:
             rotation axis
         theta : float
             initial rotation angle, in degree
-        theta_range : float 
+        theta_range : float
             range varying theta, in degree
         dtheta : float
             step varying theta, in degree
@@ -1784,7 +1781,7 @@ class core:
         n = ceil(theta_range/dtheta)
         #shifting angle each time
         dtheta = theta_range / n / 180 * np.pi
-        
+
         x = np.arange(n)
         Ns = np.arange(1, self.sgm2 + 1)
         found = None
@@ -2117,7 +2114,7 @@ class core:
         #adjust the orientation
         lattice_1, self.orient = adjust_orientation(lattice_1)
         lattice_2 = dot(self.orient, lattice_2)
-        
+
         write_POSCAR(lattice_1, atoms_1, elements_1, 'POSCAR')
         POSCAR_to_cif('POSCAR','cell_1.cif')
         self.slab_structure_1 = Structure.from_file('POSCAR', sort=False, merge_tol=0.0)
@@ -2214,11 +2211,11 @@ class core:
                 self.get_bicrystal(dydz = dydz, dx = dx, dp1 = dp1, dp2 = dp2, \
                       xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D, filename = 'CNID_inputs/{0}_{1}_{2}'.format(filename, i,j), filetype = filetype)
         print('completed')
-        
+
     def sample_lattice_planes(self, dx = 0,
                       xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, two_D = False, filename = 'POSCAR', filetype = 'VASP'):
         """
-        sampling non-identical lattice planes terminating at the GB 
+        sampling non-identical lattice planes terminating at the GB
         """
         os.mkdir('terminating_shift_inputs')
         print('terminating_sampling...')
@@ -2230,7 +2227,7 @@ class core:
 		        position_here += -self.d2
 		        count += 1
         print('completed')
-        
+
     def set_orientation_axis(self, axis_1, axis_2):
         """
         rotate lattice_2 so that its axis_2 coincident with the axis_1 of lattice_1
@@ -2246,7 +2243,7 @@ class core:
             angle = arccos(dot(axis_1, axis_2))
             R = rot(c, angle)
         self.orientation = R
-        
+
     def compute_bicrystal(self, hkl, lim = 20, normal_ortho = False, plane_ortho = False, \
     tol_ortho = 1e-10, tol_integer = 1e-8, align_rotation_axis = False, rotation_axis = [1,1,1], inclination_tol = sqrt(2)/2):
         """
@@ -2333,11 +2330,11 @@ class core:
         self.d2 = d_hkl(lattice_2, hkl_2)
         #the two slabs with auxilary vector
         plane_1 = dot(self.lattice_1, self.U1)
-        
+
         #the transformed lattice_2
         a2 = dot(self.a2_transform, self.lattice_2)
         plane_2 = dot(a2, self.U2)
-        
+
         v3_1 = cross_plane(self.lattice_1, normal_1, lim, normal_ortho, tol_ortho, inclination_tol)
         v3_2 = cross_plane(a2, normal_1, lim, normal_ortho, tol_ortho, inclination_tol)
         if dot(v3_1, v3_2) < 0:
@@ -2350,7 +2347,7 @@ class core:
         #right_handed
         cell_1 = get_right_hand(cell_1)
         cell_2 = get_right_hand(cell_2)
-        
+
         #supercell index
         self.bicrystal_U1 = dot(inv(self.lattice_1), cell_1)
         self.bicrystal_U2 = dot(inv(a2), cell_2)
@@ -2477,7 +2474,7 @@ def get_surface_slab(structure, hkl, replica = [1,1,1], inclination_tol = sqrt(2
         whether requiring the two vectors in the surface plane to be perpendicular, default False
     normal_perp : bool
         whether requiring the crossing vector to be perpendicular to the plane, default False
-    normal_tol : 
+    normal_tol :
         tolerance to judge whether perpendicular, default 1e-3
     lim : int
         control the number of generated vectors to search for the crossing vectors and perpendicular vectors, default 20
@@ -2506,13 +2503,13 @@ def get_surface_slab(structure, hkl, replica = [1,1,1], inclination_tol = sqrt(2
     lattice, orient = adjust_orientation(lattice)
     if not np.all(replica == 1):
        lattice, atoms, elements = cell_expands(lattice, atoms, elements, replica)
-       
+
     if termi_shift !=0:
        atoms = shift_none_copy(lattice, termi_shift, atoms)
-       
+
     if vacuum_height > 0:
        surface_vacuum(lattice, lattice, atoms, vacuum_height)
-    
+
     write_POSCAR(lattice, atoms, elements, 'POSCAR')
     slab_structure = Structure.from_file('POSCAR', sort=False, merge_tol=0.0)
     os.remove('POSCAR')

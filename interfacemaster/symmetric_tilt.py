@@ -4,7 +4,7 @@ Get the csl for bilayer twisted graphenes
 """
 
 from numpy import *
-from numpy.linalg import inv, norm, det
+from numpy.linalg import norm, det
 from interfacemaster.cellcalc import MID, rot
 from interfacemaster.interface_generator import core
 

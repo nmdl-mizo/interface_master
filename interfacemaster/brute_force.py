@@ -1,4 +1,4 @@
-from numpy import array, dot, round, var, average, pi, savetxt, repeat, tile, meshgrid, \
+from numpy import array, dot, repeat, tile, meshgrid, \
 unique, sqrt, ceil, where, delete, vstack, loadtxt, arange, around
 from numpy.linalg import inv, norm
 from interfacemaster.interface_generator import write_LAMMPS
@@ -7,14 +7,14 @@ import shutil
 def find_pairs_with_closest_distances(atoms_here, bicrystal_lattice):
     """
     Find the pairs of atoms with closest distance
-    
+
     Parameters
     __________
     atoms_here : numpy array
                  cartesian coordinates
     bicrystal_lattice : numpy array
                  lattice matrix of the bicrystal cell
-                 
+
     Returns
     __________
     array_id_del : numpy array
@@ -48,26 +48,26 @@ def find_pairs_with_closest_distances(atoms_here, bicrystal_lattice):
     pos_1_images = pos_1.repeat(n_images, axis=0) + tile(planar_shifts, (n_1, 1))
     #ids of arrays
     pos_1_image_index_map = arange(n_1).repeat(n_images)
-    
+
     #repeat first pair to build pairs with the second pair
     #atom coordinates
     pos_1_rep = pos_1_images.repeat(n_2, axis=0)
     #ids of arrays
     pos_1_index_map = pos_1_image_index_map.repeat(n_2)
-    
+
     #repeat second pair to build pairs with the first pair
     pos_2_rep = tile(pos_2, (n_1_images, 1))
     #ids of arrays
     pos_2_index_map = tile(arange(n_2), n_1_images)
-    
+
     #all the distances
     distances = norm(pos_1_rep - pos_2_rep, axis=1)
     #round, unique and sort
     distances_round = unique(around(distances, 5))
-    
+
     #the distances shorter than cloest atomic distance in perfect crystal and larger than zero (not a self-pair)
     closest_pairs_id = where((distances<distances_round[1]+1e-3) & (distances>0))[0]
-    
+
     #the array ids of del and dsp atoms
     #it is convenient to delete the PBC expanded atoms because in this case the displacement of the other pairs is to their center
     array_id_del = pos_1_index_map[closest_pairs_id]
@@ -87,7 +87,7 @@ def screen_out_non_repeated_pairs(ids_1, ids_2):
     """
     input two pairs of ids with self-paring
     output the indices involving non-repeating pairs
-    
+
     Parameters
     __________
     ids_1, ids_2 : numpy arrays
@@ -128,11 +128,11 @@ class GB_runner():
         self.clst_atmc_dstc = sqrt(3)/4 * norm(my_interface.conv_lattice_1[:,0])
         self.RBT_list = []
         self.terminations = []
-        
+
     def get_terminations(self, changing_termination = False):
         """
         generate termination selections
-        
+
         Parameters
         __________
         changing_termination : bool
@@ -144,11 +144,11 @@ class GB_runner():
             self.terminations = [[0, 0],\
                                  [0, - (self.interface.dp_list_1[0] - 0.0001)],\
                                  [self.interface.dp_list_1[0] + 0.0001, 0]]
-    
+
     def get_RBT_list(self, grid_size):
         """
         generate RBT operation list
-        
+
         Parameters
         __________
         grid_size : float
@@ -163,7 +163,7 @@ class GB_runner():
         for i in range(n1):
             for j in range(n2):
                 self.RBT_list.append(v1*i/n1 + v2*j/n2)
-        
+
     def divide_region(self):
         """
         divide simulation regions
@@ -176,11 +176,11 @@ class GB_runner():
         self.right_atoms = self.middle_atoms.copy()[where(self.middle_atoms[:,0] >= self.boundary)[0]]
         self.bulk_atoms = all_atoms.copy()[where( (all_atoms[:,0] <= self.boundary - self.clst_atmc_dstc) \
                                      | (all_atoms[:,0] >= self.boundary + self.clst_atmc_dstc) )[0]]
-                                     
+
     def main_run(self, core_num):
         """
         main loop doing RBT & merging
-        
+
         Parameters
         __________
         core_num : int
@@ -210,7 +210,7 @@ class GB_runner():
     def main_run_terminations(self, core_num):
         """
         main loop by hata's method
-        
+
         Parameters
         __________
         core_num : int
@@ -232,11 +232,11 @@ class GB_runner():
                 GB_atoms = vstack((self.left_atoms, self.right_atoms))
                 count = merge_operation_no_RBT(count, GB_atoms, self.interface.lattice_bi, \
                                         self.clst_atmc_dstc, self.bulk_atoms, core_num, i[0], i[1] + position_here)
-                                        
+
             position_here += -self.interface.d2
             print('terminate displace max')
             print(position_here, self.interface.d2, str(1/2 * self.interface.min_perp_length))
-            
+
 def run_LAMMPS(core_num, count):
     """
     LAMMPS run command
@@ -253,7 +253,7 @@ def read_energy():
 def write_data_here(count, energy, dy, dz, dp1, dp2, delete_cutoff):
     """
     write data for each simulation
-    
+
     Parameters
     __________
     count : int
@@ -270,7 +270,7 @@ def write_data_here(count, energy, dy, dz, dp1, dp2, delete_cutoff):
     with open('results.dat', 'a') as f:
         f.write('{0} {1} {2} {3} {4} {5} {6} \n'.format(count, energy, dy, dz, dp1, dp2, delete_cutoff))
 
-def merge_operation(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc, 
+def merge_operation(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc,
                     RBT, bulk_atoms, core_num, dp1, dp2):
     """
     merge loop
@@ -282,7 +282,7 @@ def merge_operation(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc,
     GB_atoms_here = GB_atoms.copy()
     while cloest_distance_now < 0.99 * clst_atmc_dstc:
         if merge_operation_count > 0:
-            
+
             array_id_del, array_id_dsp, dsps, delete_cutoff, a = \
             find_pairs_with_closest_distances(GB_atoms_here, bicrystal_lattice)
             if len(array_id_del) > 0:
@@ -320,7 +320,7 @@ def merge_operation_no_RBT(count_start, GB_atoms, bicrystal_lattice, clst_atmc_d
     GB_atoms_here = GB_atoms.copy()
     while cloest_distance_now < 0.99 * clst_atmc_dstc:
         if merge_operation_count > 0:
-            
+
             array_id_del, array_id_dsp, dsps, delete_cutoff, a = \
             find_pairs_with_closest_distances(GB_atoms_here, bicrystal_lattice)
             if len(array_id_del) > 0:
