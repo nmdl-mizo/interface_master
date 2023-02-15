@@ -9,7 +9,7 @@ from interfacemaster.cellcalc import MID, rot
 from interfacemaster.interface_generator import core
 
 def compute_sigma(axis, theta, filename = \
- 'cif_files/Si_mp-149_conventional_standard.cif', maxsigma=10000):
+ 'cif_files/Si_mp-149_conventional_standard.cif', maxsigma=10000, verbose=True):
     """
     compute sigma values for a given disorientation
 
@@ -21,15 +21,19 @@ def compute_sigma(axis, theta, filename = \
         rotation angle
     maxsigma : int
         maximum sigma value for searching
+    verbose : bool, optional
+        If True, the function will print additional information.
+        Default is True.
 
     Returns
     __________
     sigma : int
     """
-    print(theta/np.pi*180)
+    if verbose:
+        print(theta/np.pi*180)
     R = rot(axis,theta)
     my_interface = core(filename,\
-                        filename)
+                        filename, verbose=verbose)
     my_interface.parse_limit(du = 1e-4, S  = 1e-4, sgm1=maxsigma, sgm2=maxsigma, dd = 1e-4)
     my_interface.search_fixed(R, exact=True, tol = 1e-3)
     return det(my_interface.U1)
@@ -117,7 +121,7 @@ def generate_arrays_x_y(x_min, y_min, lim):
             indice_gcd_one.append(i)
     return np.array(indice_gcd_one)
 
-def get_csl_twisted_graphenes(lim, filename, maxsigma = 100):
+def get_csl_twisted_graphenes(lim, filename, maxsigma = 100, verbose=True):
     """
     get the geometric information of all the CS twisted graphene
     within a searching limitation
@@ -139,6 +143,9 @@ def get_csl_twisted_graphenes(lim, filename, maxsigma = 100):
         CNID areas
     list4 : numpy array
         num of atoms in supercell
+    verbose : bool, optional
+        If True, the function will print additional information.
+        Default is True.
     """
     #mirror_plane_1
     xy_arrays = generate_arrays_x_y(1,1,lim)
@@ -157,7 +164,7 @@ def get_csl_twisted_graphenes(lim, filename, maxsigma = 100):
     thetas = np.append(thetas1, thetas)
     sigmas = []
     for i in range(len(thetas)):
-        sigmas.append(compute_sigma(np.array([0,0,1]), thetas[i], filename))
+        sigmas.append(compute_sigma(np.array([0,0,1]), thetas[i], filename, verbose=verbose))
     sigmas = np.around(sigmas)
     sigmas = np.array(sigmas,dtype = int)
     unique_sigmas = np.unique(sigmas)
@@ -169,7 +176,7 @@ def get_csl_twisted_graphenes(lim, filename, maxsigma = 100):
     thetas = selected_thetas[sigmas <= maxsigma]
     sigmas = sigmas[sigmas <= maxsigma]
     my_interface = core(filename,\
-                        filename)
+                        filename, verbose=verbose)
     A_cnid = norm(np.cross(my_interface.lattice_1[:,1], my_interface.lattice_1[:,0])) / sigmas
     anum = sigmas * 4
     return sigmas, thetas, A_cnid, anum
