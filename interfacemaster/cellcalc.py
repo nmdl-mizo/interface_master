@@ -179,7 +179,7 @@ def find_integer_vectors_nn(v,sigma, tol = 1e-8):
     for i in range(1,sigma + 1):
         now = v*i
         if np.all(abs(now-np.round(now))<tol):
-            u, v, w = np.round(now)
+            _, v, _ = np.round(now)
             L = i
             found = True
             break
@@ -217,8 +217,6 @@ def solve_DSC_equations(u,v,w,L,B):
     g_v = int(round(g_v))
     g_lambda = int(round(g_lambda))
     g_miu = int(round(g_miu))
-    #find integer solutions
-    t = (w * g_v) / L
 
     # 0=<gama<g_v
     gamas = np.arange(0, g_v)
@@ -351,7 +349,7 @@ def get_normal_index(hkl, lattice):
     v_n : numpy array
         the coordinates in the lattice of a normal vector to the plane (hkl)
     """
-    n, Pc1 = get_plane(hkl, lattice)
+    n, _ = get_plane(hkl, lattice)
     return dot(inv(lattice), n)
 
 def get_primitive_hkl(hkl, C_lattice, P_lattice, tol=1e-8):
@@ -615,7 +613,7 @@ def search_MI_n(lattice, n, tol, lim):
     indice_0 = indice[np.where(np.sum(abs(indice), axis=1) != 0)]
     indice_0 = indice_0[np.argsort(norm(indice_0, axis=1))]
     found = False
-    for i in indice_0:
+    for _ in indice_0:
         n_there = get_normal_from_MI(lattice, indice_0)
         dtheta = arccos(1 - ang(n_there,n))
         if dtheta < tol:

@@ -1024,7 +1024,7 @@ def write_trans_file(v1, v2, n1, n2):
         f.write('variable nb equal {} \n'.format(n2))
 
 def draw_slab_dich(xs, ys, c_xs, c_ys,axes,num1, plane_list_1, lattice_to_screen_1, \
-              elements_list_1, colors, all_elements, elements_indices,\
+              elements_list_1, colors, all_elements, \
                   num2, plane_list_2, lattice_to_screen_2,\
                   elements_list_2, titlesize):
     """
@@ -1293,8 +1293,6 @@ class core:
         theta = theta / 180 * np.pi
         n = ceil(theta_range/dtheta)
         dtheta = theta_range / n / 180 * np.pi
-        x = np.arange(n)
-        Ns = np.arange(1, self.sgm2 + 1)
         found = None
 
         if not two_D:
@@ -1325,17 +1323,15 @@ class core:
         file.write('{0} {1} {2} {3} {4} {5} {6} {7}\n'.\
               format(axis, theta, dtheta, n, self.S, self.du, self.sgm1, self.sgm2))
         file.write('-----------for theta-----------\n')
-        for i in x:
+        for _ in range(n):
             N = 1
             R = dot(self.orientation, rot(axis, theta))
             U = three_dot(inv(a1), R, a2_0)
             file.write('theta = ' + str(theta / np.pi * 180) + '\n')
             file.write('    -----for N-----\n')
             while N <= self.sgm2:
-                tol = 1e-10
                 Uij, N = rational_mtx(U,N)
                 U_p = 1 / N * Uij
-                one_v = array([0,0,1])
                 if np.all((abs(U_p-U)) < self.du):
                     file.write('    N= ' + str(N) + " accepted" + '\n')
                     R_p = three_dot(a1, U_p, inv(a2_0))
@@ -1408,8 +1404,6 @@ class core:
         theta = theta / 180 * np.pi
         n = ceil(theta_range/dtheta)
         dtheta = theta_range / n / 180 * np.pi
-        x = np.arange(n)
-        Ns = np.arange(1, self.sgm2 + 1)
         found = None
 
         a1 = self.lattice_1.copy()
@@ -1422,13 +1416,12 @@ class core:
         file.write('{0} {1} {2} {3} {4} {5} {6} {7}\n'.\
               format(axis, theta, dtheta, n, self.S, self.du, self.sgm1, self.sgm2))
         file.write('-----------for theta-----------\n')
-        for i in x:
+        for _ in range(n):
             N = 1
             U = three_dot(inv(a1), R, a2_0)
             file.write('theta = ' + str(theta / np.pi * 180) + '\n')
             file.write('    -----for N-----\n')
             while N <= self.sgm2:
-                tol = 1e-10
                 Uij, N = rational_mtx(U,N)
                 U_p = 1 / N * Uij
                 if np.all((abs(U_p-U)) < self.du):
@@ -1492,7 +1485,6 @@ class core:
         dtheta : float
             step varying theta, in degree
         """
-        Ns = np.arange(1, self.sgm2 + 1)
         found = None
         a1 = self.lattice_1.copy()
         a2_0 = self.lattice_2.copy()
@@ -1550,7 +1542,7 @@ class core:
               to the log file generated; or try another orientation.')
 
     def search_one_position_2D(self, hkl_1, hkl_2, theta_range, dtheta, pre_dt = False, pre_R = eye(3,3), \
-    match_tol = 0.05, integer_tol = 1e-8, start = 0, exact = False):
+    integer_tol = 1e-8, start = 0, exact = False):
         """
         main loop finding the appx CSL
 
@@ -1585,8 +1577,6 @@ class core:
            v1, v2, v3 = b2_0[:,1], b2_0[:,0], -av_2_0/norm(av_2_0)*norm(av_1)
            a2_0 = column_stack((v1, v2, v3))
         #indices of the planal bases
-        U_01 = dot(inv(self.lattice_1),a1)
-        U_02 = dot(inv(self.lattice_2),a2_0)
         a2_0 = dot(self.orientation, a2_0)
         #starting point of rotation angle
         theta = start / 180 * np.pi
@@ -1595,8 +1585,6 @@ class core:
         #shifting angle each time
         dtheta = theta_range / n / 180 * np.pi
 
-        x = np.arange(n)
-        Ns = np.arange(1, self.sgm2 + 1)
         found = None
         axis = n1
         # rotation loop
@@ -1606,7 +1594,7 @@ class core:
         file.write('{0} {1} {2} {3} {4} {5} {6} {7}\n'.\
               format(axis, theta, dtheta, n, self.S, self.du, self.sgm1, self.sgm2))
         file.write('-----------for theta-----------\n')
-        for i in x:
+        for _ in range(n):
             N = 1
             R = rot(n1, theta)
             U = three_dot(inv(a1), R, a2_0)
@@ -1706,8 +1694,6 @@ class core:
         theta = theta / 180 * np.pi
         n = ceil(theta_range/dtheta)
         dtheta = theta_range / n / 180 * np.pi
-        x = np.arange(n)
-        Ns = np.arange(1, self.sgm2 + 1)
 
         if not two_D:
             a1 = self.lattice_1.copy()
@@ -1739,14 +1725,13 @@ class core:
         file.write('{0} {1} {2} {3} {4} {5} {6} {7}\n'.\
               format(axis, theta, dtheta, n, self.S, self.du, self.sgm1, self.sgm2))
         file.write('-----------for theta-----------\n')
-        for i in x:
+        for _ in range(n):
             N = 1
             R = dot(self.orientation, rot(axis, theta))
             U = three_dot(inv(a1), R, a2_0)
             file.write('theta = ' + str(theta / np.pi * 180) + '\n')
             file.write('    -----for N-----\n')
             while N <= self.sgm2:
-                tol = 1e-10
                 Uij, N = rational_mtx(U,N)
                 U_p = 1 / N * Uij
                 if np.all((abs(U_p-U)) < self.du):
@@ -2169,8 +2154,8 @@ def terminates_scanner_slab_structure(structure, hkl):
     print('plane basis: \n' + str(U[:,[1,2]]) + '\nlength: ' + str(norm(supercell[:,1])) + ' ' + str(norm(supercell[:,2])))
     atoms, elements, lattice = super_cell(U, lattice, atoms, elements)
     write_POSCAR(lattice, atoms, elements, 'POSCAR_primitive')
-    lattice, orient = adjust_orientation(lattice)
-    plane_list, element_list, indices_list, dp_list = terminates_scanner_left(supercell, atoms, elements, d, round_n = 5)
+    lattice, _ = adjust_orientation(lattice)
+    plane_list, element_list, _, dp_list = terminates_scanner_left(supercell, atoms, elements, d, round_n = 5)
     return plane_list, element_list, dp_list
 
 def get_surface_slab(structure, hkl, replica = [1,1,1], inclination_tol = sqrt(2)/2, termi_shift = 0, vacuum_height = 0, plane_normal = False, normal_perp = False, \
@@ -2222,7 +2207,7 @@ def get_surface_slab(structure, hkl, replica = [1,1,1], inclination_tol = sqrt(2
     print('cross vector: \n' + str(array([U[:,0]]).T) + '\nlength: ' + str(norm(v3)))
     print('plane basis: \n' + str(U[:,[1,2]]) + '\nlength: ' + str(norm(supercell[:,1])) + ' ' + str(norm(supercell[:,2])))
     atoms, elements, lattice = super_cell(U, lattice, atoms, elements)
-    lattice, orient = adjust_orientation(lattice)
+    lattice, _ = adjust_orientation(lattice)
     if not np.all(replica == 1):
         lattice, atoms, elements = cell_expands(lattice, atoms, elements, replica)
 
