@@ -1308,7 +1308,6 @@ class core:
             plane_B_1 = get_pri_vec_inplane(hkl_1, self.lattice_1)
             plane_B_2 = get_pri_vec_inplane(hkl_2, dot(self.orientation, self.lattice_2))
             v_3 = cross(plane_B_1[:,0], plane_B_1[:,1])
-            print(100000)
             a1 = np.column_stack((plane_B_1, v_3))
             a2_0 = np.column_stack((plane_B_2, v_3))
             self.a1 = a1.copy()
