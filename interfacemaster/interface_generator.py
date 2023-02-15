@@ -1247,6 +1247,19 @@ class core:
         self.sgm2 = sgm2
         self.dd = dd
 
+    def _print_found_csl(self, sigma1, sigma2, D, axis=None, theta=None):
+        print('Congrates, we found an appx CSL!\n')
+        print('U1 = \n' + \
+                   str(self.U1) + '; sigma_1 = ' + \
+                   str(sigma1) + '\n')
+        print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
+                   + str(sigma2) + '\n')
+        print('D = \n' + str(np.round(D,8)) + '\n')
+        if axis is not None and theta is not None:
+            print('axis = ' + str(axis) + ' ; theta = ' \
+                       + str(np.round(theta / np.pi * 180,8)) \
+                       + '\n')
+
     def search_one_position(self, axis, theta, theta_range, dtheta, two_D = False):
         """
         main loop finding the appx CSL
@@ -1361,20 +1374,7 @@ class core:
                                        + str(np.round(theta / np.pi * 180,8)) \
                                        + '\n')
                             if self.verbose:
-                                print('Congrates, we found an appx CSL!\n')
-                                print('U1 = \n' + \
-                                           str(self.U1) + '; sigma_1 = ' + \
-                                           str(sigma1) + '\n')
-
-                                print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                           + str(sigma1) + '\n')
-
-                                print('D = \n' + str(np.round(D,8)) + '\n')
-
-                                print('axis = ' + str(axis) + ' ; theta = ' \
-                                           + str(np.round(theta / np.pi * 180,8)) \
-                                           + '\n')
-
+                                self._print_found_csl(sigma1, sigma2, D, axis, theta)
                             break
                         else:
                             file.write('    sigma too large \n')
@@ -1475,20 +1475,7 @@ class core:
                                        + str(np.round(theta / np.pi * 180,8)) \
                                        + '\n')
                             if self.verbose:
-                                print('Congrates, we found an appx CSL!\n')
-                                print('U1 = \n' + \
-                                           str(self.U1) + '; sigma_1 = ' + \
-                                           str(sigma1) + '\n')
-
-                                print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                           + str(sigma1) + '\n')
-
-                                print('D = \n' + str(np.round(D,8)) + '\n')
-
-                                print('axis = ' + str(axis) + ' ; theta = ' \
-                                           + str(np.round(theta / np.pi * 180,8)) \
-                                           + '\n')
-
+                                self._print_found_csl(sigma1, sigma2, D, axis, theta)
                             break
                         else:
                             file.write('    sigma too large \n')
@@ -1571,16 +1558,7 @@ class core:
                         file.write('D = \n' + str(np.round(D,8)) + '\n')
 
                         if self.verbose:
-                            print('Congrates, we found an appx CSL!\n')
-                            print('U1 = \n' + \
-                                       str(self.U1) + '; sigma_1 = ' + \
-                                       str(sigma1) + '\n')
-
-                            print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                       + str(sigma1) + '\n')
-
-                            print('D = \n' + str(np.round(D,8)) + '\n')
-
+                            self._print_found_csl(sigma1, sigma2, D)
                         break
                     else:
                         file.write('sigma too large \n')
@@ -1717,20 +1695,7 @@ class core:
                                        + str(np.round(theta / np.pi * 180,8)) \
                                        + '\n')
                             if self.verbose:
-                                print('Congrates, we found an appx CSL!\n')
-                                print('U1 = \n' + \
-                                           str(np.round(self.U1)) + '; sigma_1 = ' + \
-                                           str(sigma1) + '\n')
-
-                                print('U2 = \n' + str(np.round(self.U2)) + '; sigma_2 = ' \
-                                           + str(sigma2) + '\n')
-
-                                print('D = \n' + str(np.round(D,8)) + '\n')
-
-                                print('axis = ' + str(axis) + ' ; theta = ' \
-                                           + str(np.round(theta / np.pi * 180,8)) \
-                                           + '\n')
-
+                                self._print_found_csl(sigma1, sigma2, D, axis, theta)
                             break
                         else:
                             file.write('    sigma too large \n')
@@ -1868,19 +1833,7 @@ class core:
                             if two_D:
                                 file_r.write('CNID = \n' + str(self.CNID) + '\n')
                             if self.verbose:
-                                print('Congrates, we found an appx CSL!\n')
-                                print('U1 = \n' + \
-                                           str(self.U1) + '; sigma_1 = ' + \
-                                           str(sigma1) + '\n')
-
-                                print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                           + str(sigma1) + '\n')
-
-                                print('D = \n' + str(np.round(D,8)) + '\n')
-
-                                print('axis = ' + str(axis) + ' ; theta = ' \
-                                           + str(np.round(theta / np.pi * 180,8)) \
-                                           + '\n')
+                                self._print_found_csl(sigma1, sigma2, D, axis, theta)
                         else:
                             file.write('    sigma too large \n')
                 N += 1
