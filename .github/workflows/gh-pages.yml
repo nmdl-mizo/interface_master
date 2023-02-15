@@ -1,11 +1,17 @@
 name: GitHub Pages
 
 on:
-  push:
-    branches:
-      - master
-      - develop
-  pull_request:
+#  push:
+#    branches:
+#      - master
+#      - develop
+  workflow_dispatch:
+    inputs:
+      deploy:
+        required: true
+        description: Deploy the html page on GitHub Pages
+        default: false
+#  pull_request:
 
 jobs:
   deploy:
@@ -55,7 +61,7 @@ jobs:
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/master' }}
+        if: ${{ inputs.deploy }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/_build
