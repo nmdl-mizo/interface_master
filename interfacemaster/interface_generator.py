@@ -1290,7 +1290,6 @@ class core:
         axis = dot(self.lattice_1, axis)
         if self.verbose:
             print(axis)
-        file = open('log.one_position','w')
         theta = theta / 180 * np.pi
         n = ceil(theta_range/dtheta)
         dtheta = theta_range / n / 180 * np.pi
@@ -1320,6 +1319,7 @@ class core:
             a2_0 = dot(inv(self.orientation), a2_0)
             self.a2_0 = a2_0.copy()
         # rotation loop
+        file = open('log.one_position','w')
         file.write('---Searching starts---\n')
         file.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
         file.write('{0} {1} {2} {3} {4} {5} {6} {7}\n'.\
@@ -1405,7 +1405,6 @@ class core:
         axis = dot(self.lattice_1, axis)
         if self.verbose:
             print(axis)
-        file = open('log.one_position','w')
         theta = theta / 180 * np.pi
         n = ceil(theta_range/dtheta)
         dtheta = theta_range / n / 180 * np.pi
@@ -1417,6 +1416,7 @@ class core:
         a2_0 = self.lattice_2.copy()
 
         # rotation loop
+        file = open('log.one_position','w')
         file.write('---Searching starts---\n')
         file.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
         file.write('{0} {1} {2} {3} {4} {5} {6} {7}\n'.\
@@ -1494,10 +1494,10 @@ class core:
         """
         Ns = np.arange(1, self.sgm2 + 1)
         found = None
-        file = open('log.fixed_search','w')
         a1 = self.lattice_1.copy()
         a2_0 = self.lattice_2.copy()
         # rotation loop
+        file = open('log.fixed_search','w')
         file.write('---Searching starts---\n')
         file.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
         file.write('{0} {1} {2} {3}\n'.\
@@ -1588,7 +1588,6 @@ class core:
         U_01 = dot(inv(self.lattice_1),a1)
         U_02 = dot(inv(self.lattice_2),a2_0)
         a2_0 = dot(self.orientation, a2_0)
-        file = open('log.one_position','w')
         #starting point of rotation angle
         theta = start / 180 * np.pi
         #searching mesh
@@ -1601,6 +1600,7 @@ class core:
         found = None
         axis = n1
         # rotation loop
+        file = open('log.one_position','w')
         file.write('---Searching starts---\n')
         file.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
         file.write('{0} {1} {2} {3} {4} {5} {6} {7}\n'.\
@@ -1703,8 +1703,6 @@ class core:
         axis = dot(self.lattice_1, axis)
         if self.verbose:
             print(axis)
-        file = open('log.all_position','w')
-        file_r = open('results','w')
         theta = theta / 180 * np.pi
         n = ceil(theta_range/dtheta)
         dtheta = theta_range / n / 180 * np.pi
@@ -1734,6 +1732,8 @@ class core:
             a2_0 = dot(inv(self.orientation), a2_0)
             self.a2_0 = a2_0.copy()
         # rotation loop
+        file = open('log.all_position','w')
+        file_r = open('results','w')
         file.write('---Searching starts---\n')
         file.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
         file.write('{0} {1} {2} {3} {4} {5} {6} {7}\n'.\
