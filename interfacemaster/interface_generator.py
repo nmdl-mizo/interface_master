@@ -1260,6 +1260,18 @@ class core:
                        + str(np.round(theta / np.pi * 180,8)) \
                        + '\n')
 
+    def _write_found_csl(self, file, sigma1, sigma2, D, axis=None, theta=None):
+        file.write('U1 = \n' + \
+                   str(self.U1) + '; sigma_1 = ' + \
+                   str(sigma1) + '\n')
+        file.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
+                   + str(sigma2) + '\n')
+        file.write('D = \n' + str(np.round(D,8)) + '\n')
+        if axis is not None and theta is not None:
+            file.write('axis = ' + str(axis) + ' ; theta = ' \
+                       + str(np.round(theta / np.pi * 180,8)) \
+                       + '\n')
+
     def search_one_position(self, axis, theta, theta_range, dtheta, two_D = False):
         """
         main loop finding the appx CSL
@@ -1361,18 +1373,7 @@ class core:
                                 self.d2 = d_hkl(three_dot(R, D, self.lattice_2), hkl_2)
                                 calc.compute_CNID([0,0,1])
                                 self.CNID = dot(a1, calc.CNID)
-                            file.write('U1 = \n' + \
-                                       str(self.U1) + '; sigma_1 = ' + \
-                                       str(sigma1) + '\n')
-
-                            file.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                       + str(sigma1) + '\n')
-
-                            file.write('D = \n' + str(np.round(D,8)) + '\n')
-
-                            file.write('axis = ' + str(axis) + ' ; theta = ' \
-                                       + str(np.round(theta / np.pi * 180,8)) \
-                                       + '\n')
+                            self._write_found_csl(file, sigma1, sigma2, D, axis, theta)
                             if self.verbose:
                                 self._print_found_csl(sigma1, sigma2, D, axis, theta)
                             break
@@ -1462,18 +1463,7 @@ class core:
                             self.theta = theta
                             self.axis = axis
                             self.cell_calc = calc
-                            file.write('U1 = \n' + \
-                                       str(self.U1) + '; sigma_1 = ' + \
-                                       str(sigma1) + '\n')
-
-                            file.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                       + str(sigma1) + '\n')
-
-                            file.write('D = \n' + str(np.round(D,8)) + '\n')
-
-                            file.write('axis = ' + str(axis) + ' ; theta = ' \
-                                       + str(np.round(theta / np.pi * 180,8)) \
-                                       + '\n')
+                            self._write_found_csl(file, sigma1, sigma2, D, axis, theta)
                             if self.verbose:
                                 self._print_found_csl(sigma1, sigma2, D, axis, theta)
                             break
@@ -1548,15 +1538,7 @@ class core:
                         self.CSL = dot(a1, self.U1)
                         self.R = R
                         self.cell_calc = calc
-                        file.write('U1 = \n' + \
-                                   str(self.U1) + '; sigma_1 = ' + \
-                                   str(sigma1) + '\n')
-
-                        file.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                   + str(sigma1) + '\n')
-
-                        file.write('D = \n' + str(np.round(D,8)) + '\n')
-
+                        self._write_found_csl(file, sigma1, sigma2, D)
                         if self.verbose:
                             self._print_found_csl(sigma1, sigma2, D)
                         break
@@ -1682,18 +1664,7 @@ class core:
                             self.R = R
                             self.theta = theta
                             self.axis = n1
-                            file.write('U1 = \n' + \
-                                       str(self.U1) + '; sigma_1 = ' + \
-                                       str(sigma1) + '\n')
-
-                            file.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                       + str(sigma1) + '\n')
-
-                            file.write('D = \n' + str(np.round(D,8)) + '\n')
-
-                            file.write('axis = ' + str(axis) + ' ; theta = ' \
-                                       + str(np.round(theta / np.pi * 180,8)) \
-                                       + '\n')
+                            self._write_found_csl(file, sigma1, sigma2, D, axis, theta)
                             if self.verbose:
                                 self._print_found_csl(sigma1, sigma2, D, axis, theta)
                             break
@@ -1805,31 +1776,8 @@ class core:
                             if two_D:
                                 calc.compute_CNID([0,0,1])
                                 self.CNID = dot(a1, calc.CNID)
-                            file.write('U1 = \n' + \
-                                       str(self.U1) + '; sigma_1 = ' + \
-                                       str(sigma1) + '\n')
-
-                            file.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                       + str(sigma1) + '\n')
-
-                            file.write('D = \n' + str(np.round(D,8)) + '\n')
-
-                            file.write('axis = ' + str(axis) + ' ; theta = ' \
-                                       + str(np.round(theta / np.pi * 180,8)) \
-                                       + '\n')
-
-                            file_r.write('U1 = \n' + \
-                                       str(self.U1) + '; sigma_1 = ' + \
-                                       str(sigma1) + '\n')
-
-                            file_r.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                       + str(sigma1) + '\n')
-
-                            file_r.write('D = \n' + str(np.round(D,8)) + '\n')
-
-                            file_r.write('axis = ' + str(axis) + ' ; theta = ' \
-                                       + str(np.round(theta / np.pi * 180,8)) \
-                                       + '\n')
+                            self._write_found_csl(file, sigma1, sigma2, D, axis, theta)
+                            self._write_found_csl(file_r, sigma1, sigma2, D, axis, theta)
                             if two_D:
                                 file_r.write('CNID = \n' + str(self.CNID) + '\n')
                             if self.verbose:
