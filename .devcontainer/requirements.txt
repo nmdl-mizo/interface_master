@@ -1,4 +1,4 @@
 ipykernel
 sphinx
-pydata-sphinx-theme
+git+https://github.com/pydata/pydata-sphinx-theme
 nbsphinx
