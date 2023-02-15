@@ -21,7 +21,7 @@ config.read('../setup.cfg')
 # -- Project information -----------------------------------------------------
 
 project = config['metadata']['name']
-copyright = '2022, Y. Xie, NMDL'
+copyright = '2023, Y. Xie, K. Shibata, T. Mizoguchi'
 author = config['metadata']['author']
 version = __version__
 release = '.'.join(__version__.split('.')[:2])
