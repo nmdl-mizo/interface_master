@@ -1160,7 +1160,7 @@ def get_nearest_pair(lattice, atoms, indices):
 
 
 class core:
-    def __init__(self, file_1, file_2, prim_1 = True, prim_2 = True):
+    def __init__(self, file_1, file_2, prim_1 = True, prim_2 = True, verbose=True):
         self.file_1 = file_1 # cif file name of lattice 1
         self.file_2 = file_2 # cif file name of lattice 2
         self.structure_1 = Structure.from_file(file_1, primitive = prim_1, sort=False, merge_tol=0.0)
@@ -1222,7 +1222,9 @@ class core:
         self.slab_structure_1 = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
         self.slab_structure_2 = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
         self.bicrystal_structure = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
-        print('Warning!, this programme will rewrite the POSCAR file in this dir!')
+        self.verbose=verbose
+        if self.verbose:
+            print('Warning!, this programme will rewrite the POSCAR file in this dir!')
 
     def scale(self, factor_1, factor_2):
         self.lattice_1 = self.lattice_1 * factor_1
@@ -1261,7 +1263,8 @@ class core:
             step varying theta, in degree
         """
         axis = dot(self.lattice_1, axis)
-        print(axis)
+        if self.verbose:
+            print(axis)
         file = open('log.one_position','w')
         theta = theta / 180 * np.pi
         n = ceil(theta_range/dtheta)
@@ -1357,20 +1360,20 @@ class core:
                             file.write('axis = ' + str(axis) + ' ; theta = ' \
                                        + str(np.round(theta / np.pi * 180,8)) \
                                        + '\n')
+                            if self.verbose:
+                                print('Congrates, we found an appx CSL!\n')
+                                print('U1 = \n' + \
+                                           str(self.U1) + '; sigma_1 = ' + \
+                                           str(sigma1) + '\n')
 
-                            print('Congrates, we found an appx CSL!\n')
-                            print('U1 = \n' + \
-                                       str(self.U1) + '; sigma_1 = ' + \
-                                       str(sigma1) + '\n')
+                                print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
+                                           + str(sigma1) + '\n')
 
-                            print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                       + str(sigma1) + '\n')
+                                print('D = \n' + str(np.round(D,8)) + '\n')
 
-                            print('D = \n' + str(np.round(D,8)) + '\n')
-
-                            print('axis = ' + str(axis) + ' ; theta = ' \
-                                       + str(np.round(theta / np.pi * 180,8)) \
-                                       + '\n')
+                                print('axis = ' + str(axis) + ' ; theta = ' \
+                                           + str(np.round(theta / np.pi * 180,8)) \
+                                           + '\n')
 
                             break
                         else:
@@ -1399,7 +1402,8 @@ class core:
             step varying theta, in degree
         """
         axis = dot(self.lattice_1, axis)
-        print(axis)
+        if self.verbose:
+            print(axis)
         file = open('log.one_position','w')
         theta = theta / 180 * np.pi
         n = ceil(theta_range/dtheta)
@@ -1470,20 +1474,20 @@ class core:
                             file.write('axis = ' + str(axis) + ' ; theta = ' \
                                        + str(np.round(theta / np.pi * 180,8)) \
                                        + '\n')
+                            if self.verbose:
+                                print('Congrates, we found an appx CSL!\n')
+                                print('U1 = \n' + \
+                                           str(self.U1) + '; sigma_1 = ' + \
+                                           str(sigma1) + '\n')
 
-                            print('Congrates, we found an appx CSL!\n')
-                            print('U1 = \n' + \
-                                       str(self.U1) + '; sigma_1 = ' + \
-                                       str(sigma1) + '\n')
+                                print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
+                                           + str(sigma1) + '\n')
 
-                            print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                       + str(sigma1) + '\n')
+                                print('D = \n' + str(np.round(D,8)) + '\n')
 
-                            print('D = \n' + str(np.round(D,8)) + '\n')
-
-                            print('axis = ' + str(axis) + ' ; theta = ' \
-                                       + str(np.round(theta / np.pi * 180,8)) \
-                                       + '\n')
+                                print('axis = ' + str(axis) + ' ; theta = ' \
+                                           + str(np.round(theta / np.pi * 180,8)) \
+                                           + '\n')
 
                             break
                         else:
@@ -1566,16 +1570,16 @@ class core:
 
                         file.write('D = \n' + str(np.round(D,8)) + '\n')
 
+                        if self.verbose:
+                            print('Congrates, we found an appx CSL!\n')
+                            print('U1 = \n' + \
+                                       str(self.U1) + '; sigma_1 = ' + \
+                                       str(sigma1) + '\n')
 
-                        print('Congrates, we found an appx CSL!\n')
-                        print('U1 = \n' + \
-                                   str(self.U1) + '; sigma_1 = ' + \
-                                   str(sigma1) + '\n')
+                            print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
+                                       + str(sigma1) + '\n')
 
-                        print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                   + str(sigma1) + '\n')
-
-                        print('D = \n' + str(np.round(D,8)) + '\n')
+                            print('D = \n' + str(np.round(D,8)) + '\n')
 
                         break
                     else:
@@ -1712,20 +1716,20 @@ class core:
                             file.write('axis = ' + str(axis) + ' ; theta = ' \
                                        + str(np.round(theta / np.pi * 180,8)) \
                                        + '\n')
+                            if self.verbose:
+                                print('Congrates, we found an appx CSL!\n')
+                                print('U1 = \n' + \
+                                           str(np.round(self.U1)) + '; sigma_1 = ' + \
+                                           str(sigma1) + '\n')
 
-                            print('Congrates, we found an appx CSL!\n')
-                            print('U1 = \n' + \
-                                       str(np.round(self.U1)) + '; sigma_1 = ' + \
-                                       str(sigma1) + '\n')
+                                print('U2 = \n' + str(np.round(self.U2)) + '; sigma_2 = ' \
+                                           + str(sigma2) + '\n')
 
-                            print('U2 = \n' + str(np.round(self.U2)) + '; sigma_2 = ' \
-                                       + str(sigma2) + '\n')
+                                print('D = \n' + str(np.round(D,8)) + '\n')
 
-                            print('D = \n' + str(np.round(D,8)) + '\n')
-
-                            print('axis = ' + str(axis) + ' ; theta = ' \
-                                       + str(np.round(theta / np.pi * 180,8)) \
-                                       + '\n')
+                                print('axis = ' + str(axis) + ' ; theta = ' \
+                                           + str(np.round(theta / np.pi * 180,8)) \
+                                           + '\n')
 
                             break
                         else:
@@ -1761,7 +1765,8 @@ class core:
             information of the found approximate CSL
         """
         axis = dot(self.lattice_1, axis)
-        print(axis)
+        if self.verbose:
+            print(axis)
         file = open('log.all_position','w')
         file_r = open('results','w')
         theta = theta / 180 * np.pi
@@ -1778,7 +1783,8 @@ class core:
             #find the two primitive plane bases
             #miller indices
             hkl_1 = MID(self.lattice_1, axis)
-            print(axis)
+            if self.verbose:
+                print(axis)
             hkl_2 = MID(dot(self.orientation, self.lattice_2), axis)
             #plane bases
             plane_B_1 = get_pri_vec_inplane(hkl_1, self.lattice_1)
@@ -1861,20 +1867,20 @@ class core:
                                        + '\n')
                             if two_D:
                                 file_r.write('CNID = \n' + str(self.CNID) + '\n')
+                            if self.verbose:
+                                print('Congrates, we found an appx CSL!\n')
+                                print('U1 = \n' + \
+                                           str(self.U1) + '; sigma_1 = ' + \
+                                           str(sigma1) + '\n')
 
-                            print('Congrates, we found an appx CSL!\n')
-                            print('U1 = \n' + \
-                                       str(self.U1) + '; sigma_1 = ' + \
-                                       str(sigma1) + '\n')
+                                print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
+                                           + str(sigma1) + '\n')
 
-                            print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                                       + str(sigma1) + '\n')
+                                print('D = \n' + str(np.round(D,8)) + '\n')
 
-                            print('D = \n' + str(np.round(D,8)) + '\n')
-
-                            print('axis = ' + str(axis) + ' ; theta = ' \
-                                       + str(np.round(theta / np.pi * 180,8)) \
-                                       + '\n')
+                                print('axis = ' + str(axis) + ' ; theta = ' \
+                                           + str(np.round(theta / np.pi * 180,8)) \
+                                           + '\n')
                         else:
                             file.write('    sigma too large \n')
                 N += 1
@@ -2049,9 +2055,10 @@ class core:
             2D grid of sampling
         """
         os.mkdir('CNID_inputs')
-        print('CNID')
-        print(np.round(dot(inv(self.lattice_1),self.CNID),8))
-        print('making {} files'.format(grid[0] * grid[1]) + '...')
+        if self.verbose:
+            print('CNID')
+            print(np.round(dot(inv(self.lattice_1),self.CNID),8))
+            print('making {} files'.format(grid[0] * grid[1]) + '...')
         n1 = grid[0]
         n2 = grid[1]
         v1, v2 = self.CNID.T
@@ -2060,7 +2067,8 @@ class core:
                 dydz = v1 / n1 * i + v2 / n2 * j
                 self.get_bicrystal(dydz = dydz, dx = dx, dp1 = dp1, dp2 = dp2, \
                       xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D, filename = 'CNID_inputs/{0}_{1}_{2}'.format(filename, i,j), filetype = filetype)
-        print('completed')
+        if self.verbose:
+            print('completed')
 
     def sample_lattice_planes(self, dx = 0,
                       xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, two_D = False, filename = 'POSCAR', filetype = 'VASP'):
@@ -2068,7 +2076,8 @@ class core:
         sampling non-identical lattice planes terminating at the GB
         """
         os.mkdir('terminating_shift_inputs')
-        print('terminating_sampling...')
+        if self.verbose:
+            print('terminating_sampling...')
         position_here = 0
         count = 1
         while abs(position_here) < 1/2 * self.min_perp_length:
@@ -2078,7 +2087,8 @@ class core:
                 filetype = filetype)
             position_here += -self.d2
             count += 1
-        print('completed')
+        if self.verbose:
+            print('completed')
 
     def set_orientation_axis(self, axis_1, axis_2):
         """
@@ -2130,7 +2140,8 @@ class core:
         self.d2 = d_hkl(lattice_2, hkl_2)
         hkl_c = get_primitive_hkl(hkl, self.lattice_1, self.CSL, tol_integer) # miller indices of the plane in CSL
         hkl_c = np.array(hkl_c)
-        print('hkl in CSL:', hkl_c)
+        if self.verbose:
+            print('hkl in CSL:', hkl_c)
         plane_B = get_pri_vec_inplane(hkl_c, self.CSL) # plane bases of the CSL lattice plane
         if (plane_ortho == True) and (abs(dot(plane_B[:,0], plane_B[:,1])) > tol_ortho):
             plane_B = get_ortho_two_v(plane_B, lim, tol_ortho, align_rotation_axis, rotation_axis)
@@ -2150,10 +2161,11 @@ class core:
         self.cell_calc.compute_CNID(hkl,tol_integer)
         CNID = self.cell_calc.CNID
         self.CNID = dot(self.lattice_1, CNID)
-        print('cell 1:')
-        print(array(np.round(self.bicrystal_U1,8),dtype = int))
-        print('cell 2:')
-        print(array(np.round(self.bicrystal_U2,8),dtype = int))
+        if self.verbose:
+            print('cell 1:')
+            print(array(np.round(self.bicrystal_U1,8),dtype = int))
+            print('cell 2:')
+            print(array(np.round(self.bicrystal_U2,8),dtype = int))
 
     def compute_bicrystal_two_D(self, hkl_1, hkl_2, lim = 20, normal_ortho = False, \
                                 tol_ortho = 1e-10, tol_integer = 1e-8, inclination_tol = sqrt(2)/2):
@@ -2203,10 +2215,11 @@ class core:
         #supercell index
         self.bicrystal_U1 = dot(inv(self.lattice_1), cell_1)
         self.bicrystal_U2 = dot(inv(a2), cell_2)
-        print('cell 1:')
-        print(array(np.round(self.bicrystal_U1,8),dtype = int))
-        print('cell 2:')
-        print(array(np.round(self.bicrystal_U2,8),dtype = int))
+        if self.verbose:
+            print('cell 1:')
+            print(array(np.round(self.bicrystal_U1,8),dtype = int))
+            print('cell 2:')
+            print(array(np.round(self.bicrystal_U2,8),dtype = int))
 
     def define_lammps_regions(self, region_names, region_los, region_his, ortho = False):
         """
