@@ -1386,7 +1386,7 @@ class core:
             print('failed to find a satisfying appx CSL. Try to adjust the limits according \
                   to the log file generated; or try another orientation.')
 
-    def search_one_position_3D(self, R, theta_range, dtheta):
+    def search_one_position_3D(self, axis, theta, theta_range, dtheta):
         """
         main loop finding the appx CSL
 
