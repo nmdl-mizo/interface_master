@@ -1764,8 +1764,8 @@ class core:
                 N += 1
             theta += dtheta
 
-    def get_bicrystal(self, dydz = np.array([0.0,0.0,0.0]), dx = 0, dp1 = 0, dp2 = 0, \
-                      xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, filename = 'POSCAR', \
+    def get_bicrystal(self, dydz = None, dx = 0, dp1 = 0, dp2 = 0, \
+                      xyz_1 = None, xyz_2 = None, vx = 0, filename = 'POSCAR', \
                       two_D = False, filetype = 'VASP',  mirror = False, KTI = False):
         """
         generate a cif file for the bicrystal structure
@@ -1793,6 +1793,12 @@ class core:
         KTI : bool
             KTI, default False
         """
+        if dydz is None:
+            dydz = np.array([0.0,0.0,0.0])
+        if xyz_1 is None:
+            xyz_1 = [1,1,1]
+        if xyz_2 is None:
+            xyz_2 = [1,1,1]
         #get the atoms in the primitive cell
         lattice_1, atoms_1, elements_1 = self.lattice_1.copy(), self.atoms_1.copy(), self.elements_1.copy()
         lattice_2, atoms_2, elements_2 = self.lattice_2.copy(), self.atoms_2.copy(), self.elements_2.copy()
@@ -1923,7 +1929,7 @@ class core:
             raise RuntimeError("Sorry, we only support for 'VASP' or 'LAMMPS' output")
 
     def sample_CNID(self, grid, dx = 0, dp1 = 0, dp2 = 0, \
-                      xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, two_D = False, filename = 'POSCAR', filetype = 'VASP'):
+                      xyz_1 = None, xyz_2 = None, vx = 0, two_D = False, filename = 'POSCAR', filetype = 'VASP'):
         """
         sampling the CNID and generate POSCARs
 
@@ -1932,6 +1938,10 @@ class core:
         grid : numpy array
             2D grid of sampling
         """
+        if xyz_1 is None:
+            xyz_1 = [1,1,1]
+        if xyz_2 is None:
+            xyz_2 = [1,1,1]
         os.mkdir('CNID_inputs')
         if self.verbose:
             print('CNID')
@@ -1949,10 +1959,14 @@ class core:
             print('completed')
 
     def sample_lattice_planes(self, dx = 0,
-                      xyz_1 = [1,1,1], xyz_2 = [1,1,1], vx = 0, two_D = False, filename = 'POSCAR', filetype = 'VASP'):
+                      xyz_1 = None, xyz_2 = None, vx = 0, two_D = False, filename = 'POSCAR', filetype = 'VASP'):
         """
         sampling non-identical lattice planes terminating at the GB
         """
+        if xyz_1 is None:
+            xyz_1 = [1,1,1]
+        if xyz_2 is None:
+            xyz_2 = [1,1,1]
         os.mkdir('terminating_shift_inputs')
         if self.verbose:
             print('terminating_sampling...')
@@ -1985,7 +1999,7 @@ class core:
         self.orientation = R
 
     def compute_bicrystal(self, hkl, lim = 20, normal_ortho = False, plane_ortho = False, \
-    tol_ortho = 1e-10, tol_integer = 1e-8, align_rotation_axis = False, rotation_axis = [1,1,1], inclination_tol = sqrt(2)/2):
+    tol_ortho = 1e-10, tol_integer = 1e-8, align_rotation_axis = False, rotation_axis = None, inclination_tol = sqrt(2)/2):
         """
         compute the transformation to obtain the supercell of the two slabs forming a interface
 
@@ -2010,6 +2024,8 @@ class core:
         inclination_tol : float
             control the angle between the interface and the cross vector, default sqrt(2)/2
         """
+        if rotation_axis is None:
+            rotation_axis = [1,1,1]
         if normal_ortho and plane_ortho:
             self.bicrystal_ortho = True
         self.d1 = d_hkl(self.lattice_1, hkl)
@@ -2148,7 +2164,7 @@ def terminates_scanner_slab_structure(structure, hkl):
     plane_list, element_list, _, dp_list = terminates_scanner_left(supercell, atoms, elements, d, round_n = 5)
     return plane_list, element_list, dp_list
 
-def get_surface_slab(structure, hkl, replica = [1,1,1], inclination_tol = sqrt(2)/2, termi_shift = 0, vacuum_height = 0, plane_normal = False, normal_perp = False, \
+def get_surface_slab(structure, hkl, replica = None, inclination_tol = sqrt(2)/2, termi_shift = 0, vacuum_height = 0, plane_normal = False, normal_perp = False, \
                      normal_tol = 1e-3, lim = 20, filename = 'POSCAR', filetype = 'VASP'):
     """
     get a superlattice of a slab containing a desired surface as crystal plane hkl
@@ -2185,6 +2201,8 @@ def get_surface_slab(structure, hkl, replica = [1,1,1], inclination_tol = sqrt(2
         slab_structure : structure object
             slab structure
     """
+    if replica is None:
+        replica = [1,1,1]
     atoms, elements = get_sites_elements(structure)
     lattice = structure.lattice.matrix.T
     plane_B = get_pri_vec_inplane(hkl, lattice)

@@ -45,7 +45,7 @@ def ang(v1, v2):
     """
     return abs(dot(v1, v2)/norm(v1)/norm(v2))
 
-def get_ortho_two_v(B, lim, tol, align_rotation_axis = False, rotation_axis = [1,1,1]):
+def get_ortho_two_v(B, lim, tol, align_rotation_axis = False, rotation_axis = None):
     """
     get orthogonal cell of a 2D basis
 
@@ -67,6 +67,8 @@ def get_ortho_two_v(B, lim, tol, align_rotation_axis = False, rotation_axis = [1
     cell_ortho : numpy array
         a perpendicular 2D basis
     """
+    if rotation_axis is None:
+        rotation_axis = [1,1,1]
     #meshes
     x = np.arange(-lim, lim + 1, 1)
     y = x
