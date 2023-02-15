@@ -1568,8 +1568,8 @@ class core:
         a1 = column_stack((b1,av_1))
         a2_0 = column_stack((b2_0, av_2_0/norm(av_2_0)*norm(av_1)))
         if three_dot(av_1, self.orientation, av_2_0) < 0:
-           v1, v2, v3 = b2_0[:,1], b2_0[:,0], -av_2_0/norm(av_2_0)*norm(av_1)
-           a2_0 = column_stack((v1, v2, v3))
+            v1, v2, v3 = b2_0[:,1], b2_0[:,0], -av_2_0/norm(av_2_0)*norm(av_1)
+            a2_0 = column_stack((v1, v2, v3))
         #indices of the planal bases
         a2_0 = dot(self.orientation, a2_0)
         #starting point of rotation angle
