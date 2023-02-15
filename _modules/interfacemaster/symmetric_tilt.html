@@ -1,0 +1,663 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>interfacemaster.symmetric_tilt &#8212; interfacemaster 1.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=752cbf1e58c09e799737" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=752cbf1e58c09e799737" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/interfacemaster/symmetric_tilt';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target="#bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+      
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">interfacemaster 1.1 documentation</p>
+  
+</a>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="me-auto">
+      
+        <div class="navbar-center-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul id="navbar-main-elements" class="navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../interfacemaster.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="http://www.edge.iis.u-tokyo.ac.jp/">
+                    Nano-Materials Design Lab.
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-end-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-end-item"><ul id="navbar-icon-links"
+    class="navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/nmdl-mizo/interface_master" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+</div>
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-center-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul id="navbar-main-elements" class="navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../interfacemaster.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="http://www.edge.iis.u-tokyo.ac.jp/">
+                    Nano-Materials Design Lab.
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-end-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-end-item"><ul id="navbar-icon-links"
+    class="navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/nmdl-mizo/interface_master" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article"><div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-start-item">
+
+
+
+<nav aria-label="breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">interfacemaster.symmetric_tilt</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for interfacemaster.symmetric_tilt</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Get the [001], [111], [110] symmetric tilt GBs;</span>
+<span class="sd">Get the csl for bilayer twisted graphenes</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">det</span>
+<span class="kn">from</span> <span class="nn">interfacemaster.cellcalc</span> <span class="kn">import</span> <span class="n">MID</span><span class="p">,</span> <span class="n">rot</span>
+<span class="kn">from</span> <span class="nn">interfacemaster.interface_generator</span> <span class="kn">import</span> <span class="n">core</span>
+
+<div class="viewcode-block" id="compute_sigma"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.symmetric_tilt.compute_sigma">[docs]</a><span class="k">def</span> <span class="nf">compute_sigma</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> \
+ <span class="s1">&#39;cif_files/Si_mp-149_conventional_standard.cif&#39;</span><span class="p">,</span> <span class="n">maxsigma</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    compute sigma values for a given disorientation</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    __________</span>
+<span class="sd">    axis : numpy array</span>
+<span class="sd">        rotation axis</span>
+<span class="sd">    theta : float</span>
+<span class="sd">        rotation angle</span>
+<span class="sd">    maxsigma : int</span>
+<span class="sd">        maximum sigma value for searching</span>
+<span class="sd">    verbose : bool, optional</span>
+<span class="sd">        If True, the function will print additional information.</span>
+<span class="sd">        Default is True.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    __________</span>
+<span class="sd">    sigma : int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">theta</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">180</span><span class="p">)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">rot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">my_interface</span> <span class="o">=</span> <span class="n">core</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span>\
+                        <span class="n">filename</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+    <span class="n">my_interface</span><span class="o">.</span><span class="n">parse_limit</span><span class="p">(</span><span class="n">du</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="n">S</span>  <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="n">sgm1</span><span class="o">=</span><span class="n">maxsigma</span><span class="p">,</span> <span class="n">sgm2</span><span class="o">=</span><span class="n">maxsigma</span><span class="p">,</span> <span class="n">dd</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">)</span>
+    <span class="n">my_interface</span><span class="o">.</span><span class="n">search_fixed</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">exact</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">det</span><span class="p">(</span><span class="n">my_interface</span><span class="o">.</span><span class="n">U1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_hkl"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.symmetric_tilt.get_hkl">[docs]</a><span class="k">def</span> <span class="nf">get_hkl</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    given a referring point and a rotation matrix, get the miller indices</span>
+<span class="sd">    for this symmetric tilt GB</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    __________</span>
+<span class="sd">    P : numpy array</span>
+<span class="sd">        referring point</span>
+<span class="sd">    axis : numpy array</span>
+<span class="sd">        rotation axis</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    __________</span>
+<span class="sd">    hkl : numpy array</span>
+<span class="sd">          miller indices</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">P</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">MID</span><span class="p">(</span><span class="n">lattice</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="sample_STGB"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.symmetric_tilt.sample_STGB">[docs]</a><span class="k">def</span> <span class="nf">sample_STGB</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">lim</span><span class="p">,</span> <span class="n">maxsigma</span><span class="p">,</span> <span class="n">max_index</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    sampling the symmetric tilt GBs for a given rotation axis</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    __________</span>
+<span class="sd">    axis : numpy array</span>
+<span class="sd">           rotation axis</span>
+<span class="sd">    lim : int</span>
+<span class="sd">          control the number of generated referring points</span>
+<span class="sd">    maxsigma : int</span>
+<span class="sd">               maximum sigma value</span>
+<span class="sd">    max_index : int</span>
+<span class="sd">               maximum value of miller indices</span>
+<span class="sd">    Returns</span>
+<span class="sd">    __________</span>
+<span class="sd">    list1 : numpy array</span>
+<span class="sd">           angle list</span>
+<span class="sd">    list2 : numpy array</span>
+<span class="sd">           sigma list</span>
+<span class="sd">    list3 : numpy array</span>
+<span class="sd">           hkl list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Ps</span><span class="p">,</span> <span class="n">sigmas</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_Ps_sigmas_thetas</span><span class="p">(</span><span class="n">lim</span><span class="p">,</span><span class="n">axis</span><span class="p">)</span>
+    <span class="n">sampled_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">sigmas</span> <span class="o">&lt;</span> <span class="n">maxsigma</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">Ps</span> <span class="o">=</span> <span class="n">Ps</span><span class="p">[</span><span class="n">sampled_indices</span><span class="p">]</span>
+    <span class="n">sigmas</span> <span class="o">=</span> <span class="n">sigmas</span><span class="p">[</span><span class="n">sampled_indices</span><span class="p">]</span>
+    <span class="n">thetas</span> <span class="o">=</span> <span class="n">thetas</span><span class="p">[</span><span class="n">sampled_indices</span><span class="p">]</span>
+    <span class="n">hkls</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">Ps</span><span class="p">:</span>
+        <span class="n">hkls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_hkl</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span><span class="mf">1e-4</span><span class="p">))</span>
+    <span class="n">hkls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">hkls</span><span class="p">)</span>
+    <span class="n">sampled_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">hkls</span><span class="p">)</span><span class="o">&lt;</span><span class="n">max_index</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">sigmas</span> <span class="o">=</span> <span class="n">sigmas</span><span class="p">[</span><span class="n">sampled_indices</span><span class="p">]</span>
+    <span class="n">thetas</span> <span class="o">=</span> <span class="n">thetas</span><span class="p">[</span><span class="n">sampled_indices</span><span class="p">]</span>
+    <span class="n">hkls</span> <span class="o">=</span> <span class="n">hkls</span><span class="p">[</span><span class="n">sampled_indices</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">thetas</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">thetas</span><span class="p">,</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;stable&#39;</span><span class="p">)],</span> <span class="n">sigmas</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">thetas</span><span class="p">,</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;stable&#39;</span><span class="p">)],</span> <span class="n">hkls</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">thetas</span><span class="p">,</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;stable&#39;</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="generate_arrays_x_y"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.symmetric_tilt.generate_arrays_x_y">[docs]</a><span class="k">def</span> <span class="nf">generate_arrays_x_y</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">lim</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    generate x, y meshgrids</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    __________</span>
+<span class="sd">    x_min, y_min : int</span>
+<span class="sd">        minimum x,y</span>
+<span class="sd">    lim : int</span>
+<span class="sd">        maximum x,y</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    __________</span>
+<span class="sd">    meshgrid : numpy array</span>
+<span class="sd">        x,y meshgrid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_min</span> <span class="o">+</span> <span class="n">lim</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_min</span> <span class="o">+</span> <span class="n">lim</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">indice</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">indice_gcd_one</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indice</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">gcd</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">indice_gcd_one</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">indice_gcd_one</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_csl_twisted_graphenes"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.symmetric_tilt.get_csl_twisted_graphenes">[docs]</a><span class="k">def</span> <span class="nf">get_csl_twisted_graphenes</span><span class="p">(</span><span class="n">lim</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">maxsigma</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    get the geometric information of all the CS twisted graphene</span>
+<span class="sd">    within a searching limitation</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    __________</span>
+<span class="sd">    lim : int</span>
+<span class="sd">        control the number of generated referring points</span>
+<span class="sd">    maxsigma : int</span>
+<span class="sd">        maximum sigma</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    __________</span>
+<span class="sd">    list1 : numpy array</span>
+<span class="sd">        sigma list</span>
+<span class="sd">    list2 : numpy array</span>
+<span class="sd">        angle list</span>
+<span class="sd">    list3 : numpy array</span>
+<span class="sd">        CNID areas</span>
+<span class="sd">    list4 : numpy array</span>
+<span class="sd">        num of atoms in supercell</span>
+<span class="sd">    verbose : bool, optional</span>
+<span class="sd">        If True, the function will print additional information.</span>
+<span class="sd">        Default is True.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#mirror_plane_1</span>
+    <span class="n">xy_arrays</span> <span class="o">=</span> <span class="n">generate_arrays_x_y</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">lim</span><span class="p">)</span>
+    <span class="n">indice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">xy_arrays</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xy_arrays</span><span class="p">))))</span>
+    <span class="n">basis1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">(([</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">P1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">basis1</span><span class="p">,</span> <span class="n">indice</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">thetas1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">P1</span><span class="p">,[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">P1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">norm</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">]))</span>
+
+    <span class="c1">#mirror_plane_2</span>
+    <span class="n">xy_arrays</span> <span class="o">=</span> <span class="n">generate_arrays_x_y</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">lim</span><span class="p">)</span>
+    <span class="n">indice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">xy_arrays</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xy_arrays</span><span class="p">))))</span>
+    <span class="n">basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">(([</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">indice</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">thetas</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">P</span><span class="p">,[</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">norm</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">P1</span><span class="p">,</span><span class="n">P</span><span class="p">))</span>
+    <span class="n">thetas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">thetas1</span><span class="p">,</span> <span class="n">thetas</span><span class="p">)</span>
+    <span class="n">sigmas</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">thetas</span><span class="p">)):</span>
+        <span class="n">sigmas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">compute_sigma</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span> <span class="n">thetas</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">filename</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">))</span>
+    <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">sigmas</span><span class="p">)</span>
+    <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sigmas</span><span class="p">,</span><span class="n">dtype</span> <span class="o">=</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="n">unique_sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">sigmas</span><span class="p">)</span>
+    <span class="n">selected_thetas</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">unique_sigmas</span><span class="p">:</span>
+        <span class="n">selected_thetas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">thetas</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">sigmas</span><span class="o">==</span><span class="n">i</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="n">selected_thetas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">selected_thetas</span><span class="p">)</span>
+    <span class="n">sigmas</span> <span class="o">=</span> <span class="n">unique_sigmas</span>
+    <span class="n">thetas</span> <span class="o">=</span> <span class="n">selected_thetas</span><span class="p">[</span><span class="n">sigmas</span> <span class="o">&lt;=</span> <span class="n">maxsigma</span><span class="p">]</span>
+    <span class="n">sigmas</span> <span class="o">=</span> <span class="n">sigmas</span><span class="p">[</span><span class="n">sigmas</span> <span class="o">&lt;=</span> <span class="n">maxsigma</span><span class="p">]</span>
+    <span class="n">my_interface</span> <span class="o">=</span> <span class="n">core</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span>\
+                        <span class="n">filename</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+    <span class="n">A_cnid</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">my_interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">my_interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))</span> <span class="o">/</span> <span class="n">sigmas</span>
+    <span class="n">anum</span> <span class="o">=</span> <span class="n">sigmas</span> <span class="o">*</span> <span class="mi">4</span>
+    <span class="k">return</span> <span class="n">sigmas</span><span class="p">,</span> <span class="n">thetas</span><span class="p">,</span> <span class="n">A_cnid</span><span class="p">,</span> <span class="n">anum</span></div>
+
+<div class="viewcode-block" id="get_Ps_sigmas_thetas"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.symmetric_tilt.get_Ps_sigmas_thetas">[docs]</a><span class="k">def</span> <span class="nf">get_Ps_sigmas_thetas</span><span class="p">(</span><span class="n">lim</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">maxsigma</span> <span class="o">=</span> <span class="mi">100000</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    for a rotation axis, get the geometric information of all the symmetric tilt GBs</span>
+<span class="sd">    within a searching limitation</span>
+<span class="sd">    arguments:</span>
+<span class="sd">    lim --- control the number of generated referring points</span>
+<span class="sd">    axis --- rotation axis</span>
+<span class="sd">    maxsigma --- maximum sigma</span>
+<span class="sd">    return:</span>
+<span class="sd">    list of referring points, sigma list, angle list, original list of the &#39;in-plane&#39; sigmas</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="mf">1e-8</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">lim</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">indice</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">y_here</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">while</span> <span class="n">y_here</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">indice</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">i</span><span class="p">,</span> <span class="n">y_here</span><span class="p">])</span>
+                <span class="n">y_here</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="n">indice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">indice</span><span class="p">)</span>
+        <span class="n">indice_gcd_one</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indice</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">gcd</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">indice_gcd_one</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">indice_gcd_one</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">indice_gcd_one</span><span class="p">)</span>
+        <span class="n">xy_arrays</span> <span class="o">=</span> <span class="n">indice_gcd_one</span>
+        <span class="n">indice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">xy_arrays</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xy_arrays</span><span class="p">))))</span>
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">xy_arrays</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="n">xy_arrays</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">indice</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xs</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ys</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">thetas</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">ys</span><span class="o">/</span><span class="n">xs</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="mf">1e-8</span><span class="p">:</span>
+        <span class="n">xy_arrays</span> <span class="o">=</span> <span class="n">generate_arrays_x_y</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">lim</span><span class="p">)</span>
+        <span class="n">indice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">xy_arrays</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xy_arrays</span><span class="p">))))</span>
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">xy_arrays</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="n">xy_arrays</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">(([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">indice</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">sq2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="p">(</span><span class="n">sq2</span><span class="o">*</span><span class="n">xs</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ys</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span> <span class="o">*</span> \
+            <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="p">(</span><span class="n">sq2</span><span class="o">*</span><span class="n">ys</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">ys</span><span class="o">%</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">))))</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">ys</span><span class="o">%</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">xs</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sq2</span>
+        <span class="n">thetas</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">ys</span><span class="o">/</span><span class="n">sq2</span><span class="o">/</span><span class="n">xs</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="mf">1e-8</span><span class="p">:</span>
+        <span class="c1">#mirror_plane_1</span>
+        <span class="n">xy_arrays</span> <span class="o">=</span> <span class="n">generate_arrays_x_y</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">lim</span><span class="p">)</span>
+        <span class="n">indice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">xy_arrays</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xy_arrays</span><span class="p">))))</span>
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">xy_arrays</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="n">xy_arrays</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">basis1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">(([</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">P1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">basis1</span><span class="p">,</span> <span class="n">indice</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">basis2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">(([</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">-</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+        <span class="n">P2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">basis2</span><span class="p">,</span> <span class="n">indice</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">P1</span><span class="p">,</span> <span class="n">P2</span><span class="p">))</span>
+        <span class="n">thetas</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">P1</span><span class="p">,[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">P1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">norm</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">sigmas</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">thetas</span><span class="p">)):</span>
+            <span class="n">sigmas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">compute_sigma</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]),</span> <span class="n">thetas</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">maxsigma</span><span class="p">))</span>
+        <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">sigmas</span><span class="p">)</span>
+        <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sigmas</span><span class="p">,</span><span class="n">dtype</span> <span class="o">=</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;error: only available for [001], [110] and [110] rotation axis&#39;</span><span class="p">)</span>
+
+    <span class="n">original_sigmas</span> <span class="o">=</span> <span class="mi">6</span><span class="o">*</span><span class="n">norm</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">sigmas</span> <span class="o">=</span> <span class="n">sigmas</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">sigmas</span><span class="o">%</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+    <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sigmas</span><span class="p">,</span><span class="n">dtype</span> <span class="o">=</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="n">sigmas</span> <span class="o">=</span> <span class="n">sigmas</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">sigmas</span><span class="o">%</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+    <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sigmas</span><span class="p">,</span><span class="n">dtype</span> <span class="o">=</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">P</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">original_sigmas</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;stable&#39;</span><span class="p">)],</span> <span class="n">sigmas</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">original_sigmas</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;stable&#39;</span><span class="p">)],</span> \
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">thetas</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">original_sigmas</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;stable&#39;</span><span class="p">)]),</span> <span class="n">original_sigmas</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">original_sigmas</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;stable&#39;</span><span class="p">)]</span></div>
+</pre></div>
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner"></div>
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=752cbf1e58c09e799737"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=752cbf1e58c09e799737"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+    <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2022, Y. Xie, NMDL.
+      <br/>
+    
+  </p>
+</div>
+  
+    <div class="footer-item"><p class="theme-version">
+  Built with the
+  <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a>
+  0.13.0rc3.dev0.
+</p></div>
+  
+    <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://sphinx-doc.org/">Sphinx</a> 6.1.3.
+    <br/>
+  </p>
+</div>
+  
+</div>
+  </footer>
+  </body>
+</html>

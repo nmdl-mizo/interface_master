@@ -1,0 +1,449 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Si symmetric tilt -exact"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from interfacemaster.cellcalc import get_primitive_hkl, rot\n",
+    "from interfacemaster.interface_generator import core, convert_vector_index\n",
+    "from numpy import array, dot, round, var, average, pi\n",
+    "from numpy.linalg import inv\n",
+    "from gb_code.csl_generator import print_list"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Define an interface core class"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Input two cif files.For GBs, input the same file; for interfaces, input two different files.\n",
+    "\n",
+    "\n",
+    "The first structure is non-changed while the second one can be deformed to form an approximate CSL\n",
+    "\n",
+    "Please input files of CONVENTIONAL cells if you are not familiar with the indices in the primitive cell."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Warning!, this programme will rewrite the POSCAR file in this dir!\n"
+     ]
+    }
+   ],
+   "source": [
+    "my_interface = core('cif_files/Si_mp-149_conventional_standard.cif','cif_files/Si_mp-149_conventional_standard.cif')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Specify the rotation axis and searching parameters to find an approximate CSL"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Since this is for a cubic lattice, we have determined rotation axis/angle to give a specific CSL"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Sigma:     1  Theta:   0.00 \n",
+      "Sigma:     3  Theta:  70.53 \n",
+      "Sigma:     9  Theta:  38.94 \n",
+      "Sigma:    11  Theta:  50.48 \n",
+      "Sigma:    17  Theta:  86.63 \n",
+      "Sigma:    19  Theta:  26.53 \n",
+      "Sigma:    27  Theta:  31.59 \n",
+      "Sigma:    33  Theta:  20.05 \n",
+      "Sigma:    41  Theta:  55.88 \n",
+      "Sigma:    43  Theta:  80.63 \n",
+      "Sigma:    51  Theta:  16.10 \n",
+      "Sigma:    57  Theta:  44.00 \n",
+      "Sigma:    59  Theta:  45.98 \n",
+      "Sigma:    67  Theta:  62.44 \n",
+      "Sigma:    73  Theta:  13.44 \n",
+      "Sigma:    81  Theta:  77.88 \n",
+      "Sigma:    83  Theta:  17.86 \n",
+      "Sigma:    89  Theta:  34.89 \n",
+      "Sigma:    97  Theta:  61.02 \n",
+      "Sigma:    99  Theta:  11.54 \n"
+     ]
+    }
+   ],
+   "source": [
+    "print_list([1,1,0],100)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#rotation matrix\n",
+    "R = rot([1,1,0],38.94/180*pi)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Congrates, we found an appx CSL!\n",
+      "\n",
+      "U1 = \n",
+      "[[ 1 -1 -1]\n",
+      " [ 0  3  0]\n",
+      " [ 0 -2  3]]; sigma_1 = 9\n",
+      "\n",
+      "U2 = \n",
+      "[[ 1 -2  0]\n",
+      " [ 0  3 -2]\n",
+      " [ 0  0  3]]; sigma_2 = 9\n",
+      "\n",
+      "D = \n",
+      "[[1. 0. 0.]\n",
+      " [0. 1. 0.]\n",
+      " [0. 0. 1.]]\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "axis = convert_vector_index(my_interface.conv_lattice_1, my_interface.lattice_1, [1,1,0])\n",
+    "my_interface.parse_limit(du = 1e-2, S  = 1e-2, sgm1=100, sgm2=100, dd = 1e-2)\n",
+    "my_interface.search_fixed(R, exact=True, tol = 1e-3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "'U1', 'U2' are two sets of indices of the CSL in the two crystals' frames,\n",
+    "'D' is the deformation applied to the crystal 2 to form an approximate CSL\n",
+    "\n",
+    "As you can see, to form a twinning structure we need to deform the structure provided!"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Convert the miller indices to be expressed in the primitive cell"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now we need to specify the orientation of our interface, which is by giving a miller indices in expressed in the primitive cell."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([ 0,  1, -3])"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "\"\"\"\n",
+    "The interface plane is the [0,-1,-2] plane in the conventional cell and now we \\\n",
+    "transform it into primitive cell\n",
+    "\"\"\"\n",
+    "hkl = get_primitive_hkl(array([-2,2,1]), my_interface.conv_lattice_1, my_interface.lattice_1, tol = 1e-3)\n",
+    "hkl"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Compute the indices of the two slabs to make bicrystal"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now let's compute the indices of the two slabs forming the interface\n",
+    "If you want a near orthogonal bicrystal, please set 'orthogonal to yes, \n",
+    "and adjust the lim & tol."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "cell 1:\n",
+      "[[ 1  1  2]\n",
+      " [ 3  0 -3]\n",
+      " [-5  0 -1]]\n",
+      "cell 2:\n",
+      "[[-1  1  2]\n",
+      " [ 5  0 -1]\n",
+      " [-3  0 -3]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "my_interface.compute_bicrystal(hkl, normal_ortho = True, plane_ortho = True, \\\n",
+    "                               lim = 50, tol_ortho = 1e-2, tol_integer = 1e-3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Lattice\n",
+       "    abc : 3.8669746532647453 3.8669746532647453 3.8669746532647453\n",
+       " angles : 59.99999999999999 59.99999999999999 59.99999999999999\n",
+       " volume : 40.88829284866483\n",
+       "      A : -2.734364 -2.734364 0.0\n",
+       "      B : -2.734364 0.0 -2.734364\n",
+       "      C : 1.6743150601518765e-16 -2.734364 -2.734364"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "my_interface.bicrystal_structure.lattice"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Here we obtained the two sets of indices to build a bicrystal"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Make a bicrystal!"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "You can adjust the bicrystal by\n",
+    "1. do expansion by set 'xyz' = [dimX, dimY, dimZ]\n",
+    "2. do RBT by 'dzdy' = a translation vector \n",
+    "(please confine dzdy in the interface plane, \n",
+    "for RBT in the normal, please use 'dp1' and 'dp2', to make vacuum in the interface use 'dx');\n",
+    "3. introduce vacuum in the interface by 'dx' = the distance spacing the two crystals\n",
+    "4. adjust the termination by 'dp1', 'dp2' = length of shift of the position of \n",
+    "the termination from the interface into the bulk\n",
+    "5. introduce vacuum to make a surface in the end of the bicrystal by\n",
+    "'vx' = length of the vaccumn\n",
+    "\n",
+    "default: xyz = [1,1,1] and others = 0"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "my_interface.get_bicrystal(xyz_1 = [1,1,1], xyz_2 = [1,1,1], filetype='LAMMPS',dydz=  1 * my_interface.CNID[:,1])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Help on method get_bicrystal in module interfacemaster.interface_generator:\n",
+      "\n",
+      "get_bicrystal(dydz=array([0., 0., 0.]), dx=0, dp1=0, dp2=0, xyz_1=[1, 1, 1], xyz_2=[1, 1, 1], vx=0, filename='POSCAR', two_D=False, filetype='VASP', mirror=False, KTI=False) method of interfacemaster.interface_generator.core instance\n",
+      "    generate a cif file for the bicrystal structure\n",
+      "    \n",
+      "    Parameters\n",
+      "    ----------\n",
+      "    dydz : numpy array\n",
+      "        translation vector in the interface\n",
+      "    dx : float\n",
+      "        translation normal to the interface\n",
+      "    dp1, dp2 : float\n",
+      "        termination of slab 1, 2\n",
+      "    xyz1, xyz2 : list\n",
+      "        expansion of slab 1, 2\n",
+      "    vx : float\n",
+      "        vacuum spacing, default 0\n",
+      "    filename : str\n",
+      "        filename, default 'POSCAR'\n",
+      "    two_D : bool\n",
+      "        whether a two CSL\n",
+      "    filetype : str\n",
+      "        filetype, 'VASP' or 'LAMMPS', default 'VASP'\n",
+      "    mirror : bool\n",
+      "        mirror, default False\n",
+      "    KTI : bool\n",
+      "        KTI, default False\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "help(my_interface.get_bicrystal)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "terminating_sampling...\n",
+      "completed\n"
+     ]
+    }
+   ],
+   "source": [
+    "my_interface.sample_lattice_planes(filetype='VASP')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Good! You have made a 'POSCAR' file of this bicrystal, we also generated two files named 'cell_1.cif' and 'cell_2.cif' providing the structure of the two slabs."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [],
+   "source": [
+    "import shutil\n",
+    "try:\n",
+    "    shutil.rmtree('CNID_inputs')\n",
+    "except:\n",
+    "    print('No existing files')\n",
+    "#To sample the CNID, try\n",
+    "my_interface.sample_CNID(grid = [4,4], xyz_1 = [1,1,1], xyz_2 = [1,1,1])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Please check the generated 'POSCAR.x.y' files. \n",
+    "The CNID here is expressed in the primitive cell's frame.\n",
+    "You can refer to the cartesian coordinates or in the conventional cell's frame"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "CNID_cartesian = round(my_interface.CNID,8)\n",
+    "CNID_cartesian"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "CNID_conv = round(dot(inv(my_interface.conv_lattice_1)\\\n",
+    "                              , my_interface.CNID),8)\n",
+    "CNID_conv"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

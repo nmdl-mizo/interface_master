@@ -1,0 +1,1267 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>interfacemaster.cellcalc &#8212; interfacemaster 1.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=752cbf1e58c09e799737" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=752cbf1e58c09e799737" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/interfacemaster/cellcalc';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target="#bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+      
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">interfacemaster 1.1 documentation</p>
+  
+</a>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="me-auto">
+      
+        <div class="navbar-center-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul id="navbar-main-elements" class="navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../interfacemaster.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="http://www.edge.iis.u-tokyo.ac.jp/">
+                    Nano-Materials Design Lab.
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-end-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-end-item"><ul id="navbar-icon-links"
+    class="navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/nmdl-mizo/interface_master" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+</div>
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-center-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul id="navbar-main-elements" class="navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../interfacemaster.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="http://www.edge.iis.u-tokyo.ac.jp/">
+                    Nano-Materials Design Lab.
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-end-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-end-item"><ul id="navbar-icon-links"
+    class="navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/nmdl-mizo/interface_master" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article"><div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-start-item">
+
+
+
+<nav aria-label="breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">interfacemaster.cellcalc</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for interfacemaster.cellcalc</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">inv</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">dot</span><span class="p">,</span> <span class="n">cross</span><span class="p">,</span> <span class="n">square</span><span class="p">,</span> <span class="n">arccos</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">inf</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="rot"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.rot">[docs]</a><span class="k">def</span> <span class="nf">rot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">Theta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    produce a rotation matrix</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a : numpy array</span>
+<span class="sd">        rotation axis</span>
+<span class="sd">    Theta : float</span>
+<span class="sd">        rotation angle</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rot_mat : numpy array</span>
+<span class="sd">        a rotation matrix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">Theta</span><span class="p">))</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">Theta</span><span class="p">))</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">norm</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="n">az</span> <span class="o">=</span> <span class="n">a</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">c</span> <span class="o">+</span> <span class="n">ax</span> <span class="o">*</span> <span class="n">ax</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">),</span> <span class="n">ax</span> <span class="o">*</span> <span class="n">ay</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="n">az</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span>
+                      <span class="n">ax</span> <span class="o">*</span> <span class="n">az</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="n">ay</span> <span class="o">*</span> <span class="n">s</span><span class="p">],</span>
+                    <span class="p">[</span><span class="n">ay</span> <span class="o">*</span> <span class="n">ax</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="n">az</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span> <span class="n">c</span> <span class="o">+</span> <span class="n">ay</span> <span class="o">*</span> <span class="n">ay</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">),</span>
+                        <span class="n">ay</span> <span class="o">*</span> <span class="n">az</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span> <span class="o">*</span> <span class="n">s</span><span class="p">],</span>
+                     <span class="p">[</span><span class="n">az</span> <span class="o">*</span> <span class="n">ax</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="n">ay</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span> <span class="n">az</span> <span class="o">*</span> <span class="n">ay</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="n">ax</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span>
+                      <span class="n">c</span> <span class="o">+</span> <span class="n">az</span> <span class="o">*</span> <span class="n">az</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">)]],</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ang"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.ang">[docs]</a><span class="k">def</span> <span class="nf">ang</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    compute the cos of angle between v1 &amp; v2</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v1, v2 : numpy array</span>
+<span class="sd">        vectors</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cos_12 : float</span>
+<span class="sd">        the cos of angle between v1 and v2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">v2</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="get_ortho_two_v"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.get_ortho_two_v">[docs]</a><span class="k">def</span> <span class="nf">get_ortho_two_v</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">lim</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">align_rotation_axis</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">rotation_axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    get orthogonal cell of a 2D basis</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    B : numpy array</span>
+<span class="sd">        matrix of 2D basis vectors</span>
+<span class="sd">    lim : int</span>
+<span class="sd">        maximum coefficient</span>
+<span class="sd">    tol : float</span>
+<span class="sd">        tolerance</span>
+<span class="sd">    align_rotation_axis : bool</span>
+<span class="sd">        whether to specify a vector, default False</span>
+<span class="sd">    rotation_axis :</span>
+<span class="sd">        specified vector, default [1, 1, 1]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cell_ortho : numpy array</span>
+<span class="sd">        a perpendicular 2D basis</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#meshes</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">lim</span><span class="p">,</span> <span class="n">lim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span>
+
+    <span class="n">indice</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">indice_0</span> <span class="o">=</span> <span class="n">indice</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">indice</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)]</span>
+    <span class="n">indice_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">indice_0</span><span class="p">,</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">LP</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">indice_0</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">LP</span> <span class="o">=</span> <span class="n">LP</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">LP</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))]</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">align_rotation_axis</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">LP</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">norm</span><span class="p">(</span><span class="n">cross</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">rotation_axis</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+                <span class="n">v1</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="k">break</span>
+
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">found</span> <span class="ow">and</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">LP</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">align_rotation_axis</span><span class="p">:</span>
+            <span class="n">v1</span> <span class="o">=</span> <span class="n">LP</span><span class="p">[</span><span class="n">count</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">LP</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ang</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+                <span class="n">v2</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">align_rotation_axis</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;faild to find two orthogonal vectors in the GB plane, maybe you can try to increase the lim&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="dia_sym_mtx"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.dia_sym_mtx">[docs]</a><span class="k">def</span> <span class="nf">dia_sym_mtx</span><span class="p">(</span><span class="n">U</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    return the second-diagonal symmetry transformed matrix of U</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    U : numpy array</span>
+<span class="sd">        matrix</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Ux : numpy array</span>
+<span class="sd">        the second-diagonal symmetry transformed matrix of U</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Ux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">Ux</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="p">[</span><span class="mi">2</span><span class="o">-</span><span class="n">j</span><span class="p">][</span><span class="mi">2</span><span class="o">-</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">Ux</span></div>
+
+<div class="viewcode-block" id="find_integer_vectors"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.find_integer_vectors">[docs]</a><span class="k">def</span> <span class="nf">find_integer_vectors</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function for finding the coefficients N so that Nv contains only integer elements and gcd(v1,v2,v3,N) = 1</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v : numpy array</span>
+<span class="sd">        a 3D vector</span>
+<span class="sd">    sigma : int</span>
+<span class="sd">        maximum limt of N for searching</span>
+<span class="sd">    tol : float</span>
+<span class="sd">        tolerancea to judge integer, default 1e-8</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Nv : numpy array</span>
+<span class="sd">        vector of integer elements Nv</span>
+<span class="sd">    N : numpy array</span>
+<span class="sd">        integer coefficients N</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">sigma</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">v</span><span class="o">*</span><span class="n">i</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">now</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">now</span><span class="p">))</span><span class="o">&lt;</span><span class="n">tol</span><span class="p">):</span>
+            <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">now</span><span class="p">)</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+        <span class="n">reduce</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gcd</span><span class="o">.</span><span class="n">reduce</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">u</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">w</span><span class="p">)])</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">now</span><span class="o">/</span><span class="n">reduce</span><span class="p">),</span><span class="n">dtype</span> <span class="o">=</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">now</span><span class="p">,</span> <span class="n">L</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;failed to find the rational vector of &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> within lcd = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sigma</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="find_integer_vectors_nn"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.find_integer_vectors_nn">[docs]</a><span class="k">def</span> <span class="nf">find_integer_vectors_nn</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function for finding the coefficients N so that Nv contains only integer elements, ignore gcd</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v : numpy array</span>
+<span class="sd">        a 3D array</span>
+<span class="sd">    sigma : int</span>
+<span class="sd">        maximum limt of N for searching</span>
+<span class="sd">    tol : float</span>
+<span class="sd">        tolerance, default 1e-8</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Nv : numpy array</span>
+<span class="sd">        vector of integer elements Nv</span>
+<span class="sd">    N : numpy array</span>
+<span class="sd">        integer coefficients N</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">sigma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">v</span><span class="o">*</span><span class="n">i</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">now</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">now</span><span class="p">))</span><span class="o">&lt;</span><span class="n">tol</span><span class="p">):</span>
+            <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">now</span><span class="p">)</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">now</span><span class="p">),</span><span class="n">dtype</span> <span class="o">=</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">L</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">now</span><span class="p">,</span> <span class="n">L</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;failed to find the rational vector of &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> within lcd = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">sigma</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="solve_DSC_equations"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.solve_DSC_equations">[docs]</a><span class="k">def</span> <span class="nf">solve_DSC_equations</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">B</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    a function for solving the integer equations for the DSC basis</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    u, v, w, L: int</span>
+<span class="sd">        integer numbers</span>
+<span class="sd">    B : numpy array</span>
+<span class="sd">        basis set</span>
+<span class="sd">    tol : float</span>
+<span class="sd">        tolerance</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    DSC_basis1, DSC_basis2 : numpy array</span>
+<span class="sd">        DSC_basis sets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-8</span>
+    <span class="c1">#get g_v, g_miu and g_lambda</span>
+    <span class="n">g_v</span> <span class="o">=</span> <span class="n">L</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">gcd</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">w</span><span class="p">),</span> <span class="n">L</span><span class="p">)</span>
+    <span class="n">g_lambda</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gcd</span><span class="o">.</span><span class="n">reduce</span><span class="p">([</span><span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">w</span><span class="p">),</span> <span class="n">L</span><span class="p">])</span>
+    <span class="n">g_miu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gcd</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">w</span><span class="p">),</span><span class="n">L</span><span class="p">)</span><span class="o">/</span><span class="n">g_lambda</span>
+
+    <span class="n">g_v</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">g_v</span><span class="p">))</span>
+    <span class="n">g_lambda</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">g_lambda</span><span class="p">))</span>
+    <span class="n">g_miu</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">g_miu</span><span class="p">))</span>
+    <span class="c1">#find integer solutions</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">g_v</span><span class="p">)</span> <span class="o">/</span> <span class="n">L</span>
+
+    <span class="c1"># 0=&lt;gama&lt;g_v</span>
+    <span class="n">gamas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">g_v</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">gamas</span><span class="p">:</span>
+        <span class="n">gama</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">g_miu</span> <span class="o">*</span> <span class="n">v</span> <span class="o">-</span> <span class="n">gama</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span> <span class="o">/</span> <span class="n">L</span>
+        <span class="c1">#check whether s is a integer</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">s</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">s</span><span class="p">))</span><span class="o">&lt;</span><span class="n">tol</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="c1"># 0=&lt;alpha&lt;g_miu, 0=&lt;beta&lt;g_v</span>
+    <span class="n">alphas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">g_miu</span><span class="p">)</span>
+    <span class="n">betas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">g_v</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">found</span> <span class="ow">and</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">alphas</span><span class="p">):</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">alphas</span><span class="p">[</span><span class="n">count</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">betas</span><span class="p">:</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="n">k</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">g_lambda</span> <span class="o">*</span> <span class="n">u</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">v</span> <span class="o">-</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">w</span><span class="p">)</span> <span class="o">/</span> <span class="n">L</span>
+            <span class="c1">#check whether r is a integer</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">r</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">r</span><span class="p">))</span><span class="o">&lt;</span><span class="n">tol</span><span class="p">:</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;failed to find integer solutions, something strange happens...&#39;</span><span class="p">)</span>
+    <span class="c1">#DSC basis</span>
+    <span class="n">D1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">g_lambda</span> <span class="o">*</span> <span class="n">B</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">D2</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">/</span> <span class="p">(</span><span class="n">g_lambda</span> <span class="o">*</span> <span class="n">g_miu</span><span class="p">)</span> <span class="o">*</span> <span class="n">B</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">g_miu</span> <span class="o">*</span> <span class="n">B</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">D3</span> <span class="o">=</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">gama</span> <span class="o">+</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">g_miu</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">g_miu</span><span class="o">*</span><span class="n">g_v</span><span class="o">*</span><span class="n">g_lambda</span><span class="p">)</span> <span class="o">*</span> <span class="n">B</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> \
+        <span class="o">+</span> <span class="n">gama</span> <span class="o">/</span> <span class="p">(</span><span class="n">g_miu</span> <span class="o">*</span> <span class="n">g_v</span><span class="p">)</span> <span class="o">*</span> <span class="n">B</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">g_v</span> <span class="o">*</span> <span class="n">B</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+    <span class="c1">#print(&#39;alpha, beta, gama, lambda, miu, v&#39;)</span>
+    <span class="c1">#print(alpha, beta, gama, g_lambda, g_miu, g_v)</span>
+    <span class="n">DSC_basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">D1</span><span class="p">,</span><span class="n">D2</span><span class="p">,</span><span class="n">D3</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">DSC_basis</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">B</span><span class="p">),</span><span class="n">DSC_basis</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="projection"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.projection">[docs]</a><span class="k">def</span> <span class="nf">projection</span><span class="p">(</span><span class="n">u1</span><span class="p">,</span><span class="n">u2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    get the projection of u1 on u2</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    u1, u2 : numpy array</span>
+<span class="sd">        vectors</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p12 : numpy array</span>
+<span class="sd">        the projection of u1 on u2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dot</span><span class="p">(</span><span class="n">u1</span><span class="p">,</span><span class="n">u2</span><span class="p">)</span><span class="o">/</span><span class="n">dot</span><span class="p">(</span><span class="n">u2</span><span class="p">,</span><span class="n">u2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Gram_Schmidt"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.Gram_Schmidt">[docs]</a><span class="k">def</span> <span class="nf">Gram_Schmidt</span><span class="p">(</span><span class="n">B0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gram–Schmidt process</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    B0 : numpy array</span>
+<span class="sd">        matrix</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Bstar : numpy array</span>
+<span class="sd">        the orthogonalized basis for B0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Bstar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">B0</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">B0</span><span class="o">.</span><span class="n">T</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Bstar</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">B0</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">BHere</span> <span class="o">=</span> <span class="n">B0</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+                <span class="n">BHere</span> <span class="o">=</span> <span class="n">BHere</span> <span class="o">-</span> <span class="n">projection</span><span class="p">(</span><span class="n">B0</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">B0</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span><span class="o">*</span><span class="n">B0</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">Bstar</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">BHere</span>
+    <span class="k">return</span> <span class="n">Bstar</span></div>
+
+<div class="viewcode-block" id="LLL"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.LLL">[docs]</a><span class="k">def</span> <span class="nf">LLL</span><span class="p">(</span><span class="n">B</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    LLL lattice reduction algorithm</span>
+
+<span class="sd">    https://en.wikipedia.org/wiki/Lenstra%E2%80%93Lenstra%E2%80%93Lov%C3%A1sz_lattice_basis_reduction_algorithm</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    B : numpy array</span>
+<span class="sd">        matrix</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Bhere : numpy array</span>
+<span class="sd">        the basis obtained for B</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Bhere</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">Bstar</span> <span class="o">=</span> <span class="n">Gram_Schmidt</span><span class="p">(</span><span class="n">Bhere</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="mi">3</span><span class="o">/</span><span class="mi">4</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">js</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">js</span><span class="p">:</span>
+            <span class="n">ukj</span> <span class="o">=</span> <span class="n">projection</span><span class="p">(</span><span class="n">Bhere</span><span class="p">[:,</span><span class="n">k</span><span class="p">],</span><span class="n">Bstar</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">ukj</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span>
+                <span class="n">Bhere</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">Bhere</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="nb">round</span><span class="p">(</span><span class="n">ukj</span><span class="p">)</span><span class="o">*</span><span class="n">Bhere</span><span class="p">[:,</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">Bstar</span> <span class="o">=</span> <span class="n">Gram_Schmidt</span><span class="p">(</span><span class="n">Bhere</span><span class="p">)</span>
+        <span class="n">ukk_1</span> <span class="o">=</span> <span class="n">projection</span><span class="p">(</span><span class="n">Bhere</span><span class="p">[:,</span><span class="n">k</span><span class="p">],</span> <span class="n">Bstar</span><span class="p">[:,</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">dot</span><span class="p">(</span><span class="n">Bstar</span><span class="p">[:,</span><span class="n">k</span><span class="p">],</span><span class="n">Bstar</span><span class="p">[:,</span><span class="n">k</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="n">delta</span> <span class="o">-</span> <span class="n">square</span><span class="p">(</span><span class="n">ukk_1</span><span class="p">))</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">Bstar</span><span class="p">[:,</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">Bstar</span><span class="p">[:,</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">Bhere</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">Bhere</span><span class="p">[:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">Bhere</span><span class="p">[:,</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">Bhere</span><span class="p">[:,</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span>
+            <span class="n">Bstar</span> <span class="o">=</span> <span class="n">Gram_Schmidt</span><span class="p">(</span><span class="n">Bhere</span><span class="p">)</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Bhere</span></div>
+
+<div class="viewcode-block" id="get_normal_index"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.get_normal_index">[docs]</a><span class="k">def</span> <span class="nf">get_normal_index</span><span class="p">(</span><span class="n">hkl</span><span class="p">,</span> <span class="n">lattice</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    get the coordinates in the lattice of a normal vector to the plane (hkl)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hkl : array_like</span>
+<span class="sd">        input index</span>
+<span class="sd">    lattice : array_like</span>
+<span class="sd">        the basis of the lattice</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v_n : numpy array</span>
+<span class="sd">        the coordinates in the lattice of a normal vector to the plane (hkl)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">Pc1</span> <span class="o">=</span> <span class="n">get_plane</span><span class="p">(</span><span class="n">hkl</span><span class="p">,</span> <span class="n">lattice</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">lattice</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_primitive_hkl"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.get_primitive_hkl">[docs]</a><span class="k">def</span> <span class="nf">get_primitive_hkl</span><span class="p">(</span><span class="n">hkl</span><span class="p">,</span> <span class="n">C_lattice</span><span class="p">,</span> <span class="n">P_lattice</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    convert the miller indices from conventional cell to primitive cell</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hkl : array_like</span>
+<span class="sd">        input index</span>
+<span class="sd">    C_lattice : numpy array</span>
+<span class="sd">        conventional cell basis set</span>
+<span class="sd">    P_lattice : numpy array</span>
+<span class="sd">        primitive cell basis set</span>
+<span class="sd">    tol : float</span>
+<span class="sd">        tolerance to judge integer, default 1e-8</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hkl_p : numpy array</span>
+<span class="sd">        the Miller indices in primitive cell</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#1. get normal</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">Pc1</span> <span class="o">=</span> <span class="n">get_plane</span><span class="p">(</span><span class="n">hkl</span><span class="p">,</span> <span class="n">C_lattice</span><span class="p">)</span>
+    <span class="c1">#print(&#39;the normal:&#39; + str(n) + &#39; the point in the plane: &#39; + str(Pc1))</span>
+    <span class="c1">#2. get indices from normal</span>
+    <span class="n">hkl_p</span> <span class="o">=</span> <span class="n">get_indices_from_n_Pc1</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">P_lattice</span><span class="p">,</span> <span class="n">Pc1</span><span class="p">)</span>
+    <span class="n">hkl_p</span> <span class="o">=</span> <span class="n">find_integer_vectors</span><span class="p">(</span><span class="n">hkl_p</span><span class="p">,</span><span class="mi">100000</span><span class="p">,</span><span class="n">tol</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">hkl_p</span></div>
+
+<div class="viewcode-block" id="get_plane"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.get_plane">[docs]</a><span class="k">def</span> <span class="nf">get_plane</span><span class="p">(</span><span class="n">hkl</span><span class="p">,</span> <span class="n">lattice</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    get the normal vector and one in-plane point for the (hkl) plane of the lattice</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hkl : array_like</span>
+<span class="sd">        input index</span>
+<span class="sd">    lattice : numpy array</span>
+<span class="sd">        lattice basis set</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n : numpy array</span>
+<span class="sd">        the normal vector</span>
+<span class="sd">    p : numpy array</span>
+<span class="sd">        an in-plane point in the (hkl) plane</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">hkl</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">points</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">lattice</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">hkl</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">break</span>
+    <span class="n">count2</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">count</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">hkl</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">points</span><span class="p">[:,</span><span class="n">count2</span><span class="p">]</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">lattice</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">points</span><span class="p">[:,</span><span class="n">count2</span><span class="p">]</span> <span class="o">=</span> <span class="n">lattice</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">hkl</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">count2</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">cross</span><span class="p">((</span><span class="n">points</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">points</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]),(</span><span class="n">points</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">points</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">n</span><span class="p">,</span> <span class="n">points</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="get_indices_from_n_Pc1"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.get_indices_from_n_Pc1">[docs]</a><span class="k">def</span> <span class="nf">get_indices_from_n_Pc1</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">lattice</span><span class="p">,</span> <span class="n">Pc1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    get the Miller indices of certain plane with normal n and one in-plane point Pc1 for certain lattice</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n : numpy array</span>
+<span class="sd">        normal vector</span>
+<span class="sd">    lattice : numpy array</span>
+<span class="sd">        lattice basis set</span>
+<span class="sd">    Pc1 : numpy array</span>
+<span class="sd">        an in-plane point in the (hkl) plane</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hkl : numpy array</span>
+<span class="sd">        the Miller indices of the desired plane</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hkl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">dtype</span> <span class="o">=</span> <span class="nb">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">hkl</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">lattice</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="n">n</span><span class="p">)</span><span class="o">/</span><span class="n">dot</span><span class="p">(</span><span class="n">Pc1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hkl</span></div>
+
+<div class="viewcode-block" id="MID"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.MID">[docs]</a><span class="k">def</span> <span class="nf">MID</span><span class="p">(</span><span class="n">lattice</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    get the Miller indices with a normal n for the lattice</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lattice : numpy array</span>
+<span class="sd">        lattice basis set</span>
+<span class="sd">    n : numpy array</span>
+<span class="sd">        normal vector</span>
+<span class="sd">    tol : float</span>
+<span class="sd">        tolerance to judge integer, default 1e-8</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hkl : numpy array</span>
+<span class="sd">        the Miller indices of desired plane</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">lattice</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">n</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">:</span>
+            <span class="n">Pc1</span> <span class="o">=</span> <span class="n">lattice</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">break</span>
+    <span class="n">hkl</span> <span class="o">=</span> <span class="n">get_indices_from_n_Pc1</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">lattice</span><span class="p">,</span> <span class="n">Pc1</span><span class="p">)</span>
+    <span class="n">hkl</span> <span class="o">=</span> <span class="n">find_integer_vectors</span><span class="p">(</span><span class="n">hkl</span><span class="p">,</span><span class="mi">10000</span><span class="p">,</span> <span class="n">tol</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">hkl</span></div>
+
+<div class="viewcode-block" id="ext_euclid"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.ext_euclid">[docs]</a><span class="k">def</span> <span class="nf">ext_euclid</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    extended euclidean algorithm</span>
+
+<span class="sd">    from https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a, b : int</span>
+<span class="sd">        two input integers</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    old_s, old_t, old_r : int</span>
+<span class="sd">        the output integers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">old_s</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span>
+    <span class="n">old_t</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span>
+    <span class="n">old_r</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">a</span><span class="p">,</span><span class="n">b</span>
+    <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">a</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">r</span><span class="o">!=</span><span class="mi">0</span><span class="p">):</span>
+            <span class="n">q</span><span class="o">=</span><span class="n">old_r</span><span class="o">//</span><span class="n">r</span>
+            <span class="n">old_r</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span><span class="n">old_r</span><span class="o">-</span><span class="n">q</span><span class="o">*</span><span class="n">r</span>
+            <span class="n">old_s</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">,</span><span class="n">old_s</span><span class="o">-</span><span class="n">q</span><span class="o">*</span><span class="n">s</span>
+            <span class="n">old_t</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span><span class="n">old_t</span><span class="o">-</span><span class="n">q</span><span class="o">*</span><span class="n">t</span>
+    <span class="k">return</span> <span class="n">old_s</span><span class="p">,</span> <span class="n">old_t</span><span class="p">,</span> <span class="n">old_r</span></div>
+
+<div class="viewcode-block" id="get_pri_vec_inplane"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.get_pri_vec_inplane">[docs]</a><span class="k">def</span> <span class="nf">get_pri_vec_inplane</span><span class="p">(</span><span class="n">hkl</span><span class="p">,</span><span class="n">lattice</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    get two primitive lattice vector for the (hkl) plane</span>
+<span class="sd">    from Banadaki A D, Patala S. An efficient algorithm for computing the primitive bases of a general lattice plane[J]. Journal of Applied Crystallography, 2015, 48(2): 585-588.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hkl : numpy array</span>
+<span class="sd">        the Miller indices</span>
+<span class="sd">    lattice : numpy array</span>
+<span class="sd">        lattice basis set</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v1, v2 : numpy array</span>
+<span class="sd">        the two primitive lattice vectors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">h</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">l</span> <span class="o">=</span> <span class="n">hkl</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">LLL</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">lattice</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">lattice</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])))</span>
+    <span class="n">by</span><span class="p">,</span> <span class="n">bz</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">ext_euclid</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">k</span><span class="p">),</span><span class="nb">abs</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">h</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">v2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">l</span><span class="o">/</span><span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="o">/</span><span class="n">c</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bx</span> <span class="o">=</span> <span class="o">-</span><span class="n">c</span><span class="o">/</span><span class="n">h</span>
+        <span class="k">if</span> <span class="n">k</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">by</span> <span class="o">=</span> <span class="n">k</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">by</span>
+        <span class="k">if</span> <span class="n">l</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">bz</span> <span class="o">=</span> <span class="n">l</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">*</span><span class="n">bz</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">l</span><span class="o">/</span><span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="o">/</span><span class="n">c</span><span class="p">])</span>
+        <span class="n">v2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">bz</span><span class="p">])</span>
+    <span class="n">v2</span> <span class="o">=</span> <span class="n">find_integer_vectors</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span><span class="mi">1000</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">LLL</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">lattice</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">))))</span></div>
+
+<div class="viewcode-block" id="get_right_hand"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.get_right_hand">[docs]</a><span class="k">def</span> <span class="nf">get_right_hand</span><span class="p">(</span><span class="n">B</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    get right handed lattice of B</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    B : numpy array</span>
+<span class="sd">        lattice basis set</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    B_r : numpy array</span>
+<span class="sd">        the right_handed basis set of lattice B</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dot</span><span class="p">(</span><span class="n">B</span><span class="p">[:,</span><span class="mi">2</span><span class="p">],</span><span class="n">cross</span><span class="p">(</span><span class="n">B</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">B</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">B</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">B</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">B</span></div>
+
+<div class="viewcode-block" id="get_normal_from_MI"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.get_normal_from_MI">[docs]</a><span class="k">def</span> <span class="nf">get_normal_from_MI</span><span class="p">(</span><span class="n">lattice</span><span class="p">,</span> <span class="n">hkl</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    get the normal vector of a lattice plane with known miller indices</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lattice : numpy array</span>
+<span class="sd">        lattice basis set</span>
+<span class="sd">    hkl : numpy array</span>
+<span class="sd">        the Miller indices</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n : numpy array</span>
+<span class="sd">        a normal vector to the (hkl) plane</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hkl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">hkl</span><span class="p">)</span>
+    <span class="n">lattice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lattice</span><span class="p">,</span><span class="n">dtype</span> <span class="o">=</span> <span class="nb">float</span><span class="p">)</span>
+    <span class="n">numzeros</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hkl</span><span class="o">==</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">numzeros</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">zero_v_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hkl</span><span class="o">==</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">cross</span><span class="p">(</span><span class="n">lattice</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">zero_v_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">lattice</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">zero_v_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="k">elif</span> <span class="n">numzeros</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">non_zero_v_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hkl</span><span class="o">!=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">u1</span> <span class="o">=</span> <span class="n">lattice</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">non_zero_v_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">/</span><span class="n">hkl</span><span class="p">[</span><span class="n">non_zero_v_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">u2</span> <span class="o">=</span> <span class="n">lattice</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">non_zero_v_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">/</span><span class="n">hkl</span><span class="p">[</span><span class="n">non_zero_v_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">u1</span><span class="o">-</span><span class="n">u2</span>
+        <span class="n">zero_v_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">hkl</span><span class="o">==</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">v2</span> <span class="o">=</span> <span class="n">lattice</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">zero_v_index</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">cross</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">numzeros</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">P1</span> <span class="o">=</span> <span class="n">lattice</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">hkl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">P2</span> <span class="o">=</span> <span class="n">lattice</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">hkl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">P3</span> <span class="o">=</span> <span class="n">lattice</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">hkl</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">P1</span><span class="o">-</span><span class="n">P2</span>
+        <span class="n">v2</span> <span class="o">=</span> <span class="n">P1</span><span class="o">-</span><span class="n">P3</span>
+        <span class="k">return</span> <span class="n">cross</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;hkl error&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="search_MI_n"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.search_MI_n">[docs]</a><span class="k">def</span> <span class="nf">search_MI_n</span><span class="p">(</span><span class="n">lattice</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">lim</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    get the miller indices of planes whose normal vector is close to the input vector n</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lattice : numpy array</span>
+<span class="sd">        lattice basis set</span>
+<span class="sd">    n : numpy array</span>
+<span class="sd">        the normal vector</span>
+<span class="sd">    tol : float</span>
+<span class="sd">        tolerance to judge perpendicular</span>
+<span class="sd">    lim : int</span>
+<span class="sd">        upper limit of indices serching</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hkl : numpy array</span>
+<span class="sd">        the Miller indices</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">lim</span><span class="p">,</span> <span class="n">lim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="n">indice</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">indice_0</span> <span class="o">=</span> <span class="n">indice</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">indice</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)]</span>
+    <span class="n">indice_0</span> <span class="o">=</span> <span class="n">indice_0</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">indice_0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))]</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indice_0</span><span class="p">:</span>
+        <span class="n">n_there</span> <span class="o">=</span> <span class="n">get_normal_from_MI</span><span class="p">(</span><span class="n">lattice</span><span class="p">,</span> <span class="n">indice_0</span><span class="p">)</span>
+        <span class="n">dtheta</span> <span class="o">=</span> <span class="n">arccos</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">ang</span><span class="p">(</span><span class="n">n_there</span><span class="p">,</span><span class="n">n</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">dtheta</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;plane found, dtheta = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">,</span><span class="nb">format</span><span class="p">(</span><span class="n">dtheta</span><span class="p">))</span>
+            <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+        <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;failed to find a close lattice plane for this normal vector, please increase the tol or adjust orientation&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">MID</span><span class="p">(</span><span class="n">lattice</span><span class="p">,</span> <span class="n">n_there</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="match_rot"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.match_rot">[docs]</a><span class="k">def</span> <span class="nf">match_rot</span><span class="p">(</span><span class="n">deft_rot</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">exact_rot</span><span class="p">,</span> <span class="n">av_perpendicular</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    find the intermediate rotation</span>
+
+<span class="sd">    given an exact rotation matrix and a default rotation matrix,</span>
+<span class="sd">    find the intermediate rotation matrix so that the operation combining</span>
+<span class="sd">    the default rotation + the intermediate rotation is close to the excat rotation</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    deft_rot : numpy array</span>
+<span class="sd">        initial orientation matrix</span>
+<span class="sd">    axis : numpy array</span>
+<span class="sd">        the rotation axix</span>
+<span class="sd">    tol : float</span>
+<span class="sd">        tolerance to judge coincidence</span>
+<span class="sd">    exact_rot : numpy array</span>
+<span class="sd">        target orientation matrix</span>
+<span class="sd">    av_perpendicular : numpy array</span>
+<span class="sd">        auxilliary vector</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inter_rot : numpy array</span>
+<span class="sd">        intermediate rotation matrix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">min_g</span> <span class="o">=</span> <span class="n">inf</span>
+    <span class="k">while</span> <span class="n">theta</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span><span class="p">:</span>
+        <span class="n">inter_rot</span> <span class="o">=</span> <span class="n">rot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+        <span class="n">compare_rot</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">deft_rot</span><span class="p">,</span><span class="n">inter_rot</span><span class="p">)</span>
+        <span class="n">compare_v</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">compare_rot</span><span class="p">,</span> <span class="n">av_perpendicular</span><span class="p">)</span>
+        <span class="n">compare_v</span> <span class="o">=</span> <span class="n">compare_v</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">compare_v</span><span class="p">)</span>
+        <span class="n">exact_v</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">exact_rot</span><span class="p">,</span><span class="n">av_perpendicular</span><span class="p">)</span>
+        <span class="n">exact_v</span> <span class="o">=</span> <span class="n">exact_v</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">exact_v</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">norm</span><span class="p">(</span><span class="n">cross</span><span class="p">(</span><span class="n">compare_v</span><span class="p">,</span> <span class="n">exact_v</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">min_g</span><span class="p">:</span>
+            <span class="n">min_g</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">cross</span><span class="p">(</span><span class="n">compare_v</span><span class="p">,</span> <span class="n">exact_v</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">norm</span><span class="p">(</span><span class="n">cross</span><span class="p">(</span><span class="n">compare_v</span><span class="p">,</span> <span class="n">exact_v</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+            <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">dot</span><span class="p">(</span><span class="n">exact_v</span><span class="p">,</span> <span class="n">compare_v</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">inter_rot</span> <span class="o">=</span> <span class="n">rot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">theta</span><span class="o">+</span><span class="n">pi</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="n">theta</span> <span class="o">+=</span> <span class="mf">0.01</span><span class="o">/</span><span class="mi">180</span><span class="o">*</span><span class="n">pi</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Disorientation match failed, please try other planes or increase tolerance, min = </span><span class="si">{</span><span class="n">min_g</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">inter_rot</span></div>
+
+<div class="viewcode-block" id="DSCcalc"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.DSCcalc">[docs]</a><span class="k">class</span> <span class="nc">DSCcalc</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    core class computing DSC basis</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ai1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#basis vectors of lattice 1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ai2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#basis vectors of lattice 2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#ai1U = ai2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="nb">int</span> <span class="c1">#sigma2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DSC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CSL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#ai1U1 = ai2U2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U_int</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="c1">#describing ai2 by ai1 with int coe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#three cooresponding greatest common denominator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CNID</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DSCcalc.parse_int_U"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.DSCcalc.parse_int_U">[docs]</a>    <span class="k">def</span> <span class="nf">parse_int_U</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ai1</span><span class="p">,</span><span class="n">ai2</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        initiate computation</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ai1 : numpy array</span>
+<span class="sd">            lattice 1 basis set</span>
+<span class="sd">        ai2 : numpy array</span>
+<span class="sd">            lattice 2 basis set</span>
+<span class="sd">        sigma : int</span>
+<span class="sd">            sigma value</span>
+<span class="sd">        tol : float</span>
+<span class="sd">            tolerance to judge coincidence, default 1e-8</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ai1</span> <span class="o">=</span> <span class="n">ai1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ai2</span> <span class="o">=</span> <span class="n">ai2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">sigma</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">ai1</span><span class="p">),</span><span class="n">ai2</span><span class="p">)</span>
+        <span class="c1">#get the integers uij</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">U_int</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">find_integer_vectors</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">,</span><span class="n">tol</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DSCcalc.compute_DSC"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.DSCcalc.compute_DSC">[docs]</a>    <span class="k">def</span> <span class="nf">compute_DSC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">to_LLL</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        solve the DSC equation</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        to_LLL : bool</span>
+<span class="sd">            whether do LLL algorithm for the found basis, default True</span>
+<span class="sd">        tol : float</span>
+<span class="sd">            tolerance to judge coincidence, default 1e-8</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#integer LC of ai2_1</span>
+        <span class="c1">#print(&#39;the U matrix&#39;)</span>
+        <span class="c1">#print(str(self.U_int) + &#39;\&#39;&#39; + str(self.sigma))</span>
+        <span class="c1">#print(&#39;---------------------------------------&#39;)</span>
+        <span class="n">ks</span><span class="p">,</span><span class="n">L</span> <span class="o">=</span> <span class="n">find_integer_vectors</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai1</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">ai2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]),</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
+        <span class="c1">#print(&#39;ai2_1 is expressed by ai1 as &#39; + str(ks) + &#39;/&#39; + str(L))</span>
+        <span class="n">k1</span><span class="p">,</span><span class="n">k2</span><span class="p">,</span><span class="n">k3</span> <span class="o">=</span> <span class="n">ks</span>
+        <span class="c1">#solve DSC Ei for the ai2_1 by ai1</span>
+        <span class="n">Ei</span> <span class="o">=</span> <span class="n">solve_DSC_equations</span><span class="p">(</span><span class="n">k1</span><span class="p">,</span><span class="n">k2</span><span class="p">,</span><span class="n">k3</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ai1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1">#print(&#39;Ei is \n&#39; + str(Ei))</span>
+        <span class="c1">#coefficients of ai2_2 expressed by DSC Ei</span>
+        <span class="n">es</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">Ei</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">ai2</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1">#print(&#39;ai2_2 is expressed by Ei as &#39; + str(es))</span>
+        <span class="c1">#integer coefficients</span>
+        <span class="n">ls</span><span class="p">,</span> <span class="n">M</span> <span class="o">=</span> <span class="n">find_integer_vectors</span><span class="p">(</span><span class="n">es</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
+        <span class="c1">#print(&#39;ls: &#39; + str(ls) + &#39; M: &#39; + str(M))</span>
+        <span class="k">if</span> <span class="n">M</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1">#print(&#39;Ei satisfy ai2_2&#39;)</span>
+            <span class="c1">#this DSC applies for ai2_2 now check ai2_3</span>
+            <span class="c1">#coefficients of ai2_3 expressed by DSC Ei</span>
+            <span class="n">es</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">Ei</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">ai2</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
+            <span class="c1">#print(&#39;ai2_3 is expressed by Ei as &#39; + str(es))</span>
+            <span class="c1">#integer coeficients</span>
+            <span class="n">ms</span><span class="p">,</span> <span class="n">M_p</span> <span class="o">=</span> <span class="n">find_integer_vectors</span><span class="p">(</span><span class="n">es</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
+            <span class="c1">#print(&#39;ms: &#39; + str(ms) + &#39; M_p: &#39; + str(M_p))</span>
+            <span class="k">if</span> <span class="n">M_p</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1">#print(&#39;Ei satisfy ai2_3&#39;)</span>
+                <span class="c1">#this DSC also applies for ai2_3, output</span>
+                <span class="c1">#print(&#39;-----------------------------&#39;)</span>
+                <span class="c1">#print(&#39;sigma &#39; + str(L))</span>
+                <span class="n">DSC</span> <span class="o">=</span> <span class="n">Ei</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1">#this DSC does not apply for ai2_3</span>
+                <span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">m3</span> <span class="o">=</span> <span class="n">ms</span>
+                <span class="c1">#now compute the DSC Fi of ai2_3 by Ei, output</span>
+                <span class="n">Fi</span> <span class="o">=</span> <span class="n">solve_DSC_equations</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">m3</span><span class="p">,</span><span class="n">M_p</span><span class="p">,</span><span class="n">Ei</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c1">#print(&#39;-----------------------------&#39;)</span>
+                <span class="c1">#print(&#39;sigma &#39; + str(L * M_p))</span>
+                <span class="n">DSC</span> <span class="o">=</span> <span class="n">Fi</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#print(&#39;M &gt; 1&#39;)</span>
+            <span class="c1">#this DSC does not apply for ai2_2</span>
+            <span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">,</span><span class="n">l3</span> <span class="o">=</span> <span class="n">ls</span>
+            <span class="c1">#now compute the DSC of ai2_2 by Ei</span>
+            <span class="n">Fi</span> <span class="o">=</span> <span class="n">solve_DSC_equations</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">,</span><span class="n">l3</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">Ei</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1">#print(&#39;Fi is\n&#39; + str(Fi))</span>
+            <span class="c1">#check for ai2_3</span>
+            <span class="c1">#coefficients of ai2_3 expressed by DSC Fi</span>
+            <span class="n">es</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">Fi</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">ai2</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
+            <span class="c1">#print(&#39;ai2_3 is expressed by Fi as &#39; + str(es))</span>
+            <span class="c1">#integer coefficients</span>
+            <span class="n">ns</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="n">find_integer_vectors</span><span class="p">(</span><span class="n">es</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
+            <span class="c1">#print(&#39;ns: &#39; + str(ns) + &#39; N: &#39; + str(N))</span>
+            <span class="k">if</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1">#print(&#39;N = 1, DSC got&#39;)</span>
+                <span class="c1">#this DSC Fi applies for ai2_3</span>
+                <span class="c1">#print(&#39;-----------------------------&#39;)</span>
+                <span class="c1">#print(&#39;sigma &#39; + str(L * M))</span>
+                <span class="n">DSC</span> <span class="o">=</span> <span class="n">Fi</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1">#this DSC Fi does not apply for ai2_3</span>
+                <span class="c1">#print(&#39;N &gt; 1&#39;)</span>
+                <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">n3</span> <span class="o">=</span> <span class="n">ns</span>
+                <span class="n">Gi</span> <span class="o">=</span> <span class="n">solve_DSC_equations</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span><span class="n">n2</span><span class="p">,</span><span class="n">n3</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">Fi</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c1">#print(&#39;Gi is &#39; + str(Gi))</span>
+                <span class="c1">#print(&#39;-----------------------------&#39;)</span>
+                <span class="c1">#print(&#39;sigma &#39; + str(L * M * N))</span>
+                <span class="n">DSC</span> <span class="o">=</span> <span class="n">Gi</span>
+        <span class="n">DSC</span> <span class="o">=</span> <span class="n">get_right_hand</span><span class="p">(</span><span class="n">DSC</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">to_LLL</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">DSC</span> <span class="o">=</span> <span class="n">LLL</span><span class="p">(</span><span class="n">DSC</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">DSC</span> <span class="o">=</span> <span class="n">DSC</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DSC</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai1</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">DSC</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DSCcalc.compute_CSL"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.DSCcalc.compute_CSL">[docs]</a>    <span class="k">def</span> <span class="nf">compute_CSL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        compute CSL</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tol : float</span>
+<span class="sd">            tolerance to judge coincidence, default 1e-8</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#symmetric matrix along the second diagonal</span>
+        <span class="n">Ux</span> <span class="o">=</span> <span class="n">dia_sym_mtx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">)</span>
+        <span class="n">a20</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai1</span><span class="p">,</span><span class="n">Ux</span><span class="p">)</span>
+        <span class="n">calc_csl</span> <span class="o">=</span> <span class="n">DSCcalc</span><span class="p">()</span>
+        <span class="n">calc_csl</span><span class="o">.</span><span class="n">parse_int_U</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai1</span><span class="p">,</span> <span class="n">a20</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
+        <span class="n">calc_csl</span><span class="o">.</span><span class="n">compute_DSC</span><span class="p">(</span><span class="n">to_LLL</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="n">tol</span><span class="p">)</span>
+        <span class="n">DSC_ax</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai1</span><span class="p">,</span><span class="n">calc_csl</span><span class="o">.</span><span class="n">DSC</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U1</span> <span class="o">=</span> <span class="n">dia_sym_mtx</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">DSC_ax</span><span class="p">),</span><span class="n">a20</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CSL</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">U1</span><span class="p">)</span>
+        <span class="n">red_CSL</span> <span class="o">=</span> <span class="n">LLL</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CSL</span><span class="p">)</span>
+        <span class="n">red_CSL</span> <span class="o">=</span> <span class="n">get_right_hand</span><span class="p">(</span><span class="n">red_CSL</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U1</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai1</span><span class="p">),</span><span class="n">red_CSL</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U2</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">U1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CSL</span> <span class="o">=</span> <span class="n">get_right_hand</span><span class="p">(</span><span class="n">red_CSL</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DSCcalc.compute_CNID"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.cellcalc.DSCcalc.compute_CNID">[docs]</a>    <span class="k">def</span> <span class="nf">compute_CNID</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hkl</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        compute 2D DSC</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        hkl :</span>
+<span class="sd">            miller indices of the plane to compute</span>
+<span class="sd">        tol : float</span>
+<span class="sd">            tolerance to judge coincidence, default 1e-8</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pmi_1</span> <span class="o">=</span> <span class="n">hkl</span>
+        <span class="n">pmi_2</span> <span class="o">=</span> <span class="n">get_primitive_hkl</span><span class="p">(</span><span class="n">hkl</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai2</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
+        <span class="n">pb_1</span> <span class="o">=</span> <span class="n">get_pri_vec_inplane</span><span class="p">(</span><span class="n">pmi_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai1</span><span class="p">)</span>
+        <span class="n">pb_2</span> <span class="o">=</span> <span class="n">get_pri_vec_inplane</span><span class="p">(</span><span class="n">pmi_2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai2</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">pb_1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">pb_1</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">c1</span> <span class="o">=</span> <span class="n">get_right_hand</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">pb_1</span><span class="p">,</span><span class="n">n</span><span class="p">)))</span>
+        <span class="n">c2</span> <span class="o">=</span> <span class="n">get_right_hand</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">pb_2</span><span class="p">,</span><span class="n">n</span><span class="p">)))</span>
+        <span class="n">calc_cnid</span> <span class="o">=</span> <span class="n">DSCcalc</span><span class="p">()</span>
+        <span class="n">calc_cnid</span><span class="o">.</span><span class="n">parse_int_U</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span><span class="n">tol</span><span class="p">)</span>
+        <span class="n">calc_cnid</span><span class="o">.</span><span class="n">compute_DSC</span><span class="p">(</span><span class="n">to_LLL</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span><span class="c1">#in c1 frame</span>
+        <span class="n">DSC</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span><span class="n">calc_cnid</span><span class="o">.</span><span class="n">DSC</span><span class="p">)</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">CNID</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-10</span>
+            <span class="k">if</span> <span class="n">norm</span><span class="p">(</span><span class="n">cross</span><span class="p">(</span><span class="n">DSC</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="n">n</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">:</span>
+                <span class="n">CNID</span><span class="p">[:,</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="n">DSC</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="n">CNID</span> <span class="o">=</span> <span class="n">LLL</span><span class="p">(</span><span class="n">CNID</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CNID</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai1</span><span class="p">),</span><span class="n">CNID</span><span class="p">)</span></div></div>
+</pre></div>
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner"></div>
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=752cbf1e58c09e799737"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=752cbf1e58c09e799737"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+    <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2022, Y. Xie, NMDL.
+      <br/>
+    
+  </p>
+</div>
+  
+    <div class="footer-item"><p class="theme-version">
+  Built with the
+  <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a>
+  0.13.0rc3.dev0.
+</p></div>
+  
+    <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://sphinx-doc.org/">Sphinx</a> 6.1.3.
+    <br/>
+  </p>
+</div>
+  
+</div>
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,987 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>CIS twinning - Approximate &#8212; interfacemaster 1.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=752cbf1e58c09e799737" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=752cbf1e58c09e799737" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/Tutorial_Making bicrystal for a known GB - CIS twinning - Approximate';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tellurium" href="Tutorial_Making%20bicrystal%20for%20a%20known%20GB%20-%20Co%20-Approximate.html" />
+    <link rel="prev" title="Tutorials" href="../tutorials.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target="#bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+      
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">interfacemaster 1.1 documentation</p>
+  
+</a>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="me-auto">
+      
+        <div class="navbar-center-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul id="navbar-main-elements" class="navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../interfacemaster.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="http://www.edge.iis.u-tokyo.ac.jp/">
+                    Nano-Materials Design Lab.
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-end-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-end-item"><ul id="navbar-icon-links"
+    class="navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/nmdl-mizo/interface_master" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-center-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul id="navbar-main-elements" class="navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../interfacemaster.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="http://www.edge.iis.u-tokyo.ac.jp/">
+                    Nano-Materials Design Lab.
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-end-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-end-item"><ul id="navbar-icon-links"
+    class="navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/nmdl-mizo/interface_master" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-start-items sidebar-primary__section">
+        <div class="sidebar-start-items__item"><nav class="bd-links"
+     id="bd-docs-nav"
+     aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Making bicrystals of known GBs</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">CIS twinning - Approximate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Making%20bicrystal%20for%20a%20known%20GB%20-%20Co%20-Approximate.html">Tellurium</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Making%20bicrystal%20for%20a%20known%20GB%20-%20Si%20symmetric%20tilt%20-%20exact.html">Si symmetric tilt -exact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Making%20bicrystal%20for%20a%20known%20GB%20-%20Si%20twist%20-%20exact.html">Si twist</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Making%20bicrystal%20for%20a%20known%20GB%20-%20tellurium%20-%20Approximate.html">Tellurium</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Making 2D CSL interfaces</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Two-dimensional%20CSL%20interfaces_Al2O3_ZnO%20-%20Approximate.html">Al2O3/ZnO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Two-dimensional%20CSL%20interfaces_GaN_Fe.html">GaN/Fe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Two-dimensional%20CSL%20interfaces_Si_Si3N4%20-%20Approximate.html">Si/Si3N4 - Approximate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Two-dimensional%20CSL%20interfaces_graphene_BN.html">Graphene/BN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Two-dimensional%20CSL%20interfaces_graphene_GaN.html">Graphene/GaN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Two-dimensional%20CSL%20interfaces_twisted_WS2_layers%20-%20Approximate.html">Twisted WS2 Bilayers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Two-dimensional%20CSL%20interfaces_twisted_graphene_layers%20-%20Approximate.html">Twisted Graphene Bilayers</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Sampling in the CNID</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Sampling_in_CNID.html">Sampling in CNID</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Making surface slabs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Tutorial_Making_surface_slab_TiO2.html">TiO2 surface slab</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article"><div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-start-item">
+
+
+
+<nav aria-label="breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">CIS twinning - Approximate</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars and line breaks on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+    white-space: pre;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<section id="CIS-twinning---Approximate">
+<h1>CIS twinning - Approximate<a class="headerlink" href="#CIS-twinning---Approximate" title="Permalink to this heading">#</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">interfacemaster.cellcalc</span> <span class="kn">import</span> <span class="n">get_primitive_hkl</span>
+<span class="kn">from</span> <span class="nn">interfacemaster.interface_generator</span> <span class="kn">import</span> <span class="n">core</span><span class="p">,</span> <span class="n">convert_vector_index</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="nb">round</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">average</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">inv</span>
+</pre></div>
+</div>
+</div>
+<section id="Define-an-interface-core-class">
+<h2>Define an interface core class<a class="headerlink" href="#Define-an-interface-core-class" title="Permalink to this heading">#</a></h2>
+<p>Input two cif files.For GBs, input the same file; for interfaces, input two different files.</p>
+<p>The first structure is non-changed while the second one can be deformed to form an approximate CSL</p>
+<p>Please input files of CONVENTIONAL cells if you are not familiar with the indices in the primitive cell.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">my_interface</span> <span class="o">=</span> <span class="n">core</span><span class="p">(</span><span class="s1">&#39;cif_files/CIS-exp.cif&#39;</span><span class="p">,</span><span class="s1">&#39;cif_files/CIS-exp.cif&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Warning!, this programme will rewrite the POSCAR file in this dir!
+</pre></div></div>
+</div>
+</section>
+<section id="Specify-the-rotation-axis-and-searching-parameters-to-find-an-approximate-CSL">
+<h2>Specify the rotation axis and searching parameters to find an approximate CSL<a class="headerlink" href="#Specify-the-rotation-axis-and-searching-parameters-to-find-an-approximate-CSL" title="Permalink to this heading">#</a></h2>
+<p>Rotation axis should be expressed in the primitive cell frame, we can convert this.</p>
+<p>For example we need an axis [2,-2,1] expressed in the conventional cell.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">axis</span> <span class="o">=</span> <span class="n">convert_vector_index</span><span class="p">(</span><span class="n">my_interface</span><span class="o">.</span><span class="n">conv_lattice_1</span><span class="p">,</span> <span class="n">my_interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axis</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([ 3., -1.,  2.])
+</pre></div></div>
+</div>
+<p>For the meaning of searching parameters, please check the paper.</p>
+<p>If you are making an exact CSL, just set du, S &amp; dd to be ‘very small’.</p>
+<p>In this case we make a known twinning GB, which is an exact CSL.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">my_interface</span><span class="o">.</span><span class="n">parse_limit</span><span class="p">(</span><span class="n">du</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">,</span> <span class="n">S</span>  <span class="o">=</span> <span class="mf">1e-2</span><span class="p">,</span> <span class="n">sgm1</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sgm2</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">dd</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">)</span>
+
+<span class="c1">#Do searching!</span>
+<span class="c1">#We already know that there is a CSL by rotation 180 degrees</span>
+<span class="n">my_interface</span><span class="o">.</span><span class="n">search_one_position</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span><span class="mi">180</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[ 11.562  -11.562   11.6422]
+Congrates, we found an appx CSL!
+
+U1 =
+[[ 0  1  1]
+ [-1  1 -1]
+ [-1  0  1]]; sigma_1 = 3
+
+U2 =
+[[ 0 -1  2]
+ [ 1 -1  0]
+ [ 1  0  1]]; sigma_2 = 3
+
+D =
+[[ 1.0030793  -0.0030793  -0.00611617]
+ [-0.0030793   1.0030793   0.00611617]
+ [ 0.00310066 -0.00310066  0.9938414 ]]
+
+axis = [ 11.562  -11.562   11.6422] ; theta = 180.0
+
+</pre></div></div>
+</div>
+<p>‘U1’, ‘U2’ are two sets of indices of the CSL in the two crystals’ frames, ‘D’ is the deformation applied to the crystal 2 to form an approximate CSL</p>
+<p>As you can see, to form a twinning structure we need to deform the structure provided!</p>
+</section>
+<section id="Convert-the-miller-indices-to-be-expressed-in-the-primitive-cell">
+<h2>Convert the miller indices to be expressed in the primitive cell<a class="headerlink" href="#Convert-the-miller-indices-to-be-expressed-in-the-primitive-cell" title="Permalink to this heading">#</a></h2>
+<p>Now we need to specify the orientation of our interface, which is by giving a miller indices in expressed in the primitive cell.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The interface plane is the [1,-1,2] plane in the conventional cell and now we \</span>
+<span class="sd">transform it into primitive cell</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">hkl</span> <span class="o">=</span> <span class="n">get_primitive_hkl</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]),</span> <span class="n">my_interface</span><span class="o">.</span><span class="n">conv_lattice_1</span><span class="p">,</span> <span class="n">my_interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">)</span>
+<span class="n">hkl</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([ 1, -1,  1])
+</pre></div></div>
+</div>
+</section>
+<section id="Compute-the-indices-of-the-two-slabs-to-make-bicrystal">
+<h2>Compute the indices of the two slabs to make bicrystal<a class="headerlink" href="#Compute-the-indices-of-the-two-slabs-to-make-bicrystal" title="Permalink to this heading">#</a></h2>
+<p>Now let’s compute the indices of the two slabs forming the interface If you want a near orthogonal bicrystal, please set ’orthogonal to yes, and adjust the lim &amp; tol.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">my_interface</span><span class="o">.</span><span class="n">compute_bicrystal</span><span class="p">(</span><span class="n">hkl</span><span class="p">,</span> <span class="n">normal_ortho</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">lim</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">tol_ortho</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+cell 1:
+[[ 3  0  1]
+ [-1 -1  1]
+ [ 2 -1  0]]
+cell 2:
+[[ 3  0 -1]
+ [-1  1 -1]
+ [ 2  1  0]]
+</pre></div></div>
+</div>
+<p>Here we obtained the two sets of indices to build a bicrystal</p>
+</section>
+<section id="Make-a-bicrystal!">
+<h2>Make a bicrystal!<a class="headerlink" href="#Make-a-bicrystal!" title="Permalink to this heading">#</a></h2>
+<p>You can adjust the bicrystal by 1. do expansion by set ‘xyz’ = [dimX, dimY, dimZ] 2. do RBT by ‘dzdy’ = a translation vector (please confine dzdy in the interface plane, for RBT in the normal, please use ‘dp1’ and ‘dp2’, to make vacuum in the interface use ‘dx’); 3. introduce vacuum in the interface by ‘dx’ = the distance spacing the two crystals 4. adjust the termination by ‘dp1’, ‘dp2’ = length of shift of the position of the termination from the interface into the bulk 5. introduce vacuum to
+make a surface in the end of the bicrystal by ‘vx’ = length of the vaccumn</p>
+<p>default: xyz = [1,1,1] and others = 0</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">my_interface</span><span class="o">.</span><span class="n">get_bicrystal</span><span class="p">(</span><span class="n">xyz_1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">xyz_2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>Good! You have made a ‘POSCAR’ file of this bicrystal, we also generated two files named ‘cell_1.cif’ and ‘cell_2.cif’ providing the structure of the two slabs.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#To sample the CNID, try</span>
+<span class="n">my_interface</span><span class="o">.</span><span class="n">sample_CNID</span><span class="p">(</span><span class="n">grid</span> <span class="o">=</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">],</span> <span class="n">xyz_1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">xyz_2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+CNID
+[[ 0. -1.]
+ [-1. -1.]
+ [-1.  0.]]
+making 400 files...
+completed
+</pre></div></div>
+</div>
+<p>Please check the generated ‘POSCAR.x.y’ files. The CNID here is expressed in the primitive cell’s frame. You can refer to the cartesian coordinates or in the conventional cell’s frame</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CNID_cartesian</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">my_interface</span><span class="o">.</span><span class="n">CNID</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">CNID_cartesian</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[ 2.8905, -5.781 ],
+       [-2.8905, -5.781 ],
+       [-5.8211, -0.    ]])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CNID_conv</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">my_interface</span><span class="o">.</span><span class="n">conv_lattice_1</span><span class="p">)</span>\
+                              <span class="p">,</span> <span class="n">my_interface</span><span class="o">.</span><span class="n">CNID</span><span class="p">),</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">CNID_conv</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[ 0.5, -1. ],
+       [-0.5, -1. ],
+       [-0.5,  0. ]])
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       id="prev-link"
+       href="../tutorials.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Tutorials</p>
+      </div>
+    </a>
+    <a class="right-next"
+       id="next-link"
+       href="Tutorial_Making%20bicrystal%20for%20a%20known%20GB%20-%20Co%20-Approximate.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Tellurium</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc">
+  <div class="toc-item">
+  <div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Define-an-interface-core-class">Define an interface core class</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Specify-the-rotation-axis-and-searching-parameters-to-find-an-approximate-CSL">Specify the rotation axis and searching parameters to find an approximate CSL</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Convert-the-miller-indices-to-be-expressed-in-the-primitive-cell">Convert the miller indices to be expressed in the primitive cell</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Compute-the-indices-of-the-two-slabs-to-make-bicrystal">Compute the indices of the two slabs to make bicrystal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Make-a-bicrystal!">Make a bicrystal!</a></li>
+</ul>
+  </nav></div>
+
+  <div class="toc-item">
+  <div class="tocsection sourcelink">
+    <a href="../_sources/tutorials/Tutorial_Making bicrystal for a known GB - CIS twinning - Approximate.ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+</div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner"></div>
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=752cbf1e58c09e799737"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=752cbf1e58c09e799737"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+    <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2022, Y. Xie, NMDL.
+      <br/>
+    
+  </p>
+</div>
+  
+    <div class="footer-item"><p class="theme-version">
+  Built with the
+  <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a>
+  0.13.0rc3.dev0.
+</p></div>
+  
+    <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://sphinx-doc.org/">Sphinx</a> 6.1.3.
+    <br/>
+  </p>
+</div>
+  
+</div>
+  </footer>
+  </body>
+</html>
