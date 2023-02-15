@@ -286,7 +286,7 @@ def write_LAMMPS(lattice, atoms, elements, filename = 'lmp_atoms_file', orthogon
         f.write('{0:.8f} {1:.8f} xlo xhi \n'.format(xlo, xhi))
         f.write('{0:.8f} {1:.8f} ylo yhi \n'.format(ylo, yhi))
         f.write('{0:.8f} {1:.8f} zlo zhi \n\n'.format(zlo, zhi))
-        if orthogonal == False:
+        if not orthogonal:
             f.write('{0:.8f} {1:.8f} {2:.8f} xy xz yz \n\n'.format(xy, xz, yz))
         f.write('Atoms \n \n')
         np.savetxt(f, Final_format, fmt='%i %i %.16f %.16f %.16f')
@@ -1273,7 +1273,7 @@ class core:
         Ns = np.arange(1, self.sgm2 + 1)
         found = None
 
-        if two_D == False:
+        if not two_D:
             a1 = self.lattice_1.copy()
             a2_0 = self.lattice_2.copy()
 
@@ -1538,7 +1538,7 @@ class core:
                 D = dot(inv(R),R_p)
                 if ((abs(det(D)-1) <= self.S) and \
                 np.all(abs(D-np.eye(3)) < self.dd)):
-                    if exact == True:
+                    if exact:
                         D = eye(3,3)
                         R = R_p
                     here_found = True
@@ -1613,7 +1613,7 @@ class core:
         b2_0 = get_pri_vec_inplane(hkl_2, self.lattice_2)
         #rotate the second crystal so that the two slabs connect
         self.set_orientation_axis(dot(inv(self.lattice_1),n1), dot(inv(self.lattice_2),n2))
-        if pre_dt == True:
+        if pre_dt:
             #auxiliary vector
             self.orientation = pre_R
         #auxilary vector
@@ -1661,7 +1661,7 @@ class core:
                     file.write('    N= ' + str(N) + " accepted" + '\n')
                     R_p = three_dot(a1, U_p, inv(a2_0))
                     D = dot(inv(R),R_p)
-                    if exact == True:
+                    if exact:
                         D = eye(3,3)
                         R = R_p
                     if (abs(det(D)-1) <= self.S) and \
@@ -1775,7 +1775,7 @@ class core:
         x = np.arange(n)
         Ns = np.arange(1, self.sgm2 + 1)
 
-        if two_D == False:
+        if not two_D:
             a1 = self.lattice_1.copy()
             a2_0 = dot(self.orientation, self.lattice_2).copy()
 
@@ -1920,14 +1920,14 @@ class core:
         lattice_2, atoms_2, elements_2 = self.lattice_2.copy(), self.atoms_2.copy(), self.elements_2.copy()
 
         # deform & rotate lattice_2
-        if two_D == True:
+        if two_D:
             lattice_2 = dot(self.a2_transform, lattice_2)
         else:
             lattice_2 = three_dot(self.R, self.D, lattice_2)
         #make supercells of the two slabs
         atoms_1, elements_1, lattice_1 = super_cell(self.bicrystal_U1, \
                                                     lattice_1, atoms_1, elements_1)
-        if mirror == False:
+        if not mirror:
             atoms_2, elements_2, lattice_2 = super_cell(self.bicrystal_U2, \
                                                 lattice_2, atoms_2, elements_2)
         else:
@@ -1956,12 +1956,12 @@ class core:
 
         #termination
         if dp1 != 0:
-            if KTI == True:
+            if KTI:
                 atoms_1, elements_1 = shift_termi_left(lattice_1, dp1, atoms_1, elements_1)
             else:
                 atoms_1 = shift_none_copy(lattice_1, dp1, atoms_1)
         if dp2 != 0:
-            if KTI == True:
+            if KTI:
                 atoms_2, elements_2 = shift_termi_right(lattice_2, dp2, atoms_2, elements_2)
             else:
                 atoms_2 = shift_none_copy(lattice_2, dp2, atoms_2)
@@ -2132,7 +2132,7 @@ class core:
         inclination_tol : float
             control the angle between the interface and the cross vector, default sqrt(2)/2
         """
-        if normal_ortho == True and plane_ortho == True:
+        if normal_ortho and plane_ortho:
             self.bicrystal_ortho = True
         self.d1 = d_hkl(self.lattice_1, hkl)
         lattice_2 = three_dot(self.R, self.D, self.lattice_2)
@@ -2143,9 +2143,9 @@ class core:
         if self.verbose:
             print('hkl in CSL:', hkl_c)
         plane_B = get_pri_vec_inplane(hkl_c, self.CSL) # plane bases of the CSL lattice plane
-        if (plane_ortho == True) and (abs(dot(plane_B[:,0], plane_B[:,1])) > tol_ortho):
+        if plane_ortho and (abs(dot(plane_B[:,0], plane_B[:,1])) > tol_ortho):
             plane_B = get_ortho_two_v(plane_B, lim, tol_ortho, align_rotation_axis, rotation_axis)
-        if align_rotation_axis == True:
+        if align_rotation_axis:
             if norm(cross(plane_B[:,0], rotation_axis) > 1e-3):
                 change_v = plane_B[:,1].copy()
                 plane_B[:,1] = plane_B[:,0]
@@ -2154,7 +2154,7 @@ class core:
         v3 = cross_plane(self.CSL, plane_n, lim, normal_ortho, tol_ortho, inclination_tol) # a CSL basic vector cross the plane
         supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
         supercell = get_right_hand(supercell) # check right-handed
-        if normal_ortho == True:
+        if normal_ortho:
             self.min_perp_length = norm(v3)
         self.bicrystal_U1 = np.array(np.round(dot(inv(self.lattice_1), supercell),8),dtype = int)
         self.bicrystal_U2 = np.array(np.round(dot(inv(self.lattice_2_TD), supercell),8),dtype = int)
@@ -2247,7 +2247,7 @@ class core:
 
         with open('blockfile', 'w') as fb:
             for i in range(len(region_names)):
-                if ortho == False:
+                if not ortho:
                     fb.write('region {0} prism {1} {2} EDGE EDGE EDGE EDGE {3} {4} {5} units box \n'.\
                 format(region_names[i], region_los[i], region_his[i], xy, xz, yz))
                 else:
@@ -2312,7 +2312,7 @@ def get_surface_slab(structure, hkl, replica = [1,1,1], inclination_tol = sqrt(2
     atoms, elements = get_sites_elements(structure)
     lattice = structure.lattice.matrix.T
     plane_B = get_pri_vec_inplane(hkl, lattice)
-    if (plane_normal == True) and (abs(dot(plane_B[:,0], plane_B[:,1])) > normal_tol):
+    if plane_normal and (abs(dot(plane_B[:,0], plane_B[:,1])) > normal_tol):
         plane_B = get_ortho_two_v(plane_B, lim, normal_tol, False)
     v3 = cross_plane(lattice, cross(plane_B[:,0], plane_B[:,1]), lim, normal_perp, normal_tol, inclination_tol)
     supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
