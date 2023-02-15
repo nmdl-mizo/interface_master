@@ -486,7 +486,7 @@ def ext_euclid(a, b):
     if b == 0:
         return 1, 0, a
     else:
-        while(r!=0):
+        while r != 0:
             q=old_r//r
             old_r,r=r,old_r-q*r
             old_s,s=s,old_s-q*s
