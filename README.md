@@ -25,6 +25,10 @@ pip install .
 - gb_code
 - numpy (requirements already satisfied by installing pymatgen)
 
+## Documentation
+
+[Documentation including tutorials](https://nmdl-mizo.github.io/interface_master/) is available (only for development branch).
+
 ## How to cite
  If you use the interface_master, please cite the following articles [1][2].  
 [1] "interface_master: Python package building CSL and approximate CSL interfaces of any two lattices -- an effective tool for interface engineers"  
