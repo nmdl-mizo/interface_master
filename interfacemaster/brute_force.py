@@ -271,7 +271,7 @@ def write_data_here(count, energy, dy, dz, dp1, dp2, delete_cutoff):
     delete_cutoff : float
         cutoff to merge atoms
     """
-    with open('results.dat', 'a') as f:
+    with open('results.dat', 'a', encoding='utf-8') as f:
         f.write(f'{count} {energy} {dy} {dz} {dp1} {dp2} {delete_cutoff} \n')
 
 def merge_operation(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc,
@@ -357,6 +357,6 @@ def get_lowest():
     count, energy, dy, dz, dp1, dp2, delete_cutoff = loadtxt('results.dat', unpack = True)
     lowest_count = count[where(energy == min(energy))[0][0]]
     lowest_energy = energy[where(energy == min(energy))[0][0]]
-    with open('lowest_energy.dat', 'w') as f:
+    with open('lowest_energy.dat', 'w', encoding='utf-8') as f:
         f.write(str(lowest_energy))
     shutil.copy(os.path.join('dump',str(int(lowest_count))), 'global_min_structure.dat')
