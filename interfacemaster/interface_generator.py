@@ -1268,30 +1268,25 @@ class core:
         self.sgm2 = sgm2
         self.dd = dd
 
+    def _str_found_csl(self, sigma1, sigma2, D, axis=None, theta=None):
+        str_found_csl = (
+            f'U1 = \n{str(self.U1)}; sigma_1 = {str(sigma1)}\n\n'
+            f'U2 = \n{str(self.U2)}; sigma_2 = {str(sigma2)}\n\n'
+            f'D = \n{str(np.round(D,8))}\n\n'
+        )
+        if axis is not None and theta is not None:
+            str_found_csl += (
+                f'axis = {str(axis)} ; '
+                f'theta = {str(np.round(theta / np.pi * 180,8))}\n'
+            )
+        return str_found_csl
+
     def _print_found_csl(self, sigma1, sigma2, D, axis=None, theta=None):
         print('Congrates, we found an appx CSL!\n')
-        print('U1 = \n' + \
-                   str(self.U1) + '; sigma_1 = ' + \
-                   str(sigma1) + '\n')
-        print('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                   + str(sigma2) + '\n')
-        print('D = \n' + str(np.round(D,8)) + '\n')
-        if axis is not None and theta is not None:
-            print('axis = ' + str(axis) + ' ; theta = ' \
-                       + str(np.round(theta / np.pi * 180,8)) \
-                       + '\n')
+        print(self._str_found_csl(sigma1, sigma2, D, axis=axis, theta=theta))
 
     def _write_found_csl(self, file, sigma1, sigma2, D, axis=None, theta=None):
-        file.write('U1 = \n' + \
-                   str(self.U1) + '; sigma_1 = ' + \
-                   str(sigma1) + '\n')
-        file.write('U2 = \n' + str(self.U2) + '; sigma_2 = ' \
-                   + str(sigma2) + '\n')
-        file.write('D = \n' + str(np.round(D,8)) + '\n')
-        if axis is not None and theta is not None:
-            file.write('axis = ' + str(axis) + ' ; theta = ' \
-                       + str(np.round(theta / np.pi * 180,8)) \
-                       + '\n')
+        file.write(self._str_found_csl(sigma1, sigma2, D, axis=axis, theta=theta))
 
     def search_one_position(self, axis, theta, theta_range, dtheta, two_D = False):
         """
