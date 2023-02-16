@@ -99,7 +99,9 @@ def get_ortho_two_v(B, lim, tol, align_rotation_axis = False, rotation_axis = No
             break
         count += 1
     if not found:
-        raise RuntimeError('faild to find two orthogonal vectors in the GB plane, maybe you can try to increase the lim')
+        raise RuntimeError(
+            'faild to find two orthogonal vectors in the GB plane, '
+            'maybe you can try to increase the lim')
     return np.column_stack((v1, v2))
 
 def dia_sym_mtx(U):
@@ -125,7 +127,8 @@ def dia_sym_mtx(U):
 
 def find_integer_vectors(v, sigma, tol=1e-8):
     """
-    A function for finding the coefficients N so that Nv contains only integer elements and gcd(v1,v2,v3,N) = 1
+    A function for finding the coefficients N
+    so that Nv contains only integer elements and gcd(v1,v2,v3,N) = 1
 
     Parameters
     ----------
@@ -156,7 +159,8 @@ def find_integer_vectors(v, sigma, tol=1e-8):
         now = np.array(np.round(now/reduce),dtype = int)
         return now, L
     else:
-        raise RuntimeError('failed to find the rational vector of ' + str(v) + '\n within lcd = ' + str(sigma))
+        raise RuntimeError(
+            f'failed to find the rational vector of {v}\n within lcd = {sigma}')
 
 def find_integer_vectors_nn(v,sigma, tol = 1e-8):
     """
@@ -191,7 +195,8 @@ def find_integer_vectors_nn(v,sigma, tol = 1e-8):
         L = int(np.round(L))
         return now, L
     else:
-        raise RuntimeError('failed to find the rational vector of ' + str(v) + '\n within lcd = ' + str(sigma))
+        raise RuntimeError(
+            f'failed to find the rational vector of {v}\n within lcd = {sigma}')
 
 def solve_DSC_equations(u,v,w,L,B):
     """
@@ -420,7 +425,8 @@ def get_plane(hkl, lattice):
 
 def get_indices_from_n_Pc1(n, lattice, Pc1):
     """
-    get the Miller indices of certain plane with normal n and one in-plane point Pc1 for certain lattice
+    get the Miller indices of certain plane
+    with normal n and one in-plane point Pc1 for certain lattice
 
     Parameters
     ----------
@@ -498,8 +504,10 @@ def ext_euclid(a, b):
 
 def get_pri_vec_inplane(hkl,lattice):
     """
-    get two primitive lattice vector for the (hkl) plane
-    from Banadaki A D, Patala S. An efficient algorithm for computing the primitive bases of a general lattice plane[J]. Journal of Applied Crystallography, 2015, 48(2): 585-588.
+    get two primitive lattice vector for the (hkl) plane from
+    Banadaki A D, Patala S.
+    An efficient algorithm for computing the primitive bases of a general lattice plane[J].
+    Journal of Applied Crystallography, 2015, 48(2): 585-588.
 
     Parameters
     ----------
@@ -624,7 +632,9 @@ def search_MI_n(lattice, n, tol, lim):
             found = True
             break
     if not found:
-        RuntimeError('failed to find a close lattice plane for this normal vector, please increase the tol or adjust orientation')
+        RuntimeError(
+            'failed to find a close lattice plane for this normal vector, '
+            'please increase the tol or adjust orientation')
     return MID(lattice, n_there, tol)
 
 def match_rot(deft_rot, axis, tol, exact_rot, av_perpendicular):
@@ -672,7 +682,9 @@ def match_rot(deft_rot, axis, tol, exact_rot, av_perpendicular):
             break
         theta += 0.01/180*pi
     if not found:
-        raise RuntimeError(f'Disorientation match failed, please try other planes or increase tolerance, min = {min_g}')
+        raise RuntimeError(
+            f'Disorientation match failed, '
+            f'please try other planes or increase tolerance, min = {min_g}')
     return inter_rot
 
 class DSCcalc:
