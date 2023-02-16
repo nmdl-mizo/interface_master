@@ -1,3 +1,6 @@
+"""
+run_brute_force_symmetric_tilt.py
+"""
 import os
 import shutil
 import argparse
@@ -23,35 +26,38 @@ args = parser.parse_args()
 #mother path
 mother_path = os.getcwd()
 
-thetas, sigmas, hkls = sample_STGB([args.axis[0], args.axis[1], args.axis[2]], args.lim, args.max_sigma, args.max_index)
+thetas, sigmas, hkls = sample_STGB(
+    [args.axis[0], args.axis[1], args.axis[2]],
+    args.lim, args.max_sigma, args.max_index)
 
 copy_files = ['GB.in', 'Si.tersoff.modc']
 
 print('-----detected GBs-----')
 print('theta     sigma    hkl')
 print(len(hkls))
-for i in range(len(hkls)):
-    print(np.around(thetas[i]/np.pi*180,2), sigmas[i], hkls[i])
+for theta, sigma, hkl in zip(thetas, sigmas, hkls):
+    print(np.around(theta/np.pi*180,2), sigma, hkl)
 
 axis = [args.axis[0], args.axis[1], args.axis[2]]
 if args.distribute == 'n':
     tasks = hkls
 else:
     tasks = hkls[np.arange(args.initial - 1, args.final)[0]]
-for i in range(len(tasks)):
+for i, (task, theta) in enumerate(zip(tasks, thetas)):
     os.mkdir(str(i+1))
     for j in copy_files:
         shutil.copy(j, os.path.join(str(i+1), j))
-    R = rot(axis,thetas[i])
+    R = rot(axis,theta)
     my_interface = core('Si_mp-149_conventional_standard.cif',\
                         'Si_mp-149_conventional_standard.cif')
     os.chdir(str(i+1))
     my_interface.scale(5.43356/5.468728, 5.43356/5.468728)
     my_interface.parse_limit(du = 1e-4, S  = 1e-4, sgm1=100000, sgm2=100000, dd = 1e-4)
     my_interface.search_fixed(R, exact=True, tol = 1e-4)
-    hkl = get_primitive_hkl(tasks[i], my_interface.conv_lattice_1, my_interface.lattice_1, tol = 1e-3)
-    my_interface.compute_bicrystal(hkl, normal_ortho =True, plane_ortho=True, tol_ortho = 1e-3, tol_integer = 1e-3, \
-                                   align_rotation_axis = True, rotation_axis = axis)
+    hkl = get_primitive_hkl(task, my_interface.conv_lattice_1, my_interface.lattice_1, tol = 1e-3)
+    my_interface.compute_bicrystal(
+        hkl, normal_ortho =True, plane_ortho=True, tol_ortho = 1e-3, tol_integer = 1e-3,
+        align_rotation_axis = True, rotation_axis = axis)
     x_dimension = np.ceil(100/norm(np.dot(my_interface.lattice_1,my_interface.bicrystal_U1)[:,0]))
     y_dimension = np.ceil(40/norm(np.dot(my_interface.lattice_1,my_interface.bicrystal_U1)[:,1]))
     z_dimension = np.ceil(40/norm(np.dot(my_interface.lattice_1,my_interface.bicrystal_U1)[:,2]))
