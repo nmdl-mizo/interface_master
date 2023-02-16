@@ -1,3 +1,4 @@
+"""cellcalc.py"""
 from numpy.linalg import norm, inv
 from numpy import dot, cross, square, arccos, pi, inf, cos, sin
 import numpy as np

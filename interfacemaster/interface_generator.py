@@ -1,3 +1,6 @@
+"""
+interface_generator.py
+"""
 from numpy.linalg import det, norm, inv
 from numpy import dot, cross, ceil, floor, cos, sin, array, column_stack, eye, arccos, around, sqrt
 from pymatgen.core.structure import Structure
@@ -1174,6 +1177,9 @@ def get_nearest_pair(lattice, atoms, indices):
 
 
 class core:
+    """
+    Core class for dealing with an interface
+    """
     def __init__(self, file_1, file_2, prim_1 = True, prim_2 = True, verbose=True):
         self.file_1 = file_1 # cif file name of lattice 1
         self.file_2 = file_2 # cif file name of lattice 2
@@ -1248,6 +1254,17 @@ class core:
             print('Warning!, this programme will rewrite the POSCAR file in this dir!')
 
     def scale(self, factor_1, factor_2):
+        """
+        scale the lattice 1 and 2 with specific factors
+        (both the lattice and conventional lattice)
+
+        Parameters
+        ----------
+        factor_1 : float
+            scale factor for lattice 1
+        factor_2 : float
+            scale factor for lattice 2
+        """
         self.lattice_1 = self.lattice_1 * factor_1
         self.lattice_2 = self.lattice_2 * factor_2
         self.conv_lattice_1 = self.conv_lattice_1 * factor_1
