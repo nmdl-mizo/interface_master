@@ -189,10 +189,10 @@ def cross_plane(lattice, n, lim, orthogonal, tol, inclination_tol = sqrt(2)/2):
     else:
         try:
             normal_v = ltc_p[np.where(abs(dot_list - 1) < tol)[0]][0]
-        except:
+        except Exception as exc:
             raise RuntimeError(
                 'failed to find a vector cross the plane. '
-                'try larger lim or smaller tol or use non-orthogonal cell')
+                'try larger lim or smaller tol or use non-orthogonal cell') from exc
     return normal_v
 
 def get_sites_elements(structure):
@@ -831,7 +831,7 @@ def terminates_scanner_left(slab, atoms, elements, d, round_n = 5):
         plane_index += 1
         try:
             position = x_coords[-plane_index]
-        except:
+        except IndexError:
             position = -np.inf
     return plane_list, element_list, indices_list, dp_list
 
@@ -899,7 +899,7 @@ def terminates_scanner_right(slab, atoms, elements, d, round_n = 5):
 
         try:
             position = x_coords[plane_index]
-        except:
+        except IndexError:
             position = np.inf
     return plane_list, element_list, indices_list, dp_list
 
