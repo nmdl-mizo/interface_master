@@ -1,3 +1,6 @@
+"""
+brute_force.py
+"""
 import os
 import shutil
 from numpy import array, dot, repeat, tile, meshgrid, \
