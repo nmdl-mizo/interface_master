@@ -2030,7 +2030,7 @@ class core:
         if self.verbose:
             print('completed')
 
-    def set_orientation_axis(self, axis_1, axis_2):
+    def set_orientation_axis(self, axis_1, axis_2, tol=1e-10):
         """
         rotate lattice_2 so that its axis_2 coincident with the axis_1 of lattice_1
         """
@@ -2039,7 +2039,7 @@ class core:
         axis_2 = np.dot(self.lattice_2, axis_2.T).T
         axis_2 = axis_2 / norm(axis_2)
         c = cross(axis_2, axis_1)
-        if norm(c) < 1e-10:
+        if norm(c) < tol:
             R = eye(3,3)
         else:
             angle = arccos(np.dot(axis_1, axis_2))
