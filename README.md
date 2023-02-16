@@ -1,4 +1,7 @@
 # Interface master
+
+[![GitHub Pages](https://github.com/nmdl-mizo/interface_master/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/nmdl-mizo/interface_master/actions/workflows/gh-pages.yml)
+
 A python package building CSL or approximate CSL interfaces of any two lattices and computing cell of non-identical displacement (CNID).
 
 ## Functions
