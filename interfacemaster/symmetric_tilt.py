@@ -94,7 +94,11 @@ def sample_STGB(axis, lim, maxsigma, max_index):
     sigmas = sigmas[sampled_indices]
     thetas = thetas[sampled_indices]
     hkls = hkls[sampled_indices]
-    return thetas[np.argsort(thetas,kind='stable')], sigmas[np.argsort(thetas,kind='stable')], hkls[np.argsort(thetas,kind='stable')]
+    return (
+        thetas[np.argsort(thetas,kind='stable')],
+        sigmas[np.argsort(thetas,kind='stable')],
+        hkls[np.argsort(thetas,kind='stable')]
+    )
 
 def generate_arrays_x_y(x_min, y_min, lim):
     """
@@ -252,5 +256,9 @@ def get_Ps_sigmas_thetas(lim, axis, maxsigma = 100000):
     sigmas = np.array(sigmas,dtype = int)
     sigmas = sigmas/(2**(abs(sigmas%2-1)))
     sigmas = np.array(sigmas,dtype = int)
-    return P[np.argsort(original_sigmas, kind='stable')], sigmas[np.argsort(original_sigmas, kind='stable')], \
-        np.array(thetas[np.argsort(original_sigmas, kind='stable')]), original_sigmas[np.argsort(original_sigmas, kind='stable')]
+    return (
+        P[np.argsort(original_sigmas, kind='stable')],
+        sigmas[np.argsort(original_sigmas, kind='stable')],
+        np.array(thetas[np.argsort(original_sigmas, kind='stable')]),
+        original_sigmas[np.argsort(original_sigmas, kind='stable')]
+    )

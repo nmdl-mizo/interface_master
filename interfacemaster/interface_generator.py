@@ -2085,7 +2085,9 @@ class core:
         lattice_2 = three_dot(self.R, self.D, self.lattice_2)
         hkl_2 = get_primitive_hkl(hkl, self.lattice_1, lattice_2, tol_integer)
         self.d2 = d_hkl(lattice_2, hkl_2)
-        hkl_c = get_primitive_hkl(hkl, self.lattice_1, self.CSL, tol_integer) # miller indices of the plane in CSL
+        hkl_c = get_primitive_hkl(
+            hkl, self.lattice_1, self.CSL, tol_integer
+            ) # miller indices of the plane in CSL
         hkl_c = np.array(hkl_c)
         if self.verbose:
             print('hkl in CSL:', hkl_c)
@@ -2098,13 +2100,19 @@ class core:
                 plane_B[:,1] = plane_B[:,0]
                 plane_B[:,0] = change_v
         plane_n = cross(plane_B[:,0], plane_B[:,1]) # plane normal
-        v3 = cross_plane(self.CSL, plane_n, lim, normal_ortho, tol_ortho, inclination_tol) # a CSL basic vector cross the plane
+        v3 = cross_plane(
+            self.CSL, plane_n, lim, normal_ortho,
+            tol_ortho, inclination_tol) # a CSL basic vector cross the plane
         supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
         supercell = get_right_hand(supercell) # check right-handed
         if normal_ortho:
             self.min_perp_length = norm(v3)
-        self.bicrystal_U1 = np.array(np.round(np.dot(inv(self.lattice_1), supercell),8),dtype = int)
-        self.bicrystal_U2 = np.array(np.round(np.dot(inv(self.lattice_2_TD), supercell),8),dtype = int)
+        self.bicrystal_U1 = np.array(
+            np.round(
+                np.dot(inv(self.lattice_1), supercell),8),dtype = int)
+        self.bicrystal_U2 = np.array(
+            np.round(
+                np.dot(inv(self.lattice_2_TD), supercell),8),dtype = int)
         self.cell_calc.compute_CNID(hkl,tol_integer)
         CNID = self.cell_calc.CNID
         self.CNID = np.dot(self.lattice_1, CNID)

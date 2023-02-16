@@ -331,7 +331,8 @@ def LLL(B):
                 Bhere[:,k] = Bhere[:,k] - round(ukj)*Bhere[:,j]
                 Bstar = Gram_Schmidt(Bhere)
         ukk_1 = projection(Bhere[:,k], Bstar[:,k-1])
-        if np.dot(Bstar[:,k],Bstar[:,k]) >= (delta - square(ukk_1)) * np.dot(Bstar[:,k-1],Bstar[:,k-1]):
+        if (np.dot(Bstar[:,k],Bstar[:,k])
+            >= (delta - square(ukk_1)) * np.dot(Bstar[:,k-1],Bstar[:,k-1])):
             k += 1
         else:
             m = Bhere[:,k].copy()
