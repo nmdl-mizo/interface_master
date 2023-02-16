@@ -1737,8 +1737,8 @@ class core:
             a2_0 = dot(inv(self.orientation), a2_0)
             self.a2_0 = a2_0.copy()
         # rotation loop
-        file = open('log.all_position','w', encoding="utf-8", encoding="utf-8")
-        file_r = open('results','w', encoding="utf-8", encoding="utf-8")
+        file = open('log.all_position','w', encoding="utf-8")
+        file_r = open('results','w', encoding="utf-8")
         file.write('---Searching starts---\n')
         file.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
         file.write(f'{axis} {theta} {dtheta} {n} {self.S} {self.du} {self.sgm1} {self.sgm2}\n')
