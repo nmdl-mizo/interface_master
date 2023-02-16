@@ -2,13 +2,15 @@ from numpy.linalg import det, norm, inv
 from numpy import dot, cross, ceil, floor, cos, sin, array, column_stack, eye, arccos, around, sqrt
 from pymatgen.core.structure import Structure
 import numpy as np
-from interfacemaster.cellcalc import MID, DSCcalc, get_primitive_hkl, get_right_hand, get_pri_vec_inplane, \
-get_ortho_two_v, ang, get_normal_from_MI
+from interfacemaster.cellcalc import (
+    MID, DSCcalc, get_primitive_hkl, get_right_hand, get_pri_vec_inplane,
+    get_ortho_two_v, ang, get_normal_from_MI)
 import os
 
 def get_disorientation(L1, L2, v1, hkl1, v2, hkl2):
     """
-    produce a rotation matrix so that the hkl1 plane overlap with the hkl2 plane and the v1 colinear with v2
+    produce a rotation matrix
+    so that the hkl1 plane overlap with the hkl2 plane and the v1 colinear with v2
 
     Parameters
     ----------
@@ -185,7 +187,9 @@ def cross_plane(lattice, n, lim, orthogonal, tol, inclination_tol = sqrt(2)/2):
         try:
             normal_v = ltc_p[np.where(abs(dot_list - 1) < tol)[0]][0]
         except:
-            raise RuntimeError('failed to find a vector cross the plane. try larger lim or smaller tol or use non-orthogonal cell')
+            raise RuntimeError(
+                'failed to find a vector cross the plane. '
+                'try larger lim or smaller tol or use non-orthogonal cell')
     return normal_v
 
 def get_sites_elements(structure):
@@ -385,7 +389,8 @@ def get_array_bounds(U):
     """
     get the meshgrid formed by three sets of lower & upper bounds.
 
-    the bounds cooresponds to the 8 vertices of the cell consisting of the three column vectors of a matrix
+    the bounds cooresponds to the 8 vertices of the cell
+    consisting of the three column vectors of a matrix
 
     Parameters
     ----------
@@ -620,7 +625,9 @@ def excess_volume(lattice_1, lattice_bi, atoms_1, atoms_2, dx):
     Returns
     ----------
     lattice_bi, atoms_1, atoms2: numpyarray
-        lattice matrix of bicrystal supercell, atom coordinates of left slab, and atom coordinates of right slab
+        lattice matrix of bicrystal supercell,
+        atom coordinates of left slab,
+        and atom coordinates of right slab
     """
     n = cross(lattice_1[:,1],lattice_1[:,2])
     normal_shift = dx / ang(lattice_1[:,0], n) / norm(lattice_bi[:,0].copy())
@@ -771,7 +778,8 @@ def d_hkl(lattice, hkl):
 
 def terminates_scanner_left(slab, atoms, elements, d, round_n = 5):
     """
-    find all different atomic planes within 1 lattice plane displacing (in the interface), for the left slab
+    find all different atomic planes
+    within 1 lattice plane displacing (in the interface), for the left slab
 
     Parameters
     ----------
@@ -840,7 +848,8 @@ def get_R_to_screen(lattice):
 
 def terminates_scanner_right(slab, atoms, elements, d, round_n = 5):
     """
-    find all different atomic planes within 1 lattice plane displacing (in the interface), for the right slab
+    find all different atomic planes
+    within 1 lattice plane displacing (in the interface), for the right slab
 
     Parameters
     ----------
@@ -946,8 +955,8 @@ def Xs_Ys_cell(lattice):
     ys = [y1, y2, y3, y4]
     return xs, ys
 
-def draw_slab(xs, ys, axes, num, plane_list, lattice_to_screen, \
-              elements_list, column, colors, all_elements, \
+def draw_slab(xs, ys, axes, num, plane_list, lattice_to_screen,
+              elements_list, column, colors, all_elements,
               l_r, titlesize, legendsize):
     """
     draw the terminating planes in the plane list for a slab
@@ -984,16 +993,18 @@ def draw_slab(xs, ys, axes, num, plane_list, lattice_to_screen, \
         #looping for different elements
         for en in element_names:
             #get the atoms of j elment
-            single_element_atoms = plane_atoms[np.where(plane_elements \
-                                                        == en)[0]]
+            single_element_atoms = plane_atoms[
+                np.where(plane_elements == en)[0]]
 
             #draw atoms of this element
             Xs = single_element_atoms[:,0]
             Ys = single_element_atoms[:,1]
             element_index_here = np.where(all_elements == en)[0][0]
             draw_cell(axes[i][column],xs,ys)
-            axes[i][column].scatter(Xs, Ys, c = colors[element_index_here],\
-                               s = 100, label = en)
+            axes[i][column].scatter(
+                Xs, Ys,
+                c = colors[element_index_here],
+                s = 100, label = en)
             axes[i][column].set_title(f'Plane {i + 1} of {l_r} Cryst.', fontsize = titlesize)
             axes[i][column].axis('scaled')
             axes[i][column].legend(fontsize = legendsize, borderpad=0.5, loc = 0)
@@ -1022,10 +1033,10 @@ def write_trans_file(v1, v2, n1, n2):
         f.write(f'variable na equal {n1} \n')
         f.write(f'variable nb equal {n2} \n')
 
-def draw_slab_dich(xs, ys, c_xs, c_ys,axes,num1, plane_list_1, lattice_to_screen_1, \
-              elements_list_1, colors, all_elements, \
-                  num2, plane_list_2, lattice_to_screen_2,\
-                  elements_list_2, titlesize):
+def draw_slab_dich(xs, ys, c_xs, c_ys,axes,num1, plane_list_1, lattice_to_screen_1,
+        elements_list_1, colors, all_elements,
+        num2, plane_list_2, lattice_to_screen_2,
+        elements_list_2, titlesize):
     """
     draw the dichromatic patterns
 
@@ -1066,21 +1077,23 @@ def draw_slab_dich(xs, ys, c_xs, c_ys,axes,num1, plane_list_1, lattice_to_screen
             element_names_2 = np.unique(plane_elements_2)
             for en1 in element_names_1:
                 #get the atoms of j elment
-                single_element_atoms_1 = plane_atoms_1[np.where(plane_elements_1 \
-                                                            == en1)[0]]
+                single_element_atoms_1 = plane_atoms_1[
+                    np.where(plane_elements_1 == en1)[0]]
 
                 #draw atoms of this element
                 Xs = single_element_atoms_1[:,0]
                 Ys = single_element_atoms_1[:,1]
                 element_index_here_1 = np.where(all_elements == en1)[0][0]
-                axes[i*num2+j][2].scatter(Xs, Ys, c = colors[element_index_here_1],\
-                                   s = 200, label = en1 + " (L)", alpha = 0.5)
+                axes[i*num2+j][2].scatter(
+                    Xs, Ys,
+                    c = colors[element_index_here_1],
+                    s = 200, label = en1 + " (L)", alpha = 0.5)
                 axes[i*num2+j][2].set_title(f'{i} left {j} right.', fontsize = titlesize)
                 axes[i*num2+j][2].axis('scaled')
                 for en2 in element_names_2:
                     #get the atoms of j elment
-                    single_element_atoms_2 = plane_atoms_2[np.where(plane_elements_2 \
-                                                                == en2)[0]]
+                    single_element_atoms_2 = plane_atoms_2[
+                        np.where(plane_elements_2 == en2)[0]]
 
                     #draw atoms of this element
                     Xs = single_element_atoms_2[:,0]
@@ -1088,8 +1101,10 @@ def draw_slab_dich(xs, ys, c_xs, c_ys,axes,num1, plane_list_1, lattice_to_screen
                     element_index_here_2 = np.where(all_elements == en2)[0][0]
                     draw_cell(axes[i*num2+j][2],xs,ys)
                     draw_cell(axes[i*num2+j][2],c_xs,c_ys,color = 'b', alpha = 1, width = 2)
-                    axes[i*num2+j][2].scatter(Xs, Ys, c = colors[-element_index_here_2-1],\
-                                       s = 50, label = en2 +  " (R)",alpha = 0.5)
+                    axes[i*num2+j][2].scatter(
+                        Xs, Ys,
+                        c = colors[-element_index_here_2-1],
+                        s = 50, label = en2 +  " (R)",alpha = 0.5)
                     axes[i*num2+j][2].axis('scaled')
 
 # """
@@ -1119,8 +1134,9 @@ def get_nearest_pair(lattice, atoms, indices):
     x_shifts = [0]
     y_shifts = reps
     z_shifts = reps
-    planar_shifts = np.array(np.meshgrid(x_shifts, y_shifts, \
-                                         z_shifts),dtype = float).T.reshape(-1, 3)
+    planar_shifts = np.array(
+        np.meshgrid(x_shifts, y_shifts, z_shifts),
+        dtype = float).T.reshape(-1, 3)
     planar_shifts = dot(lattice, planar_shifts.T).T
 
     #make images for one set
@@ -1153,22 +1169,26 @@ def get_nearest_pair(lattice, atoms, indices):
         if pos_1_index_map[distances_id] != pos_2_index_map[distances_id]:
             break
 
-    return indices[pos_1_index_map[distances_id]], indices[pos_2_index_map[distances_id]], \
-     pos_1_rep[distances_id], pos_2_rep[distances_id]
+    return (indices[pos_1_index_map[distances_id]], indices[pos_2_index_map[distances_id]],
+            pos_1_rep[distances_id], pos_2_rep[distances_id])
 
 
 class core:
     def __init__(self, file_1, file_2, prim_1 = True, prim_2 = True, verbose=True):
         self.file_1 = file_1 # cif file name of lattice 1
         self.file_2 = file_2 # cif file name of lattice 2
-        self.structure_1 = Structure.from_file(file_1, primitive = prim_1, sort=False, merge_tol=0.0)
-        self.structure_2 = Structure.from_file(file_2, primitive = prim_2, sort=False, merge_tol=0.0)
+        self.structure_1 = Structure.from_file(
+            file_1, primitive = prim_1, sort=False, merge_tol=0.0)
+        self.structure_2 = Structure.from_file(
+            file_2, primitive = prim_2, sort=False, merge_tol=0.0)
 
-        self.conv_lattice_1 = Structure.from_file(file_1, primitive=False, sort=False, merge_tol=0.0) \
-                                .lattice.matrix.T
+        self.conv_lattice_1 = Structure.from_file(
+            file_1, primitive=False, sort=False, merge_tol=0.0
+            ).lattice.matrix.T
 
-        self.conv_lattice_2 = Structure.from_file(file_2, primitive=False, sort=False, merge_tol=0.0) \
-                                .lattice.matrix.T
+        self.conv_lattice_2 = Structure.from_file(
+            file_2, primitive=False, sort=False, merge_tol=0.0
+            ).lattice.matrix.T
 
         self.lattice_1 = self.structure_1.lattice.matrix.T
         self.lattice_2 = self.structure_2.lattice.matrix.T
@@ -1217,9 +1237,12 @@ class core:
         self.atoms_bi = np.array([0.0,0.0,0.0])
         self.elements_bi = []
         self.bicrystal_ortho = False #whether the bicrystal supercell is orthogonal
-        self.slab_structure_1 = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
-        self.slab_structure_2 = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
-        self.bicrystal_structure = Structure.from_file(file_1, primitive=True, sort=False, merge_tol=0.0)
+        self.slab_structure_1 = Structure.from_file(
+            file_1, primitive=True, sort=False, merge_tol=0.0)
+        self.slab_structure_2 = Structure.from_file(
+            file_1, primitive=True, sort=False, merge_tol=0.0)
+        self.bicrystal_structure = Structure.from_file(
+            file_1, primitive=True, sort=False, merge_tol=0.0)
         self.verbose=verbose
         if self.verbose:
             print('Warning!, this programme will rewrite the POSCAR file in this dir!')
@@ -1532,11 +1555,14 @@ class core:
                         file.write('sigma too large \n')
             N += 1
         if not found:
-            print('failed to find a satisfying appx CSL. Try to adjust the limits according \
-              to the log file generated; or try another orientation.')
+            print(
+                'failed to find a satisfying appx CSL. '
+                'Try to adjust the limits according '
+                'to the log file generated; or try another orientation.')
 
-    def search_one_position_2D(self, hkl_1, hkl_2, theta_range, dtheta, pre_dt = False, pre_R = eye(3,3), \
-    integer_tol = 1e-8, start = 0, exact = False):
+    def search_one_position_2D(
+        self, hkl_1, hkl_2, theta_range, dtheta, pre_dt = False, pre_R = eye(3,3),
+        integer_tol = 1e-8, start = 0, exact = False):
         """
         main loop finding the appx CSL
 
@@ -1800,8 +1826,10 @@ class core:
         if xyz_2 is None:
             xyz_2 = [1,1,1]
         #get the atoms in the primitive cell
-        lattice_1, atoms_1, elements_1 = self.lattice_1.copy(), self.atoms_1.copy(), self.elements_1.copy()
-        lattice_2, atoms_2, elements_2 = self.lattice_2.copy(), self.atoms_2.copy(), self.elements_2.copy()
+        lattice_1, atoms_1, elements_1 = (
+            self.lattice_1.copy(), self.atoms_1.copy(), self.elements_1.copy())
+        lattice_2, atoms_2, elements_2 = (
+            self.lattice_2.copy(), self.atoms_2.copy(), self.elements_2.copy())
 
         # deform & rotate lattice_2
         if two_D:
@@ -1832,7 +1860,9 @@ class core:
         #expansion
         if not (np.all(xyz_1 == 1) and np.all(xyz_2 == 1)):
             if not np.all([xyz_1[1], xyz_1[2]] == [xyz_2[1], xyz_2[2]]):
-                raise RuntimeError('error: the two slabs must expand to the same dimension in the interface plane')
+                raise RuntimeError(
+                    'the two slabs must expand '
+                    'to the same dimension in the interface plane')
             lattice_1, atoms_1, elements_1 = cell_expands(lattice_1, atoms_1, \
                                                           elements_1, xyz_1)
             lattice_2, atoms_2, elements_2 = cell_expands(lattice_2, atoms_2, \
@@ -1895,7 +1925,8 @@ class core:
 
         #excess volume
         if dx != 0:
-            lattice_bi, atoms_1, atoms_2 = excess_volume(lattice_1, lattice_bi, atoms_1, atoms_2, dx)
+            lattice_bi, atoms_1, atoms_2 = excess_volume(
+                lattice_1, lattice_bi, atoms_1, atoms_2, dx)
 
         #in-plane translation
         if norm(dydz) > 0:
@@ -1928,8 +1959,10 @@ class core:
         else:
             raise RuntimeError("Sorry, we only support for 'VASP' or 'LAMMPS' output")
 
-    def sample_CNID(self, grid, dx = 0, dp1 = 0, dp2 = 0, \
-                      xyz_1 = None, xyz_2 = None, vx = 0, two_D = False, filename = 'POSCAR', filetype = 'VASP'):
+    def sample_CNID(
+        self, grid, dx = 0, dp1 = 0, dp2 = 0,
+        xyz_1 = None, xyz_2 = None, vx = 0, two_D = False,
+        filename = 'POSCAR', filetype = 'VASP'):
         """
         sampling the CNID and generate POSCARs
 
@@ -1953,13 +1986,16 @@ class core:
         for i in range(n1):
             for j in range(n2):
                 dydz = v1 / n1 * i + v2 / n2 * j
-                self.get_bicrystal(dydz = dydz, dx = dx, dp1 = dp1, dp2 = dp2, \
-                      xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D, filename = f'CNID_inputs/{filename}_{i}_{j}', filetype = filetype)
+                self.get_bicrystal(
+                    dydz = dydz, dx = dx, dp1 = dp1, dp2 = dp2,
+                    xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D,
+                    filename = f'CNID_inputs/{filename}_{i}_{j}',
+                    filetype = filetype)
         if self.verbose:
             print('completed')
 
-    def sample_lattice_planes(self, dx = 0,
-                      xyz_1 = None, xyz_2 = None, vx = 0, two_D = False, filename = 'POSCAR', filetype = 'VASP'):
+    def sample_lattice_planes(self, dx = 0, xyz_1 = None, xyz_2 = None, vx = 0,
+        two_D = False, filename = 'POSCAR', filetype = 'VASP'):
         """
         sampling non-identical lattice planes terminating at the GB
         """
@@ -1998,8 +2034,9 @@ class core:
             R = rot(c, angle)
         self.orientation = R
 
-    def compute_bicrystal(self, hkl, lim = 20, normal_ortho = False, plane_ortho = False, \
-    tol_ortho = 1e-10, tol_integer = 1e-8, align_rotation_axis = False, rotation_axis = None, inclination_tol = sqrt(2)/2):
+    def compute_bicrystal(self, hkl, lim = 20, normal_ortho = False, plane_ortho = False,
+        tol_ortho = 1e-10, tol_integer = 1e-8,
+        align_rotation_axis = False, rotation_axis = None, inclination_tol = sqrt(2)/2):
         """
         compute the transformation to obtain the supercell of the two slabs forming a interface
 
@@ -2061,10 +2098,12 @@ class core:
             print('cell 2:')
             print(array(np.round(self.bicrystal_U2,8),dtype = int))
 
-    def compute_bicrystal_two_D(self, hkl_1, hkl_2, lim = 20, normal_ortho = False, \
-                                tol_ortho = 1e-10, tol_integer = 1e-8, inclination_tol = sqrt(2)/2):
+    def compute_bicrystal_two_D(self, hkl_1, hkl_2, lim = 20, normal_ortho = False,
+        tol_ortho = 1e-10, tol_integer = 1e-8, inclination_tol = sqrt(2)/2):
         """
-        compute the transformation to obtain the supercell of the two slabs forming a interface (only two_D periodicity)
+        compute the transformation
+        to obtain the supercell of the two slabs
+        forming a interface (only two_D periodicity)
 
         Parameters
         ----------
@@ -2133,7 +2172,8 @@ class core:
         """
 
         if (len(region_los) != len(region_names)) or (len(region_los) != len(region_his)):
-            raise RuntimeError("the region_names, low & high bounds must have same num of elements.")
+            raise RuntimeError(
+                "the region_names, low & high bounds must have same num of elements.")
 
         xy = self.lattice_bi[:,1][0]
         xz = self.lattice_bi[:,2][0]
@@ -2142,9 +2182,13 @@ class core:
         with open('blockfile', 'w', encoding="utf-8") as fb:
             for rn, rl, rh in zip(region_names, region_los, region_his):
                 if not ortho:
-                    fb.write(f'region {rn} prism {rl} {rh} EDGE EDGE EDGE EDGE {xy} {xz} {yz} units box \n')
+                    fb.write(
+                        f'region {rn} prism {rl} {rh} EDGE EDGE EDGE EDGE '
+                        f'{xy} {xz} {yz} units box \n')
                 else:
-                    fb.write(f'region {rn} block {rl} {rh} EDGE EDGE EDGE EDGE units box \n')
+                    fb.write(
+                        f'region {rn} block {rl} {rh} EDGE EDGE EDGE EDGE '
+                        'units box \n')
                 fb.write(f'group {rn} region {rn} \n')
 
 def terminates_scanner_slab_structure(structure, hkl):
@@ -2156,16 +2200,20 @@ def terminates_scanner_slab_structure(structure, hkl):
     supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
     supercell = get_right_hand(supercell)
     U = array(around(dot(inv(lattice), supercell)), dtype = int)
-    print('cross vector: \n' + str(array([U[:,0]]).T) + '\nlength: ' + str(norm(v3)))
-    print('plane basis: \n' + str(U[:,[1,2]]) + '\nlength: ' + str(norm(supercell[:,1])) + ' ' + str(norm(supercell[:,2])))
+    print(f'cross vector: \n{str(array([U[:,0]]).T)}\nlength: {str(norm(v3))}')
+    print(
+        f'plane basis: \n{str(U[:,[1,2]])}\n'
+        f'length: {str(norm(supercell[:,1]))} {str(norm(supercell[:,2]))}')
     atoms, elements, lattice = super_cell(U, lattice, atoms, elements)
     write_POSCAR(lattice, atoms, elements, 'POSCAR_primitive')
     lattice, _ = adjust_orientation(lattice)
-    plane_list, element_list, _, dp_list = terminates_scanner_left(supercell, atoms, elements, d, round_n = 5)
+    plane_list, element_list, _, dp_list = terminates_scanner_left(
+        supercell, atoms, elements, d, round_n = 5)
     return plane_list, element_list, dp_list
 
-def get_surface_slab(structure, hkl, replica = None, inclination_tol = sqrt(2)/2, termi_shift = 0, vacuum_height = 0, plane_normal = False, normal_perp = False, \
-                     normal_tol = 1e-3, lim = 20, filename = 'POSCAR', filetype = 'VASP'):
+def get_surface_slab(structure, hkl, replica = None, inclination_tol = sqrt(2)/2,
+        termi_shift = 0, vacuum_height = 0, plane_normal = False, normal_perp = False,
+        normal_tol = 1e-3, lim = 20, filename = 'POSCAR', filetype = 'VASP'):
     """
     get a superlattice of a slab containing a desired surface as crystal plane hkl
 
@@ -2178,19 +2226,22 @@ def get_surface_slab(structure, hkl, replica = None, inclination_tol = sqrt(2)/2
     replica : list
         expansion of the primitive slab cell, default [1, 1, 1]
     inclination_tol : float
-        required minimum cos value of the angle between the basic crossing vector and the surface, default sqrt(2)/2
+        required minimum cos value of the angle
+        between the basic crossing vector and the surface, default sqrt(2)/2
     termi_shift : float
         shift the termination of the surface, default 0
     vacuum_height : float
         height of vaccum
     plane_normal : bool
-        whether requiring the two vectors in the surface plane to be perpendicular, default False
+        whether requiring the two vectors
+        in the surface plane to be perpendicular, default False
     normal_perp : bool
         whether requiring the crossing vector to be perpendicular to the plane, default False
     normal_tol :
         tolerance to judge whether perpendicular, default 1e-3
     lim : int
-        control the number of generated vectors to search for the crossing vectors and perpendicular vectors, default 20
+        control the number of generated vectors
+        to search for the crossing vectors and perpendicular vectors, default 20
     filename : str
         name of the generated atom files
     filetype : str, "VASP" or "LAMMPS"
@@ -2208,12 +2259,16 @@ def get_surface_slab(structure, hkl, replica = None, inclination_tol = sqrt(2)/2
     plane_B = get_pri_vec_inplane(hkl, lattice)
     if plane_normal and (abs(dot(plane_B[:,0], plane_B[:,1])) > normal_tol):
         plane_B = get_ortho_two_v(plane_B, lim, normal_tol, False)
-    v3 = cross_plane(lattice, cross(plane_B[:,0], plane_B[:,1]), lim, normal_perp, normal_tol, inclination_tol)
+    v3 = cross_plane(
+        lattice, cross(plane_B[:,0], plane_B[:,1]),
+        lim, normal_perp, normal_tol, inclination_tol)
     supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
     supercell = get_right_hand(supercell)
     U = array(around(dot(inv(lattice), supercell)), dtype = int)
-    print('cross vector: \n' + str(array([U[:,0]]).T) + '\nlength: ' + str(norm(v3)))
-    print('plane basis: \n' + str(U[:,[1,2]]) + '\nlength: ' + str(norm(supercell[:,1])) + ' ' + str(norm(supercell[:,2])))
+    print(f'cross vector: \n{str(array([U[:,0]]).T)}\nlength: {str(norm(v3))}')
+    print(
+        f'plane basis: \n{str(U[:,[1,2]])}\n'
+        f'length: {str(norm(supercell[:,1]))} {str(norm(supercell[:,2]))}')
     atoms, elements, lattice = super_cell(U, lattice, atoms, elements)
     lattice, _ = adjust_orientation(lattice)
     if not np.all(replica == 1):
