@@ -1358,12 +1358,11 @@ class core:
         file.write(f'{axis} {theta} {dtheta} {n} {self.S} {self.du} {self.sgm1} {self.sgm2}\n')
         file.write('-----------for theta-----------\n')
         for _ in range(int(n)):
-            N = 1
             R = np.dot(self.orientation, rot(axis, theta))
             U = three_dot(inv(a1), R, a2_0)
             file.write('theta = ' + str(theta / np.pi * 180) + '\n')
             file.write('    -----for N-----\n')
-            while N <= self.sgm2:
+            for N in range(1, self.sgm2 + 1):
                 Uij, N = rational_mtx(U,N)
                 U_p = 1 / N * Uij
                 if np.all((abs(U_p-U)) < self.du):
@@ -1409,7 +1408,6 @@ class core:
                             break
                         else:
                             file.write('    sigma too large \n')
-                N += 1
             if found:
                 break
             theta += dtheta
@@ -1529,10 +1527,9 @@ class core:
         file.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
         file.write(f'{self.S} {self.du} {self.sgm1} {self.sgm2}\n')
         file.write('-----------for theta-----------\n')
-        N = 1
         U = three_dot(inv(a1), R, a2_0)
         file.write('    -----for N-----\n')
-        while N <= self.sgm2:
+        for N in range(1, self.sgm2 + 1):
             Uij, N = rational_mtx(U,N)
             U_p = 1 / N * Uij
             if np.all((abs(U_p-U)) < self.du):
@@ -1570,7 +1567,6 @@ class core:
                         break
                     else:
                         file.write('sigma too large \n')
-            N += 1
         if not found:
             print(
                 'failed to find a satisfying appx CSL. '
@@ -1631,12 +1627,11 @@ class core:
         file.write(f'{axis} {theta} {dtheta} {n} {self.S} {self.du} {self.sgm1} {self.sgm2}\n')
         file.write('-----------for theta-----------\n')
         for _ in range(int(n)):
-            N = 1
             R = rot(n1, theta)
             U = three_dot(inv(a1), R, a2_0)
             file.write('theta = ' + str(theta / np.pi * 180) + '\n')
             file.write('    -----for N-----\n')
-            while N <= self.sgm2:
+            for N in range(1, self.sgm2 + 1):
                 tol = integer_tol
                 Uij, N = rational_mtx(U,N)
                 U_p = 1 / N * Uij
@@ -1694,7 +1689,6 @@ class core:
                             break
                         else:
                             file.write('    sigma too large \n')
-                N += 1
             if found:
                 break
             theta += dtheta
@@ -1762,12 +1756,11 @@ class core:
         file.write(f'{axis} {theta} {dtheta} {n} {self.S} {self.du} {self.sgm1} {self.sgm2}\n')
         file.write('-----------for theta-----------\n')
         for _ in range(int(n)):
-            N = 1
             R = np.dot(self.orientation, rot(axis, theta))
             U = three_dot(inv(a1), R, a2_0)
             file.write('theta = ' + str(theta / np.pi * 180) + '\n')
             file.write('    -----for N-----\n')
-            while N <= self.sgm2:
+            for N in range(1, self.sgm2 + 1):
                 Uij, N = rational_mtx(U,N)
                 U_p = 1 / N * Uij
                 if np.all((abs(U_p-U)) < self.du):
@@ -1805,7 +1798,6 @@ class core:
                                 self._print_found_csl(sigma1, sigma2, D, axis, theta)
                         else:
                             file.write('    sigma too large \n')
-                N += 1
             theta += dtheta
 
     def get_bicrystal(self, dydz = None, dx = 0, dp1 = 0, dp2 = 0,
