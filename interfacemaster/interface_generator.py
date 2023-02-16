@@ -1853,18 +1853,19 @@ class core:
             atoms_2, elements_2, lattice_2 = super_cell(self.bicrystal_U2,
                                                 lattice_2, atoms_2, elements_2)
         else:
+            eps = 0.000001
             atoms_2, elements_2, lattice_2 = atoms_1.copy(), elements_1.copy(), lattice_1.copy()
             atoms_2[:,0] = - atoms_2[:,0] + 1
             atoms_c, elements_c = atoms_2.copy(), elements_2.copy()
-            elements_c = elements_c[atoms_c[:,0] + 0.000001 > 1]
-            atoms_c = atoms_c[atoms_c[:,0] + 0.000001 > 1]
+            elements_c = elements_c[atoms_c[:,0] + eps > 1]
+            atoms_c = atoms_c[atoms_c[:,0] + eps > 1]
             atoms_c[:,0] = atoms_c[:,0] - 1
             atoms_2 = np.vstack((atoms_2, atoms_c))
             elements_2 = np.append(elements_2, elements_c)
 
             # delete overwrapping atoms
-            elements_2 = elements_2[np.where(atoms_2[:,0] + 0.000001 < 1)]
-            atoms_2 = atoms_2[atoms_2[:,0] + 0.000001 < 1]
+            elements_2 = elements_2[np.where(atoms_2[:,0] + eps < 1)]
+            atoms_2 = atoms_2[atoms_2[:,0] + eps < 1]
 
 
         #expansion
