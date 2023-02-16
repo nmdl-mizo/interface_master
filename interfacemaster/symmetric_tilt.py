@@ -167,8 +167,8 @@ def get_csl_twisted_graphenes(lim, filename, maxsigma = 100, verbose=True):
     P = np.vstack((P1,P))
     thetas = np.append(thetas1, thetas)
     sigmas = []
-    for i in range(len(thetas)):
-        sigmas.append(compute_sigma(np.array([0,0,1]), thetas[i], filename, verbose=verbose))
+    for theta in thetas:
+        sigmas.append(compute_sigma(np.array([0,0,1]), theta, filename, verbose=verbose))
     sigmas = np.around(sigmas)
     sigmas = np.array(sigmas,dtype = int)
     unique_sigmas = np.unique(sigmas)
@@ -244,8 +244,8 @@ def get_Ps_sigmas_thetas(lim, axis, maxsigma = 100000):
         P = np.vstack((P1, P2))
         thetas = 2 * np.arccos(np.dot(P1,[-1, 1/2, 1/2])/norm(P1, axis=1)/norm([-1, 1/2, 1/2]))
         sigmas = []
-        for i in range(len(thetas)):
-            sigmas.append(compute_sigma(np.array([1.0, 1.0, 1.0]), thetas[i], maxsigma))
+        for theta in thetas:
+            sigmas.append(compute_sigma(np.array([1.0, 1.0, 1.0]), theta, maxsigma))
         sigmas = np.around(sigmas)
         sigmas = np.array(sigmas,dtype = int)
     else:

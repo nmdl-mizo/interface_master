@@ -108,9 +108,9 @@ def screen_out_non_repeated_pairs(ids_1, ids_2):
     """
     arrays = arange(len(ids_1))
     screened_ids = []
-    for i in range(len(arrays)):
+    for i, a in enumerate(arrays):
         if i == 0:
-            screened_ids.append(arrays[i])
+            screened_ids.append(a)
         else:
             not_in = True
             for j in screened_ids:
@@ -118,7 +118,7 @@ def screen_out_non_repeated_pairs(ids_1, ids_2):
                     not_in = False
                     break
             if not_in:
-                screened_ids.append(arrays[i])
+                screened_ids.append(a)
     return screened_ids
 
 class GB_runner():
@@ -214,14 +214,14 @@ class GB_runner():
                 xyz_2 = [x_dimension,y_dimension,z_dimension], filetype='LAMMPS',
                 filename = 'GB.dat', dp1 = i[0], dp2 = i[1])
             self.divide_region()
-            for j in range(len(self.RBT_list)):
+            for rbt in self.RBT_list:
                 bulk_atoms_here = self.bulk_atoms.copy()
                 bulk_right_ids = where(bulk_atoms_here[:,0] > self.boundary)[0]
-                bulk_atoms_here[bulk_right_ids] += self.RBT_list[j]
-                displaced_atoms = self.right_atoms.copy() + self.RBT_list[j]
+                bulk_atoms_here[bulk_right_ids] += rbt
+                displaced_atoms = self.right_atoms.copy() + rbt
                 GB_atoms = vstack((self.left_atoms, displaced_atoms))
                 count = merge_operation(count, GB_atoms, self.interface.lattice_bi,
-                                        self.clst_atmc_dstc, self.RBT_list[j], bulk_atoms_here,
+                                        self.clst_atmc_dstc, rbt, bulk_atoms_here,
                                         core_num, i[0], i[1])
         get_lowest()
 
