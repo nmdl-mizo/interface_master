@@ -1219,6 +1219,7 @@ class core:
         self.min_perp_length = 0.0
         self.orientation = np.eye(3) # initial disorientation
         self.a1 = np.eye(3)
+        self.a2 = np.eye(3)
         self.a2_0 = np.eye(3)
         self.orient = np.eye(3) #adjusted orientation for better visulaizing
         self.d1 = float #lattice plane distance
@@ -1227,6 +1228,8 @@ class core:
         self.plane_list_2 = []
         self.elements_1 = [] #list of terminating plane atom elements
         self.elements_2 = []
+        self.elements_list_1 = []
+        self.elements_list_2 = []
         self.indices_list_1 = [] #termination plane atoms's indices
         self.indices_list_2 = []
         self.dp_list_1 = [] #list of dp parameter to select termination

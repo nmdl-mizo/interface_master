@@ -137,6 +137,10 @@ class GB_runner():
         self.clst_atmc_dstc = sqrt(3)/4 * norm(my_interface.conv_lattice_1[:,0])
         self.RBT_list = []
         self.terminations = []
+        self.middle_atoms = None
+        self.left_atoms = None
+        self.right_atoms =  None
+        self.bulk_atoms = None
 
     def get_terminations(self, changing_termination = False):
         """
