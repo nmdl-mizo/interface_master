@@ -1350,8 +1350,8 @@ class core:
                     file.write('    N= ' + str(N) + " accepted" + '\n')
                     R_p = three_dot(a1, U_p, inv(a2_0))
                     D = dot(inv(R),R_p)
-                    if (abs(det(D)-1) <= self.S) and \
-                    np.all(abs(D-np.eye(3)) < self.dd):
+                    if ((abs(det(D)-1) <= self.S) and
+                        np.all(abs(D-np.eye(3)) < self.dd)):
                         here_found = True
                         file.write('    --D accepted--\n')
                         file.write(f"    D, det(D) = {det(D)} \n")
@@ -1394,8 +1394,9 @@ class core:
                 break
             theta += dtheta
         if not found:
-            print('failed to find a satisfying appx CSL. Try to adjust the limits according \
-                  to the log file generated; or try another orientation.')
+            print(
+                'failed to find a satisfying appx CSL. Try to adjust the limits according'
+                'to the log file generated; or try another orientation.')
 
     def search_one_position_3D(self, axis, theta, theta_range, dtheta):
         """
@@ -1441,8 +1442,8 @@ class core:
                     file.write('    N= ' + str(N) + " accepted" + '\n')
                     R_p = three_dot(a1, U_p, inv(a2_0))
                     D = dot(inv(R),R_p)
-                    if (abs(det(D)-1) <= self.S) and \
-                    np.all(abs(D-np.eye(3)) < self.dd):
+                    if ((abs(det(D)-1) <= self.S) and
+                        np.all(abs(D-np.eye(3)) < self.dd)):
                         here_found = True
                         file.write('    --D accepted--\n')
                         file.write(f"    D, det(D) = {det(D)} \n")
@@ -1480,8 +1481,9 @@ class core:
                 break
             theta += dtheta
         if not found:
-            print('failed to find a satisfying appx CSL. Try to adjust the limits according \
-                  to the log file generated; or try another orientation.')
+            print(
+                'failed to find a satisfying appx CSL. Try to adjust the limits according'
+                'to the log file generated; or try another orientation.')
 
     def search_fixed(self, R, exact = False, tol = 1e-8):
         """
@@ -1517,8 +1519,8 @@ class core:
                 file.write('N= ' + str(N) + " accepted" + '\n')
                 R_p = three_dot(a1, U_p, inv(a2_0))
                 D = dot(inv(R),R_p)
-                if ((abs(det(D)-1) <= self.S) and \
-                np.all(abs(D-np.eye(3)) < self.dd)):
+                if (((abs(det(D)-1) <= self.S) and
+                    np.all(abs(D-np.eye(3)) < self.dd))):
                     if exact:
                         D = eye(3,3)
                         R = R_p
@@ -1626,8 +1628,8 @@ class core:
                     if exact:
                         D = eye(3,3)
                         R = R_p
-                    if (abs(det(D)-1) <= self.S) and \
-                    np.all(abs(D-np.eye(3)) < self.dd):
+                    if ((abs(det(D)-1) <= self.S) and
+                        np.all(abs(D-np.eye(3)) < self.dd)):
                         self.a2_transform = three_dot(R, D, self.orientation)
                         here_found = True
                         file.write('    --D accepted--\n')
@@ -1677,8 +1679,9 @@ class core:
                 break
             theta += dtheta
         if not found:
-            print('failed to find a satisfying appx CSL. Try to adjust the limits according \
-                  to the log file generated; or try another orientation.')
+            print(
+                'failed to find a satisfying appx CSL. Try to adjust the limits according'
+                'to the log file generated; or try another orientation.')
 
     def search_all_position(self, axis, theta, theta_range, dtheta, two_D = False):
         """
@@ -1751,8 +1754,8 @@ class core:
                     file.write('    N= ' + str(N) + " accepted" + '\n')
                     R_p = three_dot(a1, U_p, inv(a2_0))
                     D = dot(inv(R),R_p)
-                    if (abs(det(D)-1) <= self.S) and \
-                    np.all(abs(D-np.eye(3)) < self.dd):
+                    if ((abs(det(D)-1) <= self.S) and
+                    np.all(abs(D-np.eye(3)) < self.dd)):
                         here_found = True
                         file.write('    --D accepted--\n')
                         file.write(f"    D, det(D) = {det(D)} \n")
@@ -1785,8 +1788,8 @@ class core:
                 N += 1
             theta += dtheta
 
-    def get_bicrystal(self, dydz = None, dx = 0, dp1 = 0, dp2 = 0, \
-                      xyz_1 = None, xyz_2 = None, vx = 0, filename = 'POSCAR', \
+    def get_bicrystal(self, dydz = None, dx = 0, dp1 = 0, dp2 = 0,
+                      xyz_1 = None, xyz_2 = None, vx = 0, filename = 'POSCAR',
                       two_D = False, filetype = 'VASP',  mirror = False, KTI = False):
         """
         generate a cif file for the bicrystal structure
@@ -1832,10 +1835,10 @@ class core:
         else:
             lattice_2 = three_dot(self.R, self.D, lattice_2)
         #make supercells of the two slabs
-        atoms_1, elements_1, lattice_1 = super_cell(self.bicrystal_U1, \
+        atoms_1, elements_1, lattice_1 = super_cell(self.bicrystal_U1,
                                                     lattice_1, atoms_1, elements_1)
         if not mirror:
-            atoms_2, elements_2, lattice_2 = super_cell(self.bicrystal_U2, \
+            atoms_2, elements_2, lattice_2 = super_cell(self.bicrystal_U2,
                                                 lattice_2, atoms_2, elements_2)
         else:
             atoms_2, elements_2, lattice_2 = atoms_1.copy(), elements_1.copy(), lattice_1.copy()
@@ -1858,9 +1861,9 @@ class core:
                 raise RuntimeError(
                     'the two slabs must expand '
                     'to the same dimension in the interface plane')
-            lattice_1, atoms_1, elements_1 = cell_expands(lattice_1, atoms_1, \
+            lattice_1, atoms_1, elements_1 = cell_expands(lattice_1, atoms_1,
                                                           elements_1, xyz_1)
-            lattice_2, atoms_2, elements_2 = cell_expands(lattice_2, atoms_2, \
+            lattice_2, atoms_2, elements_2 = cell_expands(lattice_2, atoms_2,
                                                           elements_2, xyz_2)
 
         #termination
@@ -2004,8 +2007,9 @@ class core:
         position_here = 0
         count = 1
         while abs(position_here) < 1/2 * self.min_perp_length:
-            self.get_bicrystal(dx = dx, dp2 = position_here, \
-                xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D, \
+            self.get_bicrystal(
+                dx = dx, dp2 = position_here,
+                xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D,
                 filename = f'terminating_shift_inputs/{filename}_{count}',
                 filetype = filetype)
             position_here += -self.d2
