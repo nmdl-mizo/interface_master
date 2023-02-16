@@ -3,8 +3,9 @@ brute_force.py
 """
 import os
 import shutil
-from numpy import array, dot, repeat, tile, meshgrid, \
-unique, sqrt, ceil, where, delete, vstack, loadtxt, arange, around
+import numpy as np
+from numpy import array, repeat, tile, meshgrid, \
+unique, sqrt, where, delete, vstack, loadtxt, arange, around
 from numpy.linalg import inv, norm
 from interfacemaster.interface_generator import write_LAMMPS
 
@@ -39,7 +40,7 @@ def find_pairs_with_closest_distances(atoms_here, bicrystal_lattice):
     z_shifts = reps
     planar_shifts = array(meshgrid(x_shifts, y_shifts, z_shifts),dtype = float).T.reshape(-1, 3)
     for i in range(len(planar_shifts)):
-        planar_shifts[i,:] = dot(planar_shifts[i,:],transL.T)
+        planar_shifts[i,:] = np.dot(planar_shifts[i,:],transL.T)
     #expand by periodic boundary condition
     n_images = len(planar_shifts)
     n_1 = len(atoms_here)
@@ -158,11 +159,11 @@ class GB_runner():
         grid_size : float
              size of grid sampling RBT in angstrom
         """
-        CNID = dot(self.interface.orient,self.interface.CNID)
+        CNID = np.dot(self.interface.orient,self.interface.CNID)
         v1 = CNID[:,0]
         v2 = CNID[:,1]
-        n1 = int(ceil(norm(v1)/grid_size))
-        n2 = int(ceil(norm(v2)/grid_size))
+        n1 = int(np.ceil(norm(v1)/grid_size))
+        n2 = int(np.ceil(norm(v2)/grid_size))
         print(n1,n2)
         for i in range(n1):
             for j in range(n2):
@@ -172,7 +173,7 @@ class GB_runner():
         """
         divide simulation regions
         """
-        all_atoms = dot(self.interface.lattice_bi.copy(), self.interface.atoms_bi.copy().T).T
+        all_atoms = np.dot(self.interface.lattice_bi.copy(), self.interface.atoms_bi.copy().T).T
         middle_ids = where((all_atoms[:,0] < self.boundary + self.clst_atmc_dstc)\
                            & (all_atoms[:,0] > self.boundary - self.clst_atmc_dstc))[0]
         self.middle_atoms = all_atoms[middle_ids]
@@ -193,9 +194,9 @@ class GB_runner():
         count = 1
         os.mkdir('dump')
         for i in self.terminations:
-            x_dimension = ceil(100/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,0]))
-            y_dimension = ceil(40/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,1]))
-            z_dimension = ceil(40/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,2]))
+            x_dimension = np.ceil(100/norm(np.dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,0]))
+            y_dimension = np.ceil(40/norm(np.dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,1]))
+            z_dimension = np.ceil(40/norm(np.dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,2]))
             self.interface.get_bicrystal(xyz_1 = [x_dimension,y_dimension,z_dimension], \
                                        xyz_2 = [x_dimension,y_dimension,z_dimension], filetype='LAMMPS',\
                                        filename = 'GB.dat', dp1 = i[0], dp2 = i[1])
@@ -225,9 +226,9 @@ class GB_runner():
         position_here = 0
         self.interface.get_bicrystal()
         while abs(position_here) < 1/2 * self.interface.min_perp_length:
-            x_dimension = ceil(100/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,0]))
-            y_dimension = ceil(40/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,1]))
-            z_dimension = ceil(40/norm(dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,2]))
+            x_dimension = np.ceil(100/norm(np.dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,0]))
+            y_dimension = np.ceil(40/norm(np.dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,1]))
+            z_dimension = np.ceil(40/norm(np.dot(self.interface.lattice_1,self.interface.bicrystal_U1)[:,2]))
             for i in self.terminations:
                 self.interface.get_bicrystal(xyz_1 = [x_dimension,y_dimension,z_dimension], \
                                        xyz_2 = [x_dimension,y_dimension,z_dimension], filetype='LAMMPS',\
@@ -295,7 +296,7 @@ def merge_operation(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc,
                 atoms = vstack((GB_atoms_here, bulk_atoms))
                 array_id_del, array_id_dsp, dsps, cloest_distance_now, _ = \
             find_pairs_with_closest_distances(GB_atoms_here, bicrystal_lattice)
-                write_LAMMPS(bicrystal_lattice, dot(inv(bicrystal_lattice),atoms.T).T, repeat(['Si'],\
+                write_LAMMPS(bicrystal_lattice, np.dot(inv(bicrystal_lattice),atoms.T).T, repeat(['Si'],\
                          len(atoms)), filename = 'GB.dat', orthogonal = True)
                 run_LAMMPS(core_num, count)
                 energy_here = read_energy()
@@ -303,7 +304,7 @@ def merge_operation(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc,
                 count += 1
         else:
             atoms = vstack((GB_atoms_here, bulk_atoms))
-            write_LAMMPS(bicrystal_lattice, dot(inv(bicrystal_lattice),atoms.T).T, repeat(['Si'],\
+            write_LAMMPS(bicrystal_lattice, np.dot(inv(bicrystal_lattice),atoms.T).T, repeat(['Si'],\
                      len(atoms)), filename = 'GB.dat', orthogonal = True)
             run_LAMMPS(core_num, count)
             energy_here = read_energy()
@@ -333,7 +334,7 @@ def merge_operation_no_RBT(count_start, GB_atoms, bicrystal_lattice, clst_atmc_d
                 atoms = vstack((GB_atoms_here, bulk_atoms))
                 array_id_del, array_id_dsp, dsps, cloest_distance_now, _ = \
             find_pairs_with_closest_distances(GB_atoms_here, bicrystal_lattice)
-                write_LAMMPS(bicrystal_lattice, dot(inv(bicrystal_lattice),atoms.T).T, repeat(['Si'],\
+                write_LAMMPS(bicrystal_lattice, np.dot(inv(bicrystal_lattice),atoms.T).T, repeat(['Si'],\
                          len(atoms)), filename = 'GB.dat', orthogonal = True)
                 run_LAMMPS(core_num, count)
                 energy_here = read_energy()
@@ -341,7 +342,7 @@ def merge_operation_no_RBT(count_start, GB_atoms, bicrystal_lattice, clst_atmc_d
                 count += 1
         else:
             atoms = vstack((GB_atoms_here, bulk_atoms))
-            write_LAMMPS(bicrystal_lattice, dot(inv(bicrystal_lattice),atoms.T).T, repeat(['Si'],\
+            write_LAMMPS(bicrystal_lattice, np.dot(inv(bicrystal_lattice),atoms.T).T, repeat(['Si'],\
                      len(atoms)), filename = 'GB.dat', orthogonal = True)
             run_LAMMPS(core_num, count)
             energy_here = read_energy()
