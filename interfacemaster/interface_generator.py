@@ -2029,7 +2029,7 @@ class core:
                 xyz_1 = xyz_1, xyz_2 = xyz_2, vx = vx, two_D = two_D,
                 filename = f'terminating_shift_inputs/{filename}_{count}',
                 filetype = filetype)
-            position_here += -self.d2
+            position_here -= self.d2
             count += 1
         if self.verbose:
             print('completed')
