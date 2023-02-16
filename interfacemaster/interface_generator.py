@@ -1415,92 +1415,92 @@ class core:
                 'failed to find a satisfying appx CSL. Try to adjust the limits according'
                 'to the log file generated; or try another orientation.')
 
-    def search_one_position_3D(self, axis, theta, theta_range, dtheta):
-        """
-        main loop finding the appx CSL
-
-        Parameters
-        ----------
-        axis : numpy array
-            rotation axis
-        theta : float
-            initial rotation angle, in degree
-        theta_range : float
-            range varying theta, in degree
-        dtheta : float
-            step varying theta, in degree
-        """
-        axis = np.dot(self.lattice_1, axis)
-        if self.verbose:
-            print(axis)
-        theta = theta / 180 * np.pi
-        n = np.ceil(theta_range/dtheta)
-        dtheta = theta_range / n / 180 * np.pi
-        found = None
-
-        a1 = self.lattice_1.copy()
-        a2_0 = self.lattice_2.copy()
-
-        # rotation loop
-        file = open('log.one_position','w', encoding="utf-8")
-        file.write('---Searching starts---\n')
-        file.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
-        file.write(f'{axis} {theta} {dtheta} {n} {self.S} {self.du} {self.sgm1} {self.sgm2}\n')
-        file.write('-----------for theta-----------\n')
-        for _ in range(int(n)):
-            N = 1
-            U = three_dot(inv(a1), R, a2_0)
-            file.write('theta = ' + str(theta / np.pi * 180) + '\n')
-            file.write('    -----for N-----\n')
-            while N <= self.sgm2:
-                Uij, N = rational_mtx(U,N)
-                U_p = 1 / N * Uij
-                if np.all((abs(U_p-U)) < self.du):
-                    file.write('    N= ' + str(N) + " accepted" + '\n')
-                    R_p = three_dot(a1, U_p, inv(a2_0))
-                    D = np.dot(inv(R),R_p)
-                    if ((abs(det(D)-1) <= self.S) and
-                       np.all(abs(D-np.eye(3)) < self.dd)):
-                        here_found = True
-                        file.write('    --D accepted--\n')
-                        file.write(f"    D, det(D) = {det(D)} \n")
-                        ax2 = three_dot(R,D,a2_0)
-                        calc = DSCcalc()
-                        try:
-                            calc.parse_int_U(a1, ax2, self.sgm2)
-                            calc.compute_CSL()
-                        except:
-                            file.write('    failed to find CSL here \n')
-                            here_found = False
-                        if here_found and abs(det(calc.U1)) <= self.sgm1:
-                            found = True
-                            file.write('--------------------------------\n')
-                            file.write('Congrates, we found an appx CSL!\n')
-                            sigma1 = int(abs(np.round(det(calc.U1))))
-                            sigma2 = int(abs(np.round(det(calc.U2))))
-                            self.D = D
-                            self.U1 = np.array(np.round(calc.U1),dtype = int)
-                            self.U2 = np.array(np.round(calc.U2),dtype = int)
-                            self.lattice_2_TD = three_dot(R, D, a2_0)
-                            self.CSL = np.dot(a1, self.U1)
-                            self.R = R
-                            self.theta = theta
-                            self.axis = axis
-                            self.cell_calc = calc
-                            self._write_found_csl(file, sigma1, sigma2, D, axis, theta)
-                            if self.verbose:
-                                self._print_found_csl(sigma1, sigma2, D, axis, theta)
-                            break
-                        else:
-                            file.write('    sigma too large \n')
-                N += 1
-            if found:
-                break
-            theta += dtheta
-        if not found:
-            print(
-                'failed to find a satisfying appx CSL. Try to adjust the limits according'
-                'to the log file generated; or try another orientation.')
+#    def search_one_position_3D(self, axis, theta, theta_range, dtheta):
+#        """
+#        main loop finding the appx CSL
+#
+#        Parameters
+#        ----------
+#        axis : numpy array
+#            rotation axis
+#        theta : float
+#            initial rotation angle, in degree
+#        theta_range : float
+#            range varying theta, in degree
+#        dtheta : float
+#            step varying theta, in degree
+#        """
+#        axis = np.dot(self.lattice_1, axis)
+#        if self.verbose:
+#            print(axis)
+#        theta = theta / 180 * np.pi
+#        n = np.ceil(theta_range/dtheta)
+#        dtheta = theta_range / n / 180 * np.pi
+#        found = None
+#
+#        a1 = self.lattice_1.copy()
+#        a2_0 = self.lattice_2.copy()
+#
+#        # rotation loop
+#        file = open('log.one_position','w', encoding="utf-8")
+#        file.write('---Searching starts---\n')
+#        file.write('axis theta dtheta n S du sigma1_max sigma2_max\n')
+#        file.write(f'{axis} {theta} {dtheta} {n} {self.S} {self.du} {self.sgm1} {self.sgm2}\n')
+#        file.write('-----------for theta-----------\n')
+#        for _ in range(int(n)):
+#            N = 1
+#            U = three_dot(inv(a1), R, a2_0)
+#            file.write('theta = ' + str(theta / np.pi * 180) + '\n')
+#            file.write('    -----for N-----\n')
+#            while N <= self.sgm2:
+#                Uij, N = rational_mtx(U,N)
+#                U_p = 1 / N * Uij
+#                if np.all((abs(U_p-U)) < self.du):
+#                    file.write('    N= ' + str(N) + " accepted" + '\n')
+#                    R_p = three_dot(a1, U_p, inv(a2_0))
+#                    D = np.dot(inv(R),R_p)
+#                    if ((abs(det(D)-1) <= self.S) and
+#                       np.all(abs(D-np.eye(3)) < self.dd)):
+#                        here_found = True
+#                        file.write('    --D accepted--\n')
+#                        file.write(f"    D, det(D) = {det(D)} \n")
+#                        ax2 = three_dot(R,D,a2_0)
+#                        calc = DSCcalc()
+#                        try:
+#                            calc.parse_int_U(a1, ax2, self.sgm2)
+#                            calc.compute_CSL()
+#                        except:
+#                            file.write('    failed to find CSL here \n')
+#                            here_found = False
+#                        if here_found and abs(det(calc.U1)) <= self.sgm1:
+#                            found = True
+#                            file.write('--------------------------------\n')
+#                            file.write('Congrates, we found an appx CSL!\n')
+#                            sigma1 = int(abs(np.round(det(calc.U1))))
+#                            sigma2 = int(abs(np.round(det(calc.U2))))
+#                            self.D = D
+#                            self.U1 = np.array(np.round(calc.U1),dtype = int)
+#                            self.U2 = np.array(np.round(calc.U2),dtype = int)
+#                            self.lattice_2_TD = three_dot(R, D, a2_0)
+#                            self.CSL = np.dot(a1, self.U1)
+#                            self.R = R
+#                            self.theta = theta
+#                            self.axis = axis
+#                            self.cell_calc = calc
+#                            self._write_found_csl(file, sigma1, sigma2, D, axis, theta)
+#                            if self.verbose:
+#                                self._print_found_csl(sigma1, sigma2, D, axis, theta)
+#                            break
+#                        else:
+#                            file.write('    sigma too large \n')
+#                N += 1
+#            if found:
+#                break
+#            theta += dtheta
+#        if not found:
+#            print(
+#                'failed to find a satisfying appx CSL. Try to adjust the limits according'
+#                'to the log file generated; or try another orientation.')
 
     def search_fixed(self, R, exact = False, tol = 1e-8):
         """
