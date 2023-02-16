@@ -287,13 +287,13 @@ def merge_operation(count_start, GB_atoms, bicrystal_lattice, clst_atmc_dstc,
     while cloest_distance_now < 0.99 * clst_atmc_dstc:
         if merge_operation_count > 0:
 
-            array_id_del, array_id_dsp, dsps, delete_cutoff, a = \
+            array_id_del, array_id_dsp, dsps, delete_cutoff, _ = \
             find_pairs_with_closest_distances(GB_atoms_here, bicrystal_lattice)
             if len(array_id_del) > 0:
                 GB_atoms_here[array_id_dsp] += dsps[0]
                 GB_atoms_here = delete(GB_atoms_here, array_id_del, axis = 0)
                 atoms = vstack((GB_atoms_here, bulk_atoms))
-                array_id_del, array_id_dsp, dsps, cloest_distance_now, a = \
+                array_id_del, array_id_dsp, dsps, cloest_distance_now, _ = \
             find_pairs_with_closest_distances(GB_atoms_here, bicrystal_lattice)
                 write_LAMMPS(bicrystal_lattice, dot(inv(bicrystal_lattice),atoms.T).T, repeat(['Si'],\
                          len(atoms)), filename = 'GB.dat', orthogonal = True)
@@ -325,13 +325,13 @@ def merge_operation_no_RBT(count_start, GB_atoms, bicrystal_lattice, clst_atmc_d
     while cloest_distance_now < 0.99 * clst_atmc_dstc:
         if merge_operation_count > 0:
 
-            array_id_del, array_id_dsp, dsps, delete_cutoff, a = \
+            array_id_del, array_id_dsp, dsps, delete_cutoff, _ = \
             find_pairs_with_closest_distances(GB_atoms_here, bicrystal_lattice)
             if len(array_id_del) > 0:
                 GB_atoms_here[array_id_dsp] += dsps[0]
                 GB_atoms_here = delete(GB_atoms_here, array_id_del, axis = 0)
                 atoms = vstack((GB_atoms_here, bulk_atoms))
-                array_id_del, array_id_dsp, dsps, cloest_distance_now, a = \
+                array_id_del, array_id_dsp, dsps, cloest_distance_now, _ = \
             find_pairs_with_closest_distances(GB_atoms_here, bicrystal_lattice)
                 write_LAMMPS(bicrystal_lattice, dot(inv(bicrystal_lattice),atoms.T).T, repeat(['Si'],\
                          len(atoms)), filename = 'GB.dat', orthogonal = True)
@@ -354,7 +354,7 @@ def get_lowest():
     """
     get the lowest GB energy
     """
-    count, energy, dy, dz, dp1, dp2, delete_cutoff = loadtxt('results.dat', unpack = True)
+    count, energy, _, _, _, _, _ = loadtxt('results.dat', unpack = True)
     lowest_count = count[where(energy == min(energy))[0][0]]
     lowest_energy = energy[where(energy == min(energy))[0][0]]
     with open('lowest_energy.dat', 'w', encoding='utf-8') as f:
