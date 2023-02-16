@@ -1,6 +1,7 @@
 """
 interface_generator.py
 """
+import os
 from numpy.linalg import det, norm, inv
 from numpy import dot, cross, ceil, floor, cos, sin, array, column_stack, eye, arccos, around, sqrt
 from pymatgen.core.structure import Structure
@@ -8,7 +9,6 @@ import numpy as np
 from interfacemaster.cellcalc import (
     MID, DSCcalc, get_primitive_hkl, get_right_hand, get_pri_vec_inplane,
     get_ortho_two_v, ang, get_normal_from_MI)
-import os
 
 def get_disorientation(L1, L2, v1, hkl1, v2, hkl2):
     """
