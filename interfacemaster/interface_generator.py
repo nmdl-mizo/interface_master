@@ -3,7 +3,7 @@ interface_generator.py
 """
 import os
 from numpy.linalg import det, norm, inv
-from numpy import dot, cross, ceil, floor, cos, sin, array, column_stack, eye, arccos, around, sqrt
+from numpy import cross, cos, sin, array, column_stack, eye, arccos, around, sqrt
 from pymatgen.core.structure import Structure
 import numpy as np
 from interfacemaster.cellcalc import (
@@ -35,18 +35,18 @@ def get_disorientation(L1, L2, v1, hkl1, v2, hkl2):
     n2 = get_normal_from_MI(L2, hkl2)
 
     #auxiliary lattice
-    Av1 = cross(dot(L1,v1), n1)
-    Av2 = cross(dot(L2,v2), n2)
+    Av1 = cross(np.dot(L1,v1), n1)
+    Av2 = cross(np.dot(L2,v2), n2)
 
     #get the auxiliary lattices
-    AL1 = column_stack((dot(L1,v1), n1, Av1))
-    AL2 = column_stack((dot(L2,v2), n2, Av2))
+    AL1 = column_stack((np.dot(L1,v1), n1, Av1))
+    AL2 = column_stack((np.dot(L2,v2), n2, Av2))
 
     #unit mtx
     AL1 = get_unit_mtx(AL1)
     AL2 = get_unit_mtx(AL2)
 
-    return dot(AL1, inv(AL2))
+    return np.dot(AL1, inv(AL2))
 
 
 def get_unit_mtx(lattice):
@@ -133,7 +133,7 @@ def three_dot(M1, M2, M3):
     P : numpy array
         dot product
     """
-    return dot(dot(M1,M2),M3)
+    return np.dot(np.dot(M1,M2),M3)
 
 def get_ang_list(m1, n):
     """
@@ -151,7 +151,7 @@ def get_ang_list(m1, n):
     c : numpy array
         list of cos
     """
-    return 1 / norm(n) * abs(dot(m1, n)) / norm(m1, axis = 1)
+    return 1 / norm(n) * abs(np.dot(m1, n)) / norm(m1, axis = 1)
 
 def cross_plane(lattice, n, lim, orthogonal, tol, inclination_tol = sqrt(2)/2):
     """
@@ -179,7 +179,7 @@ def cross_plane(lattice, n, lim, orthogonal, tol, inclination_tol = sqrt(2)/2):
     indice = (np.stack(np.meshgrid(x, y, z)).T).reshape(len(x) ** 3, 3)
     indice_0 = indice[np.where(np.sum(abs(indice), axis=1) != 0)[0]]
     indice_0 = indice_0[np.where(np.gcd.reduce(indice_0, axis=1) == 1)[0]]
-    ltc_p = dot(indice_0, lattice.T)
+    ltc_p = np.dot(indice_0, lattice.T)
     ltc_p = ltc_p[np.argsort(norm(ltc_p, axis=1))]
     dot_list = get_ang_list(ltc_p, n)
     if not orthogonal:
@@ -257,7 +257,7 @@ def write_LAMMPS(lattice, atoms, elements, filename = 'lmp_atoms_file', orthogon
     element_species = np.unique(elements)
 
     #to Cartesian
-    atoms = dot(lattice, atoms.T).T
+    atoms = np.dot(lattice, atoms.T).T
 
     #get the speicie identifiers (e.g. 1 for Cu, 2 for O...)
     element_indices = np.arange(len(element_species)) + 1
@@ -463,7 +463,7 @@ def super_cell(U, lattice, Atoms, elements):
     tol = 1e-10
 
     #3.delete atoms dropping outside
-    Atoms = dot(inv(U),Atoms.T).T
+    Atoms = np.dot(inv(U),Atoms.T).T
     Atoms_try = Atoms.copy() + [tol, tol, tol]
     con = (Atoms_try[:,0] < 1) & (Atoms_try[:,0] >= 0) \
         & (Atoms_try[:,1] < 1) & (Atoms_try[:,1] >= 0) \
@@ -471,7 +471,7 @@ def super_cell(U, lattice, Atoms, elements):
     indices = np.where(con)[0]
     Atoms = Atoms[indices]
     elements = elements[indices]
-    lattice = dot(lattice, U)
+    lattice = np.dot(lattice, U)
     return Atoms, elements, lattice
 
 def shift_termi_left(lattice, dp, atoms, elements):
@@ -504,11 +504,11 @@ def shift_termi_left(lattice, dp, atoms, elements):
         #shift to origin
         atoms[:,0] = atoms[:,0] - 2 * position_shift
         #to cartesian
-        atoms = dot(lattice, atoms.T).T
+        atoms = np.dot(lattice, atoms.T).T
         #cut
         lattice[:,0] = lattice[:,0] * (1 - 2 * position_shift)
         #back
-        atoms = dot(inv(lattice), atoms.T).T
+        atoms = np.dot(inv(lattice), atoms.T).T
     else:
         atoms_c_1 = atoms.copy()
         atoms_c_2 = atoms.copy()
@@ -524,11 +524,11 @@ def shift_termi_left(lattice, dp, atoms, elements):
         #shift to origin
         atoms[:,0] = atoms[:,0] - 2 * position_shift
         #to cartesian
-        atoms = dot(lattice, atoms.T).T
+        atoms = np.dot(lattice, atoms.T).T
         #cut
         lattice[:,0] = lattice[:,0] * (1 - 2 * position_shift)
         #back
-        atoms = dot(inv(lattice), atoms.T).T
+        atoms = np.dot(inv(lattice), atoms.T).T
 
     return atoms, elements
 
@@ -584,11 +584,11 @@ def shift_termi_right(lattice, dp, atoms, elements):
         elements = elements[inner]
         atoms = atoms[inner]
         #to cartesian
-        atoms = dot(lattice, atoms.T).T
+        atoms = np.dot(lattice, atoms.T).T
         #cut
         lattice[:,0] = lattice[:,0] * (1 + 2 * position_shift)
         #back
-        atoms = dot(inv(lattice), atoms.T).T
+        atoms = np.dot(inv(lattice), atoms.T).T
     else:
         atoms_c_1 = atoms.copy()
         atoms_c_2 = atoms.copy()
@@ -602,11 +602,11 @@ def shift_termi_right(lattice, dp, atoms, elements):
         elements = elements[inner]
         atoms = atoms[inner]
         #to cartesian
-        atoms = dot(lattice, atoms.T).T
+        atoms = np.dot(lattice, atoms.T).T
         #cut
         lattice[:,0] = lattice[:,0] * (1 + 2 * position_shift)
         #back
-        atoms = dot(inv(lattice), atoms.T).T
+        atoms = np.dot(inv(lattice), atoms.T).T
 
     return atoms, elements
 
@@ -635,11 +635,11 @@ def excess_volume(lattice_1, lattice_bi, atoms_1, atoms_2, dx):
     n = cross(lattice_1[:,1],lattice_1[:,2])
     normal_shift = dx / ang(lattice_1[:,0], n) / norm(lattice_bi[:,0].copy())
     normal_shift_cart = normal_shift * lattice_bi[:,0]
-    atoms_2 = dot(lattice_bi.copy(), atoms_2.copy().T).T
+    atoms_2 = np.dot(lattice_bi.copy(), atoms_2.copy().T).T
     atoms_2 = atoms_2.copy() + normal_shift_cart
     lattice_bi[:,0] = (2 * normal_shift + 1) * lattice_bi[:,0]
     atoms_1[:,0] = 1 / (2 * normal_shift + 1) * atoms_1[:,0]
-    atoms_2 = dot(inv(lattice_bi), atoms_2.T).T
+    atoms_2 = np.dot(inv(lattice_bi), atoms_2.T).T
     return lattice_bi, atoms_1, atoms_2
 
 def surface_vacuum(lattice_1, lattice_bi, atoms_bi, vx):
@@ -708,11 +708,11 @@ def adjust_orientation(lattice):
     v1, v2, v3 = unit_v(v1), unit_v(v2), unit_v(v3)
     this_orientation = np.column_stack((v1,v2,v3))
     desti_orientation = np.eye(3)
-    R = dot(desti_orientation, inv(this_orientation))
-    lattice = dot(R, lattice)
+    R = np.dot(desti_orientation, inv(this_orientation))
+    lattice = np.dot(R, lattice)
     #check that a1 and a2 points to positive:
 
-    R = dot(lattice, inv(lattice_0))
+    R = np.dot(lattice, inv(lattice_0))
 
     return lattice, R
 
@@ -720,8 +720,8 @@ def convert_vector_index(lattice_0, lattice_f, v_0):
     """
     convert the index of a vector into a different basis
     """
-    v_0 = dot(lattice_0, v_0)
-    v_f = dot(inv(lattice_f), v_0)
+    v_0 = np.dot(lattice_0, v_0)
+    v_f = np.dot(inv(lattice_f), v_0)
     return v_f
 
 def get_height(lattice):
@@ -729,7 +729,7 @@ def get_height(lattice):
     get the distance of the two surfaces (crossing the first vector) of a cell
     """
     n = cross(lattice[:,1], lattice[:,2])
-    height = abs(dot(lattice[:,0], n) / norm(n))
+    height = abs(np.dot(lattice[:,0], n) / norm(n))
     return height
 
 def get_plane_vectors(lattice, n):
@@ -752,7 +752,7 @@ def get_plane_vectors(lattice, n):
     count = 0
     indices = []
     for i in range(3):
-        if norm(lattice[:,i])>0 and abs(dot(lattice[:,i], n)) < tol:
+        if norm(lattice[:,i])>0 and abs(np.dot(lattice[:,i], n)) < tol:
             B[:,count] = lattice[:,i]
             indices.append(i)
             count += 1
@@ -765,7 +765,7 @@ def reciprocal_lattice(B):
     return the reciprocal lattice of B
     """
     v1, v2, v3 = B.T
-    V = dot(v1, cross(v2, v3))
+    V = np.dot(v1, cross(v2, v3))
     b1 = cross(v2,v3) / V
     b2 = cross(v3,v1) / V
     b3 = cross(v1,v2) / V
@@ -776,7 +776,7 @@ def d_hkl(lattice, hkl):
     return the lattice plane spacing of (hkl) of a lattice
     """
     rep_L = reciprocal_lattice(lattice)
-    d = 1 / norm(dot(rep_L, hkl))
+    d = 1 / norm(np.dot(rep_L, hkl))
     return d
 
 def terminates_scanner_left(slab, atoms, elements, d, round_n = 5):
@@ -815,9 +815,9 @@ def terminates_scanner_left(slab, atoms, elements, d, round_n = 5):
     height = get_height(slab)
     normal = cross(slab[:,1], slab[:,2])
     normal = normal / norm(normal)
-    atoms_cart = dot(slab,atoms.T).T
-    projections = abs(dot(atoms_cart, normal))
-    atoms_round = ceil(projections.copy() * 10000) / 10000
+    atoms_cart = np.dot(slab,atoms.T).T
+    projections = abs(np.dot(atoms_cart, normal))
+    atoms_round = np.ceil(projections.copy() * 10000) / 10000
     x_coords = np.unique(atoms_round)
     plane_index = 1
     position = x_coords[-plane_index]
@@ -847,7 +847,7 @@ def get_R_to_screen(lattice):
     v3 = v3 / norm(v3)
     here = np.column_stack((v2,v3,v1))
     there = np.eye(3)
-    return dot(there, inv(here)) # R here = there
+    return np.dot(there, inv(here)) # R here = there
 
 def terminates_scanner_right(slab, atoms, elements, d, round_n = 5):
     """
@@ -882,9 +882,9 @@ def terminates_scanner_right(slab, atoms, elements, d, round_n = 5):
     dp_list = []
     normal = cross(slab[:,1], slab[:,2])
     normal = normal / norm(normal)
-    atoms_cart = dot(slab,atoms.T).T
-    projections = abs(dot(atoms_cart, normal))
-    atoms_round = floor(projections.copy() * 10000) / 10000
+    atoms_cart = np.dot(slab,atoms.T).T
+    projections = abs(np.dot(atoms_cart, normal))
+    atoms_round = np.floor(projections.copy() * 10000) / 10000
     x_coords = np.unique(atoms_round)
     plane_index = 0
     position = 0
@@ -988,7 +988,7 @@ def draw_slab(xs, ys, axes, num, plane_list, lattice_to_screen,
     for i in range(num):
         #get atoms in this plane
         plane_atoms = plane_list[i]
-        plane_atoms = dot(lattice_to_screen, plane_atoms.T).T
+        plane_atoms = np.dot(lattice_to_screen, plane_atoms.T).T
         #how many different elements in this plane
         plane_elements = elements_list[i]
         element_names = np.unique(plane_elements)
@@ -997,7 +997,7 @@ def draw_slab(xs, ys, axes, num, plane_list, lattice_to_screen,
         for en in element_names:
             #get the atoms of j elment
             single_element_atoms = plane_atoms[
-                np.where(plane_elements == en)[0]]
+               np.where(plane_elements == en)[0]]
 
             #draw atoms of this element
             Xs = single_element_atoms[:,0]
@@ -1070,9 +1070,9 @@ def draw_slab_dich(xs, ys, c_xs, c_ys,axes,num1, plane_list_1, lattice_to_screen
         for j in range(num2):
             #get atoms in this plane
             plane_atoms_1 = plane_list_1[i]
-            plane_atoms_1 = dot(lattice_to_screen_1, plane_atoms_1.T).T
+            plane_atoms_1 = np.dot(lattice_to_screen_1, plane_atoms_1.T).T
             plane_atoms_2 = plane_list_2[j]
-            plane_atoms_2 = dot(lattice_to_screen_2, plane_atoms_2.T).T
+            plane_atoms_2 = np.dot(lattice_to_screen_2, plane_atoms_2.T).T
             #how many different elements in this plane
             plane_elements_1 = elements_list_1[i]
             element_names_1 = np.unique(plane_elements_1)
@@ -1081,7 +1081,7 @@ def draw_slab_dich(xs, ys, c_xs, c_ys,axes,num1, plane_list_1, lattice_to_screen
             for en1 in element_names_1:
                 #get the atoms of j elment
                 single_element_atoms_1 = plane_atoms_1[
-                    np.where(plane_elements_1 == en1)[0]]
+                   np.where(plane_elements_1 == en1)[0]]
 
                 #draw atoms of this element
                 Xs = single_element_atoms_1[:,0]
@@ -1096,7 +1096,7 @@ def draw_slab_dich(xs, ys, c_xs, c_ys,axes,num1, plane_list_1, lattice_to_screen
                 for en2 in element_names_2:
                     #get the atoms of j elment
                     single_element_atoms_2 = plane_atoms_2[
-                        np.where(plane_elements_2 == en2)[0]]
+                       np.where(plane_elements_2 == en2)[0]]
 
                     #draw atoms of this element
                     Xs = single_element_atoms_2[:,0]
@@ -1130,7 +1130,7 @@ def get_nearest_pair(lattice, atoms, indices):
     """
 
     #get Cartesian
-    pos_1 = dot(lattice, atoms.copy().T).T
+    pos_1 = np.dot(lattice, atoms.copy().T).T
     pos_2 = pos_1
     #get 9 reps of atoms (PBC)
     reps = np.array([-1, 0, 1])
@@ -1138,9 +1138,9 @@ def get_nearest_pair(lattice, atoms, indices):
     y_shifts = reps
     z_shifts = reps
     planar_shifts = np.array(
-        np.meshgrid(x_shifts, y_shifts, z_shifts),
+       np.meshgrid(x_shifts, y_shifts, z_shifts),
         dtype = float).T.reshape(-1, 3)
-    planar_shifts = dot(lattice, planar_shifts.T).T
+    planar_shifts = np.dot(lattice, planar_shifts.T).T
 
     #make images for one set
     n_images = len(planar_shifts)
@@ -1320,11 +1320,11 @@ class core:
         dtheta : float
             step varying theta, in degree
         """
-        axis = dot(self.lattice_1, axis)
+        axis = np.dot(self.lattice_1, axis)
         if self.verbose:
             print(axis)
         theta = theta / 180 * np.pi
-        n = ceil(theta_range/dtheta)
+        n = np.ceil(theta_range/dtheta)
         dtheta = theta_range / n / 180 * np.pi
         found = None
 
@@ -1336,17 +1336,17 @@ class core:
             #find the two primitive plane bases
             #miller indices
             hkl_1 = MID(self.lattice_1, axis)
-            hkl_2 = MID(dot(self.orientation, self.lattice_2), axis)
+            hkl_2 = MID(np.dot(self.orientation, self.lattice_2), axis)
             #plane bases
             plane_B_1 = get_pri_vec_inplane(hkl_1, self.lattice_1)
-            plane_B_2 = get_pri_vec_inplane(hkl_2, dot(self.orientation, self.lattice_2))
+            plane_B_2 = get_pri_vec_inplane(hkl_2, np.dot(self.orientation, self.lattice_2))
             v_3 = cross(plane_B_1[:,0], plane_B_1[:,1])
             a1 = np.column_stack((plane_B_1, v_3))
             a2_0 = np.column_stack((plane_B_2, v_3))
             self.a1 = a1.copy()
             self.a2 = a2_0.copy()
             #a2_0 back to the initial orientation
-            a2_0 = dot(inv(self.orientation), a2_0)
+            a2_0 = np.dot(inv(self.orientation), a2_0)
             self.a2_0 = a2_0.copy()
         # rotation loop
         file = open('log.one_position','w', encoding="utf-8")
@@ -1356,7 +1356,7 @@ class core:
         file.write('-----------for theta-----------\n')
         for _ in range(int(n)):
             N = 1
-            R = dot(self.orientation, rot(axis, theta))
+            R = np.dot(self.orientation, rot(axis, theta))
             U = three_dot(inv(a1), R, a2_0)
             file.write('theta = ' + str(theta / np.pi * 180) + '\n')
             file.write('    -----for N-----\n')
@@ -1366,9 +1366,9 @@ class core:
                 if np.all((abs(U_p-U)) < self.du):
                     file.write('    N= ' + str(N) + " accepted" + '\n')
                     R_p = three_dot(a1, U_p, inv(a2_0))
-                    D = dot(inv(R),R_p)
+                    D = np.dot(inv(R),R_p)
                     if ((abs(det(D)-1) <= self.S) and
-                        np.all(abs(D-np.eye(3)) < self.dd)):
+                       np.all(abs(D-np.eye(3)) < self.dd)):
                         here_found = True
                         file.write('    --D accepted--\n')
                         file.write(f"    D, det(D) = {det(D)} \n")
@@ -1390,7 +1390,7 @@ class core:
                             self.U1 = np.array(np.round(calc.U1),dtype = int)
                             self.U2 = np.array(np.round(calc.U2),dtype = int)
                             self.lattice_2_TD = three_dot(R, D, a2_0)
-                            self.CSL = dot(a1, self.U1)
+                            self.CSL = np.dot(a1, self.U1)
                             self.R = R
                             self.theta = theta
                             self.axis = axis
@@ -1399,7 +1399,7 @@ class core:
                                 self.d1 = d_hkl(self.lattice_1, hkl_1)
                                 self.d2 = d_hkl(three_dot(R, D, self.lattice_2), hkl_2)
                                 calc.compute_CNID([0,0,1])
-                                self.CNID = dot(a1, calc.CNID)
+                                self.CNID = np.dot(a1, calc.CNID)
                             self._write_found_csl(file, sigma1, sigma2, D, axis, theta)
                             if self.verbose:
                                 self._print_found_csl(sigma1, sigma2, D, axis, theta)
@@ -1430,11 +1430,11 @@ class core:
         dtheta : float
             step varying theta, in degree
         """
-        axis = dot(self.lattice_1, axis)
+        axis = np.dot(self.lattice_1, axis)
         if self.verbose:
             print(axis)
         theta = theta / 180 * np.pi
-        n = ceil(theta_range/dtheta)
+        n = np.ceil(theta_range/dtheta)
         dtheta = theta_range / n / 180 * np.pi
         found = None
 
@@ -1458,9 +1458,9 @@ class core:
                 if np.all((abs(U_p-U)) < self.du):
                     file.write('    N= ' + str(N) + " accepted" + '\n')
                     R_p = three_dot(a1, U_p, inv(a2_0))
-                    D = dot(inv(R),R_p)
+                    D = np.dot(inv(R),R_p)
                     if ((abs(det(D)-1) <= self.S) and
-                        np.all(abs(D-np.eye(3)) < self.dd)):
+                       np.all(abs(D-np.eye(3)) < self.dd)):
                         here_found = True
                         file.write('    --D accepted--\n')
                         file.write(f"    D, det(D) = {det(D)} \n")
@@ -1482,7 +1482,7 @@ class core:
                             self.U1 = np.array(np.round(calc.U1),dtype = int)
                             self.U2 = np.array(np.round(calc.U2),dtype = int)
                             self.lattice_2_TD = three_dot(R, D, a2_0)
-                            self.CSL = dot(a1, self.U1)
+                            self.CSL = np.dot(a1, self.U1)
                             self.R = R
                             self.theta = theta
                             self.axis = axis
@@ -1535,9 +1535,9 @@ class core:
             if np.all((abs(U_p-U)) < self.du):
                 file.write('N= ' + str(N) + " accepted" + '\n')
                 R_p = three_dot(a1, U_p, inv(a2_0))
-                D = dot(inv(R),R_p)
+                D = np.dot(inv(R),R_p)
                 if (((abs(det(D)-1) <= self.S) and
-                    np.all(abs(D-np.eye(3)) < self.dd))):
+                   np.all(abs(D-np.eye(3)) < self.dd))):
                     if exact:
                         D = eye(3,3)
                         R = R_p
@@ -1558,7 +1558,7 @@ class core:
                         self.U1 = np.array(np.round(calc.U1),dtype = int)
                         self.U2 = np.array(np.round(calc.U2),dtype = int)
                         self.lattice_2_TD = three_dot(R, D, a2_0)
-                        self.CSL = dot(a1, self.U1)
+                        self.CSL = np.dot(a1, self.U1)
                         self.R = R
                         self.cell_calc = calc
                         self._write_found_csl(file, sigma1, sigma2, D)
@@ -1598,7 +1598,7 @@ class core:
         b1 = get_pri_vec_inplane(hkl_1, self.lattice_1)
         b2_0 = get_pri_vec_inplane(hkl_2, self.lattice_2)
         #rotate the second crystal so that the two slabs connect
-        self.set_orientation_axis(dot(inv(self.lattice_1),n1), dot(inv(self.lattice_2),n2))
+        self.set_orientation_axis(np.dot(inv(self.lattice_1),n1), np.dot(inv(self.lattice_2),n2))
         if pre_dt:
             #auxiliary vector
             self.orientation = pre_R
@@ -1611,11 +1611,11 @@ class core:
             v1, v2, v3 = b2_0[:,1], b2_0[:,0], -av_2_0/norm(av_2_0)*norm(av_1)
             a2_0 = column_stack((v1, v2, v3))
         #indices of the planal bases
-        a2_0 = dot(self.orientation, a2_0)
+        a2_0 = np.dot(self.orientation, a2_0)
         #starting point of rotation angle
         theta = start / 180 * np.pi
         #searching mesh
-        n = ceil(theta_range/dtheta)
+        n = np.ceil(theta_range/dtheta)
         #shifting angle each time
         dtheta = theta_range / n / 180 * np.pi
 
@@ -1641,12 +1641,12 @@ class core:
                 if np.all((abs(U_p-U)) < self.du) and np.all(abs(U_p[:,2]-one_v) < 1e-6):
                     file.write('    N= ' + str(N) + " accepted" + '\n')
                     R_p = three_dot(a1, U_p, inv(a2_0))
-                    D = dot(inv(R),R_p)
+                    D = np.dot(inv(R),R_p)
                     if exact:
                         D = eye(3,3)
                         R = R_p
                     if ((abs(det(D)-1) <= self.S) and
-                        np.all(abs(D-np.eye(3)) < self.dd)):
+                       np.all(abs(D-np.eye(3)) < self.dd)):
                         self.a2_transform = three_dot(R, D, self.orientation)
                         here_found = True
                         file.write('    --D accepted--\n')
@@ -1665,23 +1665,23 @@ class core:
                             file.write('Congrates, we found an appx CSL!\n')
                             self.D = D
                             self.U1 = np.array(np.round(calc.U1),dtype = int)
-                            CSL_here = dot(a1, self.U1)
+                            CSL_here = np.dot(a1, self.U1)
                             Pv_1_indices = get_plane_vectors(CSL_here, av_1)[1]
                             CSL_vs_plane = CSL_here.T[Pv_1_indices].T
-                            self.U1 = dot(inv(self.lattice_1), CSL_vs_plane)
+                            self.U1 = np.dot(inv(self.lattice_1), CSL_vs_plane)
                             self.U1 = np.array(np.round(self.U1),dtype = int)
-                            a2 = dot(self.a2_transform, self.lattice_2)
-                            self.U2 = dot(inv(a2), CSL_vs_plane)
+                            a2 = np.dot(self.a2_transform, self.lattice_2)
+                            self.U2 = np.dot(inv(a2), CSL_vs_plane)
                             self.U2 = np.array(np.round(self.U2),dtype = int)
                             sigma1 = int(abs(np.round(norm(cross(self.U1[:,0],self.U1[:,1])))))
                             sigma2 = int(abs(np.round(norm(cross(self.U2[:,0],self.U2[:,1])))))
                             self.lattice_2_TD = three_dot(R, D, self.orientation)
-                            self.lattice_2_TD = dot(self.lattice_2_TD, self.lattice_2)
-                            self.CSL = dot(a1, self.U1)
+                            self.lattice_2_TD = np.dot(self.lattice_2_TD, self.lattice_2)
+                            self.CSL = np.dot(a1, self.U1)
                             self.cell_calc = calc
                             self.cell_calc.compute_CNID([0,0,1],tol)
                             CNID = self.cell_calc.CNID
-                            self.CNID = dot(a1, CNID)
+                            self.CNID = np.dot(a1, CNID)
                             self.R = R
                             self.theta = theta
                             self.axis = n1
@@ -1722,16 +1722,16 @@ class core:
         results :
             information of the found approximate CSL
         """
-        axis = dot(self.lattice_1, axis)
+        axis = np.dot(self.lattice_1, axis)
         if self.verbose:
             print(axis)
         theta = theta / 180 * np.pi
-        n = ceil(theta_range/dtheta)
+        n = np.ceil(theta_range/dtheta)
         dtheta = theta_range / n / 180 * np.pi
 
         if not two_D:
             a1 = self.lattice_1.copy()
-            a2_0 = dot(self.orientation, self.lattice_2).copy()
+            a2_0 = np.dot(self.orientation, self.lattice_2).copy()
 
         else:
             #find the two primitive plane bases
@@ -1739,17 +1739,17 @@ class core:
             hkl_1 = MID(self.lattice_1, axis)
             if self.verbose:
                 print(axis)
-            hkl_2 = MID(dot(self.orientation, self.lattice_2), axis)
+            hkl_2 = MID(np.dot(self.orientation, self.lattice_2), axis)
             #plane bases
             plane_B_1 = get_pri_vec_inplane(hkl_1, self.lattice_1)
-            plane_B_2 = get_pri_vec_inplane(hkl_2, dot(self.orientation, self.lattice_2))
+            plane_B_2 = get_pri_vec_inplane(hkl_2, np.dot(self.orientation, self.lattice_2))
             v_3 = cross(plane_B_1[:,0], plane_B_1[:,1])
             a1 = np.column_stack((plane_B_1, v_3))
             a2_0 = np.column_stack((plane_B_2, v_3))
             self.a1 = a1.copy()
             self.a2 = a2_0.copy()
             #a2_0 back to the initial orientation
-            a2_0 = dot(inv(self.orientation), a2_0)
+            a2_0 = np.dot(inv(self.orientation), a2_0)
             self.a2_0 = a2_0.copy()
         # rotation loop
         file = open('log.all_position','w', encoding="utf-8")
@@ -1760,7 +1760,7 @@ class core:
         file.write('-----------for theta-----------\n')
         for _ in range(int(n)):
             N = 1
-            R = dot(self.orientation, rot(axis, theta))
+            R = np.dot(self.orientation, rot(axis, theta))
             U = three_dot(inv(a1), R, a2_0)
             file.write('theta = ' + str(theta / np.pi * 180) + '\n')
             file.write('    -----for N-----\n')
@@ -1770,9 +1770,9 @@ class core:
                 if np.all((abs(U_p-U)) < self.du):
                     file.write('    N= ' + str(N) + " accepted" + '\n')
                     R_p = three_dot(a1, U_p, inv(a2_0))
-                    D = dot(inv(R),R_p)
+                    D = np.dot(inv(R),R_p)
                     if ((abs(det(D)-1) <= self.S) and
-                    np.all(abs(D-np.eye(3)) < self.dd)):
+                   np.all(abs(D-np.eye(3)) < self.dd)):
                         here_found = True
                         file.write('    --D accepted--\n')
                         file.write(f"    D, det(D) = {det(D)} \n")
@@ -1793,7 +1793,7 @@ class core:
 
                             if two_D:
                                 calc.compute_CNID([0,0,1])
-                                self.CNID = dot(a1, calc.CNID)
+                                self.CNID = np.dot(a1, calc.CNID)
                             self._write_found_csl(file, sigma1, sigma2, D, axis, theta)
                             self._write_found_csl(file_r, sigma1, sigma2, D, axis, theta)
                             if two_D:
@@ -1848,7 +1848,7 @@ class core:
 
         # deform & rotate lattice_2
         if two_D:
-            lattice_2 = dot(self.a2_transform, lattice_2)
+            lattice_2 = np.dot(self.a2_transform, lattice_2)
         else:
             lattice_2 = three_dot(self.R, self.D, lattice_2)
         #make supercells of the two slabs
@@ -1898,7 +1898,7 @@ class core:
 
         #adjust the orientation
         lattice_1, self.orient = adjust_orientation(lattice_1)
-        lattice_2 = dot(self.orient, lattice_2)
+        lattice_2 = np.dot(self.orient, lattice_2)
 
         write_POSCAR(lattice_1, atoms_1, elements_1, 'POSCAR')
         POSCAR_to_cif('POSCAR','cell_1.cif')
@@ -1926,13 +1926,13 @@ class core:
             height_2 = get_height(lattice_2)
             lattice_bi[:,0] = lattice_bi[:,0] * (1 + height_2 / height_1)
             #convert to cartesian
-            atoms_1 = dot(lattice_1, atoms_1.T).T
-            atoms_2 = dot(lattice_2, atoms_2.T).T
+            atoms_1 = np.dot(lattice_1, atoms_1.T).T
+            atoms_2 = np.dot(lattice_2, atoms_2.T).T
             #translate
             atoms_2 = atoms_2 + lattice_1[:,0]
             #back to the fractional coordinates
-            atoms_1 = dot(inv(lattice_bi), atoms_1.T).T
-            atoms_2 = dot(inv(lattice_bi), atoms_2.T).T
+            atoms_1 = np.dot(inv(lattice_bi), atoms_1.T).T
+            atoms_2 = np.dot(inv(lattice_bi), atoms_2.T).T
         else:
             lattice_bi[:,0] = 2 * lattice_bi[:,0]
             atoms_1[:,0] = atoms_1[:,0] / 2
@@ -1945,8 +1945,8 @@ class core:
 
         #in-plane translation
         if norm(dydz) > 0:
-            dydz = dot(self.orient, dydz)
-            plane_shift = dot(inv(lattice_bi), dydz)
+            dydz = np.dot(self.orient, dydz)
+            plane_shift = np.dot(inv(lattice_bi), dydz)
             atoms_2 = atoms_2 + plane_shift
 
         #combine the two slabs
@@ -1954,8 +1954,8 @@ class core:
         atoms_bi = np.vstack((atoms_1, atoms_2))
 
         #wrap the periodic boundary condition
-        atoms_bi[:,1] = atoms_bi[:,1] - floor(atoms_bi[:,1])
-        atoms_bi[:,2] = atoms_bi[:,2] - floor(atoms_bi[:,2])
+        atoms_bi[:,1] = atoms_bi[:,1] - np.floor(atoms_bi[:,1])
+        atoms_bi[:,2] = atoms_bi[:,2] - np.floor(atoms_bi[:,2])
         #vacummn
         if vx > 0:
             surface_vacuum(lattice_1, lattice_bi, atoms_bi, vx)
@@ -1993,7 +1993,7 @@ class core:
         os.mkdir('CNID_inputs')
         if self.verbose:
             print('CNID')
-            print(np.round(dot(inv(self.lattice_1),self.CNID),8))
+            print(np.round(np.dot(inv(self.lattice_1),self.CNID),8))
             print(f'making {grid[0] * grid[1]} files...')
         n1 = grid[0]
         n2 = grid[1]
@@ -2038,15 +2038,15 @@ class core:
         """
         rotate lattice_2 so that its axis_2 coincident with the axis_1 of lattice_1
         """
-        axis_1 = dot(self.lattice_1, axis_1.T).T
+        axis_1 = np.dot(self.lattice_1, axis_1.T).T
         axis_1 = axis_1 / norm(axis_1)
-        axis_2 = dot(self.lattice_2, axis_2.T).T
+        axis_2 = np.dot(self.lattice_2, axis_2.T).T
         axis_2 = axis_2 / norm(axis_2)
         c = cross(axis_2, axis_1)
         if norm(c) < 1e-10:
             R = eye(3,3)
         else:
-            angle = arccos(dot(axis_1, axis_2))
+            angle = arccos(np.dot(axis_1, axis_2))
             R = rot(c, angle)
         self.orientation = R
 
@@ -2090,7 +2090,7 @@ class core:
         if self.verbose:
             print('hkl in CSL:', hkl_c)
         plane_B = get_pri_vec_inplane(hkl_c, self.CSL) # plane bases of the CSL lattice plane
-        if plane_ortho and (abs(dot(plane_B[:,0], plane_B[:,1])) > tol_ortho):
+        if plane_ortho and (abs(np.dot(plane_B[:,0], plane_B[:,1])) > tol_ortho):
             plane_B = get_ortho_two_v(plane_B, lim, tol_ortho, align_rotation_axis, rotation_axis)
         if align_rotation_axis:
             if norm(cross(plane_B[:,0], rotation_axis) > 1e-3):
@@ -2103,11 +2103,11 @@ class core:
         supercell = get_right_hand(supercell) # check right-handed
         if normal_ortho:
             self.min_perp_length = norm(v3)
-        self.bicrystal_U1 = np.array(np.round(dot(inv(self.lattice_1), supercell),8),dtype = int)
-        self.bicrystal_U2 = np.array(np.round(dot(inv(self.lattice_2_TD), supercell),8),dtype = int)
+        self.bicrystal_U1 = np.array(np.round(np.dot(inv(self.lattice_1), supercell),8),dtype = int)
+        self.bicrystal_U2 = np.array(np.round(np.dot(inv(self.lattice_2_TD), supercell),8),dtype = int)
         self.cell_calc.compute_CNID(hkl,tol_integer)
         CNID = self.cell_calc.CNID
-        self.CNID = dot(self.lattice_1, CNID)
+        self.CNID = np.dot(self.lattice_1, CNID)
         if self.verbose:
             print('cell 1:')
             print(array(np.round(self.bicrystal_U1,8),dtype = int))
@@ -2137,20 +2137,20 @@ class core:
             control the angle between the interface and the cross vector, default sqrt(2)/2
         """
         self.d1 = d_hkl(self.lattice_1, hkl_1)
-        lattice_2 = dot(self.a2_transform, self.lattice_2)
+        lattice_2 = np.dot(self.a2_transform, self.lattice_2)
         normal_1 = get_normal_from_MI(self.lattice_1, hkl_1)
         hkl_2 = MID(lattice_2, normal_1, tol_integer)
         self.d2 = d_hkl(lattice_2, hkl_2)
         #the two slabs with auxilary vector
-        plane_1 = dot(self.lattice_1, self.U1)
+        plane_1 = np.dot(self.lattice_1, self.U1)
 
         #the transformed lattice_2
-        a2 = dot(self.a2_transform, self.lattice_2)
-        plane_2 = dot(a2, self.U2)
+        a2 = np.dot(self.a2_transform, self.lattice_2)
+        plane_2 = np.dot(a2, self.U2)
 
         v3_1 = cross_plane(self.lattice_1, normal_1, lim, normal_ortho, tol_ortho, inclination_tol)
         v3_2 = cross_plane(a2, normal_1, lim, normal_ortho, tol_ortho, inclination_tol)
-        if dot(v3_1, v3_2) < 0:
+        if np.dot(v3_1, v3_2) < 0:
             v3_2 = - v3_2
 
         #unit slabs
@@ -2162,8 +2162,8 @@ class core:
         cell_2 = get_right_hand(cell_2)
 
         #supercell index
-        self.bicrystal_U1 = dot(inv(self.lattice_1), cell_1)
-        self.bicrystal_U2 = dot(inv(a2), cell_2)
+        self.bicrystal_U1 = np.dot(inv(self.lattice_1), cell_1)
+        self.bicrystal_U2 = np.dot(inv(a2), cell_2)
         if self.verbose:
             print('cell 1:')
             print(array(np.round(self.bicrystal_U1,8),dtype = int))
@@ -2215,7 +2215,7 @@ def terminates_scanner_slab_structure(structure, hkl):
     v3 = cross_plane(lattice, cross(plane_B[:,0], plane_B[:,1]), 10, False, 0.001, 0.001)
     supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
     supercell = get_right_hand(supercell)
-    U = array(around(dot(inv(lattice), supercell)), dtype = int)
+    U = array(around(np.dot(inv(lattice), supercell)), dtype = int)
     print(f'cross vector: \n{str(array([U[:,0]]).T)}\nlength: {str(norm(v3))}')
     print(
         f'plane basis: \n{str(U[:,[1,2]])}\n'
@@ -2273,14 +2273,14 @@ def get_surface_slab(structure, hkl, replica = None, inclination_tol = sqrt(2)/2
     atoms, elements = get_sites_elements(structure)
     lattice = structure.lattice.matrix.T
     plane_B = get_pri_vec_inplane(hkl, lattice)
-    if plane_normal and (abs(dot(plane_B[:,0], plane_B[:,1])) > normal_tol):
+    if plane_normal and (abs(np.dot(plane_B[:,0], plane_B[:,1])) > normal_tol):
         plane_B = get_ortho_two_v(plane_B, lim, normal_tol, False)
     v3 = cross_plane(
         lattice, cross(plane_B[:,0], plane_B[:,1]),
         lim, normal_perp, normal_tol, inclination_tol)
     supercell = np.column_stack((v3, plane_B)) # supercell of the bicrystal
     supercell = get_right_hand(supercell)
-    U = array(around(dot(inv(lattice), supercell)), dtype = int)
+    U = array(around(np.dot(inv(lattice), supercell)), dtype = int)
     print(f'cross vector: \n{str(array([U[:,0]]).T)}\nlength: {str(norm(v3))}')
     print(
         f'plane basis: \n{str(U[:,[1,2]])}\n'
