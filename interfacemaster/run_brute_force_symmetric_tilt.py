@@ -3,8 +3,8 @@ import shutil
 import argparse
 import numpy as np
 from numpy.linalg import norm
-from symmetric_tilt import sample_STGB
-from brute_force import GB_runner
+from interfacemaster.symmetric_tilt import sample_STGB
+from interfacemaster.brute_force import GB_runner
 from interfacemaster.cellcalc import get_primitive_hkl, rot
 from interfacemaster.interface_generator import core
 parser = argparse.ArgumentParser(description = 'manual to this script')
