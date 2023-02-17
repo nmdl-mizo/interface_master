@@ -458,11 +458,8 @@ def get_array_bounds(U):
             np.meshgrid(
                 x,
                 y,
-                z)).T).reshape(
-        len(x) *
-        len(y) *
-        len(z),
-        3)
+                z)
+        ).T).reshape(len(x) * len(y) * len(z), 3)
     return indice
 
 
@@ -1163,9 +1160,8 @@ def draw_slab_dich(
                     Xs, Ys,
                     c=colors[element_index_here_1],
                     s=200, label=en1 + " (L)", alpha=0.5)
-                axes[i *
-                     num2 +
-                     j][2].set_title(f'{i} left {j} right.', fontsize=titlesize)
+                axes[i * num2 + j][2].set_title(
+                    f'{i} left {j} right.', fontsize=titlesize)
                 axes[i * num2 + j][2].axis('scaled')
                 for en2 in element_names_2:
                     # get the atoms of j elment
@@ -1465,8 +1461,8 @@ class core:
                     file.write('    N= ' + str(N) + " accepted" + '\n')
                     R_p = three_dot(a1, U_p, inv(a2_0))
                     D = np.dot(inv(R), R_p)
-                    if ((abs(det(D) - 1) <= self.S) and
-                       np.all(abs(D - np.eye(3)) < self.dd)):
+                    if ((abs(det(D) - 1) <= self.S)
+                            and np.all(abs(D - np.eye(3)) < self.dd)):
                         here_found = True
                         file.write('    --D accepted--\n')
                         file.write(f"    D, det(D) = {det(D)} \n")
@@ -1635,8 +1631,8 @@ class core:
                 file.write('N= ' + str(N) + " accepted" + '\n')
                 R_p = three_dot(a1, U_p, inv(a2_0))
                 D = np.dot(inv(R), R_p)
-                if (((abs(det(D) - 1) <= self.S) and
-                   np.all(abs(D - np.eye(3)) < self.dd))):
+                if (((abs(det(D) - 1) <= self.S)
+                     and np.all(abs(D - np.eye(3)) < self.dd))):
                     if exact:
                         D = eye(3, 3)
                         R = R_p
@@ -1748,16 +1744,16 @@ class core:
                 Uij, N = rational_mtx(U, N)
                 U_p = 1 / N * Uij
                 one_v = array([0, 0, 1])
-                if np.all((abs(U_p - U)) <
-                          self.du) and np.all(abs(U_p[:, 2] - one_v) < 1e-6):
+                if (np.all((abs(U_p - U)) < self.du)
+                        and np.all(abs(U_p[:, 2] - one_v) < 1e-6)):
                     file.write('    N= ' + str(N) + " accepted" + '\n')
                     R_p = three_dot(a1, U_p, inv(a2_0))
                     D = np.dot(inv(R), R_p)
                     if exact:
                         D = eye(3, 3)
                         R = R_p
-                    if ((abs(det(D) - 1) <= self.S) and
-                       np.all(abs(D - np.eye(3)) < self.dd)):
+                    if ((abs(det(D) - 1) <= self.S)
+                            and np.all(abs(D - np.eye(3)) < self.dd)):
                         self.a2_transform = three_dot(R, D, self.orientation)
                         here_found = True
                         file.write('    --D accepted--\n')
@@ -1894,8 +1890,8 @@ class core:
                     file.write('    N= ' + str(N) + " accepted" + '\n')
                     R_p = three_dot(a1, U_p, inv(a2_0))
                     D = np.dot(inv(R), R_p)
-                    if ((abs(det(D) - 1) <= self.S) and
-                            np.all(abs(D - np.eye(3)) < self.dd)):
+                    if ((abs(det(D) - 1) <= self.S)
+                            and np.all(abs(D - np.eye(3)) < self.dd)):
                         here_found = True
                         file.write('    --D accepted--\n')
                         file.write(f"    D, det(D) = {det(D)} \n")
@@ -2282,8 +2278,7 @@ class core:
             normal_ortho=False,
             tol_ortho=1e-10,
             tol_integer=1e-8,
-            inclination_tol=sqrt(2) /
-            2):
+            inclination_tol=sqrt(2) / 2):
         """
         compute the transformation
         to obtain the supercell of the two slabs
