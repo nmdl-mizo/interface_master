@@ -684,7 +684,7 @@ def unit_cell_axis(axis):
     get an unit orthogonal cell with the x-axis collinear with certain axis
     """
     v1 = axis / norm(axis)
-    v2 = np.array([0, 0, 0], dtype=float)
+    v2 = np.zeros(3)
     if v1[0] == 0 and v1[1] == 0:
         v2[1] = 1
     else:

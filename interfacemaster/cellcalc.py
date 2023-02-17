@@ -466,7 +466,7 @@ def get_indices_from_n_Pc1(n, lattice, Pc1):
     hkl : numpy array
         the Miller indices of the desired plane
     """
-    hkl = np.array([0, 0, 0], dtype=float)
+    hkl = np.zeros(3)
     for i in range(3):
         hkl[i] = np.dot(lattice[:, i], n) / np.dot(Pc1, n)
     return hkl
