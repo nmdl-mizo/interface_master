@@ -265,8 +265,8 @@ def solve_DSC_equations(u, v, w, L, B):
     D2 = alpha / (g_lambda * g_miu) * B[:, 0] + 1 / g_miu * B[:, 1]
     D3 = (alpha * gama + beta * g_miu) / (g_miu * g_v * g_lambda) * B[:, 0] \
         + gama / (g_miu * g_v) * B[:, 1] + 1 / g_v * B[:, 2]
-    #print('alpha, beta, gama, lambda, miu, v')
-    #print(alpha, beta, gama, g_lambda, g_miu, g_v)
+    # print('alpha, beta, gama, lambda, miu, v')
+    # print(alpha, beta, gama, g_lambda, g_miu, g_v)
     DSC_basis = np.column_stack((D1, D2, D3))
     return DSC_basis, np.dot(inv(B), DSC_basis)
 
@@ -396,7 +396,7 @@ def get_primitive_hkl(hkl, C_lattice, P_lattice, tol=1e-8):
     """
     # 1. get normal
     n, Pc1 = get_plane(hkl, C_lattice)
-    #print('the normal:' + str(n) + ' the point in the plane: ' + str(Pc1))
+    # print('the normal:' + str(n) + ' the point in the plane: ' + str(Pc1))
     # 2. get indices from normal
     hkl_p = get_indices_from_n_Pc1(n, P_lattice, Pc1)
     hkl_p = find_integer_vectors(hkl_p, 100000, tol)[0]
@@ -768,36 +768,36 @@ class DSCcalc:
             tolerance to judge coincidence, default 1e-8
         """
         # integer LC of ai2_1
-        #print('the U matrix')
-        #print(str(self.U_int) + '\'' + str(self.sigma))
+        # print('the U matrix')
+        # print(str(self.U_int) + '\'' + str(self.sigma))
         # print('---------------------------------------')
         ks, L = find_integer_vectors(
             np.dot(inv(self.ai1), self.ai2[:, 0]), self.sigma, tol)
-        #print('ai2_1 is expressed by ai1 as ' + str(ks) + '/' + str(L))
+        # print('ai2_1 is expressed by ai1 as ' + str(ks) + '/' + str(L))
         k1, k2, k3 = ks
         # solve DSC Ei for the ai2_1 by ai1
         Ei = solve_DSC_equations(k1, k2, k3, L, self.ai1)[0]
-        #print('Ei is \n' + str(Ei))
+        # print('Ei is \n' + str(Ei))
         # coefficients of ai2_2 expressed by DSC Ei
         es = np.dot(inv(Ei), self.ai2[:, 1])
-        #print('ai2_2 is expressed by Ei as ' + str(es))
+        # print('ai2_2 is expressed by Ei as ' + str(es))
         # integer coefficients
         ls, M = find_integer_vectors(es, self.sigma, tol)
-        #print('ls: ' + str(ls) + ' M: ' + str(M))
+        # print('ls: ' + str(ls) + ' M: ' + str(M))
         if M == 1:
-            #print('Ei satisfy ai2_2')
+            # print('Ei satisfy ai2_2')
             # this DSC applies for ai2_2 now check ai2_3
             # coefficients of ai2_3 expressed by DSC Ei
             es = np.dot(inv(Ei), self.ai2[:, 2])
-            #print('ai2_3 is expressed by Ei as ' + str(es))
+            # print('ai2_3 is expressed by Ei as ' + str(es))
             # integer coeficients
             ms, M_p = find_integer_vectors(es, self.sigma, tol)
-            #print('ms: ' + str(ms) + ' M_p: ' + str(M_p))
+            # print('ms: ' + str(ms) + ' M_p: ' + str(M_p))
             if M_p == 1:
-                #print('Ei satisfy ai2_3')
+                # print('Ei satisfy ai2_3')
                 # this DSC also applies for ai2_3, output
                 # print('-----------------------------')
-                #print('sigma ' + str(L))
+                # print('sigma ' + str(L))
                 DSC = Ei
             else:
                 # this DSC does not apply for ai2_3
@@ -805,36 +805,36 @@ class DSCcalc:
                 # now compute the DSC Fi of ai2_3 by Ei, output
                 Fi = solve_DSC_equations(m1, m2, m3, M_p, Ei)[0]
                 # print('-----------------------------')
-                #print('sigma ' + str(L * M_p))
+                # print('sigma ' + str(L * M_p))
                 DSC = Fi
         else:
-            #print('M > 1')
+            # print('M > 1')
             # this DSC does not apply for ai2_2
             l1, l2, l3 = ls
             # now compute the DSC of ai2_2 by Ei
             Fi = solve_DSC_equations(l1, l2, l3, M, Ei)[0]
-            #print('Fi is\n' + str(Fi))
+            # print('Fi is\n' + str(Fi))
             # check for ai2_3
             # coefficients of ai2_3 expressed by DSC Fi
             es = np.dot(inv(Fi), self.ai2[:, 2])
-            #print('ai2_3 is expressed by Fi as ' + str(es))
+            # print('ai2_3 is expressed by Fi as ' + str(es))
             # integer coefficients
             ns, N = find_integer_vectors(es, self.sigma, tol)
-            #print('ns: ' + str(ns) + ' N: ' + str(N))
+            # print('ns: ' + str(ns) + ' N: ' + str(N))
             if N == 1:
-                #print('N = 1, DSC got')
+                # print('N = 1, DSC got')
                 # this DSC Fi applies for ai2_3
                 # print('-----------------------------')
-                #print('sigma ' + str(L * M))
+                # print('sigma ' + str(L * M))
                 DSC = Fi
             else:
                 # this DSC Fi does not apply for ai2_3
-                #print('N > 1')
+                # print('N > 1')
                 n1, n2, n3 = ns
                 Gi = solve_DSC_equations(n1, n2, n3, N, Fi)[0]
-                #print('Gi is ' + str(Gi))
+                # print('Gi is ' + str(Gi))
                 # print('-----------------------------')
-                #print('sigma ' + str(L * M * N))
+                # print('sigma ' + str(L * M * N))
                 DSC = Gi
         DSC = get_right_hand(DSC)
         if to_LLL:
