@@ -46,7 +46,7 @@ def ang(v1, v2):
     cos_12 : float
         the cos of angle between v1 and v2
     """
-    return abs(np.dot(v1, v2)/norm(v1)/norm(v2))
+    return abs(np.dot(v1, v2) / norm(v1) / norm(v2))
 
 
 def get_ortho_two_v(B, lim, tol, align_rotation_axis=False, rotation_axis=None):
@@ -126,7 +126,7 @@ def dia_sym_mtx(U):
     Ux = np.eye(3)
     for i in range(3):
         for j in range(3):
-            Ux[i][j] = U[2-j][2-i]
+            Ux[i][j] = U[2 - j][2 - i]
     return Ux
 
 
@@ -152,16 +152,16 @@ def find_integer_vectors(v, sigma, tol=1e-8):
         integer coefficients N
     """
     found = False
-    for i in range(1, sigma+1):
-        now = v*i
-        if np.all(abs(now-np.round(now)) < tol):
+    for i in range(1, sigma + 1):
+        now = v * i
+        if np.all(abs(now - np.round(now)) < tol):
             u, v, w = np.round(now)
             L = i
             found = True
             break
     if found:
         reduce = np.gcd.reduce([int(u), int(v), int(w)])
-        now = np.array(np.round(now/reduce), dtype=int)
+        now = np.array(np.round(now / reduce), dtype=int)
         return now, L
     else:
         raise RuntimeError(
@@ -190,8 +190,8 @@ def find_integer_vectors_nn(v, sigma, tol=1e-8):
     """
     found = False
     for i in range(1, sigma + 1):
-        now = v*i
-        if np.all(abs(now-np.round(now)) < tol):
+        now = v * i
+        if np.all(abs(now - np.round(now)) < tol):
             _, v, _ = np.round(now)
             L = i
             found = True
@@ -225,9 +225,9 @@ def solve_DSC_equations(u, v, w, L, B):
     """
     tol = 1e-8
     # get g_v, g_miu and g_lambda
-    g_v = L/np.gcd(abs(w), L)
+    g_v = L / np.gcd(abs(w), L)
     g_lambda = np.gcd.reduce([abs(v), abs(w), L])
-    g_miu = np.gcd(abs(w), L)/g_lambda
+    g_miu = np.gcd(abs(w), L) / g_lambda
 
     g_v = int(round(g_v))
     g_lambda = int(round(g_lambda))
@@ -239,7 +239,7 @@ def solve_DSC_equations(u, v, w, L, B):
         gama = i
         s = (g_miu * v - gama * w) / L
         # check whether s is a integer
-        if abs(s-np.round(s)) < tol:
+        if abs(s - np.round(s)) < tol:
             break
 
     # 0=<alpha<g_miu, 0=<beta<g_v
@@ -253,7 +253,7 @@ def solve_DSC_equations(u, v, w, L, B):
             beta = k
             r = (g_lambda * u - alpha * v - beta * w) / L
             # check whether r is a integer
-            if abs(r-np.round(r)) < tol:
+            if abs(r - np.round(r)) < tol:
                 found = True
                 break
         count += 1
@@ -263,7 +263,7 @@ def solve_DSC_equations(u, v, w, L, B):
     # DSC basis
     D1 = 1 / g_lambda * B[:, 0]
     D2 = alpha / (g_lambda * g_miu) * B[:, 0] + 1 / g_miu * B[:, 1]
-    D3 = (alpha * gama + beta * g_miu) / (g_miu*g_v*g_lambda) * B[:, 0] \
+    D3 = (alpha * gama + beta * g_miu) / (g_miu * g_v * g_lambda) * B[:, 0] \
         + gama / (g_miu * g_v) * B[:, 1] + 1 / g_v * B[:, 2]
     #print('alpha, beta, gama, lambda, miu, v')
     #print(alpha, beta, gama, g_lambda, g_miu, g_v)
@@ -285,7 +285,7 @@ def projection(u1, u2):
     p12 : numpy array
         the projection of u1 on u2
     """
-    return np.dot(u1, u2)/np.dot(u2, u2)
+    return np.dot(u1, u2) / np.dot(u2, u2)
 
 
 def Gram_Schmidt(B0):
@@ -309,7 +309,7 @@ def Gram_Schmidt(B0):
         else:
             BHere = B0[:, i].copy()
             for j in range(i):
-                BHere = BHere - projection(B0[:, i], B0[:, j])*B0[:, j]
+                BHere = BHere - projection(B0[:, i], B0[:, j]) * B0[:, j]
             Bstar[:, i] = BHere
     return Bstar
 
@@ -332,25 +332,25 @@ def LLL(B):
     """
     Bhere = B.copy()
     Bstar = Gram_Schmidt(Bhere)
-    delta = 3/4
+    delta = 3 / 4
     k = 1
-    while k <= len(B.T)-1:
-        js = -np.sort(-np.arange(0, k+1-1))
+    while k <= len(B.T) - 1:
+        js = -np.sort(-np.arange(0, k))
         for j in js:
             ukj = projection(Bhere[:, k], Bstar[:, j])
-            if abs(ukj) > 1/2:
-                Bhere[:, k] = Bhere[:, k] - round(ukj)*Bhere[:, j]
+            if abs(ukj) > 1 / 2:
+                Bhere[:, k] = Bhere[:, k] - round(ukj) * Bhere[:, j]
                 Bstar = Gram_Schmidt(Bhere)
-        ukk_1 = projection(Bhere[:, k], Bstar[:, k-1])
+        ukk_1 = projection(Bhere[:, k], Bstar[:, k - 1])
         if (np.dot(Bstar[:, k], Bstar[:, k])
-                >= (delta - square(ukk_1)) * np.dot(Bstar[:, k-1], Bstar[:, k-1])):
+                >= (delta - square(ukk_1)) * np.dot(Bstar[:, k - 1], Bstar[:, k - 1])):
             k += 1
         else:
             m = Bhere[:, k].copy()
-            Bhere[:, k] = Bhere[:, k-1].copy()
-            Bhere[:, k-1] = m
+            Bhere[:, k] = Bhere[:, k - 1].copy()
+            Bhere[:, k - 1] = m
             Bstar = Gram_Schmidt(Bhere)
-            k = max(k-1, 1)
+            k = max(k - 1, 1)
     return Bhere
 
 
@@ -460,7 +460,7 @@ def get_indices_from_n_Pc1(n, lattice, Pc1):
     """
     hkl = np.array([0, 0, 0], dtype=float)
     for i in range(3):
-        hkl[i] = np.dot(lattice[:, i], n)/np.dot(Pc1, n)
+        hkl[i] = np.dot(lattice[:, i], n) / np.dot(Pc1, n)
     return hkl
 
 
@@ -514,10 +514,10 @@ def ext_euclid(a, b):
         return 1, 0, a
     else:
         while r != 0:
-            q = old_r//r
-            old_r, r = r, old_r-q*r
-            old_s, s = s, old_s-q*s
-            old_t, t = t, old_t-q*t
+            q = old_r // r
+            old_r, r = r, old_r - q * r
+            old_s, s = s, old_s - q * s
+            old_t, t = t, old_t - q * t
     return old_s, old_t, old_r
 
 
@@ -546,14 +546,14 @@ def get_pri_vec_inplane(hkl, lattice):
     by, bz, c = ext_euclid(abs(k), abs(l))
     if h == 0:
         v1 = np.array([1, 0, 0])
-        v2 = np.array([0, -l/c, k/c])
+        v2 = np.array([0, -l / c, k / c])
     else:
-        bx = -c/h
+        bx = -c / h
         if k != 0:
-            by = k/abs(k)*by
+            by = k / abs(k) * by
         if l != 0:
-            bz = l/abs(l)*bz
-        v1 = np.array([0, -l/c, k/c])
+            bz = l / abs(l) * bz
+        v1 = np.array([0, -l / c, k / c])
         v2 = np.array([bx, by, bz])
     v2 = find_integer_vectors(v2, 1000)[0]
     return LLL(np.dot(lattice, np.column_stack((v1, v2))))
@@ -602,18 +602,18 @@ def get_normal_from_MI(lattice, hkl):
         return cross(lattice.T[zero_v_index[0]], lattice.T[zero_v_index[1]])
     elif numzeros == 1:
         non_zero_v_index = np.where(hkl != 0)[0]
-        u1 = lattice.T[non_zero_v_index[0]]/hkl[non_zero_v_index[0]]
-        u2 = lattice.T[non_zero_v_index[1]]/hkl[non_zero_v_index[1]]
-        v1 = u1-u2
+        u1 = lattice.T[non_zero_v_index[0]] / hkl[non_zero_v_index[0]]
+        u2 = lattice.T[non_zero_v_index[1]] / hkl[non_zero_v_index[1]]
+        v1 = u1 - u2
         zero_v_index = np.where(hkl == 0)[0][0]
         v2 = lattice.T[zero_v_index]
         return cross(v1, v2)
     elif numzeros == 0:
-        P1 = lattice[:, 0]/hkl[0]
-        P2 = lattice[:, 1]/hkl[1]
-        P3 = lattice[:, 2]/hkl[2]
-        v1 = P1-P2
-        v2 = P1-P3
+        P1 = lattice[:, 0] / hkl[0]
+        P2 = lattice[:, 1] / hkl[1]
+        P3 = lattice[:, 2] / hkl[2]
+        v1 = P1 - P2
+        v2 = P1 - P3
         return cross(v1, v2)
     else:
         raise RuntimeError('hkl error')
@@ -693,17 +693,17 @@ def match_rot(deft_rot, axis, tol, exact_rot, av_perpendicular):
         inter_rot = rot(axis, theta)
         compare_rot = np.dot(deft_rot, inter_rot)
         compare_v = np.dot(compare_rot, av_perpendicular)
-        compare_v = compare_v/norm(compare_v)
+        compare_v = compare_v / norm(compare_v)
         exact_v = np.dot(exact_rot, av_perpendicular)
-        exact_v = exact_v/norm(exact_v)
+        exact_v = exact_v / norm(exact_v)
         if norm(cross(compare_v, exact_v)) < min_g:
             min_g = norm(cross(compare_v, exact_v))
         if norm(cross(compare_v, exact_v)) < tol:
             found = True
             if np.dot(exact_v, compare_v) < 0:
-                inter_rot = rot(axis, theta+pi)
+                inter_rot = rot(axis, theta + pi)
             break
-        theta += 0.01/180*pi
+        theta += 0.01 / 180 * pi
     if not found:
         raise RuntimeError(
             f'Disorientation match failed, '

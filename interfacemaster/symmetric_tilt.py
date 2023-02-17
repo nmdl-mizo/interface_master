@@ -30,7 +30,7 @@ def compute_sigma(axis, theta, filename='cif_files/Si_mp-149_conventional_standa
     sigma : int
     """
     if verbose:
-        print(theta/np.pi*180)
+        print(theta / np.pi * 180)
     R = rot(axis, theta)
     my_interface = core(filename,
                         filename, verbose=verbose)
@@ -159,20 +159,22 @@ def get_csl_twisted_graphenes(lim, filename, maxsigma=100, verbose=True):
     # mirror_plane_1
     xy_arrays = generate_arrays_x_y(1, 1, lim)
     indice = np.column_stack((xy_arrays, np.zeros(len(xy_arrays))))
-    basis1 = np.column_stack(([-1/2, 0, 1/2], [-1, 1/2, 1/2], [1, 1, 1]))
+    basis1 = np.column_stack(
+        ([-1 / 2, 0, 1 / 2], [-1, 1 / 2, 1 / 2], [1, 1, 1]))
     P1 = np.dot(basis1, indice.T).T
     thetas1 = 2 * \
-        np.arccos(np.dot(P1, [-1, 1/2, 1/2])
-                  / norm(P1, axis=1)/norm([-1, 1/2, 1/2]))
+        np.arccos(np.dot(P1, [-1, 1 / 2, 1 / 2])
+                  / norm(P1, axis=1) / norm([-1, 1 / 2, 1 / 2]))
 
     # mirror_plane_2
     xy_arrays = generate_arrays_x_y(1, 1, lim)
     indice = np.column_stack((xy_arrays, np.zeros(len(xy_arrays))))
-    basis = np.column_stack(([-1/2, 1/2, 0], [-1, 1/2, 1/2], [1, 1, 1]))
+    basis = np.column_stack(
+        ([-1 / 2, 1 / 2, 0], [-1, 1 / 2, 1 / 2], [1, 1, 1]))
     P = np.dot(basis, indice.T).T
     thetas = 2 * \
-        np.arccos(np.dot(P, [-1/2, 1/2, 0])
-                  / norm(P, axis=1)/norm([-1/2, 1/2, 0]))
+        np.arccos(np.dot(P, [-1 / 2, 1 / 2, 0])
+                  / norm(P, axis=1) / norm([-1 / 2, 1 / 2, 0]))
     P = np.vstack((P1, P))
     thetas = np.append(thetas1, thetas)
     sigmas = []
@@ -213,7 +215,7 @@ def get_Ps_sigmas_thetas(lim, axis, maxsigma=100000):
         indice = []
         for i in x:
             y_here = 1
-            while y_here <= (i-1):
+            while y_here <= (i - 1):
                 indice.append([i, y_here])
                 y_here += 1
         indice = np.array(indice)
@@ -229,7 +231,7 @@ def get_Ps_sigmas_thetas(lim, axis, maxsigma=100000):
         basis = np.eye(3, 3)
         P = np.dot(basis, indice.T).T
         sigmas = np.array(xs**2 + ys**2)
-        thetas = 2 * np.arctan(ys/xs)
+        thetas = 2 * np.arctan(ys / xs)
 
     elif norm(np.cross(axis, [1, 1, 0])) < 1e-8:
         xy_arrays = generate_arrays_x_y(1, 1, lim)
@@ -239,10 +241,10 @@ def get_Ps_sigmas_thetas(lim, axis, maxsigma=100000):
         basis = np.column_stack(([-1, 1, 0], [0, 0, 1], [1, 1, 0]))
         P = np.dot(basis, indice.T).T
         sq2 = np.sqrt(2)
-        sigmas = np.sqrt((sq2*xs)**2 + ys**2) * \
-            np.sqrt((sq2*ys / (2**(abs(ys % 2-1))))
-                    ** 2 + (2**(ys % 2)*xs)**2) * sq2
-        thetas = 2 * np.arctan(ys/sq2/xs)
+        sigmas = np.sqrt((sq2 * xs)**2 + ys**2) * \
+            np.sqrt((sq2 * ys / (2**(abs(ys % 2 - 1))))
+                    ** 2 + (2**(ys % 2) * xs)**2) * sq2
+        thetas = 2 * np.arctan(ys / sq2 / xs)
 
     elif norm(np.cross(axis, [1, 1, 1])) < 1e-8:
         # mirror_plane_1
@@ -250,15 +252,16 @@ def get_Ps_sigmas_thetas(lim, axis, maxsigma=100000):
         indice = np.column_stack((xy_arrays, np.zeros(len(xy_arrays))))
         xs = xy_arrays[:, 0]
         ys = xy_arrays[:, 1]
-        basis1 = np.column_stack(([-1/2, 0, 1/2], [-1, 1/2, 1/2], [1, 1, 1]))
+        basis1 = np.column_stack(
+            ([-1 / 2, 0, 1 / 2], [-1, 1 / 2, 1 / 2], [1, 1, 1]))
         P1 = np.dot(basis1, indice.T).T
         basis2 = np.column_stack(
-            ([-1/2, 0, 1/2] * 3 - [-1, 1/2, 1/2], [-1/2, 0, 1/2], [1, 1, 1]))
+            ([-1 / 2, 0, 1 / 2] * 3 - [-1, 1 / 2, 1 / 2], [-1 / 2, 0, 1 / 2], [1, 1, 1]))
         P2 = np.dot(basis2, indice.T).T
         P = np.vstack((P1, P2))
         thetas = 2 * \
-            np.arccos(np.dot(P1, [-1, 1/2, 1/2])
-                      / norm(P1, axis=1)/norm([-1, 1/2, 1/2]))
+            np.arccos(np.dot(P1, [-1, 1 / 2, 1 / 2])
+                      / norm(P1, axis=1) / norm([-1, 1 / 2, 1 / 2]))
         sigmas = []
         for theta in thetas:
             sigmas.append(compute_sigma(
@@ -269,10 +272,10 @@ def get_Ps_sigmas_thetas(lim, axis, maxsigma=100000):
         raise RuntimeError(
             'error: only available for [001], [110] and [110] rotation axis')
 
-    original_sigmas = 6*norm(P, axis=1)**2
-    sigmas = sigmas/(2**(abs(sigmas % 2-1)))
+    original_sigmas = 6 * norm(P, axis=1)**2
+    sigmas = sigmas / (2**(abs(sigmas % 2 - 1)))
     sigmas = np.array(sigmas, dtype=int)
-    sigmas = sigmas/(2**(abs(sigmas % 2-1)))
+    sigmas = sigmas / (2**(abs(sigmas % 2 - 1)))
     sigmas = np.array(sigmas, dtype=int)
     return (
         P[np.argsort(original_sigmas, kind='stable')],
