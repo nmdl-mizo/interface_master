@@ -194,9 +194,10 @@ class GB_runner():
         all_atoms = np.dot(
             self.interface.lattice_bi.copy(),
             self.interface.atoms_bi.copy().T).T
-        middle_ids = where((all_atoms[:, 0] < self.boundary +
-                            self.clst_atmc_dstc) & (all_atoms[:, 0] > self.boundary -
-                                                    self.clst_atmc_dstc))[0]
+        middle_ids = where(
+            (all_atoms[:, 0] < self.boundary + self.clst_atmc_dstc)
+            & (all_atoms[:, 0] > self.boundary - self.clst_atmc_dstc)
+        )[0]
         self.middle_atoms = all_atoms[middle_ids]
         self.left_atoms = self.middle_atoms.copy()[
             where(self.middle_atoms[:, 0] < self.boundary)[0]]
@@ -221,24 +222,21 @@ class GB_runner():
         os.mkdir('dump')
         for i in self.terminations:
             x_dimension = np.ceil(
-                100 /
-                norm(
+                100 / norm(
                     np.dot(
                         self.interface.lattice_1,
                         self.interface.bicrystal_U1)[
                         :,
                         0]))
             y_dimension = np.ceil(
-                40 /
-                norm(
+                40 / norm(
                     np.dot(
                         self.interface.lattice_1,
                         self.interface.bicrystal_U1)[
                         :,
                         1]))
             z_dimension = np.ceil(
-                40 /
-                norm(
+                40 / norm(
                     np.dot(
                         self.interface.lattice_1,
                         self.interface.bicrystal_U1)[
@@ -292,24 +290,21 @@ class GB_runner():
         self.interface.get_bicrystal()
         while abs(position_here) < 1 / 2 * self.interface.min_perp_length:
             x_dimension = np.ceil(
-                100 /
-                norm(
+                100 / norm(
                     np.dot(
                         self.interface.lattice_1,
                         self.interface.bicrystal_U1)[
                         :,
                         0]))
             y_dimension = np.ceil(
-                40 /
-                norm(
+                40 / norm(
                     np.dot(
                         self.interface.lattice_1,
                         self.interface.bicrystal_U1)[
                         :,
                         1]))
             z_dimension = np.ceil(
-                40 /
-                norm(
+                40 / norm(
                     np.dot(
                         self.interface.lattice_1,
                         self.interface.bicrystal_U1)[
@@ -328,8 +323,7 @@ class GB_runner():
                     filetype='LAMMPS',
                     filename='GB.dat',
                     dp1=i[0],
-                    dp2=i[1] +
-                    position_here)
+                    dp2=i[1] + position_here)
                 self.divide_region()
                 GB_atoms = vstack((self.left_atoms, self.right_atoms))
                 count = merge_operation_no_RBT(

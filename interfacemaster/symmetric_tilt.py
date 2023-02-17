@@ -162,8 +162,8 @@ def get_csl_twisted_graphenes(lim, filename, maxsigma=100, verbose=True):
     basis1 = np.column_stack(([-1/2, 0, 1/2], [-1, 1/2, 1/2], [1, 1, 1]))
     P1 = np.dot(basis1, indice.T).T
     thetas1 = 2 * \
-        np.arccos(np.dot(P1, [-1, 1/2, 1/2]) /
-                  norm(P1, axis=1)/norm([-1, 1/2, 1/2]))
+        np.arccos(np.dot(P1, [-1, 1/2, 1/2])
+                  / norm(P1, axis=1)/norm([-1, 1/2, 1/2]))
 
     # mirror_plane_2
     xy_arrays = generate_arrays_x_y(1, 1, lim)
@@ -171,8 +171,8 @@ def get_csl_twisted_graphenes(lim, filename, maxsigma=100, verbose=True):
     basis = np.column_stack(([-1/2, 1/2, 0], [-1, 1/2, 1/2], [1, 1, 1]))
     P = np.dot(basis, indice.T).T
     thetas = 2 * \
-        np.arccos(np.dot(P, [-1/2, 1/2, 0]) /
-                  norm(P, axis=1)/norm([-1/2, 1/2, 0]))
+        np.arccos(np.dot(P, [-1/2, 1/2, 0])
+                  / norm(P, axis=1)/norm([-1/2, 1/2, 0]))
     P = np.vstack((P1, P))
     thetas = np.append(thetas1, thetas)
     sigmas = []
@@ -257,8 +257,8 @@ def get_Ps_sigmas_thetas(lim, axis, maxsigma=100000):
         P2 = np.dot(basis2, indice.T).T
         P = np.vstack((P1, P2))
         thetas = 2 * \
-            np.arccos(np.dot(P1, [-1, 1/2, 1/2]) /
-                      norm(P1, axis=1)/norm([-1, 1/2, 1/2]))
+            np.arccos(np.dot(P1, [-1, 1/2, 1/2])
+                      / norm(P1, axis=1)/norm([-1, 1/2, 1/2]))
         sigmas = []
         for theta in thetas:
             sigmas.append(compute_sigma(
