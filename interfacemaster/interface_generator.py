@@ -1828,7 +1828,6 @@ class core:
                 if not ((abs(det(D) - 1) <= self.S)
                         and np.all(abs(D - np.eye(3)) < self.dd)):
                     continue
-                here_found = True
                 file.write('    --D accepted--\n')
                 file.write(f"    D, det(D) = {det(D)} \n")
                 ax2 = three_dot(R, D, a2_0)
