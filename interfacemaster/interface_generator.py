@@ -101,31 +101,6 @@ def rot(a, theta):
                       c + az * az * (1 - c)]], dtype=np.float64)
 
 
-def rational_mtx(M, N):
-    """
-    find a rational matrix close to M
-
-    Parameters
-    ----------
-    M : numpy array
-        original matrix
-    N : int
-        denominator
-
-    Returns
-    ----------
-    B : numpy array
-        integer matrix
-    N : int
-        denominator
-    """
-    B = np.eye(3)
-    for i in range(3):
-        for j in range(3):
-            B[i][j] = round(N * M[i][j])
-    return B, N
-
-
 def three_dot(M1, M2, M3):
     """
     compute the three continuous dot product
@@ -1465,8 +1440,7 @@ class core:
             file.write('theta = ' + str(theta / np.pi * 180) + '\n')
             file.write('    -----for N-----\n')
             for N in range(1, self.sgm2 + 1):
-                Uij, N = rational_mtx(U, N)
-                U_p = 1 / N * Uij
+                U_p = np.round(N * U) / N
                 if not np.all((abs(U_p - U)) < self.du):
                     continue
                 file.write('    N= ' + str(N) + " accepted" + '\n')
@@ -1550,8 +1524,7 @@ class core:
         U = three_dot(inv(a1), R, a2_0)
         file.write('    -----for N-----\n')
         for N in range(1, self.sgm2 + 1):
-            Uij, N = rational_mtx(U, N)
-            U_p = 1 / N * Uij
+            U_p = np.round(N * U) / N
             if not np.all((abs(U_p - U)) < self.du):
                 continue
             file.write('N= ' + str(N) + " accepted" + '\n')
@@ -1668,8 +1641,7 @@ class core:
             file.write('    -----for N-----\n')
             for N in range(1, self.sgm2 + 1):
                 tol = integer_tol
-                Uij, N = rational_mtx(U, N)
-                U_p = 1 / N * Uij
+                U_p = np.round(N * U) / N
                 one_v = array([0, 0, 1])
                 if not (np.all((abs(U_p - U)) < self.du)
                         and np.all(abs(U_p[:, 2] - one_v) < 1e-6)):
@@ -1818,8 +1790,7 @@ class core:
             file.write('theta = ' + str(theta / np.pi * 180) + '\n')
             file.write('    -----for N-----\n')
             for N in range(1, self.sgm2 + 1):
-                Uij, N = rational_mtx(U, N)
-                U_p = 1 / N * Uij
+                U_p = np.round(N * U) / N
                 if not np.all((abs(U_p - U)) < self.du):
                     continue
                 file.write('    N= ' + str(N) + " accepted" + '\n')
