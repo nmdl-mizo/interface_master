@@ -1277,7 +1277,6 @@ class core:
         self.orientation = np.eye(3)  # initial disorientation
         self.a1 = np.eye(3)
         self.a2 = np.eye(3)
-        self.a2_0 = np.eye(3)
         self.orient = np.eye(3)  # adjusted orientation for better visulaizing
         self.d1 = float  # lattice plane distance
         self.d2 = float  # lattice plane distance
@@ -1425,7 +1424,6 @@ class core:
             self.a2 = a2_0.copy()
             # a2_0 back to the initial orientation
             a2_0 = np.dot(inv(self.orientation), a2_0)
-            self.a2_0 = a2_0.copy()
         # rotation loop
         file = open('log.one_position', 'w', encoding="utf-8")
         file.write('---Searching starts---\n')
@@ -1774,7 +1772,6 @@ class core:
             self.a2 = a2_0.copy()
             # a2_0 back to the initial orientation
             a2_0 = np.dot(inv(self.orientation), a2_0)
-            self.a2_0 = a2_0.copy()
         # rotation loop
         file = open('log.all_position', 'w', encoding="utf-8")
         file_r = open('results', 'w', encoding="utf-8")
