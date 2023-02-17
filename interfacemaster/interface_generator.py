@@ -1,5 +1,6 @@
 """
 interface_generator.py
+
 """
 import os
 from numpy.linalg import det, norm, inv
@@ -1466,52 +1467,53 @@ class core:
             for N in range(1, self.sgm2 + 1):
                 Uij, N = rational_mtx(U, N)
                 U_p = 1 / N * Uij
-                if np.all((abs(U_p - U)) < self.du):
-                    file.write('    N= ' + str(N) + " accepted" + '\n')
-                    R_p = three_dot(a1, U_p, inv(a2_0))
-                    D = np.dot(inv(R), R_p)
-                    if ((abs(det(D) - 1) <= self.S)
-                            and np.all(abs(D - np.eye(3)) < self.dd)):
-                        here_found = True
-                        file.write('    --D accepted--\n')
-                        file.write(f"    D, det(D) = {det(D)} \n")
-                        ax2 = three_dot(R, D, a2_0)
-                        calc = DSCcalc()
-                        try:
-                            calc.parse_int_U(a1, ax2, self.sgm2)
-                            calc.compute_CSL()
-                        except BaseException:
-                            file.write('    failed to find CSL here \n')
-                            here_found = False
-                        if here_found and abs(det(calc.U1)) <= self.sgm1:
-                            found = True
-                            file.write('--------------------------------\n')
-                            file.write('Congrates, we found an appx CSL!\n')
-                            sigma1 = int(abs(np.round(det(calc.U1))))
-                            sigma2 = int(abs(np.round(det(calc.U2))))
-                            self.D = D
-                            self.U1 = np.array(np.round(calc.U1), dtype=int)
-                            self.U2 = np.array(np.round(calc.U2), dtype=int)
-                            self.lattice_2_TD = three_dot(R, D, a2_0)
-                            self.CSL = np.dot(a1, self.U1)
-                            self.R = R
-                            self.theta = theta
-                            self.axis = axis
-                            self.cell_calc = calc
-                            if two_D:
-                                self.d1 = d_hkl(self.lattice_1, hkl_1)
-                                self.d2 = d_hkl(
-                                    three_dot(R, D, self.lattice_2), hkl_2)
-                                calc.compute_CNID([0, 0, 1])
-                                self.CNID = np.dot(a1, calc.CNID)
-                            self._write_found_csl(
-                                file, sigma1, sigma2, D, axis, theta)
-                            if self.verbose:
-                                self._print_found_csl(
-                                    sigma1, sigma2, D, axis, theta)
-                            break
-                        else:
-                            file.write('    sigma too large \n')
+                if not np.all((abs(U_p - U)) < self.du):
+                    continue
+                file.write('    N= ' + str(N) + " accepted" + '\n')
+                R_p = three_dot(a1, U_p, inv(a2_0))
+                D = np.dot(inv(R), R_p)
+                if not ((abs(det(D) - 1) <= self.S)
+                        and np.all(abs(D - np.eye(3)) < self.dd)):
+                    continue
+                file.write('    --D accepted--\n')
+                file.write(f"    D, det(D) = {det(D)} \n")
+                ax2 = three_dot(R, D, a2_0)
+                calc = DSCcalc()
+                try:
+                    calc.parse_int_U(a1, ax2, self.sgm2)
+                    calc.compute_CSL()
+                except BaseException:
+                    file.write('    failed to find CSL here \n')
+                    continue
+                if not abs(det(calc.U1)) <= self.sgm1:
+                    file.write('    sigma too large \n')
+                    continue
+                found = True
+                file.write('--------------------------------\n')
+                file.write('Congrates, we found an appx CSL!\n')
+                sigma1 = int(abs(np.round(det(calc.U1))))
+                sigma2 = int(abs(np.round(det(calc.U2))))
+                self.D = D
+                self.U1 = np.array(np.round(calc.U1), dtype=int)
+                self.U2 = np.array(np.round(calc.U2), dtype=int)
+                self.lattice_2_TD = three_dot(R, D, a2_0)
+                self.CSL = np.dot(a1, self.U1)
+                self.R = R
+                self.theta = theta
+                self.axis = axis
+                self.cell_calc = calc
+                if two_D:
+                    self.d1 = d_hkl(self.lattice_1, hkl_1)
+                    self.d2 = d_hkl(
+                        three_dot(R, D, self.lattice_2), hkl_2)
+                    calc.compute_CNID([0, 0, 1])
+                    self.CNID = np.dot(a1, calc.CNID)
+                self._write_found_csl(
+                    file, sigma1, sigma2, D, axis, theta)
+                if self.verbose:
+                    self._print_found_csl(
+                        sigma1, sigma2, D, axis, theta)
+                break
             if found:
                 break
             theta += dtheta
@@ -1550,41 +1552,42 @@ class core:
         for N in range(1, self.sgm2 + 1):
             Uij, N = rational_mtx(U, N)
             U_p = 1 / N * Uij
-            if np.all((abs(U_p - U)) < self.du):
-                file.write('N= ' + str(N) + " accepted" + '\n')
-                R_p = three_dot(a1, U_p, inv(a2_0))
-                D = np.dot(inv(R), R_p)
-                if (((abs(det(D) - 1) <= self.S)
+            if not np.all((abs(U_p - U)) < self.du):
+                continue
+            file.write('N= ' + str(N) + " accepted" + '\n')
+            R_p = three_dot(a1, U_p, inv(a2_0))
+            D = np.dot(inv(R), R_p)
+            if not (((abs(det(D) - 1) <= self.S)
                      and np.all(abs(D - np.eye(3)) < self.dd))):
-                    if exact:
-                        D = eye(3, 3)
-                        R = R_p
-                    here_found = True
-                    file.write('--D accepted--\n')
-                    file.write(f"D, det(D) = {det(D)} \n")
-                    ax2 = three_dot(R, D, a2_0)
-                    calc = DSCcalc()
-                    calc.parse_int_U(a1, ax2, self.sgm2, tol)
-                    calc.compute_CSL(tol)
-                    if here_found and abs(det(calc.U1)) <= self.sgm1:
-                        found = True
-                        file.write('--------------------------------\n')
-                        file.write('Congrates, we found an appx CSL!\n')
-                        sigma1 = int(abs(np.round(det(calc.U1))))
-                        sigma2 = int(abs(np.round(det(calc.U2))))
-                        self.D = D
-                        self.U1 = np.array(np.round(calc.U1), dtype=int)
-                        self.U2 = np.array(np.round(calc.U2), dtype=int)
-                        self.lattice_2_TD = three_dot(R, D, a2_0)
-                        self.CSL = np.dot(a1, self.U1)
-                        self.R = R
-                        self.cell_calc = calc
-                        self._write_found_csl(file, sigma1, sigma2, D)
-                        if self.verbose:
-                            self._print_found_csl(sigma1, sigma2, D)
-                        break
-                    else:
-                        file.write('sigma too large \n')
+                continue
+            if exact:
+                D = eye(3, 3)
+                R = R_p
+            file.write('--D accepted--\n')
+            file.write(f"D, det(D) = {det(D)} \n")
+            ax2 = three_dot(R, D, a2_0)
+            calc = DSCcalc()
+            calc.parse_int_U(a1, ax2, self.sgm2, tol)
+            calc.compute_CSL(tol)
+            if not abs(det(calc.U1)) <= self.sgm1:
+                file.write('sigma too large \n')
+                continue
+            found = True
+            file.write('--------------------------------\n')
+            file.write('Congrates, we found an appx CSL!\n')
+            sigma1 = int(abs(np.round(det(calc.U1))))
+            sigma2 = int(abs(np.round(det(calc.U2))))
+            self.D = D
+            self.U1 = np.array(np.round(calc.U1), dtype=int)
+            self.U2 = np.array(np.round(calc.U2), dtype=int)
+            self.lattice_2_TD = three_dot(R, D, a2_0)
+            self.CSL = np.dot(a1, self.U1)
+            self.R = R
+            self.cell_calc = calc
+            self._write_found_csl(file, sigma1, sigma2, D)
+            if self.verbose:
+                self._print_found_csl(sigma1, sigma2, D)
+            break
         if not found:
             print(
                 'failed to find a satisfying appx CSL. '
@@ -1668,70 +1671,71 @@ class core:
                 Uij, N = rational_mtx(U, N)
                 U_p = 1 / N * Uij
                 one_v = array([0, 0, 1])
-                if (np.all((abs(U_p - U)) < self.du)
+                if not (np.all((abs(U_p - U)) < self.du)
                         and np.all(abs(U_p[:, 2] - one_v) < 1e-6)):
-                    file.write('    N= ' + str(N) + " accepted" + '\n')
-                    R_p = three_dot(a1, U_p, inv(a2_0))
-                    D = np.dot(inv(R), R_p)
-                    if exact:
-                        D = eye(3, 3)
-                        R = R_p
-                    if ((abs(det(D) - 1) <= self.S)
-                            and np.all(abs(D - np.eye(3)) < self.dd)):
-                        self.a2_transform = three_dot(R, D, self.orientation)
-                        here_found = True
-                        file.write('    --D accepted--\n')
-                        file.write(f"    D, det(D) = {det(D)} \n")
-                        ax2 = three_dot(R, D, a2_0)
-                        calc = DSCcalc()
-                        try:
-                            calc.parse_int_U(a1, ax2, self.sgm2)
-                            calc.compute_CSL()
-                        except BaseException:
-                            file.write('    failed to find CSL here \n')
-                            here_found = False
-                        if here_found and abs(det(calc.U1)) <= self.sgm1:
-                            found = True
-                            file.write('--------------------------------\n')
-                            file.write('Congrates, we found an appx CSL!\n')
-                            self.D = D
-                            self.U1 = np.array(np.round(calc.U1), dtype=int)
-                            CSL_here = np.dot(a1, self.U1)
-                            Pv_1_indices = get_plane_vectors(CSL_here, av_1)[1]
-                            CSL_vs_plane = CSL_here.T[Pv_1_indices].T
-                            self.U1 = np.dot(inv(self.lattice_1), CSL_vs_plane)
-                            self.U1 = np.array(np.round(self.U1), dtype=int)
-                            a2 = np.dot(self.a2_transform, self.lattice_2)
-                            self.U2 = np.dot(inv(a2), CSL_vs_plane)
-                            self.U2 = np.array(np.round(self.U2), dtype=int)
-                            sigma1 = int(
-                                abs(np.round(norm(cross(
-                                    self.U1[:, 0],
-                                    self.U1[:, 1])))))
-                            sigma2 = int(
-                                abs(np.round(norm(cross(
-                                    self.U2[:, 0],
-                                    self.U2[:, 1])))))
-                            self.lattice_2_TD = three_dot(
-                                R, D, self.orientation)
-                            self.lattice_2_TD = np.dot(
-                                self.lattice_2_TD, self.lattice_2)
-                            self.CSL = np.dot(a1, self.U1)
-                            self.cell_calc = calc
-                            self.cell_calc.compute_CNID([0, 0, 1], tol)
-                            CNID = self.cell_calc.CNID
-                            self.CNID = np.dot(a1, CNID)
-                            self.R = R
-                            self.theta = theta
-                            self.axis = n1
-                            self._write_found_csl(
-                                file, sigma1, sigma2, D, axis, theta)
-                            if self.verbose:
-                                self._print_found_csl(
-                                    sigma1, sigma2, D, axis, theta)
-                            break
-                        else:
-                            file.write('    sigma too large \n')
+                    continue
+                file.write('    N= ' + str(N) + " accepted" + '\n')
+                R_p = three_dot(a1, U_p, inv(a2_0))
+                D = np.dot(inv(R), R_p)
+                if exact:
+                    D = eye(3, 3)
+                    R = R_p
+                if not ((abs(det(D) - 1) <= self.S)
+                        and np.all(abs(D - np.eye(3)) < self.dd)):
+                    continue
+                self.a2_transform = three_dot(R, D, self.orientation)
+                file.write('    --D accepted--\n')
+                file.write(f"    D, det(D) = {det(D)} \n")
+                ax2 = three_dot(R, D, a2_0)
+                calc = DSCcalc()
+                try:
+                    calc.parse_int_U(a1, ax2, self.sgm2)
+                    calc.compute_CSL()
+                except BaseException:
+                    file.write('    failed to find CSL here \n')
+                    continue
+                if not abs(det(calc.U1)) <= self.sgm1:
+                    file.write('    sigma too large \n')
+                    continue
+                found = True
+                file.write('--------------------------------\n')
+                file.write('Congrates, we found an appx CSL!\n')
+                self.D = D
+                self.U1 = np.array(np.round(calc.U1), dtype=int)
+                CSL_here = np.dot(a1, self.U1)
+                Pv_1_indices = get_plane_vectors(CSL_here, av_1)[1]
+                CSL_vs_plane = CSL_here.T[Pv_1_indices].T
+                self.U1 = np.dot(inv(self.lattice_1), CSL_vs_plane)
+                self.U1 = np.array(np.round(self.U1), dtype=int)
+                a2 = np.dot(self.a2_transform, self.lattice_2)
+                self.U2 = np.dot(inv(a2), CSL_vs_plane)
+                self.U2 = np.array(np.round(self.U2), dtype=int)
+                sigma1 = int(
+                    abs(np.round(norm(cross(
+                        self.U1[:, 0],
+                        self.U1[:, 1])))))
+                sigma2 = int(
+                    abs(np.round(norm(cross(
+                        self.U2[:, 0],
+                        self.U2[:, 1])))))
+                self.lattice_2_TD = three_dot(
+                    R, D, self.orientation)
+                self.lattice_2_TD = np.dot(
+                    self.lattice_2_TD, self.lattice_2)
+                self.CSL = np.dot(a1, self.U1)
+                self.cell_calc = calc
+                self.cell_calc.compute_CNID([0, 0, 1], tol)
+                CNID = self.cell_calc.CNID
+                self.CNID = np.dot(a1, CNID)
+                self.R = R
+                self.theta = theta
+                self.axis = n1
+                self._write_found_csl(
+                    file, sigma1, sigma2, D, axis, theta)
+                if self.verbose:
+                    self._print_found_csl(
+                        sigma1, sigma2, D, axis, theta)
+                break
             if found:
                 break
             theta += dtheta
@@ -1816,45 +1820,47 @@ class core:
             for N in range(1, self.sgm2 + 1):
                 Uij, N = rational_mtx(U, N)
                 U_p = 1 / N * Uij
-                if np.all((abs(U_p - U)) < self.du):
-                    file.write('    N= ' + str(N) + " accepted" + '\n')
-                    R_p = three_dot(a1, U_p, inv(a2_0))
-                    D = np.dot(inv(R), R_p)
-                    if ((abs(det(D) - 1) <= self.S)
-                            and np.all(abs(D - np.eye(3)) < self.dd)):
-                        here_found = True
-                        file.write('    --D accepted--\n')
-                        file.write(f"    D, det(D) = {det(D)} \n")
-                        ax2 = three_dot(R, D, a2_0)
-                        calc = DSCcalc()
-                        try:
-                            calc.parse_int_U(a1, ax2, self.sgm2)
-                            calc.compute_CSL()
-                        except BaseException:
-                            file.write('    failed to find CSL here \n')
-                            here_found = False
-                        if here_found and abs(det(calc.U1)) <= self.sgm1:
-                            file.write('--------------------------------\n')
-                            file_r.write('--------------------------------\n')
-                            file.write('Congrates, we found an appx CSL!\n')
-                            sigma1 = int(abs(np.round(det(calc.U1))))
-                            sigma2 = int(abs(np.round(det(calc.U2))))
+                if not np.all((abs(U_p - U)) < self.du):
+                    continue
+                file.write('    N= ' + str(N) + " accepted" + '\n')
+                R_p = three_dot(a1, U_p, inv(a2_0))
+                D = np.dot(inv(R), R_p)
+                if not ((abs(det(D) - 1) <= self.S)
+                        and np.all(abs(D - np.eye(3)) < self.dd)):
+                    continue
+                here_found = True
+                file.write('    --D accepted--\n')
+                file.write(f"    D, det(D) = {det(D)} \n")
+                ax2 = three_dot(R, D, a2_0)
+                calc = DSCcalc()
+                try:
+                    calc.parse_int_U(a1, ax2, self.sgm2)
+                    calc.compute_CSL()
+                except BaseException:
+                    file.write('    failed to find CSL here \n')
+                    continue
+                if not abs(det(calc.U1)) <= self.sgm1:
+                    file.write('    sigma too large \n')
+                    continue
+                file.write('--------------------------------\n')
+                file_r.write('--------------------------------\n')
+                file.write('Congrates, we found an appx CSL!\n')
+                sigma1 = int(abs(np.round(det(calc.U1))))
+                sigma2 = int(abs(np.round(det(calc.U2))))
 
-                            if two_D:
-                                calc.compute_CNID([0, 0, 1])
-                                self.CNID = np.dot(a1, calc.CNID)
-                            self._write_found_csl(
-                                file, sigma1, sigma2, D, axis, theta)
-                            self._write_found_csl(
-                                file_r, sigma1, sigma2, D, axis, theta)
-                            if two_D:
-                                file_r.write(
-                                    'CNID = \n' + str(self.CNID) + '\n')
-                            if self.verbose:
-                                self._print_found_csl(
-                                    sigma1, sigma2, D, axis, theta)
-                        else:
-                            file.write('    sigma too large \n')
+                if two_D:
+                    calc.compute_CNID([0, 0, 1])
+                    self.CNID = np.dot(a1, calc.CNID)
+                self._write_found_csl(
+                    file, sigma1, sigma2, D, axis, theta)
+                self._write_found_csl(
+                    file_r, sigma1, sigma2, D, axis, theta)
+                if two_D:
+                    file_r.write(
+                        'CNID = \n' + str(self.CNID) + '\n')
+                if self.verbose:
+                    self._print_found_csl(
+                        sigma1, sigma2, D, axis, theta)
             theta += dtheta
 
     def get_bicrystal(self, dydz=None, dx=0, dp1=0, dp2=0,
