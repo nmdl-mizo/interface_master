@@ -1818,14 +1818,13 @@ class core:
                 sigma1 = int(abs(np.round(det(calc.U1))))
                 sigma2 = int(abs(np.round(det(calc.U2))))
 
-                if two_D:
-                    calc.compute_CNID([0, 0, 1])
-                    self.CNID = np.dot(a1, calc.CNID)
                 self._write_found_csl(
                     file, sigma1, sigma2, D, axis, theta)
                 self._write_found_csl(
                     file_r, sigma1, sigma2, D, axis, theta)
                 if two_D:
+                    calc.compute_CNID([0, 0, 1])
+                    self.CNID = np.dot(a1, calc.CNID)
                     file_r.write(
                         'CNID = \n' + str(self.CNID) + '\n')
                 if self.verbose:
