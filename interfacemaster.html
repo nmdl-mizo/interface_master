@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -32,8 +32,8 @@
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=752cbf1e58c09e799737" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=752cbf1e58c09e799737" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/doctools.js"></script>
@@ -48,7 +48,7 @@
   </head>
   
   
-  <body data-bs-spy="scroll" data-bs-target="#bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
   
   
@@ -87,13 +87,15 @@
 </form></div>
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
     <span class="fa-solid fa-bars"></span>
   </label>
-  <div id="navbar-start">
+  
+  <div class="navbar-header-items__start">
     
-      
+      <div class="navbar-item">
   
 
 <a class="navbar-brand logo" href="index.html">
@@ -104,21 +106,23 @@
   
     <p class="title logo__title">interfacemaster 1.1 documentation</p>
   
-</a>
+</a></div>
     
   </div>
   
+  
   <div class="col-lg-9 navbar-header-items">
-    <div id="navbar-center" class="me-auto">
+    
+    <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-center-item"><nav class="navbar-nav">
+        <div class="navbar-item"><nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
      aria-label="Site Navigation">
     Site Navigation
   </p>
-  <ul id="navbar-main-elements" class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="install.html">
@@ -151,9 +155,11 @@
 </nav></div>
       
     </div>
-    <div id="navbar-end">
+    
+    
+    <div class="navbar-header-items__end">
       
-        <div class="navbar-end-item navbar-persistent--container">
+        <div class="navbar-item navbar-persistent--container">
           
 <script>
 document.write(`
@@ -165,7 +171,7 @@ document.write(`
         </div>
       
       
-        <div class="navbar-end-item">
+        <div class="navbar-item">
 <script>
 document.write(`
   <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -176,8 +182,7 @@ document.write(`
 `);
 </script></div>
       
-        <div class="navbar-end-item"><ul id="navbar-icon-links"
-    class="navbar-nav"
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -194,6 +199,7 @@ document.write(`
 </ul></div>
       
     </div>
+    
   </div>
   
   
@@ -214,6 +220,7 @@ document.write(`
     </label>
   
 </div>
+
     </nav>
   
   <div class="bd-container">
@@ -221,20 +228,21 @@ document.write(`
       
       <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
+
   
   <div class="sidebar-header-items sidebar-primary__section">
     
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-center-item"><nav class="navbar-nav">
+          <div class="navbar-item"><nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
      aria-label="Site Navigation">
     Site Navigation
   </p>
-  <ul id="navbar-main-elements" class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="install.html">
@@ -272,7 +280,7 @@ document.write(`
     
       <div class="sidebar-header-items__end">
         
-          <div class="navbar-end-item">
+          <div class="navbar-item">
 <script>
 document.write(`
   <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -283,8 +291,7 @@ document.write(`
 `);
 </script></div>
         
-          <div class="navbar-end-item"><ul id="navbar-icon-links"
-    class="navbar-nav"
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -305,23 +312,26 @@ document.write(`
   </div>
   
   
-  <div class="sidebar-end-items sidebar-primary__section">
+  <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
   
   <div id="rtd-footer-container"></div>
 
+
       </div>
+      
       <main id="main-content" class="bd-main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article"><div class="header-article-items header-article__inner">
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-start-item">
+        <div class="header-article-item">
 
 
 
@@ -341,7 +351,8 @@ document.write(`
     </div>
   
   
-</div></div>
+</div>
+</div>
               
               
               
@@ -353,6 +364,7 @@ document.write(`
 <h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this heading">#</a></h1>
 <section id="module-interfacemaster.cellcalc">
 <span id="interfacemaster-cellcalc"></span><h2>interfacemaster.cellcalc<a class="headerlink" href="#module-interfacemaster.cellcalc" title="Permalink to this heading">#</a></h2>
+<p>cellcalc.py</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="interfacemaster.cellcalc.DSCcalc">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interfacemaster.cellcalc.</span></span><span class="sig-name descname"><span class="pre">DSCcalc</span></span><a class="reference internal" href="_modules/interfacemaster/cellcalc.html#DSCcalc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.cellcalc.DSCcalc" title="Permalink to this definition">#</a></dt>
@@ -532,7 +544,8 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="interfacemaster.cellcalc.find_integer_vectors">
 <span class="sig-prename descclassname"><span class="pre">interfacemaster.cellcalc.</span></span><span class="sig-name descname"><span class="pre">find_integer_vectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/cellcalc.html#find_integer_vectors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.cellcalc.find_integer_vectors" title="Permalink to this definition">#</a></dt>
-<dd><p>A function for finding the coefficients N so that Nv contains only integer elements and gcd(v1,v2,v3,N) = 1</p>
+<dd><p>A function for finding the coefficients N
+so that Nv contains only integer elements and gcd(v1,v2,v3,N) = 1</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -576,7 +589,8 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="interfacemaster.cellcalc.get_indices_from_n_Pc1">
 <span class="sig-prename descclassname"><span class="pre">interfacemaster.cellcalc.</span></span><span class="sig-name descname"><span class="pre">get_indices_from_n_Pc1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Pc1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/cellcalc.html#get_indices_from_n_Pc1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.cellcalc.get_indices_from_n_Pc1" title="Permalink to this definition">#</a></dt>
-<dd><p>get the Miller indices of certain plane with normal n and one in-plane point Pc1 for certain lattice</p>
+<dd><p>get the Miller indices of certain plane
+with normal n and one in-plane point Pc1 for certain lattice</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -636,7 +650,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="interfacemaster.cellcalc.get_ortho_two_v">
-<span class="sig-prename descclassname"><span class="pre">interfacemaster.cellcalc.</span></span><span class="sig-name descname"><span class="pre">get_ortho_two_v</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">align_rotation_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/cellcalc.html#get_ortho_two_v"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.cellcalc.get_ortho_two_v" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">interfacemaster.cellcalc.</span></span><span class="sig-name descname"><span class="pre">get_ortho_two_v</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">align_rotation_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/cellcalc.html#get_ortho_two_v"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.cellcalc.get_ortho_two_v" title="Permalink to this definition">#</a></dt>
 <dd><p>get orthogonal cell of a 2D basis</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -681,8 +695,10 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="interfacemaster.cellcalc.get_pri_vec_inplane">
 <span class="sig-prename descclassname"><span class="pre">interfacemaster.cellcalc.</span></span><span class="sig-name descname"><span class="pre">get_pri_vec_inplane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hkl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/cellcalc.html#get_pri_vec_inplane"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.cellcalc.get_pri_vec_inplane" title="Permalink to this definition">#</a></dt>
-<dd><p>get two primitive lattice vector for the (hkl) plane
-from Banadaki A D, Patala S. An efficient algorithm for computing the primitive bases of a general lattice plane[J]. Journal of Applied Crystallography, 2015, 48(2): 585-588.</p>
+<dd><p>get two primitive lattice vector for the (hkl) plane from
+Banadaki A D, Patala S.
+An efficient algorithm for computing the primitive bases of a general lattice plane[J].
+Journal of Applied Crystallography, 2015, 48(2): 585-588.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -853,6 +869,7 @@ the default rotation + the intermediate rotation is close to the excat rotation<
 </section>
 <section id="module-interfacemaster.interface_generator">
 <span id="interfacemaster-interface-generator"></span><h2>interfacemaster.interface_generator<a class="headerlink" href="#module-interfacemaster.interface_generator" title="Permalink to this heading">#</a></h2>
+<p>interface_generator.py</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.POSCAR_to_cif">
 <span class="sig-prename descclassname"><span class="pre">interfacemaster.interface_generator.</span></span><span class="sig-name descname"><span class="pre">POSCAR_to_cif</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Poscar_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cif_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#POSCAR_to_cif"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.POSCAR_to_cif" title="Permalink to this definition">#</a></dt>
@@ -931,9 +948,10 @@ x-direction and the second axis is in the x-y plane</p>
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.core">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interfacemaster.interface_generator.</span></span><span class="sig-name descname"><span class="pre">core</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prim_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prim_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Core class for dealing with an interface</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.core.compute_bicrystal">
-<span class="sig-name descname"><span class="pre">compute_bicrystal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hkl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_ortho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane_ortho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_ortho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_integer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">align_rotation_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7071067811865476</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.compute_bicrystal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.compute_bicrystal" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_bicrystal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hkl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_ortho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane_ortho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_ortho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_integer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">align_rotation_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7071067811865476</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.compute_bicrystal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.compute_bicrystal" title="Permalink to this definition">#</a></dt>
 <dd><p>compute the transformation to obtain the supercell of the two slabs forming a interface</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -955,7 +973,9 @@ x-direction and the second axis is in the x-y plane</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.core.compute_bicrystal_two_D">
 <span class="sig-name descname"><span class="pre">compute_bicrystal_two_D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hkl_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hkl_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_ortho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_ortho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_integer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7071067811865476</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.compute_bicrystal_two_D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.compute_bicrystal_two_D" title="Permalink to this definition">#</a></dt>
-<dd><p>compute the transformation to obtain the supercell of the two slabs forming a interface (only two_D periodicity)</p>
+<dd><p>compute the transformation
+to obtain the supercell of the two slabs
+forming a interface (only two_D periodicity)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -990,7 +1010,7 @@ inside these regions into some groups.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.core.get_bicrystal">
-<span class="sig-name descname"><span class="pre">get_bicrystal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dydz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([0.,</span> <span class="pre">0.,</span> <span class="pre">0.])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dp1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dp2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyz_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyz_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'POSCAR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">two_D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'VASP'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mirror</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">KTI</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.get_bicrystal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.get_bicrystal" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_bicrystal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dydz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dp1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dp2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyz_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyz_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'POSCAR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">two_D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'VASP'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mirror</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">KTI</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.get_bicrystal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.get_bicrystal" title="Permalink to this definition">#</a></dt>
 <dd><p>generate a cif file for the bicrystal structure</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1031,7 +1051,7 @@ inside these regions into some groups.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.core.sample_CNID">
-<span class="sig-name descname"><span class="pre">sample_CNID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dp1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dp2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyz_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyz_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">two_D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'POSCAR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'VASP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.sample_CNID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.sample_CNID" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sample_CNID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dp1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dp2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyz_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyz_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">two_D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'POSCAR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'VASP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.sample_CNID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.sample_CNID" title="Permalink to this definition">#</a></dt>
 <dd><p>sampling the CNID and generate POSCARs</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1042,14 +1062,24 @@ inside these regions into some groups.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.core.sample_lattice_planes">
-<span class="sig-name descname"><span class="pre">sample_lattice_planes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyz_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyz_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">two_D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'POSCAR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'VASP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.sample_lattice_planes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.sample_lattice_planes" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sample_lattice_planes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyz_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyz_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">two_D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'POSCAR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'VASP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.sample_lattice_planes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.sample_lattice_planes" title="Permalink to this definition">#</a></dt>
 <dd><p>sampling non-identical lattice planes terminating at the GB</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.core.scale">
 <span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor_2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.scale" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>scale the lattice 1 and 2 with specific factors
+(both the lattice and conventional lattice)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>factor_1</strong> (<em>float</em>) – scale factor for lattice 1</p></li>
+<li><p><strong>factor_2</strong> (<em>float</em>) – scale factor for lattice 2</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.core.search_all_position">
@@ -1108,23 +1138,7 @@ inside these regions into some groups.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.core.search_one_position_2D">
-<span class="sig-name descname"><span class="pre">search_one_position_2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hkl_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hkl_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[1.,</span> <span class="pre">0.,</span> <span class="pre">0.],</span> <span class="pre">[0.,</span> <span class="pre">1.,</span> <span class="pre">0.],</span> <span class="pre">[0.,</span> <span class="pre">0.,</span> <span class="pre">1.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integer_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exact</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.search_one_position_2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.search_one_position_2D" title="Permalink to this definition">#</a></dt>
-<dd><p>main loop finding the appx CSL</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>axis</strong> (<em>numpy array</em>) – rotation axis</p></li>
-<li><p><strong>theta</strong> (<em>float</em>) – initial rotation angle, in degree</p></li>
-<li><p><strong>theta_range</strong> (<em>float</em>) – range varying theta, in degree</p></li>
-<li><p><strong>dtheta</strong> (<em>float</em>) – step varying theta, in degree</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="interfacemaster.interface_generator.core.search_one_position_3D">
-<span class="sig-name descname"><span class="pre">search_one_position_3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtheta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.search_one_position_3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.search_one_position_3D" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">search_one_position_2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hkl_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hkl_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([[1.,</span> <span class="pre">0.,</span> <span class="pre">0.],</span> <span class="pre">[0.,</span> <span class="pre">1.,</span> <span class="pre">0.],</span> <span class="pre">[0.,</span> <span class="pre">0.,</span> <span class="pre">1.]])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integer_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exact</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.search_one_position_2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.search_one_position_2D" title="Permalink to this definition">#</a></dt>
 <dd><p>main loop finding the appx CSL</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1140,7 +1154,7 @@ inside these regions into some groups.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.core.set_orientation_axis">
-<span class="sig-name descname"><span class="pre">set_orientation_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.set_orientation_axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.set_orientation_axis" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_orientation_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#core.set_orientation_axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.core.set_orientation_axis" title="Permalink to this definition">#</a></dt>
 <dd><p>rotate lattice_2 so that its axis_2 coincident with the axis_1 of lattice_1</p>
 </dd></dl>
 
@@ -1204,7 +1218,7 @@ inside these regions into some groups.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.draw_slab_dich">
-<span class="sig-prename descclassname"><span class="pre">interfacemaster.interface_generator.</span></span><span class="sig-name descname"><span class="pre">draw_slab_dich</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane_list_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice_to_screen_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elements_list_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_elements</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elements_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane_list_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice_to_screen_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elements_list_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titlesize</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#draw_slab_dich"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.draw_slab_dich" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">interfacemaster.interface_generator.</span></span><span class="sig-name descname"><span class="pre">draw_slab_dich</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_ys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane_list_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice_to_screen_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elements_list_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_elements</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane_list_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lattice_to_screen_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elements_list_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titlesize</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#draw_slab_dich"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.draw_slab_dich" title="Permalink to this definition">#</a></dt>
 <dd><p>draw the dichromatic patterns</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1245,7 +1259,9 @@ inside these regions into some groups.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>lattice_bi, atoms_1, atoms2</strong> – lattice matrix of bicrystal supercell, atom coordinates of left slab, and atom coordinates of right slab</p>
+<dd class="field-even"><p><strong>lattice_bi, atoms_1, atoms2</strong> – lattice matrix of bicrystal supercell,
+atom coordinates of left slab,
+and atom coordinates of right slab</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>numpyarray</p>
@@ -1283,7 +1299,8 @@ inside these regions into some groups.</p>
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.get_array_bounds">
 <span class="sig-prename descclassname"><span class="pre">interfacemaster.interface_generator.</span></span><span class="sig-name descname"><span class="pre">get_array_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">U</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#get_array_bounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.get_array_bounds" title="Permalink to this definition">#</a></dt>
 <dd><p>get the meshgrid formed by three sets of lower &amp; upper bounds.</p>
-<p>the bounds cooresponds to the 8 vertices of the cell consisting of the three column vectors of a matrix</p>
+<p>the bounds cooresponds to the 8 vertices of the cell
+consisting of the three column vectors of a matrix</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>U</strong> (<em>numpy array</em>) – integer matrix</p>
@@ -1300,7 +1317,8 @@ inside these regions into some groups.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.get_disorientation">
 <span class="sig-prename descclassname"><span class="pre">interfacemaster.interface_generator.</span></span><span class="sig-name descname"><span class="pre">get_disorientation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hkl1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hkl2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#get_disorientation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.get_disorientation" title="Permalink to this definition">#</a></dt>
-<dd><p>produce a rotation matrix so that the hkl1 plane overlap with the hkl2 plane and the v1 colinear with v2</p>
+<dd><p>produce a rotation matrix
+so that the hkl1 plane overlap with the hkl2 plane and the v1 colinear with v2</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1384,7 +1402,7 @@ inspired from <a class="github reference external" href="https://github.com/oeko
 
 <dl class="py function">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.get_surface_slab">
-<span class="sig-prename descclassname"><span class="pre">interfacemaster.interface_generator.</span></span><span class="sig-name descname"><span class="pre">get_surface_slab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hkl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replica</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7071067811865476</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">termi_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vacuum_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane_normal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_perp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'POSCAR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'VASP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#get_surface_slab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.get_surface_slab" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">interfacemaster.interface_generator.</span></span><span class="sig-name descname"><span class="pre">get_surface_slab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">structure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hkl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replica</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7071067811865476</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">termi_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vacuum_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane_normal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_perp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'POSCAR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'VASP'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#get_surface_slab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.get_surface_slab" title="Permalink to this definition">#</a></dt>
 <dd><p>get a superlattice of a slab containing a desired surface as crystal plane hkl</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1392,13 +1410,16 @@ inspired from <a class="github reference external" href="https://github.com/oeko
 <li><p><strong>structure</strong> (<em>Structure object</em>) – Structure object of the unit cell structure</p></li>
 <li><p><strong>hkl</strong> (<em>numpy array</em>) – miller indices of the surface plane</p></li>
 <li><p><strong>replica</strong> (<em>list</em>) – expansion of the primitive slab cell, default [1, 1, 1]</p></li>
-<li><p><strong>inclination_tol</strong> (<em>float</em>) – required minimum cos value of the angle between the basic crossing vector and the surface, default sqrt(2)/2</p></li>
+<li><p><strong>inclination_tol</strong> (<em>float</em>) – required minimum cos value of the angle
+between the basic crossing vector and the surface, default sqrt(2)/2</p></li>
 <li><p><strong>termi_shift</strong> (<em>float</em>) – shift the termination of the surface, default 0</p></li>
 <li><p><strong>vacuum_height</strong> (<em>float</em>) – height of vaccum</p></li>
-<li><p><strong>plane_normal</strong> (<em>bool</em>) – whether requiring the two vectors in the surface plane to be perpendicular, default False</p></li>
+<li><p><strong>plane_normal</strong> (<em>bool</em>) – whether requiring the two vectors
+in the surface plane to be perpendicular, default False</p></li>
 <li><p><strong>normal_perp</strong> (<em>bool</em>) – whether requiring the crossing vector to be perpendicular to the plane, default False</p></li>
 <li><p><strong>normal_tol</strong> – tolerance to judge whether perpendicular, default 1e-3</p></li>
-<li><p><strong>lim</strong> (<em>int</em>) – control the number of generated vectors to search for the crossing vectors and perpendicular vectors, default 20</p></li>
+<li><p><strong>lim</strong> (<em>int</em>) – control the number of generated vectors
+to search for the crossing vectors and perpendicular vectors, default 20</p></li>
 <li><p><strong>filename</strong> (<em>str</em>) – name of the generated atom files</p></li>
 <li><p><strong>filetype</strong> (<em>str</em><em>, </em><em>&quot;VASP&quot;</em><em> or </em><em>&quot;LAMMPS&quot;</em>) – type of the generated atom files (for VASP or LAMMPS)</p></li>
 </ul>
@@ -1583,7 +1604,8 @@ inspired from <a class="github reference external" href="https://github.com/oeko
 <dl class="py function">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.terminates_scanner_left">
 <span class="sig-prename descclassname"><span class="pre">interfacemaster.interface_generator.</span></span><span class="sig-name descname"><span class="pre">terminates_scanner_left</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elements</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#terminates_scanner_left"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.terminates_scanner_left" title="Permalink to this definition">#</a></dt>
-<dd><p>find all different atomic planes within 1 lattice plane displacing (in the interface), for the left slab</p>
+<dd><p>find all different atomic planes
+within 1 lattice plane displacing (in the interface), for the left slab</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1609,7 +1631,8 @@ inspired from <a class="github reference external" href="https://github.com/oeko
 <dl class="py function">
 <dt class="sig sig-object py" id="interfacemaster.interface_generator.terminates_scanner_right">
 <span class="sig-prename descclassname"><span class="pre">interfacemaster.interface_generator.</span></span><span class="sig-name descname"><span class="pre">terminates_scanner_right</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elements</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/interface_generator.html#terminates_scanner_right"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.interface_generator.terminates_scanner_right" title="Permalink to this definition">#</a></dt>
-<dd><p>find all different atomic planes within 1 lattice plane displacing (in the interface), for the right slab</p>
+<dd><p>find all different atomic planes
+within 1 lattice plane displacing (in the interface), for the right slab</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1854,6 +1877,7 @@ for this symmetric tilt GB</p>
 </section>
 <section id="module-interfacemaster.brute_force">
 <span id="interfacemaster-brute-force"></span><h2>interfacemaster.brute_force<a class="headerlink" href="#module-interfacemaster.brute_force" title="Permalink to this heading">#</a></h2>
+<p>brute_force.py</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="interfacemaster.brute_force.GB_runner">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interfacemaster.brute_force.</span></span><span class="sig-name descname"><span class="pre">GB_runner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_interface</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfacemaster/brute_force.html#GB_runner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfacemaster.brute_force.GB_runner" title="Permalink to this definition">#</a></dt>
@@ -2017,7 +2041,6 @@ output the indices involving non-repeating pairs</p>
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       id="prev-link"
        href="tutorials/Tutorial_Making_surface_slab_TiO2.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
@@ -2033,12 +2056,13 @@ output the indices involving non-repeating pairs</p>
             
             
               
-                <div class="bd-sidebar-secondary bd-toc">
-  <div class="toc-item">
-  <div class="tocsection onthispage">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav id="bd-toc-nav" class="page-toc">
+  <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-interfacemaster.cellcalc">interfacemaster.cellcalc</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interfacemaster.cellcalc.DSCcalc"><code class="docutils literal notranslate"><span class="pre">DSCcalc</span></code></a><ul class="nav section-nav flex-column">
@@ -2091,7 +2115,6 @@ output the indices involving non-repeating pairs</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interfacemaster.interface_generator.core.search_fixed"><code class="docutils literal notranslate"><span class="pre">core.search_fixed()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interfacemaster.interface_generator.core.search_one_position"><code class="docutils literal notranslate"><span class="pre">core.search_one_position()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interfacemaster.interface_generator.core.search_one_position_2D"><code class="docutils literal notranslate"><span class="pre">core.search_one_position_2D()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interfacemaster.interface_generator.core.search_one_position_3D"><code class="docutils literal notranslate"><span class="pre">core.search_one_position_3D()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interfacemaster.interface_generator.core.set_orientation_axis"><code class="docutils literal notranslate"><span class="pre">core.set_orientation_axis()</span></code></a></li>
 </ul>
 </li>
@@ -2161,14 +2184,15 @@ output the indices involving non-repeating pairs</p>
 </ul>
   </nav></div>
 
-  <div class="toc-item">
+  <div class="sidebar-secondary-item">
   <div class="tocsection sourcelink">
     <a href="_sources/interfacemaster.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
 </div>
-</div>
+
+</div></div>
               
             
           </div>
@@ -2181,34 +2205,45 @@ output the indices involving non-repeating pairs</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=752cbf1e58c09e799737"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=752cbf1e58c09e799737"></script>
+  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
 
-  <footer class="bd-footer"><div class="bd-footer__inner container">
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
   
-    <div class="footer-item">
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2022, Y. Xie, NMDL.
+      © Copyright 2023, Y. Xie, K. Shibata, T. Mizoguchi.
       <br/>
     
   </p>
 </div>
-  
-    <div class="footer-item"><p class="theme-version">
-  Built with the
-  <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a>
-  0.13.0rc3.dev0.
-</p></div>
-  
-    <div class="footer-item">
+      
+        <div class="footer-item">
   <p class="sphinx-version">
     Created using <a href="https://sphinx-doc.org/">Sphinx</a> 6.1.3.
     <br/>
   </p>
 </div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the
+  <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a>
+  0.13.0rc4dev0.
+</p></div>
+      
+    </div>
   
 </div>
+
   </footer>
   </body>
 </html>

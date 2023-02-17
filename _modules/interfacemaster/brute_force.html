@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=752cbf1e58c09e799737" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -31,8 +31,8 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=752cbf1e58c09e799737" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=752cbf1e58c09e799737" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -46,7 +46,7 @@
   </head>
   
   
-  <body data-bs-spy="scroll" data-bs-target="#bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
   
   
@@ -85,13 +85,15 @@
 </form></div>
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
     <span class="fa-solid fa-bars"></span>
   </label>
-  <div id="navbar-start">
+  
+  <div class="navbar-header-items__start">
     
-      
+      <div class="navbar-item">
   
 
 <a class="navbar-brand logo" href="../../index.html">
@@ -102,21 +104,23 @@
   
     <p class="title logo__title">interfacemaster 1.1 documentation</p>
   
-</a>
+</a></div>
     
   </div>
   
+  
   <div class="col-lg-9 navbar-header-items">
-    <div id="navbar-center" class="me-auto">
+    
+    <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-center-item"><nav class="navbar-nav">
+        <div class="navbar-item"><nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
      aria-label="Site Navigation">
     Site Navigation
   </p>
-  <ul id="navbar-main-elements" class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../install.html">
@@ -149,9 +153,11 @@
 </nav></div>
       
     </div>
-    <div id="navbar-end">
+    
+    
+    <div class="navbar-header-items__end">
       
-        <div class="navbar-end-item navbar-persistent--container">
+        <div class="navbar-item navbar-persistent--container">
           
 <script>
 document.write(`
@@ -163,7 +169,7 @@ document.write(`
         </div>
       
       
-        <div class="navbar-end-item">
+        <div class="navbar-item">
 <script>
 document.write(`
   <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -174,8 +180,7 @@ document.write(`
 `);
 </script></div>
       
-        <div class="navbar-end-item"><ul id="navbar-icon-links"
-    class="navbar-nav"
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -192,6 +197,7 @@ document.write(`
 </ul></div>
       
     </div>
+    
   </div>
   
   
@@ -208,6 +214,7 @@ document.write(`
 
   
 </div>
+
     </nav>
   
   <div class="bd-container">
@@ -215,20 +222,21 @@ document.write(`
       
       <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
+
   
   <div class="sidebar-header-items sidebar-primary__section">
     
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-center-item"><nav class="navbar-nav">
+          <div class="navbar-item"><nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
      aria-label="Site Navigation">
     Site Navigation
   </p>
-  <ul id="navbar-main-elements" class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../install.html">
@@ -266,7 +274,7 @@ document.write(`
     
       <div class="sidebar-header-items__end">
         
-          <div class="navbar-end-item">
+          <div class="navbar-item">
 <script>
 document.write(`
   <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -277,8 +285,7 @@ document.write(`
 `);
 </script></div>
         
-          <div class="navbar-end-item"><ul id="navbar-icon-links"
-    class="navbar-nav"
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -299,23 +306,26 @@ document.write(`
   </div>
   
   
-  <div class="sidebar-end-items sidebar-primary__section">
+  <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
   
   <div id="rtd-footer-container"></div>
 
+
       </div>
+      
       <main id="main-content" class="bd-main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article"><div class="header-article-items header-article__inner">
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-start-item">
+        <div class="header-article-item">
 
 
 
@@ -338,7 +348,8 @@ document.write(`
     </div>
   
   
-</div></div>
+</div>
+</div>
               
               
               
@@ -347,10 +358,14 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for interfacemaster.brute_force</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">brute_force.py</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">repeat</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">meshgrid</span><span class="p">,</span> \
-<span class="n">unique</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">vstack</span><span class="p">,</span> <span class="n">loadtxt</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">around</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">repeat</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">meshgrid</span><span class="p">,</span> \
+<span class="n">unique</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">vstack</span><span class="p">,</span> <span class="n">loadtxt</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">around</span>
 <span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">inv</span><span class="p">,</span> <span class="n">norm</span>
 <span class="kn">from</span> <span class="nn">interfacemaster.interface_generator</span> <span class="kn">import</span> <span class="n">write_LAMMPS</span>
 
@@ -385,7 +400,7 @@ document.write(`
     <span class="n">z_shifts</span> <span class="o">=</span> <span class="n">reps</span>
     <span class="n">planar_shifts</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x_shifts</span><span class="p">,</span> <span class="n">y_shifts</span><span class="p">,</span> <span class="n">z_shifts</span><span class="p">),</span><span class="n">dtype</span> <span class="o">=</span> <span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">planar_shifts</span><span class="p">)):</span>
-        <span class="n">planar_shifts</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">planar_shifts</span><span class="p">[</span><span class="n">i</span><span class="p">,:],</span><span class="n">transL</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">planar_shifts</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">planar_shifts</span><span class="p">[</span><span class="n">i</span><span class="p">,:],</span><span class="n">transL</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
     <span class="c1">#expand by periodic boundary condition</span>
     <span class="n">n_images</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">planar_shifts</span><span class="p">)</span>
     <span class="n">n_1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms_here</span><span class="p">)</span>
@@ -415,11 +430,13 @@ document.write(`
     <span class="c1">#round, unique and sort</span>
     <span class="n">distances_round</span> <span class="o">=</span> <span class="n">unique</span><span class="p">(</span><span class="n">around</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 
-    <span class="c1">#the distances shorter than cloest atomic distance in perfect crystal and larger than zero (not a self-pair)</span>
+    <span class="c1"># the distances shorter than cloest atomic distance</span>
+    <span class="c1"># in perfect crystal and larger than zero (not a self-pair)</span>
     <span class="n">closest_pairs_id</span> <span class="o">=</span> <span class="n">where</span><span class="p">((</span><span class="n">distances</span><span class="o">&lt;</span><span class="n">distances_round</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-3</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">distances</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="c1">#the array ids of del and dsp atoms</span>
-    <span class="c1">#it is convenient to delete the PBC expanded atoms because in this case the displacement of the other pairs is to their center</span>
+    <span class="c1"># the array ids of del and dsp atoms</span>
+    <span class="c1"># it is convenient to delete the PBC expanded atoms</span>
+    <span class="c1"># because in this case the displacement of the other pairs is to their center</span>
     <span class="n">array_id_del</span> <span class="o">=</span> <span class="n">pos_1_index_map</span><span class="p">[</span><span class="n">closest_pairs_id</span><span class="p">]</span>
     <span class="n">array_id_dsp</span> <span class="o">=</span> <span class="n">pos_2_index_map</span><span class="p">[</span><span class="n">closest_pairs_id</span><span class="p">]</span>
 
@@ -430,7 +447,9 @@ document.write(`
     <span class="n">array_id_dsp</span> <span class="o">=</span> <span class="n">array_id_dsp</span><span class="p">[</span><span class="n">non_repeated_closest_pairs_id</span><span class="p">]</span>
 
     <span class="c1">#the displacements of the dsp atoms</span>
-    <span class="n">dsps</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">pos_1_rep</span><span class="p">[</span><span class="n">closest_pairs_id</span><span class="p">]</span> <span class="o">+</span> <span class="n">pos_2_rep</span><span class="p">[</span><span class="n">closest_pairs_id</span><span class="p">])</span> <span class="o">-</span> <span class="n">pos_2_rep</span><span class="p">[</span><span class="n">closest_pairs_id</span><span class="p">]</span>
+    <span class="n">dsps</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span>
+        <span class="n">pos_1_rep</span><span class="p">[</span><span class="n">closest_pairs_id</span><span class="p">]</span> <span class="o">+</span> <span class="n">pos_2_rep</span><span class="p">[</span><span class="n">closest_pairs_id</span><span class="p">]</span>
+        <span class="p">)</span> <span class="o">-</span> <span class="n">pos_2_rep</span><span class="p">[</span><span class="n">closest_pairs_id</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">array_id_del</span><span class="p">,</span> <span class="n">array_id_dsp</span><span class="p">,</span> <span class="n">dsps</span><span class="p">,</span> <span class="n">distances_round</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">distances_round</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="screen_out_non_repeated_pairs"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.brute_force.screen_out_non_repeated_pairs">[docs]</a><span class="k">def</span> <span class="nf">screen_out_non_repeated_pairs</span><span class="p">(</span><span class="n">ids_1</span><span class="p">,</span> <span class="n">ids_2</span><span class="p">):</span>
@@ -449,9 +468,9 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">arrays</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ids_1</span><span class="p">))</span>
     <span class="n">screened_ids</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arrays</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arrays</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">screened_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arrays</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">screened_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">not_in</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">screened_ids</span><span class="p">:</span>
@@ -459,7 +478,7 @@ document.write(`
                     <span class="n">not_in</span> <span class="o">=</span> <span class="kc">False</span>
                     <span class="k">break</span>
             <span class="k">if</span> <span class="n">not_in</span><span class="p">:</span>
-                <span class="n">screened_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arrays</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">screened_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">screened_ids</span></div>
 
 <div class="viewcode-block" id="GB_runner"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.brute_force.GB_runner">[docs]</a><span class="k">class</span> <span class="nc">GB_runner</span><span class="p">():</span>
@@ -478,6 +497,10 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">clst_atmc_dstc</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">4</span> <span class="o">*</span> <span class="n">norm</span><span class="p">(</span><span class="n">my_interface</span><span class="o">.</span><span class="n">conv_lattice_1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">RBT_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">middle_atoms</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left_atoms</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right_atoms</span> <span class="o">=</span>  <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bulk_atoms</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="GB_runner.get_terminations"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.brute_force.GB_runner.get_terminations">[docs]</a>    <span class="k">def</span> <span class="nf">get_terminations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">changing_termination</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -504,11 +527,11 @@ document.write(`
 <span class="sd">        grid_size : float</span>
 <span class="sd">             size of grid sampling RBT in angstrom</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">CNID</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">orient</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">CNID</span><span class="p">)</span>
+        <span class="n">CNID</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">orient</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">CNID</span><span class="p">)</span>
         <span class="n">v1</span> <span class="o">=</span> <span class="n">CNID</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">v2</span> <span class="o">=</span> <span class="n">CNID</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">n1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span><span class="o">/</span><span class="n">grid_size</span><span class="p">))</span>
-        <span class="n">n2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">grid_size</span><span class="p">))</span>
+        <span class="n">n1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span><span class="o">/</span><span class="n">grid_size</span><span class="p">))</span>
+        <span class="n">n2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span><span class="o">/</span><span class="n">grid_size</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span><span class="n">n2</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n1</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n2</span><span class="p">):</span>
@@ -518,14 +541,19 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        divide simulation regions</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">all_atoms</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_bi</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">atoms_bi</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">all_atoms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_bi</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">atoms_bi</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
         <span class="n">middle_ids</span> <span class="o">=</span> <span class="n">where</span><span class="p">((</span><span class="n">all_atoms</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">clst_atmc_dstc</span><span class="p">)</span>\
                            <span class="o">&amp;</span> <span class="p">(</span><span class="n">all_atoms</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">clst_atmc_dstc</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">middle_atoms</span> <span class="o">=</span> <span class="n">all_atoms</span><span class="p">[</span><span class="n">middle_ids</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">left_atoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">middle_atoms</span><span class="o">.</span><span class="n">copy</span><span class="p">()[</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">middle_atoms</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">right_atoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">middle_atoms</span><span class="o">.</span><span class="n">copy</span><span class="p">()[</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">middle_atoms</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bulk_atoms</span> <span class="o">=</span> <span class="n">all_atoms</span><span class="o">.</span><span class="n">copy</span><span class="p">()[</span><span class="n">where</span><span class="p">(</span> <span class="p">(</span><span class="n">all_atoms</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">clst_atmc_dstc</span><span class="p">)</span> \
-                                     <span class="o">|</span> <span class="p">(</span><span class="n">all_atoms</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">clst_atmc_dstc</span><span class="p">)</span> <span class="p">)[</span><span class="mi">0</span><span class="p">]]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left_atoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">middle_atoms</span><span class="o">.</span><span class="n">copy</span><span class="p">()[</span>
+            <span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">middle_atoms</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right_atoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">middle_atoms</span><span class="o">.</span><span class="n">copy</span><span class="p">()[</span>
+            <span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">middle_atoms</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bulk_atoms</span> <span class="o">=</span> <span class="n">all_atoms</span><span class="o">.</span><span class="n">copy</span><span class="p">()[</span>
+            <span class="n">where</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">all_atoms</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">clst_atmc_dstc</span><span class="p">)</span>
+                <span class="o">|</span> <span class="p">(</span><span class="n">all_atoms</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">clst_atmc_dstc</span><span class="p">)</span>
+            <span class="p">)[</span><span class="mi">0</span><span class="p">]]</span></div>
 
 <div class="viewcode-block" id="GB_runner.main_run"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.brute_force.GB_runner.main_run">[docs]</a>    <span class="k">def</span> <span class="nf">main_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">core_num</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -539,21 +567,25 @@ document.write(`
         <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s1">&#39;dump&#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">:</span>
-            <span class="n">x_dimension</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="mi">100</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">bicrystal_U1</span><span class="p">)[:,</span><span class="mi">0</span><span class="p">]))</span>
-            <span class="n">y_dimension</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="mi">40</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">bicrystal_U1</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">]))</span>
-            <span class="n">z_dimension</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="mi">40</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">bicrystal_U1</span><span class="p">)[:,</span><span class="mi">2</span><span class="p">]))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">get_bicrystal</span><span class="p">(</span><span class="n">xyz_1</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_dimension</span><span class="p">,</span><span class="n">y_dimension</span><span class="p">,</span><span class="n">z_dimension</span><span class="p">],</span> \
-                                       <span class="n">xyz_2</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_dimension</span><span class="p">,</span><span class="n">y_dimension</span><span class="p">,</span><span class="n">z_dimension</span><span class="p">],</span> <span class="n">filetype</span><span class="o">=</span><span class="s1">&#39;LAMMPS&#39;</span><span class="p">,</span>\
-                                       <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;GB.dat&#39;</span><span class="p">,</span> <span class="n">dp1</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dp2</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">x_dimension</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span>
+                <span class="mi">100</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">bicrystal_U1</span><span class="p">)[:,</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">y_dimension</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span>
+                <span class="mi">40</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">bicrystal_U1</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">z_dimension</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span>
+                <span class="mi">40</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">bicrystal_U1</span><span class="p">)[:,</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">get_bicrystal</span><span class="p">(</span>
+                <span class="n">xyz_1</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_dimension</span><span class="p">,</span><span class="n">y_dimension</span><span class="p">,</span><span class="n">z_dimension</span><span class="p">],</span>
+                <span class="n">xyz_2</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_dimension</span><span class="p">,</span><span class="n">y_dimension</span><span class="p">,</span><span class="n">z_dimension</span><span class="p">],</span> <span class="n">filetype</span><span class="o">=</span><span class="s1">&#39;LAMMPS&#39;</span><span class="p">,</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;GB.dat&#39;</span><span class="p">,</span> <span class="n">dp1</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dp2</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">divide_region</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RBT_list</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">rbt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">RBT_list</span><span class="p">:</span>
                 <span class="n">bulk_atoms_here</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bulk_atoms</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
                 <span class="n">bulk_right_ids</span> <span class="o">=</span> <span class="n">where</span><span class="p">(</span><span class="n">bulk_atoms_here</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">boundary</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">bulk_atoms_here</span><span class="p">[</span><span class="n">bulk_right_ids</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RBT_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
-                <span class="n">displaced_atoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_atoms</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">RBT_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">bulk_atoms_here</span><span class="p">[</span><span class="n">bulk_right_ids</span><span class="p">]</span> <span class="o">+=</span> <span class="n">rbt</span>
+                <span class="n">displaced_atoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_atoms</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="o">+</span> <span class="n">rbt</span>
                 <span class="n">GB_atoms</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">left_atoms</span><span class="p">,</span> <span class="n">displaced_atoms</span><span class="p">))</span>
-                <span class="n">count</span> <span class="o">=</span> <span class="n">merge_operation</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">GB_atoms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_bi</span><span class="p">,</span> \
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">clst_atmc_dstc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">RBT_list</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">bulk_atoms_here</span><span class="p">,</span> \
+                <span class="n">count</span> <span class="o">=</span> <span class="n">merge_operation</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">GB_atoms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_bi</span><span class="p">,</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">clst_atmc_dstc</span><span class="p">,</span> <span class="n">rbt</span><span class="p">,</span> <span class="n">bulk_atoms_here</span><span class="p">,</span>
                                         <span class="n">core_num</span><span class="p">,</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">get_lowest</span><span class="p">()</span></div>
 
@@ -571,17 +603,20 @@ document.write(`
         <span class="n">position_here</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">get_bicrystal</span><span class="p">()</span>
         <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="n">position_here</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">min_perp_length</span><span class="p">:</span>
-            <span class="n">x_dimension</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="mi">100</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">bicrystal_U1</span><span class="p">)[:,</span><span class="mi">0</span><span class="p">]))</span>
-            <span class="n">y_dimension</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="mi">40</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">bicrystal_U1</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">]))</span>
-            <span class="n">z_dimension</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="mi">40</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">bicrystal_U1</span><span class="p">)[:,</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="n">x_dimension</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span>
+                <span class="mi">100</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">bicrystal_U1</span><span class="p">)[:,</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">y_dimension</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span>
+                <span class="mi">40</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">bicrystal_U1</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">z_dimension</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span>
+                <span class="mi">40</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">bicrystal_U1</span><span class="p">)[:,</span><span class="mi">2</span><span class="p">]))</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminations</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">get_bicrystal</span><span class="p">(</span><span class="n">xyz_1</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_dimension</span><span class="p">,</span><span class="n">y_dimension</span><span class="p">,</span><span class="n">z_dimension</span><span class="p">],</span> \
-                                       <span class="n">xyz_2</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_dimension</span><span class="p">,</span><span class="n">y_dimension</span><span class="p">,</span><span class="n">z_dimension</span><span class="p">],</span> <span class="n">filetype</span><span class="o">=</span><span class="s1">&#39;LAMMPS&#39;</span><span class="p">,</span>\
-                                       <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;GB.dat&#39;</span><span class="p">,</span> <span class="n">dp1</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dp2</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">position_here</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">get_bicrystal</span><span class="p">(</span><span class="n">xyz_1</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_dimension</span><span class="p">,</span><span class="n">y_dimension</span><span class="p">,</span><span class="n">z_dimension</span><span class="p">],</span>
+                    <span class="n">xyz_2</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_dimension</span><span class="p">,</span><span class="n">y_dimension</span><span class="p">,</span><span class="n">z_dimension</span><span class="p">],</span> <span class="n">filetype</span><span class="o">=</span><span class="s1">&#39;LAMMPS&#39;</span><span class="p">,</span>
+                    <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;GB.dat&#39;</span><span class="p">,</span> <span class="n">dp1</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dp2</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">position_here</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">divide_region</span><span class="p">()</span>
                 <span class="n">GB_atoms</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">left_atoms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_atoms</span><span class="p">))</span>
-                <span class="n">count</span> <span class="o">=</span> <span class="n">merge_operation_no_RBT</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">GB_atoms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_bi</span><span class="p">,</span> \
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">clst_atmc_dstc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bulk_atoms</span><span class="p">,</span> <span class="n">core_num</span><span class="p">,</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">position_here</span><span class="p">)</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="n">merge_operation_no_RBT</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">GB_atoms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">lattice_bi</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">clst_atmc_dstc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bulk_atoms</span><span class="p">,</span> <span class="n">core_num</span><span class="p">,</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">position_here</span><span class="p">)</span>
 
             <span class="n">position_here</span> <span class="o">+=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">interface</span><span class="o">.</span><span class="n">d2</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;terminate displace max&#39;</span><span class="p">)</span>
@@ -617,7 +652,7 @@ document.write(`
 <span class="sd">    delete_cutoff : float</span>
 <span class="sd">        cutoff to merge atoms</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;results.dat&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;results.dat&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">energy</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">dy</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">dz</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">dp1</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">dp2</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">delete_cutoff</span><span class="si">}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="merge_operation"><a class="viewcode-back" href="../../interfacemaster.html#interfacemaster.brute_force.merge_operation">[docs]</a><span class="k">def</span> <span class="nf">merge_operation</span><span class="p">(</span><span class="n">count_start</span><span class="p">,</span> <span class="n">GB_atoms</span><span class="p">,</span> <span class="n">bicrystal_lattice</span><span class="p">,</span> <span class="n">clst_atmc_dstc</span><span class="p">,</span>
@@ -633,24 +668,32 @@ document.write(`
     <span class="k">while</span> <span class="n">cloest_distance_now</span> <span class="o">&lt;</span> <span class="mf">0.99</span> <span class="o">*</span> <span class="n">clst_atmc_dstc</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">merge_operation_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
 
-            <span class="n">array_id_del</span><span class="p">,</span> <span class="n">array_id_dsp</span><span class="p">,</span> <span class="n">dsps</span><span class="p">,</span> <span class="n">delete_cutoff</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> \
+            <span class="n">array_id_del</span><span class="p">,</span> <span class="n">array_id_dsp</span><span class="p">,</span> <span class="n">dsps</span><span class="p">,</span> <span class="n">delete_cutoff</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> \
             <span class="n">find_pairs_with_closest_distances</span><span class="p">(</span><span class="n">GB_atoms_here</span><span class="p">,</span> <span class="n">bicrystal_lattice</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">array_id_del</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">GB_atoms_here</span><span class="p">[</span><span class="n">array_id_dsp</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dsps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">GB_atoms_here</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="n">GB_atoms_here</span><span class="p">,</span> <span class="n">array_id_del</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="n">atoms</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">((</span><span class="n">GB_atoms_here</span><span class="p">,</span> <span class="n">bulk_atoms</span><span class="p">))</span>
-                <span class="n">array_id_del</span><span class="p">,</span> <span class="n">array_id_dsp</span><span class="p">,</span> <span class="n">dsps</span><span class="p">,</span> <span class="n">cloest_distance_now</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> \
+                <span class="n">array_id_del</span><span class="p">,</span> <span class="n">array_id_dsp</span><span class="p">,</span> <span class="n">dsps</span><span class="p">,</span> <span class="n">cloest_distance_now</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> \
             <span class="n">find_pairs_with_closest_distances</span><span class="p">(</span><span class="n">GB_atoms_here</span><span class="p">,</span> <span class="n">bicrystal_lattice</span><span class="p">)</span>
-                <span class="n">write_LAMMPS</span><span class="p">(</span><span class="n">bicrystal_lattice</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">bicrystal_lattice</span><span class="p">),</span><span class="n">atoms</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">repeat</span><span class="p">([</span><span class="s1">&#39;Si&#39;</span><span class="p">],</span>\
-                         <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)),</span> <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;GB.dat&#39;</span><span class="p">,</span> <span class="n">orthogonal</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+                <span class="n">write_LAMMPS</span><span class="p">(</span>
+                    <span class="n">bicrystal_lattice</span><span class="p">,</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">bicrystal_lattice</span><span class="p">),</span><span class="n">atoms</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                    <span class="n">repeat</span><span class="p">([</span><span class="s1">&#39;Si&#39;</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)),</span>
+                    <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;GB.dat&#39;</span><span class="p">,</span>
+                    <span class="n">orthogonal</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
                 <span class="n">run_LAMMPS</span><span class="p">(</span><span class="n">core_num</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
                 <span class="n">energy_here</span> <span class="o">=</span> <span class="n">read_energy</span><span class="p">()</span>
                 <span class="n">write_data_here</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">energy_here</span><span class="p">,</span> <span class="n">RBT</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">RBT</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">dp1</span><span class="p">,</span> <span class="n">dp2</span><span class="p">,</span> <span class="n">delete_cutoff</span><span class="p">)</span>
                 <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">atoms</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">((</span><span class="n">GB_atoms_here</span><span class="p">,</span> <span class="n">bulk_atoms</span><span class="p">))</span>
-            <span class="n">write_LAMMPS</span><span class="p">(</span><span class="n">bicrystal_lattice</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">bicrystal_lattice</span><span class="p">),</span><span class="n">atoms</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">repeat</span><span class="p">([</span><span class="s1">&#39;Si&#39;</span><span class="p">],</span>\
-                     <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)),</span> <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;GB.dat&#39;</span><span class="p">,</span> <span class="n">orthogonal</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="n">write_LAMMPS</span><span class="p">(</span>
+                <span class="n">bicrystal_lattice</span><span class="p">,</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">bicrystal_lattice</span><span class="p">),</span><span class="n">atoms</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                <span class="n">repeat</span><span class="p">([</span><span class="s1">&#39;Si&#39;</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)),</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;GB.dat&#39;</span><span class="p">,</span>
+                <span class="n">orthogonal</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
             <span class="n">run_LAMMPS</span><span class="p">(</span><span class="n">core_num</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
             <span class="n">energy_here</span> <span class="o">=</span> <span class="n">read_energy</span><span class="p">()</span>
             <span class="n">write_data_here</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">energy_here</span><span class="p">,</span> <span class="n">RBT</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">RBT</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">dp1</span><span class="p">,</span> <span class="n">dp2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -671,23 +714,29 @@ document.write(`
     <span class="k">while</span> <span class="n">cloest_distance_now</span> <span class="o">&lt;</span> <span class="mf">0.99</span> <span class="o">*</span> <span class="n">clst_atmc_dstc</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">merge_operation_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
 
-            <span class="n">array_id_del</span><span class="p">,</span> <span class="n">array_id_dsp</span><span class="p">,</span> <span class="n">dsps</span><span class="p">,</span> <span class="n">delete_cutoff</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> \
-            <span class="n">find_pairs_with_closest_distances</span><span class="p">(</span><span class="n">GB_atoms_here</span><span class="p">,</span> <span class="n">bicrystal_lattice</span><span class="p">)</span>
+            <span class="n">array_id_del</span><span class="p">,</span> <span class="n">array_id_dsp</span><span class="p">,</span> <span class="n">dsps</span><span class="p">,</span> <span class="n">delete_cutoff</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> \
+                <span class="n">find_pairs_with_closest_distances</span><span class="p">(</span><span class="n">GB_atoms_here</span><span class="p">,</span> <span class="n">bicrystal_lattice</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">array_id_del</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">GB_atoms_here</span><span class="p">[</span><span class="n">array_id_dsp</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dsps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">GB_atoms_here</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="n">GB_atoms_here</span><span class="p">,</span> <span class="n">array_id_del</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="n">atoms</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">((</span><span class="n">GB_atoms_here</span><span class="p">,</span> <span class="n">bulk_atoms</span><span class="p">))</span>
-                <span class="n">array_id_del</span><span class="p">,</span> <span class="n">array_id_dsp</span><span class="p">,</span> <span class="n">dsps</span><span class="p">,</span> <span class="n">cloest_distance_now</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> \
-            <span class="n">find_pairs_with_closest_distances</span><span class="p">(</span><span class="n">GB_atoms_here</span><span class="p">,</span> <span class="n">bicrystal_lattice</span><span class="p">)</span>
-                <span class="n">write_LAMMPS</span><span class="p">(</span><span class="n">bicrystal_lattice</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">bicrystal_lattice</span><span class="p">),</span><span class="n">atoms</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">repeat</span><span class="p">([</span><span class="s1">&#39;Si&#39;</span><span class="p">],</span>\
-                         <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)),</span> <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;GB.dat&#39;</span><span class="p">,</span> <span class="n">orthogonal</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+                <span class="n">array_id_del</span><span class="p">,</span> <span class="n">array_id_dsp</span><span class="p">,</span> <span class="n">dsps</span><span class="p">,</span> <span class="n">cloest_distance_now</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> \
+                    <span class="n">find_pairs_with_closest_distances</span><span class="p">(</span><span class="n">GB_atoms_here</span><span class="p">,</span> <span class="n">bicrystal_lattice</span><span class="p">)</span>
+                <span class="n">write_LAMMPS</span><span class="p">(</span>
+                    <span class="n">bicrystal_lattice</span><span class="p">,</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">bicrystal_lattice</span><span class="p">),</span><span class="n">atoms</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                    <span class="n">repeat</span><span class="p">([</span><span class="s1">&#39;Si&#39;</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)),</span>
+                    <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;GB.dat&#39;</span><span class="p">,</span>
+                    <span class="n">orthogonal</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="p">)</span>
                 <span class="n">run_LAMMPS</span><span class="p">(</span><span class="n">core_num</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
                 <span class="n">energy_here</span> <span class="o">=</span> <span class="n">read_energy</span><span class="p">()</span>
                 <span class="n">write_data_here</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">energy_here</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dp1</span><span class="p">,</span> <span class="n">dp2</span><span class="p">,</span> <span class="n">delete_cutoff</span><span class="p">)</span>
                 <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">atoms</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">((</span><span class="n">GB_atoms_here</span><span class="p">,</span> <span class="n">bulk_atoms</span><span class="p">))</span>
-            <span class="n">write_LAMMPS</span><span class="p">(</span><span class="n">bicrystal_lattice</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">bicrystal_lattice</span><span class="p">),</span><span class="n">atoms</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">repeat</span><span class="p">([</span><span class="s1">&#39;Si&#39;</span><span class="p">],</span>\
+            <span class="n">write_LAMMPS</span><span class="p">(</span>
+                <span class="n">bicrystal_lattice</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">bicrystal_lattice</span><span class="p">),</span><span class="n">atoms</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">repeat</span><span class="p">([</span><span class="s1">&#39;Si&#39;</span><span class="p">],</span>\
                      <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)),</span> <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;GB.dat&#39;</span><span class="p">,</span> <span class="n">orthogonal</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
             <span class="n">run_LAMMPS</span><span class="p">(</span><span class="n">core_num</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
             <span class="n">energy_here</span> <span class="o">=</span> <span class="n">read_energy</span><span class="p">()</span>
@@ -700,10 +749,10 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    get the lowest GB energy</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">count</span><span class="p">,</span> <span class="n">energy</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">dp1</span><span class="p">,</span> <span class="n">dp2</span><span class="p">,</span> <span class="n">delete_cutoff</span> <span class="o">=</span> <span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;results.dat&#39;</span><span class="p">,</span> <span class="n">unpack</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">count</span><span class="p">,</span> <span class="n">energy</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;results.dat&#39;</span><span class="p">,</span> <span class="n">unpack</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
     <span class="n">lowest_count</span> <span class="o">=</span> <span class="n">count</span><span class="p">[</span><span class="n">where</span><span class="p">(</span><span class="n">energy</span> <span class="o">==</span> <span class="nb">min</span><span class="p">(</span><span class="n">energy</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
     <span class="n">lowest_energy</span> <span class="o">=</span> <span class="n">energy</span><span class="p">[</span><span class="n">where</span><span class="p">(</span><span class="n">energy</span> <span class="o">==</span> <span class="nb">min</span><span class="p">(</span><span class="n">energy</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;lowest_energy.dat&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;lowest_energy.dat&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">lowest_energy</span><span class="p">))</span>
     <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;dump&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">lowest_count</span><span class="p">))),</span> <span class="s1">&#39;global_min_structure.dat&#39;</span><span class="p">)</span></div>
 </pre></div>
@@ -733,34 +782,45 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=752cbf1e58c09e799737"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=752cbf1e58c09e799737"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
 
-  <footer class="bd-footer"><div class="bd-footer__inner container">
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
   
-    <div class="footer-item">
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2022, Y. Xie, NMDL.
+      © Copyright 2023, Y. Xie, K. Shibata, T. Mizoguchi.
       <br/>
     
   </p>
 </div>
-  
-    <div class="footer-item"><p class="theme-version">
-  Built with the
-  <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a>
-  0.13.0rc3.dev0.
-</p></div>
-  
-    <div class="footer-item">
+      
+        <div class="footer-item">
   <p class="sphinx-version">
     Created using <a href="https://sphinx-doc.org/">Sphinx</a> 6.1.3.
     <br/>
   </p>
 </div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the
+  <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a>
+  0.13.0rc4dev0.
+</p></div>
+      
+    </div>
   
 </div>
+
   </footer>
   </body>
 </html>
