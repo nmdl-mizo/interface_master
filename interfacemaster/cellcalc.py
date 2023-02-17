@@ -379,7 +379,7 @@ def get_normal_index(hkl, lattice):
     return np.dot(inv(lattice), n)
 
 
-def get_primitive_hkl(hkl, C_lattice, P_lattice, tol=1e-8):
+def get_primitive_hkl(hkl, C_lattice, P_lattice, tol=1e-8, n_max=100000):
     """
     convert the miller indices from conventional cell to primitive cell
 
@@ -393,6 +393,8 @@ def get_primitive_hkl(hkl, C_lattice, P_lattice, tol=1e-8):
         primitive cell basis set
     tol : float
         tolerance to judge integer, default 1e-8
+    n_max : int
+        maximum limit of N for search
 
     Returns
     ----------
@@ -404,7 +406,7 @@ def get_primitive_hkl(hkl, C_lattice, P_lattice, tol=1e-8):
     # print('the normal:' + str(n) + ' the point in the plane: ' + str(Pc1))
     # 2. get indices from normal
     hkl_p = get_indices_from_n_Pc1(n, P_lattice, Pc1)
-    hkl_p = find_integer_vectors(hkl_p, 100000, tol)[0]
+    hkl_p = find_integer_vectors(hkl_p, n_max, tol)[0]
     return hkl_p
 
 
