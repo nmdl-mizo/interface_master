@@ -96,7 +96,9 @@ def find_pairs_with_closest_distances(atoms_here, bicrystal_lattice):
     dsps = 1 / 2 * (
         pos_1_rep[closest_pairs_id] + pos_2_rep[closest_pairs_id]
     ) - pos_2_rep[closest_pairs_id]
-    return array_id_del, array_id_dsp, dsps, distances_round[1], distances_round[2]
+    return (
+        array_id_del, array_id_dsp, dsps,
+        distances_round[1], distances_round[2])
 
 
 def screen_out_non_repeated_pairs(ids_1, ids_2):

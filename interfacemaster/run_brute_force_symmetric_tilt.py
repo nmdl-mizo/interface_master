@@ -58,14 +58,18 @@ for i, (task, theta) in enumerate(zip(tasks, thetas)):
     hkl = get_primitive_hkl(
         task, my_interface.conv_lattice_1, my_interface.lattice_1, tol=1e-3)
     my_interface.compute_bicrystal(
-        hkl, normal_ortho=True, plane_ortho=True, tol_ortho=1e-3, tol_integer=1e-3,
+        hkl, normal_ortho=True, plane_ortho=True,
+        tol_ortho=1e-3, tol_integer=1e-3,
         align_rotation_axis=True, rotation_axis=axis)
     x_dimension = np.ceil(
-        100 / norm(np.dot(my_interface.lattice_1, my_interface.bicrystal_U1)[:, 0]))
+        100 / norm(np.dot(
+            my_interface.lattice_1, my_interface.bicrystal_U1)[:, 0]))
     y_dimension = np.ceil(
-        40 / norm(np.dot(my_interface.lattice_1, my_interface.bicrystal_U1)[:, 1]))
+        40 / norm(np.dot(
+            my_interface.lattice_1, my_interface.bicrystal_U1)[:, 1]))
     z_dimension = np.ceil(
-        40 / norm(np.dot(my_interface.lattice_1, my_interface.bicrystal_U1)[:, 2]))
+        40 / norm(np.dot(
+            my_interface.lattice_1, my_interface.bicrystal_U1)[:, 2]))
     my_interface.get_bicrystal(xyz_1=[x_dimension, y_dimension, z_dimension],
                                xyz_2=[x_dimension, y_dimension, z_dimension])
     my_run = GB_runner(my_interface)

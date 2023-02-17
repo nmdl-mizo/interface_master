@@ -9,7 +9,7 @@ from interfacemaster.cellcalc import MID, rot
 from interfacemaster.interface_generator import core
 
 
-def compute_sigma(axis, theta, filename='cif_files/Si_mp-149_conventional_standard.cif', maxsigma=10000, verbose=True):
+def compute_sigma(axis, theta, filename, maxsigma=10000, verbose=True):
     """
     compute sigma values for a given disorientation
 
@@ -194,21 +194,25 @@ def get_csl_twisted_graphenes(lim, filename, maxsigma=100, verbose=True):
     my_interface = core(filename,
                         filename, verbose=verbose)
     A_cnid = norm(
-        np.cross(my_interface.lattice_1[:, 1], my_interface.lattice_1[:, 0])) / sigmas
+        np.cross(
+            my_interface.lattice_1[:, 1],
+            my_interface.lattice_1[:, 0]
+        )) / sigmas
     anum = sigmas * 4
     return sigmas, thetas, A_cnid, anum
 
 
 def get_Ps_sigmas_thetas(lim, axis, maxsigma=100000):
     """
-    for a rotation axis, get the geometric information of all the symmetric tilt GBs
-    within a searching limitation
+    get the geometric information of all the symmetric tilt GBs
+    for a rotation axis within a searching limitation
     arguments:
     lim --- control the number of generated referring points
     axis --- rotation axis
     maxsigma --- maximum sigma
     return:
-    list of referring points, sigma list, angle list, original list of the 'in-plane' sigmas
+    list of referring points, sigma list,
+    angle list, original list of the 'in-plane' sigmas
     """
     if norm(np.cross(axis, [0, 0, 1])) < 1e-8:
         x = np.arange(2, 2 + lim, 1)
@@ -256,7 +260,11 @@ def get_Ps_sigmas_thetas(lim, axis, maxsigma=100000):
             ([-1 / 2, 0, 1 / 2], [-1, 1 / 2, 1 / 2], [1, 1, 1]))
         P1 = np.dot(basis1, indice.T).T
         basis2 = np.column_stack(
-            ([-1 / 2, 0, 1 / 2] * 3 - [-1, 1 / 2, 1 / 2], [-1 / 2, 0, 1 / 2], [1, 1, 1]))
+            (
+                [-1 / 2, 0, 1 / 2] * 3 - [-1, 1 / 2, 1 / 2],
+                [-1 / 2, 0, 1 / 2],
+                [1, 1, 1]
+            ))
         P2 = np.dot(basis2, indice.T).T
         P = np.vstack((P1, P2))
         thetas = 2 * \
