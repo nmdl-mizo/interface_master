@@ -4,7 +4,7 @@ from numpy import cross, square, arccos, pi, inf, cos, sin
 import numpy as np
 
 
-def rot(a, Theta):
+def rot(a, theta):
     """
     produce a rotation matrix
 
@@ -12,7 +12,7 @@ def rot(a, Theta):
     ----------
     a : numpy array
         rotation axis
-    Theta : float
+    theta : float
         rotation angle
 
     Returns
@@ -20,8 +20,8 @@ def rot(a, Theta):
     rot_mat : numpy array
         a rotation matrix
     """
-    c = float(cos(Theta))
-    s = float(sin(Theta))
+    c = float(cos(theta))
+    s = float(sin(theta))
     a = a / norm(a)
     ax, ay, az = a
     return np.array([[c + ax * ax * (1 - c), ax * ay * (1 - c) - az * s,
