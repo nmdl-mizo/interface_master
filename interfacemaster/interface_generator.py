@@ -1542,7 +1542,6 @@ class core:
             if not abs(det(calc.U1)) <= self.sgm1:
                 file.write('sigma too large \n')
                 continue
-            found = True
             file.write('--------------------------------\n')
             file.write('Congrates, we found an appx CSL!\n')
             sigma1 = int(abs(np.round(det(calc.U1))))
@@ -1558,7 +1557,7 @@ class core:
             if self.verbose:
                 self._print_found_csl(sigma1, sigma2, D)
             break
-        if not found:
+        else:
             print(
                 'failed to find a satisfying appx CSL. '
                 'Try to adjust the limits according '
@@ -1639,9 +1638,8 @@ class core:
             for N in range(1, self.sgm2 + 1):
                 tol = integer_tol
                 U_p = np.round(N * U) / N
-                one_v = array([0, 0, 1])
                 if not (np.all((abs(U_p - U)) < self.du)
-                        and np.all(abs(U_p[:, 2] - one_v) < 1e-6)):
+                        and np.all(abs(U_p[:, 2] - array([0, 0, 1])) < 1e-6)):
                     continue
                 file.write('    N= ' + str(N) + " accepted" + '\n')
                 R_p = three_dot(a1, U_p, inv(a2_0))
