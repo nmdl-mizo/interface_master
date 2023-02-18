@@ -67,9 +67,7 @@ def get_unit_mtx(lattice):
     lattice_return : numpy array
         basis set of a unit lattice
     """
-    lattice_return = np.eye(3, 3)
-    for i in range(3):
-        lattice_return[:, i] = lattice[:, i] / norm(lattice[:, i])
+    lattice_return = np.array([v / norm(v) for v in lattice.T]).T
     return lattice_return
 
 
