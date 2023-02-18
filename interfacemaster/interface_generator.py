@@ -319,7 +319,7 @@ def write_POSCAR(lattice, atoms, elements, filename='POSCAR'):
         num_list.append(len(atoms_this_element))
 
     if len(element_species) > 1:
-        atoms = np.array([[0, 0, 0]], dtype=float)
+        atoms = np.zeros(3)
         for i in atoms_list:
             atoms = np.vstack((atoms, i))
         atoms = np.delete(atoms, 0, axis=0)
@@ -1263,7 +1263,7 @@ class core:
         self.sgm1 = 100  # sigma 1
         self.sgm2 = 100  # sigma 2
         self.R = np.eye(3)  # rotation matrix
-        self.axis = np.array([0.0, 0.0, 0.0])  # rotation axis
+        self.axis = np.zeros(3)  # rotation axis
         self.theta = 0.0  # rotation angle
         self.U1 = np.eye(3)
         self.U2 = np.eye(3)
@@ -1301,7 +1301,7 @@ class core:
         self.atoms_2, self.elements_2 = get_sites_elements(self.structure_2)
         # save the information of the bicrystal box
         self.lattice_bi = np.eye(3)
-        self.atoms_bi = np.array([0.0, 0.0, 0.0])
+        self.atoms_bi = np.zeros(3)
         self.elements_bi = []
         # whether the bicrystal supercell is orthogonal
         self.bicrystal_ortho = False
@@ -1859,11 +1859,11 @@ class core:
             KTI, default False
         """
         if dydz is None:
-            dydz = np.array([0.0, 0.0, 0.0])
+            dydz = np.zeros(3)
         if xyz_1 is None:
-            xyz_1 = [1, 1, 1]
+            xyz_1 = np.ones(3)
         if xyz_2 is None:
-            xyz_2 = [1, 1, 1]
+            xyz_2 = np.ones(3)
         # get the atoms in the primitive cell
         lattice_1, atoms_1, elements_1 = (
             self.lattice_1.copy(), self.atoms_1.copy(), self.elements_1.copy())
