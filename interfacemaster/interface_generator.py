@@ -965,7 +965,6 @@ def Xs_Ys_cell(lattice):
     get the Xs and Ys arrays to draw a cell for a given lattice
     """
     # four verticies
-    P1 = np.array([0, 0, 0])
     P2 = lattice[:, 1]
     P3 = lattice[:, 1] + lattice[:, 2]
     P4 = lattice[:, 2]
