@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Sample symmetric-tilt grain boundary</h1>
+
+{% with messages = get_flashed_messages() %}
+    {% for message in messages %}
+        <li>
+            <i>
+                <font color="orange">{{ message }}</font>
+            </i>
+        </li>
+    {% endfor %}
+{% endwith %}
+
+<form method = post enctype = multipart/form-data>
+<label for="title">Calculate CSLs for symmetric-tilt grain boundary</label>
+<br><label for="cif file">crystal CIF file: </label>
+    <input type=file name = file>
+<br>
+<br><label for="v1">v1: </label>
+<input type="text" name="v1" value="1, -1, 0">
+<br><label for="hkl1">hkl1: </label>
+<input type="text" name="hkl1" value="1, 1, -2">
+<br><label for="v2">v2: </label>
+<input type="text" name="v2" value="-1, -2, 0">
+<br><label for="hkl2">hkl2: </label>
+<input type="text" name="hkl2" value="-2, 1, -2">
+<br>
+<br><label for="du">du: </label>
+<input type="number" name="du" value="0.001", step="0.0001">
+<br><label for="S">S: </label>
+<input type="number" name="S" value="0.001", step="0.0001">
+<br><label for="maxsigma1">maxsigma1: </label>
+<input type="number" name="maxsigma1" value="100">
+<br><label for="maxsigma2">maxsigma2: </label>
+<input type="number" name="maxsigma2" value="100">
+<br><label for="dd">dd: </label>
+<input type="number" name="dd" value="0.001", step="0.0001">
+<br><input type = submit value = Submit>
+</form>
+{% endblock %}

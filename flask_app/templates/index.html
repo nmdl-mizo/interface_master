@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>interfacemaster app</h1>
+
+<form method = post enctype = multipart/form-data>
+<label for="title">Calculate interface</label>
+<p><label for="crystal 1">lattice 1: </label>
+    <input type=file name = file1>
+<p><label for="crystal 2">lattice 2: </label>
+    <input type=file name = file2>
+<p><label for="axis">axis: </label>
+<input type="text" name="axis">
+<p><input type = submit value = Submit>
+</form>
+
+{% endblock %}

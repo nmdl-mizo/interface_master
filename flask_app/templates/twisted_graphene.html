@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Twisted bilayer graphene</h1>
+
+<form method = post enctype = multipart/form-data>
+<label for="title">Calculate CSLs for twisted bilayer graphene</label>
+<p><label for="graphene cif file">graphene CIF file: </label>
+    <input type=file name = file>
+<p><label for="maxsigma">maxsigma: </label>
+<input type="number" name="maxsigma" value="2500">
+<p><input type = submit value = Submit>
+</form>
+
+{% endblock %}
