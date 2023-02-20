@@ -225,3 +225,40 @@ def get_sample_stgb(request: Request):
             "request": request,
         }
     )
+
+
+@app.get("/show_model", response_class=HTMLResponse)
+def get_show_model(request: Request):
+    return templates.TemplateResponse(
+        "show_model.html",
+        {
+            "request": request,
+        }
+    )
+
+@app.post("/show_model", response_class=HTMLResponse)
+async def post_show_model(
+    upload_file: UploadFile | None = None,
+    request: Request = {}
+):
+    filename = get_upload_file(
+        upload_file=upload_file,
+        default_file='C_mp-990448_conventional_standard.cif'
+    )
+    import ase.io
+    from ase.io import x3d
+    atoms = ase.io.read(filename)
+    from ase.build import make_supercell
+    multiplier = np.identity(3) * 2
+    atoms = make_supercell(atoms, multiplier)
+    with io.StringIO() as io_object:
+        x3d.write_html(io_object, atoms)
+        result = io_object.getvalue()
+    print("finished")
+    return templates.TemplateResponse(
+        "show_model.html",
+        {
+            "result": result,
+            "request": request
+        }
+    )

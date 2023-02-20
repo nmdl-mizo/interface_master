@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Show graphene</h1>
+
+<form method = post enctype = multipart/form-data>
+<label for="title" class="form-label">Show model</label>
+<div class="mb-3">
+<label for="graphene cif file" class="form-label">graphene CIF file</label>
+<input type="file" name="upload_file" class="form-control">
+<div id="cifHelp" class="form-text">Only "*.cif" is acceptable. If not specified, default file is used.</div>
+</div>
+<button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{{ result | safe }}
+
+{% endblock %}
