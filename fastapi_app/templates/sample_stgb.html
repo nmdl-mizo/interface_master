@@ -7,8 +7,10 @@
 <div class="row align-items-start">
     <div class="col">
         <div class="mb-3">
-        <label for="cif file" class="form-label">crystal CIF file: </label>
-        <input type="file" name="upload_file" class="form-control">
+        <label for="cif file 1" class="form-label">crystal CIF file: </label>
+        <input type="file" name="upload_file_1" class="form-control">
+        <label for="cif file 2" class="form-label">crystal CIF file: </label>
+        <input type="file" name="upload_file_2" class="form-control">
         </div>
         <div class="mb-3">
         <label for="v1" class="form-label">v1: </label>
@@ -51,5 +53,9 @@
     </div>
 </div>
 <button type="submit" class="btn btn-primary">Submit</button>
+
+<div class="row align-items-start">
+{{ result | safe }}
+</div>
 </form>
 {% endblock %}

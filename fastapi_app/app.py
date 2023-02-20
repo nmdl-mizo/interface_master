@@ -7,7 +7,6 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from fastapi.requests import Request
 
-from werkzeug.utils import secure_filename
 from interfacemaster.interface_generator import core, get_disorientation
 from interfacemaster.symmetric_tilt import get_csl_twisted_graphenes
 
@@ -56,6 +55,34 @@ def get_product(request: Request):
     )
 
 
+def get_upload_file(
+    upload_file: UploadFile | None = None,
+    default_file: str | None = None,
+    verbose: bool = True
+):
+    if upload_file.filename == "":
+        if default_file is None:
+            raise RuntimeError(
+                "No file uploaded and no default file specified!")
+        filename = os.path.join(
+            CIF_DIR,
+            default_file)
+        if verbose:
+            print(f"use default file {filename}")
+    else:
+        if not upload_file.filename.endswith(".cif"):
+            raise RuntimeError("the file is not CIF!")
+        filename = os.path.join(
+            UPLOAD_DIR,
+            upload_file.filename
+        )
+        with open(filename, 'w+b') as buffer:
+            shutil.copyfileobj(upload_file.file, buffer)
+        if verbose:
+            print(f"use upload file {filename}")
+    return filename
+
+
 @app.post("/twisted_graphene", response_class=HTMLResponse)
 async def show_product(
     upload_file: UploadFile | None = None,
@@ -63,22 +90,10 @@ async def show_product(
     maxsigma: str = Form(...),
     request: Request = {}
 ):
-    if upload_file.filename == "":
-        filename = os.path.join(
-            CIF_DIR,
-            'C_mp-990448_conventional_standard.cif')
-        print("use default file")
-    else:
-        if not upload_file.filename.endswith(".cif"):
-            raise RuntimeError("the file is not CIF!")
-        filename = os.path.join(
-            UPLOAD_DIR,
-            secure_filename(upload_file.filename)
-        )
-        with open(filename, 'w+b') as buffer:
-            shutil.copyfileobj(upload_file.file, buffer)
-        print("use upload file")
-    print(filename)
+    filename = get_upload_file(
+        upload_file=upload_file,
+        default_file='C_mp-990448_conventional_standard.cif'
+    )
     sigmas, thetas, A_cnid, anum = get_csl_twisted_graphenes(
         lim=int(lim),
         filename=filename,
@@ -116,9 +131,17 @@ async def show_product(
     )
 
 
+def show_matrix(m, format=".0f"):
+    return "\\begin{bmatrix}" \
+        + "\\\\".join(['&'.join([f'{value:{format}}' for value in row]) for row in m]) \
+        + "\\end{bmatrix}"
+
+
+
 @app.post("/sample_stgb", response_class=HTMLResponse)
 async def post_sample_stgb(
-    upload_file: UploadFile | None = None,
+    upload_file_1: UploadFile | None = None,
+    upload_file_2: UploadFile | None = None,
     v1: str = Form(...),
     hkl1: str = Form(...),
     v2: str = Form(...),
@@ -130,30 +153,20 @@ async def post_sample_stgb(
     dd: str = Form(...),
     request: Request = {}
 ):
-    if not upload_file:
-        filename = os.path.join(
-            CIF_DIR,
-            'C_mp-990448_conventional_standard.cif')
-        print("use default file")
-    elif upload_file.filename == "":
-        filename = os.path.join(
-            CIF_DIR,
-            'C_mp-990448_conventional_standard.cif')
-        print("use default file")
+    filename_1 = get_upload_file(
+        upload_file=upload_file_1,
+        default_file='C_mp-990448_conventional_standard.cif'
+    )
+    if upload_file_2.filename == "":
+        filename_2 = filename_1
     else:
-        if not upload_file.filename.endswith(".cif"):
-            raise RuntimeError("the file is not CIF!")
-        filename = os.path.join(
-            UPLOAD_DIR,
-            secure_filename(upload_file.filename)
+        filename_2 = get_upload_file(
+            upload_file=upload_file_2,
         )
-        with open(filename, 'w+b') as buffer:
-            shutil.copyfileobj(upload_file.file, buffer)
-        print("use upload file")
-    print(filename)
+
     try:
         my_interface = core(
-            file_1=filename, file_2=filename
+            file_1=filename_1, file_2=filename_2
         )
         # get the rotation mtx
         v1 = list(map(int, v1.split(",")))
@@ -176,14 +189,19 @@ async def post_sample_stgb(
         my_interface.search_fixed(R)
         sigma1 = int(abs(np.round(det(my_interface.U1))))
         sigma2 = int(abs(np.round(det(my_interface.U2))))
+        volume = int(abs(np.round(det(my_interface.CSL))))
         result = (
-            f"CSL:<br>{'<br>'.join([f'{v}' for v in my_interface.CSL])}"
-            f"<br>U1: {my_interface.U1}, Sigma1: {sigma1}"
-            f"<br>U2: {my_interface.U2}, Sigma1: {sigma2}"
-            f"<br>D: {my_interface.D}, det(D): {det(my_interface.D)}"
+            f"\\(volume = {volume}\\)"
+            f"\\(CSL = {show_matrix(my_interface.CSL, format='.4g')}\\)"
+            f"\\(\\Sigma_1 = {sigma1}, "
+            f"U_1 = {show_matrix(my_interface.U1)}\\)"
+            f"\\(\\Sigma_2 = {sigma2}, "
+            f"U_2 = {show_matrix(my_interface.U2)}\\)"
+            f"\\(D = {show_matrix(my_interface.D, format='.4e')}\\)"
+            f"\\(\\det(D) = {det(my_interface.D)}\\)"
         )
         return templates.TemplateResponse(
-            "result.html",
+            "sample_stgb.html",
             {
                 "request": request,
                 "result": result
@@ -191,7 +209,7 @@ async def post_sample_stgb(
         )
     except Exception as ex:
         return templates.TemplateResponse(
-            "result.html",
+            "sample_stgb.html",
             {
                 "request": request,
                 "result": ex

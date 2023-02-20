@@ -2,3 +2,4 @@ ipykernel
 sphinx
 git+https://github.com/pydata/pydata-sphinx-theme
 nbsphinx
+pre-commit
