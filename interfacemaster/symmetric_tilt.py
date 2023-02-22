@@ -61,7 +61,7 @@ def get_hkl(P, axis, tol=1e-3):
     return MID(lattice=np.eye(3, 3), n=n, tol=tol)
 
 
-def sample_STGB(axis, lim, maxsigma, max_index):
+def sample_STGB(filename, axis, lim, maxsigma, max_index):
     """
     sampling the symmetric tilt GBs for a given rotation axis
 
@@ -77,6 +77,8 @@ def sample_STGB(axis, lim, maxsigma, max_index):
                maximum value of miller indices
     Returns
     __________
+    filename: str
+            path to the CIF file
     list1 : numpy array
            angle list
     list2 : numpy array
@@ -84,7 +86,7 @@ def sample_STGB(axis, lim, maxsigma, max_index):
     list3 : numpy array
            hkl list
     """
-    Ps, sigmas, thetas, _ = get_Ps_sigmas_thetas(lim, axis)
+    Ps, sigmas, thetas, _ = get_Ps_sigmas_thetas(filename, lim, axis)
     sampled_indices = np.where((sigmas < maxsigma))[0]
     Ps = Ps[sampled_indices]
     sigmas = sigmas[sampled_indices]
@@ -202,11 +204,12 @@ def get_csl_twisted_graphenes(lim, filename, maxsigma=100, verbose=True):
     return sigmas, thetas, A_cnid, anum
 
 
-def get_Ps_sigmas_thetas(lim, axis, maxsigma=100000):
+def get_Ps_sigmas_thetas(filename, lim, axis, maxsigma=100000):
     """
     get the geometric information of all the symmetric tilt GBs
     for a rotation axis within a searching limitation
     arguments:
+    filename --- cif filename
     lim --- control the number of generated referring points
     axis --- rotation axis
     maxsigma --- maximum sigma
@@ -261,9 +264,9 @@ def get_Ps_sigmas_thetas(lim, axis, maxsigma=100000):
         P1 = np.dot(basis1, indice.T).T
         basis2 = np.column_stack(
             (
-                [-1 / 2, 0, 1 / 2] * 3 - [-1, 1 / 2, 1 / 2],
-                [-1 / 2, 0, 1 / 2],
-                [1, 1, 1]
+                np.array([-1 / 2, 0, 1 / 2]) * 3 - np.array([-1, 1 / 2, 1 / 2]),
+                np.array([-1 / 2, 0, 1 / 2]),
+                np.array([1, 1, 1])
             ))
         P2 = np.dot(basis2, indice.T).T
         P = np.vstack((P1, P2))
@@ -271,9 +274,11 @@ def get_Ps_sigmas_thetas(lim, axis, maxsigma=100000):
             np.arccos(np.dot(P1, [-1, 1 / 2, 1 / 2])
                       / norm(P1, axis=1) / norm([-1, 1 / 2, 1 / 2]))
         sigmas = []
+        print(f"{thetas=}")
         for theta in thetas:
+            print(f"{theta=}")
             sigmas.append(compute_sigma(
-                np.array([1.0, 1.0, 1.0]), theta, maxsigma))
+                np.array([1.0, 1.0, 1.0]), theta, filename, maxsigma))
         sigmas = np.around(sigmas)
         sigmas = np.array(sigmas, dtype=int)
     else:

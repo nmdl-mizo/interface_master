@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Sample symmetric-tilt grain boundary</h1>
+
+<form method = post enctype = multipart/form-data>
+<label for="title" class="form-label">Calculate CSLs for symmetric-tilt grain boundary</label>
+<div class="row align-items-start">
+    <div class="col">
+        <div class="mb-3">
+        <label for="graphene cif file" class="form-label">CIF file</label>
+        <input type="file" name="upload_file" class="form-control">
+        <div id="cifHelp" class="form-text">Required. Only "*.cif" is acceptable.</div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="mb-3">
+        <label for="axis" class="form-label">axis</label>
+        <input type="text" name="axis" value="1, 1, 1" class="form-control">
+        </div>
+        <div class="mb-3">
+        <label for="lim" class="form-label">lim</label>
+        <input type="number" name="lim" value="10" class="form-control">
+        </div>
+        <div class="mb-3">
+        <label for="maxsigma" class="form-label">maxsigma</label>
+        <input type="number" name="maxsigma" value="100" class="form-control">
+        </div>
+        <div class="mb-3">
+        <label for="max_index" class="form-label">max_index</label>
+        <input type="number" name="max_index" value="10" class="form-control">
+        </div>
+    </div>
+</div>
+<button type="submit" class="btn btn-primary">Submit</button>
+
+<div class="row align-items-start">
+{{ result | safe }}
+</div>
+</form>
+{% endblock %}

@@ -8,7 +8,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.requests import Request
 
 from interfacemaster.interface_generator import core, get_disorientation
-from interfacemaster.symmetric_tilt import get_csl_twisted_graphenes
+from interfacemaster.symmetric_tilt import get_csl_twisted_graphenes, sample_STGB
 
 import numpy as np
 from numpy.linalg import det
@@ -136,6 +136,67 @@ def show_matrix(m, format=".0f"):
         + "\\\\".join(['&'.join([f'{value:{format}}' for value in row]) for row in m]) \
         + "\\end{bmatrix}"
 
+
+# Search STGB
+@app.get("/search_stgb", response_class=HTMLResponse)
+def get_search_stgb(request: Request):
+    return templates.TemplateResponse(
+        "search_stgb.html",
+        {
+            "request": request,
+        }
+    )
+
+
+@app.post("/search_stgb", response_class=HTMLResponse)
+async def post_search_stgb(
+    upload_file: UploadFile | None = None,
+    axis: str = Form(...),
+    lim: str = Form(...),
+    maxsigma: str = Form(...),
+    max_index: str = Form(...),
+    request: Request = {}
+):
+    filename = get_upload_file(
+        upload_file=upload_file,
+#        default_file='C_mp-990448_conventional_standard.cif'
+    )
+    sigmas, thetas, A_cnid, anum = sample_STGB(
+        filename=filename,
+        axis=list(map(int, axis.split(","))),
+        lim=int(lim),
+        maxsigma=int(maxsigma),
+        max_index=int(max_index),
+    )
+    df = pd.DataFrame(np.column_stack(
+        (sigmas, thetas / np.pi * 180, A_cnid, anum)),
+        index=np.arange(len(sigmas)) + 1,
+        columns=['sigma', 'thetas', 'CNID area', 'atom number'])
+    df['sigma'] = df['sigma'].astype('int')
+    df['atom number'] = df['atom number'].astype('int')
+    with io.StringIO() as io_object:
+        fig = px.scatter(
+            x=df["thetas"],
+            y=df["sigma"],
+            title="twisted angle vs Sigma value"
+        )
+        fig.write_html(io_object, full_html=False)
+        result = f"""
+        {io_object.getvalue()}
+        "
+        {df.to_html().replace(
+            'class="dataframe"',
+            'class="table table-hover table-striped table-bordered"'
+            )}
+        """
+    print("finished")
+    return templates.TemplateResponse(
+        "result.html",
+        {
+            "result": result,
+            "request": request
+        }
+    )
 
 
 @app.post("/sample_stgb", response_class=HTMLResponse)
