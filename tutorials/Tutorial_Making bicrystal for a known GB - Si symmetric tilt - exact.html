@@ -659,6 +659,81 @@ div.rendered_html tbody tr:hover {
 </style>
 <section id="Si-symmetric-tilt--exact">
 <h1>Si symmetric tilt -exact<a class="headerlink" href="#Si-symmetric-tilt--exact" title="Permalink to this heading">#</a></h1>
+<section id="import-&amp;-prepare">
+<h2>import &amp; prepare<a class="headerlink" href="#import-&-prepare" title="Permalink to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/nmdl-mizo/interface_master.git@develop
+<span class="o">!</span>mkdir<span class="w"> </span>-p<span class="w"> </span>cif_files
+<span class="o">!</span>curl<span class="w"> </span>https://raw.githubusercontent.com/nmdl-mizo/interface_master/develop/test_files/cif_files/Si_mp-149_conventional_standard.cif<span class="w"> </span>-o<span class="w"> </span><span class="s1">&#39;cif_files/Si_mp-149_conventional_standard.cif&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Defaulting to user installation because normal site-packages is not writeable
+Collecting git+https://github.com/nmdl-mizo/interface_master.git@develop
+  Cloning https://github.com/nmdl-mizo/interface_master.git (to revision develop) to /tmp/pip-req-build-_tof5zgf
+  Running command git clone --filter=blob:none --quiet https://github.com/nmdl-mizo/interface_master.git /tmp/pip-req-build-_tof5zgf
+  Resolved https://github.com/nmdl-mizo/interface_master.git to commit 2bdf96ed4835b036557ac18de82b4fa2afdabf24
+  Preparing metadata (setup.py) ... done
+Requirement already satisfied: pymatgen in /home/vscode/.local/lib/python3.10/site-packages (from interfacemaster==1.1.1) (2023.1.30)
+Requirement already satisfied: matplotlib in /home/vscode/.local/lib/python3.10/site-packages (from interfacemaster==1.1.1) (3.7.0)
+Requirement already satisfied: gb_code in /home/vscode/.local/lib/python3.10/site-packages (from interfacemaster==1.1.1) (1.0.0)
+Requirement already satisfied: numpy&gt;=1.14.0 in /home/vscode/.local/lib/python3.10/site-packages (from gb_code-&gt;interfacemaster==1.1.1) (1.24.2)
+Requirement already satisfied: contourpy&gt;=1.0.1 in /home/vscode/.local/lib/python3.10/site-packages (from matplotlib-&gt;interfacemaster==1.1.1) (1.0.7)
+Requirement already satisfied: packaging&gt;=20.0 in /usr/local/lib/python3.10/site-packages (from matplotlib-&gt;interfacemaster==1.1.1) (23.0)
+Requirement already satisfied: cycler&gt;=0.10 in /home/vscode/.local/lib/python3.10/site-packages (from matplotlib-&gt;interfacemaster==1.1.1) (0.11.0)
+Requirement already satisfied: pyparsing&gt;=2.3.1 in /home/vscode/.local/lib/python3.10/site-packages (from matplotlib-&gt;interfacemaster==1.1.1) (3.0.9)
+Requirement already satisfied: python-dateutil&gt;=2.7 in /usr/local/lib/python3.10/site-packages (from matplotlib-&gt;interfacemaster==1.1.1) (2.8.2)
+Requirement already satisfied: pillow&gt;=6.2.0 in /home/vscode/.local/lib/python3.10/site-packages (from matplotlib-&gt;interfacemaster==1.1.1) (9.4.0)
+Requirement already satisfied: kiwisolver&gt;=1.0.1 in /home/vscode/.local/lib/python3.10/site-packages (from matplotlib-&gt;interfacemaster==1.1.1) (1.4.4)
+Requirement already satisfied: fonttools&gt;=4.22.0 in /home/vscode/.local/lib/python3.10/site-packages (from matplotlib-&gt;interfacemaster==1.1.1) (4.38.0)
+Requirement already satisfied: monty&gt;=3.0.2 in /home/vscode/.local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (2022.9.9)
+Requirement already satisfied: ruamel.yaml&gt;=0.17.0 in /home/vscode/.local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (0.17.21)
+Requirement already satisfied: networkx&gt;=2.2 in /home/vscode/.local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (3.0)
+Requirement already satisfied: plotly&gt;=4.5.0 in /home/vscode/.local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (5.13.0)
+Requirement already satisfied: uncertainties&gt;=3.1.4 in /home/vscode/.local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (3.1.7)
+Requirement already satisfied: tqdm in /home/vscode/.local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (4.64.1)
+Requirement already satisfied: scipy&gt;=1.5.0 in /home/vscode/.local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (1.10.1)
+Requirement already satisfied: sympy in /home/vscode/.local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (1.11.1)
+Requirement already satisfied: requests in /usr/local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (2.28.2)
+Requirement already satisfied: spglib&gt;=2.0.2 in /home/vscode/.local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (2.0.2)
+Requirement already satisfied: palettable&gt;=3.1.1 in /home/vscode/.local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (3.3.0)
+Requirement already satisfied: pandas in /home/vscode/.local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (1.5.3)
+Requirement already satisfied: pybtex in /home/vscode/.local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (0.24.0)
+Requirement already satisfied: mp-api&gt;=0.27.3 in /home/vscode/.local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (0.30.10)
+Requirement already satisfied: tabulate in /home/vscode/.local/lib/python3.10/site-packages (from pymatgen-&gt;interfacemaster==1.1.1) (0.9.0)
+Requirement already satisfied: msgpack in /home/vscode/.local/lib/python3.10/site-packages (from mp-api&gt;=0.27.3-&gt;pymatgen-&gt;interfacemaster==1.1.1) (1.0.4)
+Requirement already satisfied: typing-extensions&gt;=3.7.4.1 in /home/vscode/.local/lib/python3.10/site-packages (from mp-api&gt;=0.27.3-&gt;pymatgen-&gt;interfacemaster==1.1.1) (4.5.0)
+Requirement already satisfied: setuptools in /usr/local/lib/python3.10/site-packages (from mp-api&gt;=0.27.3-&gt;pymatgen-&gt;interfacemaster==1.1.1) (65.5.1)
+Requirement already satisfied: emmet-core&gt;=0.39.8 in /home/vscode/.local/lib/python3.10/site-packages (from mp-api&gt;=0.27.3-&gt;pymatgen-&gt;interfacemaster==1.1.1) (0.44.0)
+Requirement already satisfied: tenacity&gt;=6.2.0 in /home/vscode/.local/lib/python3.10/site-packages (from plotly&gt;=4.5.0-&gt;pymatgen-&gt;interfacemaster==1.1.1) (8.2.1)
+Requirement already satisfied: six&gt;=1.5 in /usr/local/lib/python3.10/site-packages (from python-dateutil&gt;=2.7-&gt;matplotlib-&gt;interfacemaster==1.1.1) (1.16.0)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /usr/local/lib/python3.10/site-packages (from requests-&gt;pymatgen-&gt;interfacemaster==1.1.1) (3.4)
+Requirement already satisfied: certifi&gt;=2017.4.17 in /usr/local/lib/python3.10/site-packages (from requests-&gt;pymatgen-&gt;interfacemaster==1.1.1) (2022.12.7)
+Requirement already satisfied: charset-normalizer&lt;4,&gt;=2 in /usr/local/lib/python3.10/site-packages (from requests-&gt;pymatgen-&gt;interfacemaster==1.1.1) (3.0.1)
+Requirement already satisfied: urllib3&lt;1.27,&gt;=1.21.1 in /usr/local/lib/python3.10/site-packages (from requests-&gt;pymatgen-&gt;interfacemaster==1.1.1) (1.26.14)
+Requirement already satisfied: ruamel.yaml.clib&gt;=0.2.6 in /home/vscode/.local/lib/python3.10/site-packages (from ruamel.yaml&gt;=0.17.0-&gt;pymatgen-&gt;interfacemaster==1.1.1) (0.2.7)
+Requirement already satisfied: future in /home/vscode/.local/lib/python3.10/site-packages (from uncertainties&gt;=3.1.4-&gt;pymatgen-&gt;interfacemaster==1.1.1) (0.18.3)
+Requirement already satisfied: pytz&gt;=2020.1 in /usr/local/lib/python3.10/site-packages (from pandas-&gt;pymatgen-&gt;interfacemaster==1.1.1) (2022.7.1)
+Requirement already satisfied: latexcodec&gt;=1.0.4 in /home/vscode/.local/lib/python3.10/site-packages (from pybtex-&gt;pymatgen-&gt;interfacemaster==1.1.1) (2.0.1)
+Requirement already satisfied: PyYAML&gt;=3.01 in /usr/local/lib/python3.10/site-packages (from pybtex-&gt;pymatgen-&gt;interfacemaster==1.1.1) (6.0)
+Requirement already satisfied: mpmath&gt;=0.19 in /home/vscode/.local/lib/python3.10/site-packages (from sympy-&gt;pymatgen-&gt;interfacemaster==1.1.1) (1.2.1)
+Requirement already satisfied: pydantic&gt;=1.10.2 in /home/vscode/.local/lib/python3.10/site-packages (from emmet-core&gt;=0.39.8-&gt;mp-api&gt;=0.27.3-&gt;pymatgen-&gt;interfacemaster==1.1.1) (1.10.5)
+
+<span class="ansi-bold">[</span><span class="ansi-blue-fg">notice</span><span class="ansi-bold">]</span> A new release of pip available: <span class="ansi-red-fg">22.3.1</span> -&gt; <span class="ansi-green-fg">23.0.1</span>
+<span class="ansi-bold">[</span><span class="ansi-blue-fg">notice</span><span class="ansi-bold">]</span> To update, run: <span class="ansi-green-fg">pip install --upgrade pip</span>
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  1059  100  1059    0     0  22531      0 --:--:-- --:--:-- --:--:-- 22531
+</pre></div></div>
+</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -671,6 +746,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+</section>
 <section id="Define-an-interface-core-class">
 <h2>Define an interface core class<a class="headerlink" href="#Define-an-interface-core-class" title="Permalink to this heading">#</a></h2>
 <p>Input two cif files.For GBs, input the same file; for interfaces, input two different files.</p>
@@ -1008,6 +1084,7 @@ completed
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-&amp;-prepare">import &amp; prepare</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Define-an-interface-core-class">Define an interface core class</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Specify-the-rotation-axis-and-searching-parameters-to-find-an-approximate-CSL">Specify the rotation axis and searching parameters to find an approximate CSL</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Convert-the-miller-indices-to-be-expressed-in-the-primitive-cell">Convert the miller indices to be expressed in the primitive cell</a></li>
