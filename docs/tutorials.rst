@@ -1,6 +1,8 @@
 Tutorials
 ===========================================
 
+Tutorials are ready on `Google Colab <https://colab.research.google.com/github/nmdl-mizo/interface_master/blob/develop>`_.
+
 .. toctree::
    :caption: Making bicrystals of known GBs
    :maxdepth: 1
