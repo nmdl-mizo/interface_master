@@ -32,6 +32,8 @@ pip install .
 
 [Documentation including tutorials](https://nmdl-mizo.github.io/interface_master/) is available (only for development branch).
 
+Tutorials are ready on [Google Colab](https://colab.research.google.com/github/nmdl-mizo/interface_master/blob/develop).
+
 ## How to cite
  If you use the interface_master, please cite the following articles [1][2].  
 [1] "interface_master: Python package building CSL and approximate CSL interfaces of any two lattices -- an effective tool for interface engineers"  
