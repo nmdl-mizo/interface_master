@@ -727,16 +727,16 @@ Sigma:    97  Theta:  42.08
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#rotation matrix</span>
-<span class="n">R</span> <span class="o">=</span> <span class="n">rot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="mi">0</span><span class="o">/</span><span class="mi">180</span><span class="o">*</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">rot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="mf">36.87</span><span class="o">/</span><span class="mi">180</span><span class="o">*</span><span class="n">pi</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#take this as an &#39;exact&#39; CSL</span>
@@ -752,30 +752,31 @@ Sigma:    97  Theta:  42.08
 Congrates, we found an appx CSL!
 
 U1 =
-[[ 1 -1  0]
- [ 0  1  0]
- [ 0  0  1]]; sigma_1 = 1
+[[-1  2  1]
+ [ 1 -1  1]
+ [ 1  0 -2]]; sigma_1 = 5
 
 U2 =
-[[ 1 -1  0]
- [ 0  1  0]
- [ 0  0  1]]; sigma_2 = 1
+[[-1  2  0]
+ [ 1  0  1]
+ [ 1 -1 -2]]; sigma_2 = 5
 
 D =
 [[1. 0. 0.]
  [0. 1. 0.]
  [0. 0. 1.]]
 
+
 </pre></div></div>
 </div>
 <p>‘U1’, ‘U2’ are two sets of indices of the CSL in the two crystals’ frames, ‘D’ is the deformation applied to the crystal 2 to form an approximate CSL</p>
-<p>As you can see, to form a twinning structure we need to deform the structure provided!</p>
+<p>As you can see, no strain is applied to any crystal for this exact CSL</p>
 </section>
 <section id="Convert-the-miller-indices-to-be-expressed-in-the-primitive-cell">
 <h2>Convert the miller indices to be expressed in the primitive cell<a class="headerlink" href="#Convert-the-miller-indices-to-be-expressed-in-the-primitive-cell" title="Permalink to this heading">#</a></h2>
 <p>Now we need to specify the orientation of our interface, which is by giving a miller indices in expressed in the primitive cell.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
@@ -788,7 +789,7 @@ D =
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -801,7 +802,7 @@ array([ 0, -1, -1])
 <h2>Compute the indices of the two slabs to make bicrystal<a class="headerlink" href="#Compute-the-indices-of-the-two-slabs-to-make-bicrystal" title="Permalink to this heading">#</a></h2>
 <p>Now let’s compute the indices of the two slabs forming the interface If you want a near orthogonal bicrystal, please set ’orthogonal to yes, and adjust the lim &amp; tol.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">my_interface</span><span class="o">.</span><span class="n">compute_bicrystal</span><span class="p">(</span><span class="n">hkl</span><span class="p">,</span> <span class="n">normal_ortho</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">plane_ortho</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">lim</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">tol_ortho</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="n">tol_integer</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">)</span>
@@ -813,14 +814,15 @@ array([ 0, -1, -1])
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+hkl in CSL: [-2  1  1]
 cell 1:
-[[ 1  1  0]
- [-1  0 -1]
- [-1  0  1]]
+[[ 1 -1  2]
+ [-1  2  1]
+ [-1 -2 -1]]
 cell 2:
-[[ 1  1  0]
- [-1  0 -1]
- [-1  0  1]]
+[[ 1 -2  1]
+ [-1  1  2]
+ [-1 -1 -2]]
 </pre></div></div>
 </div>
 <p>Here we obtained the two sets of indices to build a bicrystal</p>

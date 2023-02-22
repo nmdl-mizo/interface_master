@@ -660,7 +660,7 @@ div.rendered_html tbody tr:hover {
 <section id="CIS-twinning---Approximate">
 <h1>CIS twinning - Approximate<a class="headerlink" href="#CIS-twinning---Approximate" title="Permalink to this heading">#</a></h1>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">interfacemaster.cellcalc</span> <span class="kn">import</span> <span class="n">get_primitive_hkl</span>
@@ -676,7 +676,7 @@ div.rendered_html tbody tr:hover {
 <p>The first structure is non-changed while the second one can be deformed to form an approximate CSL</p>
 <p>Please input files of CONVENTIONAL cells if you are not familiar with the indices in the primitive cell.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">my_interface</span> <span class="o">=</span> <span class="n">core</span><span class="p">(</span><span class="s1">&#39;cif_files/CIS-exp.cif&#39;</span><span class="p">,</span><span class="s1">&#39;cif_files/CIS-exp.cif&#39;</span><span class="p">)</span>
@@ -697,7 +697,7 @@ Warning!, this programme will rewrite the POSCAR file in this dir!
 <p>Rotation axis should be expressed in the primitive cell frame, we can convert this.</p>
 <p>For example we need an axis [2,-2,1] expressed in the conventional cell.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">axis</span> <span class="o">=</span> <span class="n">convert_vector_index</span><span class="p">(</span><span class="n">my_interface</span><span class="o">.</span><span class="n">conv_lattice_1</span><span class="p">,</span> <span class="n">my_interface</span><span class="o">.</span><span class="n">lattice_1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
@@ -706,7 +706,7 @@ Warning!, this programme will rewrite the POSCAR file in this dir!
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -715,10 +715,10 @@ array([ 3., -1.,  2.])
 </pre></div></div>
 </div>
 <p>For the meaning of searching parameters, please check the paper.</p>
-<p>If you are making an exact CSL, just set du, S &amp; dd to be ‘very small’.</p>
-<p>In this case we make a known twinning GB, which is an exact CSL.</p>
+<p>If you are making an exact CSL, please use the search_fixed() function setting ‘exact = True’</p>
+<p>In this case we make a known twinning GB, which is an approximate CSL.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">my_interface</span><span class="o">.</span><span class="n">parse_limit</span><span class="p">(</span><span class="n">du</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">,</span> <span class="n">S</span>  <span class="o">=</span> <span class="mf">1e-2</span><span class="p">,</span> <span class="n">sgm1</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sgm2</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">dd</span> <span class="o">=</span> <span class="mf">1e-2</span><span class="p">)</span>

@@ -9,7 +9,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": 2,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -41,7 +41,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": 3,
    "metadata": {},
    "outputs": [
     {
@@ -72,7 +72,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
+   "execution_count": 4,
    "metadata": {},
    "outputs": [
     {
@@ -108,7 +108,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 6,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -117,8 +117,15 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "To calculate an exact CSL, we use the search_fixed function by setting exact=True"
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": 7,
    "metadata": {},
    "outputs": [
     {
@@ -141,12 +148,12 @@
       "[[1. 0. 0.]\n",
       " [0. 1. 0.]\n",
       " [0. 0. 1.]]\n",
+      "\n",
       "\n"
      ]
     }
    ],
    "source": [
-    "axis = convert_vector_index(my_interface.conv_lattice_1, my_interface.lattice_1, [1,1,0])\n",
     "my_interface.parse_limit(du = 1e-2, S  = 1e-2, sgm1=100, sgm2=100, dd = 1e-2)\n",
     "my_interface.search_fixed(R, exact=True, tol = 1e-3)"
    ]
