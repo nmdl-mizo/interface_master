@@ -1921,7 +1921,6 @@ class core:
         # adjust the orientation
         lattice_1, self.orient = adjust_orientation(lattice_1)
         lattice_2 = np.dot(self.orient, lattice_2)
-
         write_POSCAR(lattice_1, atoms_1, elements_1, 'POSCAR')
         POSCAR_to_cif('POSCAR', 'cell_1.cif')
         self.slab_structure_1 = Structure.from_file(
@@ -1960,9 +1959,10 @@ class core:
             atoms_1 = np.dot(inv(lattice_bi), atoms_1.T).T
             atoms_2 = np.dot(inv(lattice_bi), atoms_2.T).T
         else:
-            lattice_bi[:, 0] = 2 * lattice_bi[:, 0]
-            atoms_1[:, 0] = atoms_1[:, 0] / 2
-            atoms_2[:, 0] = (atoms_2[:, 0] + 1) / 2
+            lth1, lth2 = norm(lattice_1[:, 0]), norm(lattice_2[:, 0])
+            lattice_bi[:, 0] = lattice_1[:, 0] + lattice_2[:,0]
+            atoms_1[:, 0] = atoms_1[:, 0] * lth1 / (lth1 + lth2)
+            atoms_2[:, 0] = (atoms_2[:, 0] * lth2 + lth1) / (lth1 + lth2)
 
         # excess volume
         if dx != 0:
