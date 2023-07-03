@@ -1,3 +1,2 @@
 pymatgen
 matplotlib
-gb_code

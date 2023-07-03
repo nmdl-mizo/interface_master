@@ -1,0 +1,84 @@
+name: create release draft and compile pdf
+
+on:
+  push:
+    branches:
+      - release
+    tags:
+      - '*'
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Upgrade pip
+        run: |
+          # install pip=>20.1 to use "pip cache dir"
+          python3 -m pip install --upgrade pip
+      - name: Get pip cache dir
+        id: pip-cache
+        run: echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install package
+        run: python3 -m pip install .
+
+      - name: Install sphinx
+        run: python3 -m pip install -r ./.devcontainer/requirements.txt
+
+      - name: Install pandoc
+        run: sudo apt-get install pandoc
+
+      - name: install texlive
+        run: sudo apt-get install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra latexmk 
+
+      - name: build tex files and compile pdf
+        run: sphinx-build -M latexpdf docs docs/_build
+
+      - name: upload pdf
+        uses: actions/upload-artifact@v3
+        with:
+          name: interface_master.pdf
+          path: docs/_build/latex/interfacemaster.pdf
+
+      - name: Create release draft
+        id: create_release
+        uses: actions/create-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          tag_name: ${{github.ref}}
+          release_name: Release ${{ github.ref }}
+          body: |
+            ${{github.ref}}
+          draft: True
+          prerelease: false
+
+      - name: upload release asset pdf
+        id: upload_release_asset_pdf
+        uses: actions/upload-release-asset@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: docs/_build/latex/interfacemaster.pdf
+          asset_name: pdf_document
+          asset_content_type: application/pdf
