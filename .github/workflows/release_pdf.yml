@@ -42,11 +42,10 @@ jobs:
       - name: Install sphinx
         run: python3 -m pip install -r ./.devcontainer/requirements.txt
 
-      - name: Install pandoc
-        run: sudo apt-get install pandoc
-
-      - name: install texlive
-        run: sudo apt-get install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra latexmk 
+      - name: install pandoc and texlive
+        run: |
+          sudo apt-get update
+          sudo apt-get install pandoc texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra latexmk 
 
       - name: build tex files and compile pdf
         run: sphinx-build -M latexpdf docs docs/_build
