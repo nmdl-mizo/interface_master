@@ -45,7 +45,7 @@ jobs:
       - name: install pandoc and texlive
         run: |
           sudo apt-get update
-          sudo apt-get install pandoc install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra latexmk 
+          sudo apt-get install pandoc texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra latexmk 
 
       - name: build tex files and compile pdf
         run: sphinx-build -M latexpdf docs docs/_build
