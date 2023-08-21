@@ -45,7 +45,9 @@ jobs:
         run: python3 -m pip install .
 
       - name: Install pandoc
-        run: sudo apt-get install pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install pandoc
 
       - name: Install sphinx
         run: python3 -m pip install -r ./.devcontainer/requirements.txt
