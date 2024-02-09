@@ -8,7 +8,7 @@ A python package building CSL or approximate CSL interfaces of any two lattices 
 1. Searching for 3D and 2D CSLs by rotating along an axis;
 2. Build an approximate CSL interface according to a pre-determined approximate disorientation;
 3. Generate exact CSL interfaces;
-4. Sampling RBT in CNID
+4. Sampling Rigid Body Translation, aka, RBT in CNID
 
 ## Installation
 ```bash
