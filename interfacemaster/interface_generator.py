@@ -196,8 +196,6 @@ def get_sites_elements(structure):
         Fractional coordinates of the atoms in the primitive cell.
     elements : numpy array
         Element symbols of the atoms.
-    species_strings : numpy array
-        Species strings of the atoms.
     """
     # Ensure we are working with the primitive cell of the given structure
     primitive_structure = structure.get_primitive_structure()
@@ -208,10 +206,7 @@ def get_sites_elements(structure):
     # Extract the element symbols of all atoms
     elements = np.array([site.specie.symbol for site in primitive_structure.sites])
 
-    # Additionally extract species string of all atoms
-    species_strings = np.array([site.species_string for site in primitive_structure.sites])
-
-    return atoms, elements, species_strings
+    return atoms, elements
 
 
 def POSCAR_to_cif(Poscar_name, Cif_name):
@@ -443,7 +438,7 @@ def get_array_bounds(U):
     return indice
 
 
-def super_cell(U, lattice, Atoms, elements):
+def super_cell(U, lattice, atoms, elements):
     """
     make supercell
 
@@ -451,6 +446,8 @@ def super_cell(U, lattice, Atoms, elements):
     ----------
     U : numpy array
         coefficients of the LC of three vectors from the basis
+    lattice : numpy array
+        lattice matrix 
     atoms : numpy array
         fractional coordinates of atoms
     elements : numpy array
@@ -468,22 +465,22 @@ def super_cell(U, lattice, Atoms, elements):
     indice = get_array_bounds(U)
 
     # 1.get atoms
-    Atoms = Atoms.repeat(len(indice), axis=0) + \
-        np.tile(indice, (len(Atoms), 1))
+    atoms = atoms.repeat(len(indice), axis=0) + \
+        np.tile(indice, (len(atoms), 1))
     elements = elements.repeat(len(indice))
     tol = 1e-10
 
     # 3.delete atoms dropping outside
-    Atoms = np.dot(inv(U), Atoms.T).T
-    Atoms_try = Atoms.copy() + [tol, tol, tol]
-    con = (Atoms_try[:, 0] < 1) & (Atoms_try[:, 0] >= 0) \
-        & (Atoms_try[:, 1] < 1) & (Atoms_try[:, 1] >= 0) \
-        & (Atoms_try[:, 2] < 1) & (Atoms_try[:, 2] >= 0)
+    atoms = np.dot(inv(U), atoms.T).T
+    atoms_try = atoms.copy() + [tol, tol, tol]
+    con = (atoms_try[:, 0] < 1) & (atoms_try[:, 0] >= 0) \
+        & (atoms_try[:, 1] < 1) & (atoms_try[:, 1] >= 0) \
+        & (atoms_try[:, 2] < 1) & (atoms_try[:, 2] >= 0)
     indices = np.where(con)[0]
-    Atoms = Atoms[indices]
+    atoms = atoms[indices]
     elements = elements[indices]
     lattice = np.dot(lattice, U)
-    return Atoms, elements, lattice
+    return lattice, atoms, elements
 
 
 def shift_termi_left(lattice, dp, atoms, elements):
@@ -1300,8 +1297,8 @@ class core:
         self.slab_lattice_2 = np.eye(3)
         self.a2_transform = np.eye(3)
         # get the atoms in the primitive cell
-        self.atoms_1, self.elements_1, self.species_string_1 = get_sites_elements(self.structure_1)
-        self.atoms_2, self.elements_2, self.species_string_2 = get_sites_elements(self.structure_2)
+        self.atoms_1, self.elements_1 = get_sites_elements(self.structure_1)
+        self.atoms_2, self.elements_2 = get_sites_elements(self.structure_2)
         # save the information of the bicrystal box
         self.lattice_bi = np.eye(3)
         self.atoms_bi = np.zeros(3)
@@ -1866,10 +1863,10 @@ class core:
         if xyz_2 is None:
             xyz_2 = np.ones(3)
         # get the atoms in the primitive cell
-        lattice_1, atoms_1, elements_1, species_string_1 = (
-            self.lattice_1.copy(), self.atoms_1.copy(), self.elements_1.copy(), self.species_string_1.copy())
-        lattice_2, atoms_2, elements_2, species_string_2 = (
-            self.lattice_2.copy(), self.atoms_2.copy(), self.elements_2.copy(), self.species_string_2.copy())
+        lattice_1, atoms_1, elements_1 = (
+            self.lattice_1.copy(), self.atoms_1.copy(), self.elements_1.copy())
+        lattice_2, atoms_2, elements_2 = (
+            self.lattice_2.copy(), self.atoms_2.copy(), self.elements_2.copy())
 
         # deform & rotate lattice_2
         if two_D:
@@ -1877,10 +1874,10 @@ class core:
         else:
             lattice_2 = three_dot(self.R, self.D, lattice_2)
         # make supercells of the two slabs
-        atoms_1, elements_1, lattice_1 = super_cell(
+        lattice_1, atoms_1, elements_1 = super_cell(
             self.bicrystal_U1, lattice_1, atoms_1, elements_1)
         if not mirror:
-            atoms_2, elements_2, lattice_2 = super_cell(
+            lattice_2, atoms_2, elements_2 = super_cell(
                 self.bicrystal_U2, lattice_2, atoms_2, elements_2)
         else:
             eps = 0.000001
@@ -1983,7 +1980,6 @@ class core:
 
         # combine the two slabs
         elements_bi = np.append(elements_1, elements_2)
-        species_string_bi = np.append(species_string_1, species_string_2)
         atoms_bi = np.vstack((atoms_1, atoms_2))
 
         # wrap the periodic boundary condition
@@ -1997,7 +1993,6 @@ class core:
         self.lattice_bi = lattice_bi
         self.atoms_bi = atoms_bi
         self.elements_bi = elements_bi
-        self.species_string_bi = species_string_bi
         
         # Directly creating the Structure object in memory to reduce disk I/O 
         # and improve efficiency. Both lines are equivalent and avoid the need 
@@ -2316,7 +2311,7 @@ class core:
 
 
 def terminates_scanner_slab_structure(structure, hkl):
-    atoms, elements, species_string = get_sites_elements(structure)
+    atoms, elements = get_sites_elements(structure)
     lattice = structure.lattice.matrix.T
     plane_B = get_pri_vec_inplane(hkl, lattice)
     d = d_hkl(lattice, hkl)
@@ -2329,7 +2324,7 @@ def terminates_scanner_slab_structure(structure, hkl):
     print(
         f'plane basis: \n{str(U[:,[1,2]])}\n'
         f'length: {str(norm(supercell[:,1]))} {str(norm(supercell[:,2]))}')
-    atoms, elements, lattice = super_cell(U, lattice, atoms, elements)
+    lattice, atoms, elements = super_cell(U, lattice, atoms, elements)
     write_POSCAR(lattice, atoms, elements, 'POSCAR_primitive')
     lattice, _ = adjust_orientation(lattice)
     plane_list, element_list, _, dp_list = terminates_scanner_left(
@@ -2393,7 +2388,7 @@ def get_surface_slab(
     """
     if replica is None:
         replica = [1, 1, 1]
-    atoms, elements, species_string = get_sites_elements(structure)
+    atoms, elements = get_sites_elements(structure)
     lattice = structure.lattice.matrix.T
     plane_B = get_pri_vec_inplane(hkl, lattice)
     if plane_normal and (
@@ -2409,7 +2404,7 @@ def get_surface_slab(
     print(
         f'plane basis: \n{str(U[:,[1,2]])}\n'
         f'length: {str(norm(supercell[:,1]))} {str(norm(supercell[:,2]))}')
-    atoms, elements, lattice = super_cell(U, lattice, atoms, elements)
+    lattice, atoms, elements = super_cell(U, lattice, atoms, elements)
     lattice, _ = adjust_orientation(lattice)
     if not np.all(replica == 1):
         lattice, atoms, elements = cell_expands(
