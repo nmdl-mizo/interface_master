@@ -197,16 +197,15 @@ def get_sites_elements(structure):
     elements : numpy array
         Element symbols of the atoms.
     """
+    # 还不清楚这里到底用不用转换：
     # Ensure we are working with the primitive cell of the given structure
-    #primitive_structure = structure.get_primitive_structure()
-    # 暂时不明白这里到底用不用转换：
-    primitive_structure = structure
-
+    #structure = structure.get_primitive_structure()
+    
     # Extract the fractional coordinates of all atoms
-    atoms = np.array([site.frac_coords for site in primitive_structure.sites])
+    atoms = np.array([site.frac_coords for site in structure.sites])
 
     # Extract the element symbols of all atoms
-    elements = np.array([site.specie.symbol for site in primitive_structure.sites])
+    elements = np.array([site.specie.symbol for site in structure.sites])
 
     return atoms, elements
 
