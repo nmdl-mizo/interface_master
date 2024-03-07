@@ -5,7 +5,7 @@ interface_generator.py
 import os
 from numpy.linalg import det, norm, inv
 from numpy import (cross, cos, sin, array, column_stack,
-                   eye, arccos, around, sqrt)
+                   eye, arccos, around, sqrt, dot)
 from pymatgen.core.structure import Structure
 import numpy as np
 from interfacemaster.cellcalc import (
@@ -674,10 +674,10 @@ def surface_vacuum(lattice_1, lattice_bi, atoms_bi, vx):
     #n = cross(lattice_1[:, 1], lattice_1[:, 2])
     #normal_shift = vx / ang(lattice_1[:, 0], n) / norm(lattice_1[:, 0])
     atoms_cart = dot(lattice_bi, atoms_bi.T).T
-    lattice_bi[:, 0] = lattice_bi[:, 0] * (1 + vx / norm(lattice_bi[:, 0])
-    atoms_bi = dot(inv(lattice_bi), atoms_cart).T
+    lattice_bi[:, 0] = lattice_bi[:, 0] * (1 + vx / norm(lattice_bi[:, 0]))
+    atoms_bi = dot(inv(lattice_bi), atoms_cart.T).T
     #atoms_bi[:, 0] = 1 / (1 + normal_shift) * atoms_bi[:, 0]
-
+    return atoms_bi, lattice_bi
 
 def unit_cell_axis(axis):
     """
@@ -1986,7 +1986,7 @@ class core:
         atoms_bi[:, 2] = atoms_bi[:, 2] - np.floor(atoms_bi[:, 2])
         # vacummn
         if vx > 0:
-            surface_vacuum(lattice_1, lattice_bi, atoms_bi, vx)
+            atoms_bi, lattice_bi = surface_vacuum(lattice_1, lattice_bi, atoms_bi, vx)
 
         # save
         self.lattice_bi = lattice_bi
@@ -2405,7 +2405,7 @@ def get_surface_slab(
         atoms = shift_none_copy(lattice, termi_shift, atoms)
 
     if vacuum_height > 0:
-        surface_vacuum(lattice, lattice, atoms, vacuum_height)
+        atoms, lattice = surface_vacuum(lattice, lattice, atoms, vacuum_height)
 
     write_POSCAR(lattice, atoms, elements, 'POSCAR')
     slab_structure = Structure.from_file('POSCAR', sort=False, merge_tol=0.0)
