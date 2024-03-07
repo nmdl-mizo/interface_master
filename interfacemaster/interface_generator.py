@@ -671,10 +671,12 @@ def surface_vacuum(lattice_1, lattice_bi, atoms_bi, vx):
     vx : float
         length of the vacuum bulk with units as lattice para
     """
-    n = cross(lattice_1[:, 1], lattice_1[:, 2])
-    normal_shift = vx / ang(lattice_1[:, 0], n) / norm(lattice_1[:, 0])
-    lattice_bi[:, 0] = lattice_bi[:, 0] * (1 + normal_shift)
-    atoms_bi[:, 0] = 1 / (1 + normal_shift) * atoms_bi[:, 0]
+    #n = cross(lattice_1[:, 1], lattice_1[:, 2])
+    #normal_shift = vx / ang(lattice_1[:, 0], n) / norm(lattice_1[:, 0])
+    atoms_cart = dot(lattice_bi, atoms_bi.T).T
+    lattice_bi[:, 0] = lattice_bi[:, 0] * (1 + vx / norm(lattice_bi[:, 0])
+    atoms_bi = dot(inv(lattice_bi), atoms_cart).T
+    #atoms_bi[:, 0] = 1 / (1 + normal_shift) * atoms_bi[:, 0]
 
 
 def unit_cell_axis(axis):
