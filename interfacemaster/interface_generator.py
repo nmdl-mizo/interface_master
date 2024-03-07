@@ -1877,11 +1877,11 @@ class core:
         # adjust the orientation
         lattice_1, self.orient = adjust_orientation(lattice_1)
         lattice_2 = np.dot(self.orient, lattice_2)
-        Poscar(Structure(lattice_1, elements_1, atoms_1, coords_are_cartesian=False)).write_file('POSCAR')
+        Poscar(Structure(lattice_1.T, elements_1, atoms_1, coords_are_cartesian=False)).write_file('POSCAR')
         POSCAR_to_cif('POSCAR', 'cell_1.cif')
         self.slab_structure_1 = Structure.from_file(
             'POSCAR', sort=False, merge_tol=0.0)
-        Poscar(Structure(lattice_2, elements_2, atoms_2, coords_are_cartesian=False)).write_file('POSCAR')
+        Poscar(Structure(lattice_2.T, elements_2, atoms_2, coords_are_cartesian=False)).write_file('POSCAR')
         POSCAR_to_cif('POSCAR', 'cell_2.cif')
         self.slab_structure_2 = Structure.from_file(
             'POSCAR', sort=False, merge_tol=0.0)
@@ -1950,8 +1950,8 @@ class core:
         # Directly creating the Structure object in memory to reduce disk I/O 
         # and improve efficiency. Both lines are equivalent and avoid the need 
         # for intermediary file operations:
-        # self.bicrystal_structure = Structure(Lattice(lattice_bi), elements_bi, atoms_bi, coords_are_cartesian=False)
-        self.bicrystal_structure = Structure(lattice_bi, elements_bi, atoms_bi, coords_are_cartesian=False)
+        # self.bicrystal_structure = Structure(Lattice(lattice_bi.T), elements_bi, atoms_bi, coords_are_cartesian=False)
+        self.bicrystal_structure = Structure(lattice_bi.T, elements_bi, atoms_bi, coords_are_cartesian=False)
 
         if filetype == 'VASP':
             poscar = Poscar(self.bicrystal_structure)
@@ -2274,7 +2274,7 @@ def terminates_scanner_slab_structure(structure, hkl):
         f'plane basis: \n{str(U[:,[1,2]])}\n'
         f'length: {str(norm(supercell[:,1]))} {str(norm(supercell[:,2]))}')
     lattice, atoms, elements = super_cell(U, lattice, atoms, elements)
-    Poscar(Structure(lattice, elements, atoms, coords_are_cartesian=False)).write_file('POSCAR_primitive')
+    Poscar(Structure(lattice.T, elements, atoms, coords_are_cartesian=False)).write_file('POSCAR_primitive')
     lattice, _ = adjust_orientation(lattice)
     plane_list, element_list, _, dp_list = terminates_scanner_left(
         supercell, atoms, elements, d, round_n=5)
@@ -2365,7 +2365,7 @@ def get_surface_slab(
     if vacuum_height > 0:
         surface_vacuum(lattice, lattice, atoms, vacuum_height)
 
-    slab_structure = Structure(Lattice(lattice), elements, atoms, coords_are_cartesian=False)
+    slab_structure = Structure(lattice.T, elements, atoms, coords_are_cartesian=False)
     if filetype == 'VASP':
         poscar = Poscar(slab_structure)
         poscar.write_file(filename)        
