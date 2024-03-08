@@ -5,7 +5,7 @@ interface_generator.py
 import os
 from numpy.linalg import det, norm, inv
 from numpy import (cross, cos, sin, array, column_stack,
-                   eye, arccos, around, sqrt)
+                   eye, arccos, around, sqrt， dot)
 from pymatgen.core.lattice import Lattice
 from pymatgen.core.structure import Structure
 from pymatgen.io.vasp import Poscar
