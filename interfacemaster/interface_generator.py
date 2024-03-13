@@ -13,7 +13,7 @@ import numpy as np
 from interfacemaster.cellcalc import (
     MID, DSCcalc, get_primitive_hkl, get_right_hand, get_pri_vec_inplane,
     get_ortho_two_v, ang, get_normal_from_MI)
-
+from pymatgen.io.cif import CifWriter
 
 def get_disorientation(L1, L2, v1, hkl1, v2, hkl2):
     """
@@ -1847,7 +1847,9 @@ class core:
             # delete overwrapping atoms
             elements_2 = elements_2[np.where(atoms_2[:, 0] + eps < 1)]
             atoms_2 = atoms_2[atoms_2[:, 0] + eps < 1]
-
+        CifWriter(Structure(lattice_1.T, elements_1, atoms_1, coords_are_cartesian=False)).write_file('min_sub.cif')
+        CifWriter(Structure(lattice_2.T, elements_2, atoms_2, coords_are_cartesian=False)).write_file('min_film.cif')
+        
         # expansion
         if not (np.all(xyz_1 == 1) and np.all(xyz_2 == 1)):
             if not np.all([xyz_1[1], xyz_1[2]] == [xyz_2[1], xyz_2[2]]):
@@ -1858,7 +1860,7 @@ class core:
                                                           elements_1, xyz_1)
             lattice_2, atoms_2, elements_2 = cell_expands(lattice_2, atoms_2,
                                                           elements_2, xyz_2)
-
+        
         # termination
         if dp1 != 0:
             if KTI:
@@ -1877,11 +1879,11 @@ class core:
         lattice_1, self.orient = adjust_orientation(lattice_1)
         lattice_2 = np.dot(self.orient, lattice_2)
         Poscar(Structure(lattice_1.T, elements_1, atoms_1, coords_are_cartesian=False)).write_file('POSCAR')
-        POSCAR_to_cif('POSCAR', 'cell_1.cif')
+        POSCAR_to_cif('POSCAR', 'super_sub.cif')
         self.slab_structure_1 = Structure.from_file(
             'POSCAR', sort=False, merge_tol=0.0)
         Poscar(Structure(lattice_2.T, elements_2, atoms_2, coords_are_cartesian=False)).write_file('POSCAR')
-        POSCAR_to_cif('POSCAR', 'cell_2.cif')
+        POSCAR_to_cif('POSCAR', 'super_film.cif')
         self.slab_structure_2 = Structure.from_file(
             'POSCAR', sort=False, merge_tol=0.0)
         os.remove('POSCAR')
@@ -1929,7 +1931,7 @@ class core:
             dydz = np.dot(self.orient, dydz)
             plane_shift = np.dot(inv(lattice_bi), dydz)
             atoms_2 = atoms_2 + plane_shift
-
+        
         # combine the two slabs
         elements_bi = np.append(elements_1, elements_2)
         atoms_bi = np.vstack((atoms_1, atoms_2))
@@ -2202,7 +2204,8 @@ class core:
         # right_handed
         cell_1 = get_right_hand(cell_1)
         cell_2 = get_right_hand(cell_2)
-
+        self.height_1 = get_height(cell_1)
+        self.height_2 = get_height(cell_2)
         # supercell index
         self.bicrystal_U1 = np.dot(inv(self.lattice_1), cell_1)
         self.bicrystal_U2 = np.dot(inv(a2), cell_2)
