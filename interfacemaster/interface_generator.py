@@ -1192,25 +1192,20 @@ class core:
     Core class for dealing with an interface
     """
 
-    def __init__(self, file_1, file_2, prim_1=True, prim_2=True, verbose=True):
-        self.file_1 = file_1  # cif file name of lattice 1
-        self.file_2 = file_2  # cif file name of lattice 2
-        self.structure_1 = Structure.from_file(
-            file_1, primitive=prim_1, sort=False, merge_tol=0.0)
-        self.structure_2 = Structure.from_file(
-            file_2, primitive=prim_2, sort=False, merge_tol=0.0)
-
-        self.conv_lattice_1 = Structure.from_file(
-            file_1, primitive=False, sort=False, merge_tol=0.0
-        ).lattice.matrix.T
-
-        self.conv_lattice_2 = Structure.from_file(
-            file_2, primitive=False, sort=False, merge_tol=0.0
-        ).lattice.matrix.T
+    def __init__(self, stct_1, stct_2, prim_1=True, prim_2=True, verbose=True):
+        self.structure_1 = stct_1.get_primitive_structure()  # Structure object of lattice 1
+        self.structure_2 = stct_2.get_primitive_structure()  # Structure object of lattice 2
+        
+        self.conv_structure_1 = stct_1
+        self.conv_structure_2 = stct_2
+        
+        self.conv_lattice_1 = stct_1.lattice.matrix.T
+        self.conv_lattice_2 = stct_2.lattice.matrix.T
 
         self.lattice_1 = self.structure_1.lattice.matrix.T
         self.lattice_2 = self.structure_2.lattice.matrix.T
-        self.lattice_2_TD = self.structure_2.lattice.matrix.T.copy()
+        
+        self.lattice_2_TD = self.lattice_2.copy()
         self.CSL = np.eye(3)  # CSL cell in cartesian
         self.du = 0.005
         self.S = 0.005
@@ -1260,12 +1255,9 @@ class core:
         self.elements_bi = []
         # whether the bicrystal supercell is orthogonal
         self.bicrystal_ortho = False
-        self.slab_structure_1 = Structure.from_file(
-            file_1, primitive=True, sort=False, merge_tol=0.0)
-        self.slab_structure_2 = Structure.from_file(
-            file_1, primitive=True, sort=False, merge_tol=0.0)
-        self.bicrystal_structure = Structure.from_file(
-            file_1, primitive=True, sort=False, merge_tol=0.0)
+        self.slab_structure_1 = self.structure_1
+        self.slab_structure_2 = self.structure_2
+        self.bicrystal_structure = self.structure_1
         self.verbose = verbose
         if self.verbose:
             print(
@@ -1284,10 +1276,15 @@ class core:
         factor_2 : float
             scale factor for lattice 2
         """
-        self.lattice_1 = self.lattice_1 * factor_1
-        self.lattice_2 = self.lattice_2 * factor_2
-        self.conv_lattice_1 = self.conv_lattice_1 * factor_1
-        self.conv_lattice_2 = self.conv_lattice_2 * factor_2
+        self.structure_1 = self.structure_1.apply_strain(1 - factor_1)
+        self.structure_2 = self.structure_2.apply_strain(1 - factor_2)
+        self.conv_lattice_1 = self.conv_lattice_1.apply_strain(1 - factor_1)
+        self.conv_lattice_2 = self.conv_lattice_2.apply_strain(1 - factor_2)
+        
+        self.lattice_1 = self.structure_1.lattice.matrix.T
+        self.lattice_2 = self.structure_2.lattice.matrix.T
+        self.conv_lattice_1 = self.conv_lattice_1.matrix.T
+        self.conv_lattice_2 = self.conv_lattice_2.matrix.T
 
     def parse_limit(self, du, S, sgm1, sgm2, dd):
         """
