@@ -240,19 +240,19 @@ class hetero_searcher:
                     cstl_id_2_conv = apply_function_to_array(dot(inv(my_interface.conv_lattice_2), cart_id), float_to_rational)
                     
                     results[count] = {}
-                    results[count]['prim_film_prim_hkl'] = mtch_data.plane_set_film.hkl
-                    results[count]['prim_film_prim_v1'] = mtch_data.plane_set_film.v1
-                    results[count]['prim_film_prim_v2'] = mtch_data.plane_set_film.v2
-                    results[count]['prim_film_conv_hkl'] = mtch_data.plane_set_film_conv.hkl
-                    results[count]['prim_film_conv_v1'] = mtch_data.plane_set_film_conv.v1
-                    results[count]['prim_film_conv_v2'] = mtch_data.plane_set_film_conv.v2
+                    results[count]['film_prim_hkl'] = mtch_data.plane_set_film.hkl
+                    results[count]['film_prim_v1'] = mtch_data.plane_set_film.v1
+                    results[count]['film_prim_v2'] = mtch_data.plane_set_film.v2
+                    results[count]['film_conv_hkl'] = mtch_data.plane_set_film_conv.hkl
+                    results[count]['film_conv_v1'] = mtch_data.plane_set_film_conv.v1
+                    results[count]['film_conv_v2'] = mtch_data.plane_set_film_conv.v2
             
-                    results[count]['prim_substrate_prim_hkl'] = mtch_data.plane_set_substrate.hkl
-                    results[count]['prim_substrate_prim_v1'] = mtch_data.plane_set_substrate.v1
-                    results[count]['prim_substrate_prim_v2'] = mtch_data.plane_set_substrate.v2
-                    results[count]['prim_substrate_conv_hkl'] = mtch_data.plane_set_substrate_conv.hkl
-                    results[count]['prim_substrate_conv_v1'] = mtch_data.plane_set_substrate_conv.v1
-                    results[count]['prim_substrate_conv_v2'] = mtch_data.plane_set_substrate_conv.v2
+                    results[count]['substrate_prim_hkl'] = mtch_data.plane_set_substrate.hkl
+                    results[count]['substrate_prim_v1'] = mtch_data.plane_set_substrate.v1
+                    results[count]['substrate_prim_v2'] = mtch_data.plane_set_substrate.v2
+                    results[count]['substrate_conv_hkl'] = mtch_data.plane_set_substrate_conv.hkl
+                    results[count]['substrate_conv_v1'] = mtch_data.plane_set_substrate_conv.v1
+                    results[count]['substrate_conv_v2'] = mtch_data.plane_set_substrate_conv.v2
                     results[count]['area'] = data[i][-1]
                     results[count]['strain'] = my_interface.D
                     with open(f'{it_folder}/{count}/interface.info','w') as f:
