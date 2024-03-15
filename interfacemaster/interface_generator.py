@@ -14,6 +14,8 @@ from interfacemaster.cellcalc import (
     MID, DSCcalc, get_primitive_hkl, get_right_hand, get_pri_vec_inplane,
     get_ortho_two_v, ang, get_normal_from_MI)
 from pymatgen.io.cif import CifWriter
+import shutil
+from interfacemaster.tool import write_KPOINTS_gama, get_fix_atom_TFarray, get_fix_atom_TFarray
 
 def get_disorientation(L1, L2, v1, hkl1, v2, hkl2):
     """
@@ -1971,7 +1973,7 @@ class core:
     def sample_CNID(
             self, grid, dx=0, dp1=0, dp2=0,
             xyz_1=None, xyz_2=None, vx=0, two_D=False,
-            filename='POSCAR', filetype='VASP'):
+            filename='POSCAR', filetype='VASP', incar_path = 'INCAR', potcar_path = 'POTCAR', fix_frac = 0):
         """
         sampling the CNID and generate POSCARs
 
@@ -1980,10 +1982,22 @@ class core:
         grid : numpy array
             2D grid of sampling
         """
+        
+        #generating POSCAR
         if xyz_1 is None:
             xyz_1 = [1, 1, 1]
         if xyz_2 is None:
             xyz_2 = [1, 1, 1]
+        try:
+            shutil.rmtree('CNID_inputs')
+        except:
+            print('no previous CNID inputs folder')
+
+        try:
+            shutil.rmtree('vasp_inputs_cnid_search')
+        except:
+            print('no previous vasp inputs folder')
+            
         os.mkdir('CNID_inputs')
         if self.verbose:
             print('CNID')
@@ -1991,15 +2005,32 @@ class core:
             print(f'making {grid[0] * grid[1]} files...')
         n1 = grid[0]
         n2 = grid[1]
+        self.cnid_grid = [n1, n2]
         v1, v2 = self.CNID.T
+        os.mkdir('vasp_inputs_cnid_search')
         for i in range(n1):
             for j in range(n2):
                 dydz = v1 / n1 * i + v2 / n2 * j
+                os.mkdir(f'vasp_inputs_cnid_search/{i}_{j}')
+                cnid_poscar_name = f'CNID_inputs/POSCAR_{i}_{j}'
                 self.get_bicrystal(
                     dydz=dydz, dx=dx, dp1=dp1, dp2=dp2,
                     xyz_1=xyz_1, xyz_2=xyz_2, vx=vx, two_D=two_D,
-                    filename=f'CNID_inputs/{filename}_{i}_{j}',
-                    filetype=filetype)
+                    filename = cnid_poscar_name,
+                    filetype = filetype)
+                vasp_poscar_name = f'vasp_inputs_cnid_search/{i}_{j}/POSCAR'
+                shutil.copy(cnid_poscar_name, vasp_poscar_name)
+                if fix_frac > 0:
+                    TF_arrays, fix_ids, fixed_coords  = get_fix_atom_TFarray(vasp_poscar_name, \
+                     norm(dot(self.lattice_1, self.bicrystal_U1[:,0])) * x1, fix_frac)
+                    combine_poscar_TFarray(vasp_poscar_name, TF_arrays, vasp_poscar_name)
+                write_KPOINTS_gama(vasp_poscar_name, 20, f'vasp_inputs_cnid_search/{i}_{j}/KPOINTS')
+                try:
+                    shutil.copy(incar_path, f'vasp_inputs_cnid_search/{i}_{j}/INCAR')
+                    shutil.copy(potcar_path, f'vasp_inputs_cnid_search/{i}_{j}/POTCAR')
+                except:
+                    print('INCAR or POTCAR not found, please check')
+            
         if self.verbose:
             print('completed')
 
