@@ -11,7 +11,7 @@ Tutorials are ready on `Google Colab <https://colab.research.google.com/github/n
    tutorials/Tutorial_Making bicrystal for a known GB*
 
 .. toctree::
-   :caption: Making 2D CSL interfaces with a determined orientation
+   :caption: Making 2D CSL interfaces with a determined matching
    :maxdepth: 1
    :glob:
 
