@@ -15,7 +15,7 @@ from interfacemaster.cellcalc import (
     get_ortho_two_v, ang, get_normal_from_MI)
 from pymatgen.io.cif import CifWriter
 import shutil
-from interfacemaster.tool import write_KPOINTS_gama, get_fix_atom_TFarray, get_fix_atom_TFarray
+from interfacemaster.tool import write_KPOINTS_gama, get_fix_atom_TFarray, combine_poscar_TFarray
 
 def get_disorientation(L1, L2, v1, hkl1, v2, hkl2):
     """
@@ -1973,7 +1973,7 @@ class core:
     def sample_CNID(
             self, grid, dx=0, dp1=0, dp2=0,
             xyz_1=None, xyz_2=None, vx=0, two_D=False,
-            filename='POSCAR', filetype='VASP', incar_path = 'INCAR', potcar_path = 'POTCAR', fix_frac = 0):
+            filename='POSCAR', filetype='VASP', incar_path = 'INCAR', potcar_path = 'POTCAR', fix_frac = 0, kpoints_dense = 20):
         """
         sampling the CNID and generate POSCARs
 
@@ -1997,7 +1997,9 @@ class core:
             shutil.rmtree('vasp_inputs_cnid_search')
         except:
             print('no previous vasp inputs folder')
-            
+        
+        
+        
         os.mkdir('CNID_inputs')
         if self.verbose:
             print('CNID')
@@ -2022,9 +2024,9 @@ class core:
                 shutil.copy(cnid_poscar_name, vasp_poscar_name)
                 if fix_frac > 0:
                     TF_arrays, fix_ids, fixed_coords  = get_fix_atom_TFarray(vasp_poscar_name, \
-                     norm(dot(self.lattice_1, self.bicrystal_U1[:,0])) * x1, fix_frac)
+                     norm(dot(self.lattice_1, self.bicrystal_U1[:,0])) * xyz_1[0], fix_frac)
                     combine_poscar_TFarray(vasp_poscar_name, TF_arrays, vasp_poscar_name)
-                write_KPOINTS_gama(vasp_poscar_name, 20, f'vasp_inputs_cnid_search/{i}_{j}/KPOINTS')
+                write_KPOINTS_gama(cnid_poscar_name, kpoints_dense, f'vasp_inputs_cnid_search/{i}_{j}/KPOINTS')
                 try:
                     shutil.copy(incar_path, f'vasp_inputs_cnid_search/{i}_{j}/INCAR')
                     shutil.copy(potcar_path, f'vasp_inputs_cnid_search/{i}_{j}/POTCAR')
