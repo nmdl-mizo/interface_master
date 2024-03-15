@@ -2227,18 +2227,22 @@ class core:
             normal_ortho,
             tol_ortho,
             inclination_tol)
-        if np.dot(v3_1, v3_2) < 0:
-            v3_2 = - v3_2
 
         # unit slabs
         cell_1 = np.column_stack((v3_1, plane_1))
         cell_2 = np.column_stack((v3_2, plane_2))
-
+        print(cell_1[:,0])
+        print(cell_2[:,0])
+        print(dot(cell_1[:,0],cell_1[:,1]))
         # right_handed
         cell_1 = get_right_hand(cell_1)
+
+        if dot(inv(cell_1), cell_2[:,0])[0] < 0:
+            cell_2[:,0] = - cell_2[:,0]
         cell_2 = get_right_hand(cell_2)
         self.height_1 = get_height(cell_1)
         self.height_2 = get_height(cell_2)
+
         # supercell index
         self.bicrystal_U1 = np.dot(inv(self.lattice_1), cell_1)
         self.bicrystal_U2 = np.dot(inv(a2), cell_2)
