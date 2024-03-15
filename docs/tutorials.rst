@@ -23,3 +23,10 @@ Tutorials are ready on `Google Colab <https://colab.research.google.com/github/n
    :glob:
 
    tutorials/Tutorial_Making_surface_slab*
+
+.. toctree::
+   :caption: Automatically generate heterogeneous interfaces
+   :maxdepth: 1
+   :glob:
+
+   tutorials/Tutorial_auto_searching_for_heterogeneous_interfaces.ipynb
