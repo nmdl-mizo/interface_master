@@ -219,7 +219,7 @@ class hetero_searcher:
             
             if len(my_interface.atoms_bi) < max_anum:
                 sub_v1, sub_v2, hkl_sub = mtch_data.plane_set_substrate.output()
-                film_v1, film_v2, hkl_film = mtch_data.plane_set_substrate.output()
+                film_v1, film_v2, hkl_film = mtch_data.plane_set_film.output()
                 if count == 1:
                     same = False
                 else:
@@ -238,7 +238,7 @@ class hetero_searcher:
                     cart_id = dot(my_interface.lattice_2,my_interface.bicrystal_U2)
                     cstl_id_2 = array((around(dot(inv(my_interface.lattice_2), cart_id), 8)), dtype = int)
                     cstl_id_2_conv = apply_function_to_array(dot(inv(my_interface.conv_lattice_2), cart_id), float_to_rational)
-                    
+
                     results[count] = {}
                     results[count]['film_prim_hkl'] = mtch_data.plane_set_film.hkl
                     results[count]['film_prim_v1'] = mtch_data.plane_set_film.v1
