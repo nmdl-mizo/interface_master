@@ -18,14 +18,6 @@ Tutorials are ready on `Google Colab <https://colab.research.google.com/github/n
    tutorials/Tutorial_Two-dimensional CSL interfaces*
 
 .. toctree::
-   :caption: Sampling in the CNID
-   :maxdepth: 1
-   :glob:
-
-   tutorials/Tutorial_Sampling*
-
-
-.. toctree::
    :caption: Making surface slabs
    :maxdepth: 1
    :glob:
