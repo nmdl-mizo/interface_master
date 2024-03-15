@@ -1,6 +1,25 @@
 from numpy import *
 from numpy.linalg import *
 from pymatgen.core.structure import Structure
+
+def get_indices_from_cart(lattice, cart):
+    return dot(inv(lattice), cart)
+    
+def get_indices_from_cart(lattice, cart):
+    return dot(inv(lattice), cart)
+
+def get_rational_mtx(M, lim=50):
+    found = False
+    for i in range(1, lim+1):
+        here = M * i
+        if int_mtx(here):
+            found = True
+            break
+    if found:
+        return array(around(here), dtype=int), i
+    else:
+        print('failed to found rational matrix')
+
 #generating KPOINTS
 def generate_KPOINTS(poscar_file, dens):
     pos_struc = Structure.from_file(poscar_file)
@@ -33,7 +52,7 @@ def get_bounds(xs, TR, fracture, Tlength):
 #fix atom
 def get_fix_atom_TFarray(original_pos_file, Llength, fraction, skipnum = 8):
     #get middle bound
-    stct = Structure.from_file(original_pos_file)
+    stct = Structure.from_file(original_pos_file, sort = 'False')
     Tlength = norm(stct.lattice.matrix[0])
     middle_bound = (Llength - 0.5)/Tlength
 
@@ -78,9 +97,10 @@ def combine_poscar_TFarray(poscar_file, TFarray, filename):
                 skiprows = where(array(lines) == 'cartesian\n')[0][0] + 1
     atoms = loadtxt(poscar_file, skiprows = skiprows, usecols=(0,1,2))
     atoms = char.mod("%.16f", atoms)
+
     front_contents = array(lines)[arange(skiprows)]
     back_contents = column_stack((atoms, TFarray))
     with open(filename, 'w') as f:
         for i in front_contents:
             f.write(i)
-        savetxt(filename, back_contents, fmt = '%s %s %s %s %s %s')
+        savetxt(f, back_contents, fmt = '%s %s %s %s %s %s')

@@ -2231,9 +2231,7 @@ class core:
         # unit slabs
         cell_1 = np.column_stack((v3_1, plane_1))
         cell_2 = np.column_stack((v3_2, plane_2))
-        print(cell_1[:,0])
-        print(cell_2[:,0])
-        print(dot(cell_1[:,0],cell_1[:,1]))
+
         # right_handed
         cell_1 = get_right_hand(cell_1)
 

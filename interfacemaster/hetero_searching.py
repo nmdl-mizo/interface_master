@@ -4,6 +4,7 @@ from pymatgen.analysis.interfaces.zsl import ZSLGenerator, ZSLMatch, reduce_vect
 from pymatgen.core.surface import SlabGenerator
 from interfacemaster.cellcalc import get_primitive_hkl, get_pri_vec_inplane, get_normal_index, get_normal_from_MI, rot
 from interfacemaster.interface_generator import core, convert_vector_index, get_disorientation
+from interfacemaster.tool import get_indices_from_cart
 from numpy import *
 from numpy.linalg import *
 import os
@@ -56,6 +57,9 @@ def float_to_rational(x, lim =50):
             return f'{int(round(x*i))}/{i}'
     else:
         raise RuntimeError('failed to found rational matrix')
+
+def get_rational_mtx(M):
+    return apply_function_to_array(M, float_to_rational)
 
 def plane_set_transform(old_set, new_l, format = 'int'):
     hkl = get_primitive_hkl(old_set.hkl, old_set.lattice, new_l)
@@ -240,26 +244,44 @@ class hetero_searcher:
                     cstl_id_2_conv = apply_function_to_array(dot(inv(my_interface.conv_lattice_2), cart_id), float_to_rational)
 
                     results[count] = {}
-                    results[count]['film_prim_hkl'] = mtch_data.plane_set_film.hkl
-                    results[count]['film_prim_v1'] = mtch_data.plane_set_film.v1
-                    results[count]['film_prim_v2'] = mtch_data.plane_set_film.v2
-                    results[count]['film_conv_hkl'] = mtch_data.plane_set_film_conv.hkl
+                    results[count]['film_prim_hkl'] = array(mtch_data.plane_set_film.hkl, dtype = int)
+                    results[count]['film_prim_v1'] = array(mtch_data.plane_set_film.v1, dtype = int)
+                    results[count]['film_prim_v2'] = array(mtch_data.plane_set_film.v2, dtype = int)
+                    results[count]['film_conv_hkl'] = array(mtch_data.plane_set_film_conv.hkl, dtype = int)
                     results[count]['film_conv_v1'] = mtch_data.plane_set_film_conv.v1
                     results[count]['film_conv_v2'] = mtch_data.plane_set_film_conv.v2
             
-                    results[count]['substrate_prim_hkl'] = mtch_data.plane_set_substrate.hkl
-                    results[count]['substrate_prim_v1'] = mtch_data.plane_set_substrate.v1
-                    results[count]['substrate_prim_v2'] = mtch_data.plane_set_substrate.v2
-                    results[count]['substrate_conv_hkl'] = mtch_data.plane_set_substrate_conv.hkl
+                    results[count]['substrate_prim_hkl'] = array(mtch_data.plane_set_substrate.hkl, dtype = int)
+                    results[count]['substrate_prim_v1'] = array(mtch_data.plane_set_substrate.v1, dtype = int)
+                    results[count]['substrate_prim_v2'] = array(mtch_data.plane_set_substrate.v2, dtype = int)
+                    results[count]['substrate_conv_hkl'] = array(mtch_data.plane_set_substrate_conv.hkl, dtype = int)
                     results[count]['substrate_conv_v1'] = mtch_data.plane_set_substrate_conv.v1
                     results[count]['substrate_conv_v2'] = mtch_data.plane_set_substrate_conv.v2
-                    results[count]['area'] = data[i][-1]
+                    results[count]['CSL area'] = data[i][-1]
                     results[count]['strain'] = my_interface.D
+                    results[count]['atom_num'] = len(my_interface.atoms_bi)
+                    
+                    cnid_indices_1_prim = get_rational_mtx(get_indices_from_cart(my_interface.lattice_1, my_interface.CNID))
+                    transL2 = dot(my_interface.a2_transform, my_interface.lattice_2)
+                    cnid_indices_2_prim = get_rational_mtx(get_indices_from_cart(transL2, my_interface.CNID))
+                    results[count]['substrate_prim_CNID_express'] = cnid_indices_1_prim
+                    results[count]['film_prim_CNID_express'] = cnid_indices_2_prim
+                    
+                    cnid_indices_1_conv = get_rational_mtx(get_indices_from_cart(my_interface.conv_lattice_1, my_interface.CNID))
+                    transL2 = dot(my_interface.a2_transform, my_interface.conv_lattice_2)
+                    cnid_indices_2_conv = get_rational_mtx(get_indices_from_cart(transL2, my_interface.CNID))
+                    results[count]['substrate_conv_CNID_express'] = cnid_indices_1_conv
+                    results[count]['film_conv_CNID_express'] = cnid_indices_2_conv
+                    c1, c2 = my_interface.CNID.T
+                    results[count]['CNID area'] = norm(cross(c1, c2))
+                    
                     with open(f'{it_folder}/{count}/interface.info','w') as f:
-                        f.write(f"""film miller: {tuple(array(data[i][0:3], dtype = int))}
-film vecs: {list(array(data[i][3:6], dtype = int))} {list(array(data[i][6:9], dtype = int))}
-sub miller: {tuple(array(data[i][9:12], dtype = int))}
-sub vecs: {list(array(data[i][12:15],dtype = int))} {list(array(data[i][15:18], dtype = int))}
+                        f.write(f"""substrate primitive miller indices:{array(mtch_data.plane_set_substrate.hkl, dtype = int)}
+film primitive miller indices: {array(mtch_data.plane_set_film.hkl, dtype = int)}
+
+substrate conventional miller indices:{array(mtch_data.plane_set_substrate_conv.hkl, dtype = int)}
+film conventional miller indices:{array(mtch_data.plane_set_film_conv.hkl, dtype = int)}
+
 strain:
 {my_interface.D}\n
 atom number: {len(my_interface.atoms_bi)}\n
