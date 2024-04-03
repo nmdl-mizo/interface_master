@@ -50,7 +50,7 @@ def get_bounds(xs, TR, fracture, Tlength):
         raise CustomeError('must be L or R')
 
 #fix atom
-def get_fix_atom_TFarray(original_pos_file, Llength, fraction, skipnum = 8):
+def get_fix_atom_TFarray(original_pos_file, Llength, fraction, skipnum = 8, both=True):
     #get middle bound
     stct = Structure.from_file(original_pos_file, sort = 'False')
     Tlength = norm(stct.lattice.matrix[0])
@@ -76,9 +76,12 @@ def get_fix_atom_TFarray(original_pos_file, Llength, fraction, skipnum = 8):
     left_bound_ids = indices[con_left]
     right_bound_ids = indices[con_right]
     
-    fix_ids = union1d(left_bound_ids, right_bound_ids)
+    if both:
+        fix_ids = union1d(left_bound_ids, right_bound_ids)
+    else:
+        fix_ids = left_bound_ids
     
-    TF_array[fix_ids] = ['F','T','T']
+    TF_array[fix_ids] = ['F','F','F']
 
     return TF_array, fix_ids, coords[fix_ids]
 

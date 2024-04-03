@@ -1978,7 +1978,7 @@ class core:
     def sample_CNID(
             self, grid, dx=0, dp1=0, dp2=0,
             xyz_1=None, xyz_2=None, vx=0, two_D=False,
-            filename='POSCAR', filetype='VASP', incar_path = 'INCAR', potcar_path = 'POTCAR', fix_frac = 0, kpoints_dense = 20):
+            filename='POSCAR', filetype='VASP', incar_path = 'INCAR', potcar_path = 'POTCAR', fix_frac = 0, kpoints_dense = 20, fix_both = True):
         """
         sampling the CNID and generate POSCARs
 
@@ -2028,8 +2028,8 @@ class core:
                 vasp_poscar_name = f'vasp_inputs_cnid_search/{i}_{j}/POSCAR'
                 shutil.copy(cnid_poscar_name, vasp_poscar_name)
                 if fix_frac > 0:
-                    TF_arrays, fix_ids, fixed_coords  = get_fix_atom_TFarray(vasp_poscar_name, \
-                     norm(dot(self.lattice_1, self.bicrystal_U1[:,0])) * xyz_1[0], fix_frac)
+                    TF_arrays, fix_ids, fixed_coords = get_fix_atom_TFarray(vasp_poscar_name, \
+                     norm(dot(self.lattice_1, self.bicrystal_U1[:,0])) * xyz_1[0], fix_frac, fix_both)
                     combine_poscar_TFarray(vasp_poscar_name, TF_arrays, vasp_poscar_name)
                 write_KPOINTS_gama(cnid_poscar_name, kpoints_dense, f'vasp_inputs_cnid_search/{i}_{j}/KPOINTS')
                 try:

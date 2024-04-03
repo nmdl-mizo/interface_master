@@ -188,6 +188,7 @@ class hetero_searcher:
         matches = list(sub_analyzer.calculate(film = self.film_stct.get_primitive_structure(), substrate = self.substct_stct.get_primitive_structure()))
         self.data = data_from_matches(matches, self.film_stct, self.substct_stct)
         print(f'{len(self.data)} non-identical matchings found')
+        
     def generating(self, max_anum = 150, min_slab_length = 15):
         #generate interfaces
         my_interface = core(self.substct_stct,\
