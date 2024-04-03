@@ -78,7 +78,7 @@ def get_fix_atom_TFarray(original_pos_file, Llength, fraction, skipnum = 8):
     
     fix_ids = union1d(left_bound_ids, right_bound_ids)
     
-    TF_array[fix_ids,:] = 'F'
+    TF_array[fix_ids] = ['F','T','T']
 
     return TF_array, fix_ids, coords[fix_ids]
 
@@ -98,9 +98,11 @@ def combine_poscar_TFarray(poscar_file, TFarray, filename):
     atoms = loadtxt(poscar_file, skiprows = skiprows, usecols=(0,1,2))
     atoms = char.mod("%.16f", atoms)
 
-    front_contents = array(lines)[arange(skiprows)]
+    front_contents = array(lines)[arange(skiprows-1)]
     back_contents = column_stack((atoms, TFarray))
     with open(filename, 'w') as f:
         for i in front_contents:
             f.write(i)
+        f.write('direct\n')
+        f.write('Selective dynamics\n')
         savetxt(f, back_contents, fmt = '%s %s %s %s %s %s')
