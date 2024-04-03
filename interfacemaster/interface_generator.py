@@ -1783,7 +1783,7 @@ class core:
 
     def get_bicrystal(self, dydz=None, dx=0, dp1=0, dp2=0,
                       xyz_1=None, xyz_2=None, vx=0, filename='POSCAR',
-                      two_D=False, filetype='VASP', mirror=False, KTI=False):
+                      two_D=False, filetype='VASP', mirror=False, KTI=False, fix_frac = 0):
         """
         generate a cif file for the bicrystal structure
 
@@ -1959,6 +1959,11 @@ class core:
         if filetype == 'VASP':
             poscar = Poscar(self.bicrystal_structure)
             poscar.write_file(filename)
+            if fix_frac > 0:
+                TF_arrays, fix_ids, fixed_coords  = get_fix_atom_TFarray(filename, \
+                 norm(dot(self.lattice_1, self.bicrystal_U1[:,0])) * xyz_1[0], fix_frac)
+                combine_poscar_TFarray(filename, TF_arrays, filename)
+                
         elif filetype == 'LAMMPS':
             write_LAMMPS(
                 lattice_bi,
