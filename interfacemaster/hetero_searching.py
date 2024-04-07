@@ -188,6 +188,7 @@ class hetero_searcher:
         matches = list(sub_analyzer.calculate(film = self.film_stct.get_primitive_structure(), substrate = self.substct_stct.get_primitive_structure()))
         self.data = data_from_matches(matches, self.film_stct, self.substct_stct)
         print(f'{len(self.data)} non-identical matchings found')
+        
     def generating(self, max_anum = 150, min_slab_length = 15):
         #generate interfaces
         my_interface = core(self.substct_stct,\
@@ -259,6 +260,7 @@ class hetero_searcher:
                     results[count]['substrate_conv_v2'] = mtch_data.plane_set_substrate_conv.v2
                     results[count]['CSL area'] = data[i][-1]
                     results[count]['strain'] = my_interface.D
+                    results[count]['von_mises_strain'] = data[i][-2]
                     results[count]['atom_num'] = len(my_interface.atoms_bi)
                     
                     cnid_indices_1_prim = get_rational_mtx(get_indices_from_cart(my_interface.lattice_1, my_interface.CNID))
@@ -310,7 +312,13 @@ film conventional indices in supercell (a, b, c):
             os.remove(r_i)
     
     def write_results(self, filename):
+        results = self.res_dict
         json_obj = json.dumps(self.res_dict,  cls=MyEncoder)
         with open(f'{filename}.json', 'w') as f:
             f.write(json_obj)
+        with open(f'{filename}_list.dat', 'w') as f:
+            f.write('sub_hkl sub_v1 sub_v2 film_hkl film_v1 film_v2 strain area\n')
+            for i in results:
+                f.write(f"""{tuple(results[i]["substrate_conv_hkl"])} {results[i]["substrate_conv_v1"]} {results[i]["substrate_conv_v2"]} {tuple(results[i]["film_conv_hkl"])} {results[i]["film_conv_v1"]} {results[i]["film_conv_v2"]} {results[i]["von_mises_strain"]} {results[i]["CSL area"]}\n""")
+                
         
