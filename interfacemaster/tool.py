@@ -50,14 +50,27 @@ def get_bounds(xs, TR, fracture, Tlength):
         raise CustomeError('must be L or R')
 
 #fix atom
-def get_fix_atom_TFarray(original_pos_file, Llength, fraction, skipnum = 8, both=True):
+def get_fix_atom_TFarray(original_pos_file, Llength, fraction, both=True):
     #get middle bound
     stct = Structure.from_file(original_pos_file, sort = 'False')
     Tlength = norm(stct.lattice.matrix[0])
     middle_bound = (Llength - 0.5)/Tlength
-
+    
+    with open(original_pos_file, 'r') as f:
+        lines = f.readlines()
+    try:
+        skiprows = where(array(lines) == 'Direct\n')[0][0] + 1
+    except:
+        try:
+            skiprows = where(array(lines) == 'direct\n')[0][0] + 1
+        except:
+            try:
+                skiprows = where(array(lines) == 'Cartesian\n')[0][0] + 1
+            except:
+                skiprows = where(array(lines) == 'cartesian\n')[0][0] + 1
+    
     #read data
-    coords = loadtxt(original_pos_file, skiprows= skipnum, usecols=(0,1,2))
+    coords = loadtxt(original_pos_file, skiprows= skiprows, usecols=(0,1,2))
     #left & right atoms
     left_coords = coords[coords[:,0] < middle_bound]
     right_coords = coords[coords[:,0] > middle_bound]
@@ -106,6 +119,6 @@ def combine_poscar_TFarray(poscar_file, TFarray, filename):
     with open(filename, 'w') as f:
         for i in front_contents:
             f.write(i)
-        f.write('direct\n')
         f.write('Selective dynamics\n')
+        f.write('direct\n')
         savetxt(f, back_contents, fmt = '%s %s %s %s %s %s')
