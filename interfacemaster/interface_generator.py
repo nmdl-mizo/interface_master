@@ -4,8 +4,8 @@ interface_generator.py
 """
 import os
 from numpy.linalg import det, norm, inv
-from numpy import (cross, cos, dot, sin, array, column_stack,
-                   eye, arccos, around, sqrt)
+from numpy import (cross, cos, sin, array, column_stack,
+                   eye, arccos, around, sqrt, dot)
 from pymatgen.core.lattice import Lattice
 from pymatgen.core.structure import Structure
 from pymatgen.io.vasp import Poscar
@@ -13,7 +13,9 @@ import numpy as np
 from interfacemaster.cellcalc import (
     MID, DSCcalc, get_primitive_hkl, get_right_hand, get_pri_vec_inplane,
     get_ortho_two_v, ang, get_normal_from_MI)
-
+from pymatgen.io.cif import CifWriter
+import shutil
+from interfacemaster.tool import write_KPOINTS_gama, get_fix_atom_TFarray, combine_poscar_TFarray
 
 def get_disorientation(L1, L2, v1, hkl1, v2, hkl2):
     """
@@ -1188,25 +1190,20 @@ class core:
     Core class for dealing with an interface
     """
 
-    def __init__(self, file_1, file_2, prim_1=True, prim_2=True, verbose=True):
-        self.file_1 = file_1  # cif file name of lattice 1
-        self.file_2 = file_2  # cif file name of lattice 2
-        self.structure_1 = Structure.from_file(
-            file_1, primitive=prim_1, sort=False, merge_tol=0.0)
-        self.structure_2 = Structure.from_file(
-            file_2, primitive=prim_2, sort=False, merge_tol=0.0)
-
-        self.conv_lattice_1 = Structure.from_file(
-            file_1, primitive=False, sort=False, merge_tol=0.0
-        ).lattice.matrix.T
-
-        self.conv_lattice_2 = Structure.from_file(
-            file_2, primitive=False, sort=False, merge_tol=0.0
-        ).lattice.matrix.T
+    def __init__(self, stct_1, stct_2, prim_1=True, prim_2=True, verbose=True):
+        self.structure_1 = stct_1.get_primitive_structure()  # Structure object of lattice 1
+        self.structure_2 = stct_2.get_primitive_structure()  # Structure object of lattice 2
+        
+        self.conv_structure_1 = stct_1
+        self.conv_structure_2 = stct_2
+        
+        self.conv_lattice_1 = stct_1.lattice.matrix.T
+        self.conv_lattice_2 = stct_2.lattice.matrix.T
 
         self.lattice_1 = self.structure_1.lattice.matrix.T
         self.lattice_2 = self.structure_2.lattice.matrix.T
-        self.lattice_2_TD = self.structure_2.lattice.matrix.T.copy()
+        
+        self.lattice_2_TD = self.lattice_2.copy()
         self.CSL = np.eye(3)  # CSL cell in cartesian
         self.du = 0.005
         self.S = 0.005
@@ -1256,12 +1253,9 @@ class core:
         self.elements_bi = []
         # whether the bicrystal supercell is orthogonal
         self.bicrystal_ortho = False
-        self.slab_structure_1 = Structure.from_file(
-            file_1, primitive=True, sort=False, merge_tol=0.0)
-        self.slab_structure_2 = Structure.from_file(
-            file_1, primitive=True, sort=False, merge_tol=0.0)
-        self.bicrystal_structure = Structure.from_file(
-            file_1, primitive=True, sort=False, merge_tol=0.0)
+        self.slab_structure_1 = self.structure_1
+        self.slab_structure_2 = self.structure_2
+        self.bicrystal_structure = self.structure_1
         self.verbose = verbose
         if self.verbose:
             print(
@@ -1280,10 +1274,15 @@ class core:
         factor_2 : float
             scale factor for lattice 2
         """
-        self.lattice_1 = self.lattice_1 * factor_1
-        self.lattice_2 = self.lattice_2 * factor_2
-        self.conv_lattice_1 = self.conv_lattice_1 * factor_1
-        self.conv_lattice_2 = self.conv_lattice_2 * factor_2
+        self.structure_1 = self.structure_1.apply_strain(1 - factor_1)
+        self.structure_2 = self.structure_2.apply_strain(1 - factor_2)
+        self.conv_lattice_1 = self.conv_lattice_1.apply_strain(1 - factor_1)
+        self.conv_lattice_2 = self.conv_lattice_2.apply_strain(1 - factor_2)
+        
+        self.lattice_1 = self.structure_1.lattice.matrix.T
+        self.lattice_2 = self.structure_2.lattice.matrix.T
+        self.conv_lattice_1 = self.conv_lattice_1.matrix.T
+        self.conv_lattice_2 = self.conv_lattice_2.matrix.T
 
     def parse_limit(self, du, S, sgm1, sgm2, dd):
         """
@@ -1780,7 +1779,7 @@ class core:
 
     def get_bicrystal(self, dydz=None, dx=0, dp1=0, dp2=0,
                       xyz_1=None, xyz_2=None, vx=0, filename='POSCAR',
-                      two_D=False, filetype='VASP', mirror=False, KTI=False):
+                      two_D=False, filetype='VASP', mirror=False, KTI=False, fix_frac = 0, fix_both = True):
         """
         generate a cif file for the bicrystal structure
 
@@ -1846,7 +1845,9 @@ class core:
             # delete overwrapping atoms
             elements_2 = elements_2[np.where(atoms_2[:, 0] + eps < 1)]
             atoms_2 = atoms_2[atoms_2[:, 0] + eps < 1]
-
+        CifWriter(Structure(lattice_1.T, elements_1, atoms_1, coords_are_cartesian=False)).write_file('min_sub.cif')
+        CifWriter(Structure(lattice_2.T, elements_2, atoms_2, coords_are_cartesian=False)).write_file('min_film.cif')
+        
         # expansion
         if not (np.all(xyz_1 == 1) and np.all(xyz_2 == 1)):
             if not np.all([xyz_1[1], xyz_1[2]] == [xyz_2[1], xyz_2[2]]):
@@ -1857,7 +1858,7 @@ class core:
                                                           elements_1, xyz_1)
             lattice_2, atoms_2, elements_2 = cell_expands(lattice_2, atoms_2,
                                                           elements_2, xyz_2)
-
+        
         # termination
         if dp1 != 0:
             if KTI:
@@ -1876,11 +1877,11 @@ class core:
         lattice_1, self.orient = adjust_orientation(lattice_1)
         lattice_2 = np.dot(self.orient, lattice_2)
         Poscar(Structure(lattice_1.T, elements_1, atoms_1, coords_are_cartesian=False)).write_file('POSCAR')
-        POSCAR_to_cif('POSCAR', 'cell_1.cif')
+        POSCAR_to_cif('POSCAR', 'super_sub.cif')
         self.slab_structure_1 = Structure.from_file(
             'POSCAR', sort=False, merge_tol=0.0)
         Poscar(Structure(lattice_2.T, elements_2, atoms_2, coords_are_cartesian=False)).write_file('POSCAR')
-        POSCAR_to_cif('POSCAR', 'cell_2.cif')
+        POSCAR_to_cif('POSCAR', 'super_film.cif')
         self.slab_structure_2 = Structure.from_file(
             'POSCAR', sort=False, merge_tol=0.0)
         os.remove('POSCAR')
@@ -1928,7 +1929,7 @@ class core:
             dydz = np.dot(self.orient, dydz)
             plane_shift = np.dot(inv(lattice_bi), dydz)
             atoms_2 = atoms_2 + plane_shift
-
+        
         # combine the two slabs
         elements_bi = np.append(elements_1, elements_2)
         atoms_bi = np.vstack((atoms_1, atoms_2))
@@ -1954,6 +1955,11 @@ class core:
         if filetype == 'VASP':
             poscar = Poscar(self.bicrystal_structure)
             poscar.write_file(filename)
+            if fix_frac > 0:
+                TF_arrays, fix_ids, fixed_coords  = get_fix_atom_TFarray(filename, \
+                 norm(dot(self.lattice_1, self.bicrystal_U1[:,0])) * xyz_1[0], fix_frac, fix_both)
+                combine_poscar_TFarray(filename, TF_arrays, filename)
+                
         elif filetype == 'LAMMPS':
             write_LAMMPS(
                 lattice_bi,
@@ -1968,7 +1974,7 @@ class core:
     def sample_CNID(
             self, grid, dx=0, dp1=0, dp2=0,
             xyz_1=None, xyz_2=None, vx=0, two_D=False,
-            filename='POSCAR', filetype='VASP'):
+            filename='POSCAR', filetype='VASP', incar_path = 'INCAR', potcar_path = 'POTCAR', fix_frac = 0, kpoints_dense = 20, fix_both = True):
         """
         sampling the CNID and generate POSCARs
 
@@ -1977,10 +1983,24 @@ class core:
         grid : numpy array
             2D grid of sampling
         """
+        
+        #generating POSCAR
         if xyz_1 is None:
             xyz_1 = [1, 1, 1]
         if xyz_2 is None:
             xyz_2 = [1, 1, 1]
+        try:
+            shutil.rmtree('CNID_inputs')
+        except:
+            print('no previous CNID inputs folder')
+
+        try:
+            shutil.rmtree('vasp_inputs_cnid_search')
+        except:
+            print('no previous vasp inputs folder')
+        
+        
+        
         os.mkdir('CNID_inputs')
         if self.verbose:
             print('CNID')
@@ -1988,15 +2008,32 @@ class core:
             print(f'making {grid[0] * grid[1]} files...')
         n1 = grid[0]
         n2 = grid[1]
+        self.cnid_grid = [n1, n2]
         v1, v2 = self.CNID.T
+        os.mkdir('vasp_inputs_cnid_search')
         for i in range(n1):
             for j in range(n2):
                 dydz = v1 / n1 * i + v2 / n2 * j
+                os.mkdir(f'vasp_inputs_cnid_search/{i}_{j}')
+                cnid_poscar_name = f'CNID_inputs/POSCAR_{i}_{j}'
                 self.get_bicrystal(
                     dydz=dydz, dx=dx, dp1=dp1, dp2=dp2,
                     xyz_1=xyz_1, xyz_2=xyz_2, vx=vx, two_D=two_D,
-                    filename=f'CNID_inputs/{filename}_{i}_{j}',
-                    filetype=filetype)
+                    filename = cnid_poscar_name,
+                    filetype = filetype)
+                vasp_poscar_name = f'vasp_inputs_cnid_search/{i}_{j}/POSCAR'
+                shutil.copy(cnid_poscar_name, vasp_poscar_name)
+                if fix_frac > 0:
+                    TF_arrays, fix_ids, fixed_coords = get_fix_atom_TFarray(vasp_poscar_name, \
+                     norm(dot(self.lattice_1, self.bicrystal_U1[:,0])) * xyz_1[0], fix_frac, fix_both)
+                    combine_poscar_TFarray(vasp_poscar_name, TF_arrays, vasp_poscar_name)
+                write_KPOINTS_gama(cnid_poscar_name, kpoints_dense, f'vasp_inputs_cnid_search/{i}_{j}/KPOINTS')
+                try:
+                    shutil.copy(incar_path, f'vasp_inputs_cnid_search/{i}_{j}/INCAR')
+                    shutil.copy(potcar_path, f'vasp_inputs_cnid_search/{i}_{j}/POTCAR')
+                except:
+                    print('INCAR or POTCAR not found, please check')
+            
         if self.verbose:
             print('completed')
 
@@ -2191,8 +2228,6 @@ class core:
             normal_ortho,
             tol_ortho,
             inclination_tol)
-        if np.dot(v3_1, v3_2) < 0:
-            v3_2 = - v3_2
 
         # unit slabs
         cell_1 = np.column_stack((v3_1, plane_1))
@@ -2200,7 +2235,12 @@ class core:
 
         # right_handed
         cell_1 = get_right_hand(cell_1)
+
+        if dot(inv(cell_1), cell_2[:,0])[0] < 0:
+            cell_2[:,0] = - cell_2[:,0]
         cell_2 = get_right_hand(cell_2)
+        self.height_1 = get_height(cell_1)
+        self.height_2 = get_height(cell_2)
 
         # supercell index
         self.bicrystal_U1 = np.dot(inv(self.lattice_1), cell_1)

@@ -21,6 +21,11 @@ cd interface_master
 pip install .
 ```
 
+## Automatically generate heterogeneous interfaces without repeating identical ones; and ensure to get minimum-sized supercell, and giving information of the rational coordinates
+![截屏2024-03-14 10 26 56](https://github.com/nmdl-mizo/interface_master/assets/48645456/d0986de7-ec1a-4e3b-b828-31b87c355f00)
+
+![image](https://github.com/nmdl-mizo/interface_master/assets/48645456/cc6da36c-92ee-4e30-a64b-43dee69d166f)
+
 ## Requirements
 - python3
 - pymatgen

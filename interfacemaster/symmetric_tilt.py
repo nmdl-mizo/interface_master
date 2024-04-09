@@ -7,7 +7,7 @@ import numpy as np
 from numpy.linalg import norm, det
 from interfacemaster.cellcalc import MID, rot
 from interfacemaster.interface_generator import core
-
+from pymatgen.core.structure import Structure
 
 def compute_sigma(axis, theta, filename, maxsigma=10000, verbose=True):
     """
@@ -32,8 +32,9 @@ def compute_sigma(axis, theta, filename, maxsigma=10000, verbose=True):
     if verbose:
         print(theta / np.pi * 180)
     R = rot(axis, theta)
-    my_interface = core(filename,
-                        filename, verbose=verbose)
+    stct_1, stct_2 = list(map(lambda x:Structure.from_file(x), [filename, filename]))
+    my_interface = core(stct_1,
+                            stct_2, verbose=False)
     my_interface.parse_limit(
         du=1e-4, S=1e-4, sgm1=maxsigma, sgm2=maxsigma, dd=1e-4)
     my_interface.search_fixed(R, exact=True, tol=1e-3)
@@ -191,8 +192,9 @@ def get_csl_twisted_graphenes(lim, filename, maxsigma=100, verbose=True):
     sigmas = unique_sigmas
     thetas = selected_thetas[sigmas <= maxsigma]
     sigmas = sigmas[sigmas <= maxsigma]
-    my_interface = core(filename,
-                        filename, verbose=verbose)
+    stct_1, stct_2 = list(map(lambda x:Structure.from_file(x), [filename, filename]))
+    my_interface = core(stct_1,
+                            stct_2, verbose=False)
     A_cnid = norm(
         np.cross(
             my_interface.lattice_1[:, 1],

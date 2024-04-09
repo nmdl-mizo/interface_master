@@ -1,0 +1,42 @@
+
+#======================================================================
+# CRYSTAL DATA
+#----------------------------------------------------------------------
+data_VESTA_phase_1
+
+_chemical_name_common                  'Ag2 S                                 '
+_cell_length_a                         4.271054
+_cell_length_b                         7.007768
+_cell_length_c                         7.636801
+_cell_angle_alpha                      90.001762
+_cell_angle_beta                       102.137924
+_cell_angle_gamma                      89.988213
+_cell_volume                           223.463772
+_space_group_name_H-M_alt              'P 1'
+_space_group_IT_number                 1
+
+loop_
+_space_group_symop_operation_xyz
+   'x, y, z'
+
+loop_
+   _atom_site_label
+   _atom_site_occupancy
+   _atom_site_fract_x
+   _atom_site_fract_y
+   _atom_site_fract_z
+   _atom_site_adp_type
+   _atom_site_U_iso_or_equiv
+   _atom_site_type_symbol
+   Ag1        1.0     0.289492     0.312840     0.437493    Uiso  ? Ag
+   Ag2        1.0     0.710498     0.687160     0.562502    Uiso  ? Ag
+   Ag3        1.0     0.210533     0.812896     0.062547    Uiso  ? Ag
+   Ag4        1.0     0.789469     0.187104     0.937455    Uiso  ? Ag
+   Ag5        1.0     0.787548     0.004299     0.313648    Uiso  ? Ag
+   Ag6        1.0     0.212455     0.995702     0.686355    Uiso  ? Ag
+   Ag7        1.0     0.712445     0.504313     0.186339    Uiso  ? Ag
+   Ag8        1.0     0.287556     0.495687     0.813664    Uiso  ? Ag
+   S1         1.0     0.380401     0.215301     0.135953    Uiso  ? S
+   S2         1.0     0.619600     0.784697     0.864045    Uiso  ? S
+   S3         1.0     0.119602     0.715206     0.363998    Uiso  ? S
+   S4         1.0     0.880400     0.284795     0.636001    Uiso  ? S
