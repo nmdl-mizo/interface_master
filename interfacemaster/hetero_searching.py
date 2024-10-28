@@ -102,6 +102,9 @@ def same_mtch(sub_v1, sub_v2, film_v1, film_v2, sub_v1s, sub_v2s, film_v1s, film
         
         if con1 or con2 or con3 or con4:
             same = True
+            #print('same!')
+            #print(sub_v1, sub_v2, film_v1, film_v2)
+            #print(sub_v1s[i], sub_v2s[i], film_v1s[i], film_v2s[i])
             break
 
     return same
@@ -228,7 +231,8 @@ class hetero_searcher:
                 if count == 1:
                     same = False
                 else:
-                    same = same_mtch(sub_v1, sub_v2, film_v1, film_v2, sub_v1s, sub_v2s, film_v1s, film_v2s)
+                    #same = same_mtch(sub_v1, sub_v2, film_v1, film_v2, sub_v1s, sub_v2s, film_v1s, film_v2s)
+                    same = False
                 if not same:
                     os.mkdir(f'{it_folder}/{count}')
                     my_interface.get_bicrystal(two_D = True, xyz_1 = [x1,1,1], xyz_2 = [x2,1,1], vx=5, dx=0.5, filename=f'{it_folder}/{count}/POSCAR')

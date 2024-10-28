@@ -614,7 +614,7 @@ def excess_volume(lattice_1, lattice_bi, atoms_1, atoms_2, dx):
     return lattice_bi, atoms_1, atoms_2
 
 
-def surface_vacuum(lattice_1, lattice_bi, atoms_bi, vx):
+def surface_vacuum(lattice_1, lattice_bi, atoms_bi, vx, double_vx = False):
     """
     introduce vacuum at one of the tails of the bicrystal cell
 
@@ -632,7 +632,12 @@ def surface_vacuum(lattice_1, lattice_bi, atoms_bi, vx):
     #n = cross(lattice_1[:, 1], lattice_1[:, 2])
     #normal_shift = vx / ang(lattice_1[:, 0], n) / norm(lattice_1[:, 0])
     atoms_cart = dot(lattice_bi, atoms_bi.T).T
-    lattice_bi[:, 0] = lattice_bi[:, 0] * (1 + vx / norm(lattice_bi[:, 0]))
+    if double_vx:
+        atoms_cart += vx / norm(lattice_bi[:, 0]) * lattice_bi[:,0]
+    if double_vx:
+        lattice_bi[:, 0] = lattice_bi[:, 0] * (1 + 2 * vx / norm(lattice_bi[:, 0]))
+    else:
+        lattice_bi[:, 0] = lattice_bi[:, 0] * (1 + vx / norm(lattice_bi[:, 0]))
     atoms_bi = dot(inv(lattice_bi), atoms_cart.T).T
     #atoms_bi[:, 0] = 1 / (1 + normal_shift) * atoms_bi[:, 0]
     return atoms_bi, lattice_bi
@@ -1666,6 +1671,25 @@ class core:
                 'failed to find a satisfying appx CSL. '
                 'Try to adjust the limits according'
                 'to the log file generated; or try another orientation.')
+    """"""
+    #def specified_matching(hkl_substrate, hkl_film, B_substrate, B_film):
+        """
+        lattice matching by specified indices
+        
+        Parameters
+        ----------
+        hkl_substrate : numpy array
+            substrate miller indices
+        hkl_film : numpy array
+            film miller indices
+        B_substrate : numpy array
+            plane basis of substrate
+        B_film : numpy array
+            plane basis of film
+        __________
+        """
+    """"""
+        
 
     def search_all_position(
             self,
@@ -1954,7 +1978,7 @@ class core:
         # and improve efficiency. Both lines are equivalent and avoid the need 
         # for intermediary file operations:
         # self.bicrystal_structure = Structure(Lattice(lattice_bi.T), elements_bi, atoms_bi, coords_are_cartesian=False)
-        self.bicrystal_structure = Structure(lattice_bi.T, elements_bi, atoms_bi, coords_are_cartesian=False)
+        self.bicrystal_structure = Structure(lattice_bi.T, elements_bi, atoms_bi, coords_are_cartesian=False).sort()
 
         if filetype == 'VASP':
             poscar = Poscar(self.bicrystal_structure)
@@ -2405,7 +2429,7 @@ def get_surface_slab(
         atoms = shift_none_copy(lattice, termi_shift, atoms)
 
     if vacuum_height > 0:
-        atoms, lattice = surface_vacuum(lattice, lattice, atoms, vacuum_height)
+        atoms, lattice = surface_vacuum(lattice, lattice, atoms, vacuum_height, double_vx = True)
 
     slab_structure = Structure(lattice.T, elements, atoms, coords_are_cartesian=False)
     if filetype == 'VASP':
@@ -2420,3 +2444,43 @@ def get_surface_slab(
         raise RuntimeError(
             "Sorry, we only support for 'VASP' or 'LAMMPS' output")
     return slab_structure
+
+def get_au_vector(B):
+    auv = cross(B[:,0], B[:,1])
+    return auv / norm(auv)
+
+def from_2D_to_3D_transformation(B1, B2):
+    auv_B1 = get_au_vector(B1)
+    auv_B2 = get_au_vector(B2)
+    C1 = column_stack((B1, auv_B1))
+    C2 = column_stack((B2, auv_B2))
+    return dot(C1, inv(C2))
+
+class hetero_generator:
+    """
+    making heterogeneous interface with results from zsl matching
+    """
+    def __init__(
+        self,
+        substrate_sl_vectors,
+        film_sl_vectors,
+        substrate_miller,
+        film_miller,
+        substrate_structure,
+        film_structure,
+        )
+    
+    def csl_cnid_calc():
+        transformation = from_2D_to_3D_transformation(substrate_sl_vectors, film_sl_vectors)
+        B_substrate = get_pri_vec_inplane(substrate_miller, substrate_structure.lattice.matrix.T)
+        B_film = get_pri_vec_inplane(film_miller, film_structure.lattice.matrix.T)
+        B_film = dot(transformation, B_film)
+        calc = DSCcalc()
+        calc.parse_int_U(B_substrate, B_film, 200)
+        calc.compute_CSL()
+        calc.compute_CNID([0,0,1])
+        self.CSL = calc.CSL
+        self.CNID = calc.CNID
+    
+    def find_c():
+        

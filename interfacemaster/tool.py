@@ -73,10 +73,12 @@ def get_fix_atom_TFarray(original_pos_file, Llength, fraction, both=True):
     coords = loadtxt(original_pos_file, skiprows= skiprows, usecols=(0,1,2))
     #left & right atoms
     left_coords = coords[coords[:,0] < middle_bound]
-    right_coords = coords[coords[:,0] > middle_bound]
+    if both:
+        right_coords = coords[coords[:,0] > middle_bound]
 
     left_bound = get_bounds(left_coords[:,0], 'L', fraction, Tlength)
-    right_bound = get_bounds(right_coords[:,0], 'R', fraction, Tlength)
+    if both:
+        right_bound = get_bounds(right_coords[:,0], 'R', fraction, Tlength)
 
     TF_array = repeat(array([['T', 'T', 'T']]), len(coords), axis = 0)
     
@@ -84,10 +86,12 @@ def get_fix_atom_TFarray(original_pos_file, Llength, fraction, both=True):
     indices = arange(atom_number)
 
     con_left = coords[:,0] < left_bound
-    con_right = coords[:,0] > right_bound
+    if both:
+        con_right = coords[:,0] > right_bound
 
     left_bound_ids = indices[con_left]
-    right_bound_ids = indices[con_right]
+    if both:
+        right_bound_ids = indices[con_right]
     
     if both:
         fix_ids = union1d(left_bound_ids, right_bound_ids)
