@@ -12,13 +12,7 @@ A python package building CSL or approximate CSL interfaces of any two lattices 
 
 ## Installation
 ```bash
-pip install git+https://github.com/nmdl-mizo/interface_master
-```
-or
-```bash
-git clone https://github.com/nmdl-mizo/interface_master
-cd interface_master
-pip install .
+pip install interface_master
 ```
 
 ## Automatically generate heterogeneous interfaces without repeating identical ones; and ensure to get minimum-sized supercell, and giving information of the rational coordinates
