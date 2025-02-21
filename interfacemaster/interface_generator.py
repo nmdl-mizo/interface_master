@@ -1667,25 +1667,6 @@ class core:
                 'failed to find a satisfying appx CSL. '
                 'Try to adjust the limits according'
                 'to the log file generated; or try another orientation.')
-    """"""
-    #def specified_matching(hkl_substrate, hkl_film, B_substrate, B_film):
-        """
-        lattice matching by specified indices
-        
-        Parameters
-        ----------
-        hkl_substrate : numpy array
-            substrate miller indices
-        hkl_film : numpy array
-            film miller indices
-        B_substrate : numpy array
-            plane basis of substrate
-        B_film : numpy array
-            plane basis of film
-        __________
-        """
-    """"""
-        
 
     def search_all_position(
             self,
@@ -2451,32 +2432,3 @@ def from_2D_to_3D_transformation(B1, B2):
     C1 = column_stack((B1, auv_B1))
     C2 = column_stack((B2, auv_B2))
     return dot(C1, inv(C2))
-
-class hetero_generator:
-    """
-    making heterogeneous interface with results from zsl matching
-    """
-    def __init__(
-        self,
-        substrate_sl_vectors,
-        film_sl_vectors,
-        substrate_miller,
-        film_miller,
-        substrate_structure,
-        film_structure,
-        )
-    
-    def csl_cnid_calc():
-        transformation = from_2D_to_3D_transformation(substrate_sl_vectors, film_sl_vectors)
-        B_substrate = get_pri_vec_inplane(substrate_miller, substrate_structure.lattice.matrix.T)
-        B_film = get_pri_vec_inplane(film_miller, film_structure.lattice.matrix.T)
-        B_film = dot(transformation, B_film)
-        calc = DSCcalc()
-        calc.parse_int_U(B_substrate, B_film, 200)
-        calc.compute_CSL()
-        calc.compute_CNID([0,0,1])
-        self.CSL = calc.CSL
-        self.CNID = calc.CNID
-    
-    def find_c():
-        
