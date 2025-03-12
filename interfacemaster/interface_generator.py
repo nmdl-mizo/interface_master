@@ -16,6 +16,9 @@ from interfacemaster.cellcalc import (
 from pymatgen.io.cif import CifWriter
 import shutil
 from interfacemaster.tool import write_KPOINTS_gama, get_fix_atom_TFarray, combine_poscar_TFarray
+from skopt import gp_minimize
+from skopt.space import Real
+from tqdm.notebook import tqdm
 
 def get_disorientation(L1, L2, v1, hkl1, v2, hkl2):
     """
@@ -1784,7 +1787,8 @@ class core:
 
     def get_bicrystal(self, dydz=None, dx=0, dp1=0, dp2=0,
                       xyz_1=None, xyz_2=None, vx=0, filename='POSCAR',
-                      two_D=False, filetype='VASP', mirror=False, KTI=False, fix_frac = 0, fix_both = True):
+                      two_D=False, filetype='VASP', mirror=False, KTI=False,
+                      fix_frac = 0, fix_both = True, output = True, BO = False, **kwargs):
         """
         generate a cif file for the bicrystal structure
 
@@ -1956,25 +1960,79 @@ class core:
         # for intermediary file operations:
         # self.bicrystal_structure = Structure(Lattice(lattice_bi.T), elements_bi, atoms_bi, coords_are_cartesian=False)
         self.bicrystal_structure = Structure(lattice_bi.T, elements_bi, atoms_bi, coords_are_cartesian=False).sort()
+        
+        
+        if BO:
+            atoms_2_0 = atoms_2.copy()
+            v1, v2 = self.CNID.T
+            
+            #Bayesian Optimization for RBT
+            self.set_energy_calculator(kwargs['calculator'])
+            self.parse_it_size(xyz_1, xyz_2, vx)
+            result = registration_minimizer(self, kwargs['n_calls'], kwargs['z_range'])
+            xs = array(result.x_iters)
+            ys = result.func_vals
+            xs = xs[np.argsort(ys)]
+            x,y,z = xs[0]
+            v1, v2 = self.CNID.T
+            dydz = x * v1 + y * v2
+            return self.best_bo_interface(dydz=dydz, dx=z, dp1=dp1, dp2=dp2,
+                      xyz_1=xyz_1, xyz_2=xyz_2, vx=vx,
+                      two_D=two_D, mirror=mirror, KTI=KTI,
+                      fix_frac = 0, fix_both = fix_both), [x,y,z]
+            
 
-        if filetype == 'VASP':
-            poscar = Poscar(self.bicrystal_structure)
-            poscar.write_file(filename)
-            if fix_frac > 0:
-                TF_arrays, fix_ids, fixed_coords  = get_fix_atom_TFarray(filename, \
-                 norm(dot(self.lattice_1, self.bicrystal_U1[:,0])) * xyz_1[0], fix_frac, fix_both)
-                combine_poscar_TFarray(filename, TF_arrays, filename)
-                
-        elif filetype == 'LAMMPS':
-            write_LAMMPS(
-                lattice_bi,
-                atoms_bi,
-                elements_bi,
-                filename,
-                self.bicrystal_ortho)
+        if output:
+            if filetype == 'VASP':
+                poscar = Poscar(self.bicrystal_structure)
+                poscar.write_file(filename)
+                if fix_frac > 0:
+                    TF_arrays, fix_ids, fixed_coords  = get_fix_atom_TFarray(filename, \
+                     norm(dot(self.lattice_1, self.bicrystal_U1[:,0])) * xyz_1[0], fix_frac, fix_both)
+                    combine_poscar_TFarray(filename, TF_arrays, filename)
+                    
+            elif filetype == 'LAMMPS':
+                write_LAMMPS(
+                    lattice_bi,
+                    atoms_bi,
+                    elements_bi,
+                    filename,
+                    self.bicrystal_ortho)
+            else:
+                raise RuntimeError(
+                    "Sorry, we only support for 'VASP' or 'LAMMPS' output")
         else:
-            raise RuntimeError(
-                "Sorry, we only support for 'VASP' or 'LAMMPS' output")
+            return self.bicrystal_structure
+    
+    def best_bo_interface(self, dydz=None, dx=0, dp1=0, dp2=0,
+                      xyz_1=None, xyz_2=None, vx=0,
+                      two_D=False, mirror=False, KTI=False,
+                      fix_frac = 0, fix_both = True):
+        return self.get_bicrystal(dydz=dydz, dx=dx, dp1=dp1, dp2=dp2,
+                      xyz_1=xyz_1, xyz_2=xyz_2, vx=vx,
+                      two_D=two_D, mirror=mirror, KTI=KTI,
+                      fix_frac = fix_frac, fix_both = fix_both, output = False)
+        
+    
+    def set_energy_calculator(self, calculator):
+        self.calculator = calculator
+    
+    def parse_it_size(self, xyz_1, xyz_2, vx):
+        self.xyz_1 = xyz_1
+        self.xyz_2 = xyz_2
+        self.vx = vx
+    
+    def sample_rbt_energy(self, params):
+        x,y,z = params
+        xyz = [x,y,z]
+        v1, v2 = self.CNID.T
+        dydz = x * v1 + y * v2
+        interface_here = self.get_bicrystal(xyz_1 = self.xyz_1, xyz_2 = self.xyz_2, dydz = dydz, dx = z, output = False, vx = self.vx)
+        atoms = interface_here.to_ase_atoms()
+        atoms.set_calculator(self.calculator)
+        #interface_here.to_file(f'test/{x}_{y}_{z}_POSCAR')
+        
+        return atoms.get_potential_energy()
 
     def sample_CNID(
             self, grid, dx=0, dp1=0, dp2=0,
@@ -2301,6 +2359,32 @@ class core:
                         'units box \n')
                 fb.write(f'group {rn} region {rn} \n')
 
+def registration_minimizer(interface, n_calls, z_range):
+    """
+    baysian optimization for xyz registration
+    
+    Args:
+    n_calls (int): num of optimization
+    z_range (float): range of z sampling
+    
+    Return:
+    optimization result
+    """
+    def trial_with_progress(func, n_calls, *args, **kwargs):
+        with tqdm(total = n_calls, desc = "registration optimizing") as rgst_pbar:  # Initialize tqdm with total number of iterations
+            def wrapped_func(*args, **kwargs):
+                result = func(*args, **kwargs)
+                rgst_pbar.update(1)  # Update progress bar by 1 after each function call
+                return result
+            return gp_minimize(wrapped_func, search_space, n_calls=n_calls, *args, **kwargs)
+    search_space = [
+        Real(0, 1, name='x'),
+        Real(0, 1, name='y'),
+        Real(z_range[0], z_range[1], name = 'z')
+    ]
+    # Run the optimization with progress bar
+    result = trial_with_progress(interface.sample_rbt_energy, n_calls=n_calls, random_state=42)
+    return result
 
 def terminates_scanner_slab_structure(structure, hkl):
     atoms, elements = get_sites_elements(structure)
