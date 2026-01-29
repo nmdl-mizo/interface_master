@@ -2017,20 +2017,29 @@ class core:
     def set_energy_calculator(self, calculator):
         self.calculator = calculator
     
-    def parse_it_size(self, xyz_1, xyz_2, vx):
+    def parse_it_size(self, xyz_1, xyz_2, vx, dp1=0, dp2=0):
         self.xyz_1 = xyz_1
         self.xyz_2 = xyz_2
         self.vx = vx
+        self.dp1 = dp1
+        self.dp2 = dp2
     
     def sample_rbt_energy(self, params):
-        x,y,z = params
-        xyz = [x,y,z]
+        if len(params) == 3:
+            x, y, z = params
+            dp1, dp2, vx = self.dp1, self.dp2, self.vx
+        elif len(params) == 6:
+            x, y, z, dp1, dp2, vx = params
+        else:
+            raise ValueError("Invalid number of parameters for optimization")
+            
         v1, v2 = self.CNID.T
         dydz = x * v1 + y * v2
-        interface_here = self.get_bicrystal(xyz_1 = self.xyz_1, xyz_2 = self.xyz_2, dydz = dydz, dx = z, output = False, vx = self.vx)
+        interface_here = self.get_bicrystal(xyz_1 = self.xyz_1, xyz_2 = self.xyz_2, 
+                                            dydz = dydz, dx = z, dp1 = dp1, dp2 = dp2, 
+                                            output = False, vx = vx)
         atoms = interface_here.to_ase_atoms()
         atoms.set_calculator(self.calculator)
-        #interface_here.to_file(f'test/{x}_{y}_{z}_POSCAR')
         
         return atoms.get_potential_energy()
 
@@ -2359,29 +2368,42 @@ class core:
                         'units box \n')
                 fb.write(f'group {rn} region {rn} \n')
 
-def registration_minimizer(interface, n_calls, z_range):
+def registration_minimizer(interface, n_calls, z_range, full_opt=False):
     """
-    baysian optimization for xyz registration
+    baysian optimization for registration
     
     Args:
     n_calls (int): num of optimization
     z_range (float): range of z sampling
+    full_opt (bool): if True, optimize dp1, dp2, vx as well
     
     Return:
     optimization result
     """
     def trial_with_progress(func, n_calls, *args, **kwargs):
-        with tqdm(total = n_calls, desc = "registration optimizing") as rgst_pbar:  # Initialize tqdm with total number of iterations
+        with tqdm(total = n_calls, desc = "registration optimizing") as rgst_pbar:
             def wrapped_func(*args, **kwargs):
                 result = func(*args, **kwargs)
-                rgst_pbar.update(1)  # Update progress bar by 1 after each function call
+                rgst_pbar.update(1)
                 return result
             return gp_minimize(wrapped_func, search_space, n_calls=n_calls, *args, **kwargs)
-    search_space = [
-        Real(0, 1, name='x'),
-        Real(0, 1, name='y'),
-        Real(z_range[0], z_range[1], name = 'z')
-    ]
+            
+    if full_opt:
+        search_space = [
+            Real(0, 1, name='x'),      # CNID v1
+            Real(0, 1, name='y'),      # CNID v2
+            Real(z_range[0], z_range[1], name='z'), # dx
+            Real(0, 1, name='dp1'),    # termination 1
+            Real(0, 1, name='dp2'),    # termination 2
+            Real(0, 2.0, name='vx')    # vacuum/gap spacing
+        ]
+    else:
+        search_space = [
+            Real(0, 1, name='x'),
+            Real(0, 1, name='y'),
+            Real(z_range[0], z_range[1], name = 'z')
+        ]
+        
     # Run the optimization with progress bar
     result = trial_with_progress(interface.sample_rbt_energy, n_calls=n_calls, random_state=42)
     return result

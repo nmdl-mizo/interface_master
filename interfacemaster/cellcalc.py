@@ -1,8 +1,25 @@
 """cellcalc.py"""
+"""cellcalc.py"""
 from numpy.linalg import norm, inv
 from numpy import cross, square, arccos, pi, inf, cos, sin
 import numpy as np
 
+def reciprocal_cell(cell):
+    """Returns reciprocal cell (without factor of 2PI)"""
+    v = signed_cell_volume(cell)
+    recipro_cell = np.empty((3, 3))
+    recipro_cell[:, 0] = cross(cell[:, 1], cell[:, 2]) / v * 2 * pi
+    recipro_cell[:, 1] = cross(cell[:, 2], cell[:, 0]) / v * 2 * pi
+    recipro_cell[:, 2] = cross(cell[:, 0], cell[:, 1]) / v * 2 * pi
+    return recipro_cell
+    
+def signed_cell_volume(cell):
+    """Returns signed cell volume by scalar triple product"""
+    return np.dot(cell[:, 0], cross(cell[:, 1], cell[:, 2]))
+
+def get_plane_distance(lattice, hkl):
+    rpl = reciprocal_cell(lattice)
+    return 2 * pi / norm( np.dot(rpl, hkl))
 
 def rot(a, theta):
     """
