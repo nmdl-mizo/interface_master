@@ -224,19 +224,55 @@ def search_low_index_twinning(parent_file, child_file, max_strain=0.1, hkl_limit
 
     # --- 对称性去重 ---
     unique_results = []
-    seen_keys = set()
     for candidate in raw_results:
         R_cand = candidate['rotation_matrix']
         sigma_cand = candidate['sigma']
+        hkl_cand = candidate['hkl']
         
         is_new = True
         for unique in unique_results:
+            # 1. 检查旋转矩阵是否对称等效
             if sigma_cand == unique['sigma'] and is_symmetry_equivalent(R_cand, unique['rotation_matrix'], sym_ops):
-                is_new = False
-                if candidate['strain'] < unique['strain']:
-                    unique['strain'] = candidate['strain']
-                    unique['hkl'] = candidate['hkl']
-                break
+                # 2. 如果旋转等效，进一步检查 Miller 指数 (hkl) 是否也等效
+                # 注意：Cartesian 形式会是字符串，需要先转为 hkl
+                hkl_equivalent = False
+                hkl_cand_numeric = None
+                hkl_unique_numeric = None
+                # 处理 candidate 的 hkl
+                if isinstance(hkl_cand, str) and "Cartesian" in hkl_cand:
+                    try:
+                        hkl_cand_numeric = MID(lattice=L_p, n=candidate['axis_cart'], tol=1e-2)
+                    except Exception:
+                        hkl_cand_numeric = None
+                else:
+                    hkl_cand_numeric = np.array(hkl_cand, dtype=float)
+                # 处理 unique 的 hkl
+                hkl_unique = unique['hkl']
+                if isinstance(hkl_unique, str) and "Cartesian" in hkl_unique:
+                    try:
+                        hkl_unique_numeric = MID(lattice=L_p, n=unique['axis_cart'], tol=1e-2)
+                    except Exception:
+                        hkl_unique_numeric = None
+                else:
+                    hkl_unique_numeric = np.array(hkl_unique, dtype=float)
+
+                if hkl_cand_numeric is None or hkl_unique_numeric is None:
+                    # 无法比较则认为不等价，保留
+                    hkl_equivalent = False
+                else:
+                    for op in sym_ops:
+                        # 对称操作作用于面法向
+                        op_hkl = np.dot(op, hkl_cand_numeric)
+                        if np.allclose(abs(op_hkl), abs(hkl_unique_numeric), atol=1e-2):
+                            hkl_equivalent = True
+                            break
+                
+                if hkl_equivalent:
+                    is_new = False
+                    # 如果旋转和指数都等效，保留应变更小的
+                    if candidate['strain'] < unique['strain']:
+                        unique['strain'] = candidate['strain']
+                    break
         if is_new:
             unique_results.append(candidate)
 
