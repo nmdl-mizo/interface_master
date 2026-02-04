@@ -1,2 +1,7 @@
 pymatgen
 matplotlib
+numpy
+jobflow
+scikit-optimize
+tqdm
+gb_code

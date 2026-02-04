@@ -1,16 +1,16 @@
 # generated using pymatgen
-data_Li3PO4
+data_Li3PS4
 _symmetry_space_group_name_H-M   Pnma
-_cell_length_a   10.41629663
-_cell_length_b   6.07079561
-_cell_length_c   4.89264480
+_cell_length_a   13.03281824
+_cell_length_b   8.01859859
+_cell_length_c   6.17176593
 _cell_angle_alpha   90.00000000
 _cell_angle_beta   90.00000000
 _cell_angle_gamma   90.00000000
 _symmetry_Int_Tables_number   62
-_chemical_formula_structural   Li3PO4
-_chemical_formula_sum   'Li12 P4 O16'
-_cell_volume   309.38741088
+_chemical_formula_structural   Li3PS4
+_chemical_formula_sum   'Li12 P4 S16'
+_cell_volume   644.98001564
 _cell_formula_units_Z   4
 loop_
  _symmetry_equiv_pos_site_id
@@ -28,7 +28,7 @@ loop_
  _atom_type_oxidation_number
   Li+  1.0
   P5+  5.0
-  O2-  -2.0
+  S2-  -2.0
 loop_
  _atom_site_type_symbol
  _atom_site_label
@@ -37,9 +37,9 @@ loop_
  _atom_site_fract_y
  _atom_site_fract_z
  _atom_site_occupancy
-  Li+  Li0  8  0.16431139  0.00153938  0.69534509  1
-  Li+  Li1  4  0.07624687  0.75000000  0.29721728  1
-  P5+  P2  4  0.08814555  0.25000000  0.19067243  1
-  O2-  O3  8  0.15858046  0.04268818  0.29434655  1
-  O2-  O4  4  0.05116622  0.75000000  0.70515882  1
-  O2-  O5  4  0.08918165  0.25000000  0.87526589  1
+  Li+  Li0  8  0.16745425  0.53349734  0.88940176  1
+  Li+  Li1  4  0.00000000  0.00000000  0.50000000  1
+  P5+  P2  4  0.08946782  0.25000000  0.15238914  1
+  S2-  S3  8  0.15386116  0.03652390  0.27096483  1
+  S2-  S4  4  0.05933211  0.75000000  0.72757734  1
+  S2-  S5  4  0.10018968  0.25000000  0.82467616  1

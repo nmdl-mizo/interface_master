@@ -1,265 +1,363 @@
 import numpy as np
 import os
-import subprocess
-from numpy.linalg import inv, norm, det
 from pymatgen.core.structure import Structure
-from pymatgen.io.lammps.data import LammpsData
-from pymatgen.io.lammps.outputs import parse_lammps_dumps
-from interfacemaster.interface_generator import core, registration_minimizer, get_height
-from interfacemaster.cellcalc import rot, MID, get_normal_from_MI
-from interfacemaster.twinning_search import calculate_approx_sigma
+from pymatgen.core.surface import SlabGenerator
+from pymatgen.core.interface import label_termination
+from interfacemaster.interface_generator import core, get_height
+from interfacemaster.cellcalc import MID, get_normal_from_MI
+from pymatgen.io.vasp import Poscar
 from jobflow import job, Maker
 from dataclasses import dataclass
 from typing import Dict, Any, List
 from skopt.space import Real
 from skopt import gp_minimize
-from tqdm import tqdm
+ 
+# Try to import ASE and adapters
+HAS_ASE = False
+IMPORT_ERROR = None
+try:
+    from ase.optimize import LBFGS
+    from ase.constraints import ExpCellFilter
+    try:
+        from pymatgen.io.ase import AseAtomsAdaptor as AseAdaptor
+    except ImportError:
+        from pymatgen.io.ase import AseAdaptor
+    HAS_ASE = True
+except Exception as e:
+    IMPORT_ERROR = f"ASE import error: {e}"
 
-def get_structure_from_dump_file(dump_file_name):
-    """从 LAMMPS dump 文件读取最后一帧结构"""
-    dump = None
-    for i in parse_lammps_dumps(dump_file_name):
-        dump = i
-    if dump is None:
-        raise RuntimeError(f"无法从 {dump_file_name} 解析结构")
-    lattice = dump.box.to_lattice()
-    elements = dump.data['element'].to_numpy()
-    x, y, z = dump.data['x'], dump.data['y'], dump.data['z']
-    coords = np.column_stack((x, y, z))
-    return Structure(lattice, elements, coords, coords_are_cartesian=True)
+# Optional calculators
+try:
+    from deepmd.calculator import DP as DeepmdDP
+except Exception:
+    DeepmdDP = None
+try:
+    from deepmd.calc import DeepMDPotential as DeepmdPotential
+except Exception:
+    DeepmdPotential = None
+try:
+    from sevenn.sevennet_calculator import SevenNetCalculator
+except Exception:
+    SevenNetCalculator = None
+try:
+    from orb_models.calculators import OrbCalculator
+except Exception:
+    OrbCalculator = None
 
-def extract_position(elements_all, xs, es, target_elements, bulk_energies, tol=0.1):
-    """提取界面位置（基于能量异常）"""
-    high_energy_xs = []
-    for elem, bulk_e in zip(target_elements, bulk_energies):
-        mask = (elements_all == elem)
-        elem_xs = xs[mask]
-        elem_es = es[mask]
-        # 筛选能量显著高于 bulk 的原子
-        high_energy_xs.extend(elem_xs[elem_es > bulk_e + tol])
-    
-    if not high_energy_xs:
-        return np.average(xs) # 回退
-    return np.average(high_energy_xs)
+def _termination_signature_from_slab(slab, ftol):
+    """Return (top_label, bottom_label) using pymatgen label_termination."""
+    top_label = label_termination(slab, ftol=ftol)
+    frac = slab.frac_coords.copy()
+    frac[:, 2] = (-frac[:, 2]) % 1.0
+    bottom_struct = Structure(slab.lattice, slab.species, frac, coords_are_cartesian=False)
+    bottom_label = label_termination(bottom_struct, ftol=ftol)
+    return (top_label, bottom_label)
 
-def get_double_gb_positions(dump_file_name, target_elements, bulk_energies, tol=0.1, shell=3.0):
-    """获取两个等效界面的位置，用于定义退火区域"""
-    dump = None
-    for i in parse_lammps_dumps(dump_file_name):
-        dump = i
-    
-    a = dump.box.to_lattice().a
-    elements = dump.data['element'].to_numpy()
-    x = dump.data['x']
-    e = dump.data['c_energy']
-    
-    # 假设界面在大约 0 和 0.5 处（周期性边界）
-    # 划分中间区域和侧边区域
-    mid_mask = (x >= 0.25 * a) & (x < 0.75 * a)
-    side_mask = ~mid_mask
-    
-    middle_elements = elements[mid_mask]
-    middle_x = x[mid_mask]
-    middle_e = e[mid_mask]
+def _get_termination_pairs(
+    structure,
+    hkl,
+    termination_ftol=0.25,
+    termination_tol=1e-3,
+    max_pairs=None,
+):
+    """Return list of (dp1, dp2, signature) for equivalent terminations."""
+    slab_spacing = float(structure.lattice.d_hkl(hkl))
+    sg = SlabGenerator(
+        initial_structure=structure,
+        miller_index=hkl,
+        min_slab_size=slab_spacing,
+        min_vacuum_size=0.0,
+        center_slab=False,
+        in_unit_planes=True,
+    )
+    slabs = sg.get_slabs(ftol=termination_ftol, filter_out_sym_slabs=False)
+    if not slabs:
+        return []
 
-    side_elements = elements[side_mask]
-    side_x = x[side_mask].copy()
-    # 处理跨越边界的情况，将侧边原子平移到一起计算中心
-    side_x[side_x >= 0.5 * a] -= a
-    side_e = e[side_mask]
-    
-    middle_pos = extract_position(middle_elements, middle_x, middle_e, target_elements, bulk_energies, tol)
-    side_pos = extract_position(side_elements, side_x, side_e, target_elements, bulk_energies, tol)
-    
-    # 转换回 [0, a] 范围
-    if side_pos < 0: side_pos += a
-    
-    # 定义区域边界
-    m_lo, m_hi = middle_pos - shell, middle_pos + shell
-    
-    if side_pos < 0.5 * a:
-        s_lo = side_pos + shell
-        s_hi = side_pos + a - shell
-    else:
-        s_lo = side_pos - a + shell
-        s_hi = side_pos - shell
-        
-    return s_lo, s_hi, m_lo, m_hi
+    groups = []
+    for slab in slabs:
+        shift = float(slab.shift) % 1.0
+        sig = _termination_signature_from_slab(slab, termination_ftol)
+        placed = False
+        for grp in groups:
+            if sig == grp[0]["signature"]:
+                # 保留同一端面签名下的所有 shift（不在这里去重）
+                grp.append({"shift": shift, "signature": sig})
+                placed = True
+                break
+        if not placed:
+            groups.append([{"shift": shift, "signature": sig}])
+
+    term_pairs = []
+    seen_pairs = set()
+    for grp in groups:
+        for i in range(len(grp)):
+            for j in range(i + 1, len(grp)):
+                s1, s2 = grp[i]["shift"], grp[j]["shift"]
+                if abs(s1 - s2) > termination_tol:
+                    a, b = (s1, s2) if s1 <= s2 else (s2, s1)
+                    # 去重：同一端面签名下，(a,b) 近似相同的配对只保留一次
+                    key = (grp[i]["signature"], round(a / termination_tol), round(b / termination_tol))
+                    if key in seen_pairs:
+                        continue
+                    seen_pairs.add(key)
+                    term_pairs.append((a, b, grp[i]["signature"]))
+                    if max_pairs is not None and len(term_pairs) >= max_pairs:
+                        return term_pairs
+    return term_pairs
+
+def generate_equivalent_termination_structures(
+    result,
+    parent_stct,
+    slab_length=10.0,
+    termination_ftol=0.25,
+    termination_tol=1e-3,
+    tol_ortho=1e-2,
+    return_slabs=False,
+):
+    """
+    Given one search result, return bicrystal Structures for equivalent terminations.
+    This only builds structures (no BO/relax).
+    """
+    hkl = result["hkl"]
+    if isinstance(hkl, str) and "Cartesian" in hkl:
+        L_p = parent_stct.lattice.matrix.T
+        hkl = MID(lattice=L_p, n=result["axis_cart"], tol=1e-2)
+
+    my_interface = core(parent_stct, parent_stct, verbose=False)
+    my_interface.parse_limit(du=5e-2, S=5e-2, sgm1=200, sgm2=200, dd=5e-2)
+    my_interface.search_fixed(result["rotation_matrix"], exact=False)
+
+    try:
+        my_interface.compute_bicrystal(hkl, lim=20, normal_ortho=True, tol_ortho=tol_ortho)
+    except Exception:
+        my_interface.compute_bicrystal(hkl, lim=20, normal_ortho=False)
+
+    v_cross_cart = np.dot(my_interface.lattice_1, my_interface.bicrystal_U1)
+    h_single = get_height(v_cross_cart)
+    rep_k = int(np.ceil(slab_length / h_single))
+
+    # Use the same supercell used for GB construction to judge terminations
+    slab_structure = parent_stct.copy()
+    slab_structure.make_supercell(np.array(my_interface.bicrystal_U1, dtype=int))
+    # Convert hkl to the supercell basis for slab generation
+    n_cart = get_normal_from_MI(parent_stct.lattice.matrix.T, hkl)
+    hkl_sc = MID(lattice=slab_structure.lattice.matrix.T, n=n_cart, tol=1e-2)
+    term_pairs = _get_termination_pairs(
+        slab_structure, hkl_sc, termination_ftol=termination_ftol, termination_tol=termination_tol
+    )
+    structures = []
+    for dp1, dp2, signature in term_pairs:
+        slab_spacing = float(slab_structure.lattice.d_hkl(hkl_sc))
+        sg = SlabGenerator(
+            initial_structure=slab_structure,
+            miller_index=hkl_sc,
+            min_slab_size=slab_spacing,
+            min_vacuum_size=0.0,
+            center_slab=False,
+            in_unit_planes=True,
+        )
+        slab1 = sg.get_slab(shift=dp1)
+        slab2 = sg.get_slab(shift=dp2)
+
+        stct = my_interface.get_bicrystal(
+            xyz_1=[rep_k, 1, 1],
+            xyz_2=[rep_k, 1, 1],
+            dp1=dp1,
+            dp2=dp2,
+            dydz=np.zeros(3),
+            dx=0.0,
+            vx=0.0,
+            output=False,
+        )
+        item = {"structure": stct, "dp1": dp1, "dp2": dp2, "signature": signature}
+        if return_slabs:
+            item["slab1"] = slab1
+            item["slab2"] = slab2
+        structures.append(item)
+    return structures
+
+def count_equivalent_termination_pairs(
+    result,
+    parent_stct,
+    slab_length=10.0,
+    termination_ftol=0.25,
+    termination_tol=1e-3,
+    tol_ortho=1e-2,
+):
+    """
+    Return count of equivalent termination pairs for a given search result.
+    This avoids building full GB structures.
+    """
+    hkl = result["hkl"]
+    if isinstance(hkl, str) and "Cartesian" in hkl:
+        L_p = parent_stct.lattice.matrix.T
+        hkl = MID(lattice=L_p, n=result["axis_cart"], tol=1e-2)
+
+    my_interface = core(parent_stct, parent_stct, verbose=False)
+    my_interface.parse_limit(du=5e-2, S=5e-2, sgm1=200, sgm2=200, dd=5e-2)
+    my_interface.search_fixed(result["rotation_matrix"], exact=False)
+
+    try:
+        my_interface.compute_bicrystal(hkl, lim=20, normal_ortho=True, tol_ortho=tol_ortho)
+    except Exception:
+        my_interface.compute_bicrystal(hkl, lim=20, normal_ortho=False)
+
+    slab_structure = parent_stct.copy()
+    slab_structure.make_supercell(np.array(my_interface.bicrystal_U1, dtype=int))
+    n_cart = get_normal_from_MI(parent_stct.lattice.matrix.T, hkl)
+    hkl_sc = MID(lattice=slab_structure.lattice.matrix.T, n=n_cart, tol=1e-2)
+
+    term_pairs = _get_termination_pairs(
+        slab_structure,
+        hkl_sc,
+        termination_ftol=termination_ftol,
+        termination_tol=termination_tol,
+        max_pairs=1,
+    )
+    return len(term_pairs)
 
 @dataclass
 class TwinningJobflowMaker(Maker):
-    name: str = "Twinning GB BO-Anneal-Relax"
+    name: str = "Twinning GB BO-Relax (Symmetric Terminations)"
     # 基础参数
     crystal_structure: Structure = None
     search_result: Dict[str, Any] = None # 包含 rotation_matrix, sigma, hkl 等
-    ml_model_path: str = None # DPA 模型路径
-    potential_type: str = "e3gnn" # 或 "deepmd" 等
-    elements: List[str] = None
-    bulk_energies: List[float] = None # 与 elements 对应
+    ml_model_path: str = None # 模型路径
+    calc_type: str = "deepmd" # deepmd | sevennet | orb
+    calc_kwargs: Dict[str, Any] = None
+    bulk_energy_per_atom: float = None # eV/atom
+    output_dir: str = "twinning_jobflow_results"
     
     # 优化参数
     trials: int = 40
     slab_length: float = 10.0
     z_range: List[float] = None # [min, max]
     random_state: int = 42
-    
-    # 退火参数
-    temp: float = 2000.0
-    anneal_steps: int = 2000
-    cool_steps: int = 2000
+    termination_tol: float = 1e-3
+    termination_ftol: float = 0.25
+    interface_energy_window: float = 0.5 # J/m^2
     
     def __post_init__(self):
         if self.z_range is None:
             self.z_range = [-0.1, 0.1]
-        if self.elements is None and self.crystal_structure:
-            self.elements = [str(el) for el in self.crystal_structure.composition.elements]
+        if self.calc_kwargs is None:
+            self.calc_kwargs = {}
 
-    def get_lammps_static_input(self, model_path, elements):
-        elem_str = " ".join(elements)
-        return f"""
-units           metal
-atom_style      atomic
-dimension       3
-boundary        p p p
-read_data       gb.data
+    def _compute_interface_energy(self, total_energy, structure):
+        """
+        计算界面能 (J/m^2):
+        gamma = (E_total - N * E_bulk) / (2 * A) * 16.0218
+        其中 A 为单个界面面积 (Ang^2), E_total 单位 eV, E_bulk 为 eV/atom
+        """
+        if self.bulk_energy_per_atom is None:
+            raise RuntimeError("必须提供 bulk_energy_per_atom (eV/atom) 才能计算界面能。")
+        if self.bulk_energy_per_atom > 0:
+            raise RuntimeError(
+                f"bulk_energy_per_atom 为正值 ({self.bulk_energy_per_atom:.6f})，"
+                "这通常是符号传反。请传入体相每原子的实际能量（通常为负）。"
+            )
+        n_atoms = len(structure)
+        # 界面面积取结构的 b×c（假设 a 为法向）
+        lat = structure.lattice.matrix
+        area = np.linalg.norm(np.cross(lat[1], lat[2]))
+        excess_e = total_energy - n_atoms * self.bulk_energy_per_atom
+        gamma_eva2 = excess_e / (2.0 * area)
+        gamma_jm2 = gamma_eva2 * 16.0217662
+        return gamma_jm2, area
 
-pair_style      {self.potential_type}
-pair_coeff      * * {model_path} {elem_str}
+    def _build_calculator(self):
+        if not HAS_ASE:
+            raise RuntimeError(f"无法初始化 ASE: {IMPORT_ERROR}")
+        if not self.ml_model_path and self.calc_type != "orb":
+            raise RuntimeError("未提供 ml_model_path，无法初始化计算器。")
 
-neighbor        2.0 bin
-neigh_modify    every 1 delay 0 check yes
+        calc_type = self.calc_type.lower()
+        if calc_type == "deepmd":
+            if DeepmdDP is not None:
+                return DeepmdDP(model=self.ml_model_path, **self.calc_kwargs)
+            if DeepmdPotential is not None:
+                return DeepmdPotential(model=self.ml_model_path, **self.calc_kwargs)
+            raise RuntimeError("DeepMD 计算器不可用。")
+        if calc_type == "sevennet":
+            if SevenNetCalculator is None:
+                raise RuntimeError("SevenNetCalculator 不可用。")
+            return SevenNetCalculator(model=self.ml_model_path, **self.calc_kwargs)
+        if calc_type == "orb":
+            if OrbCalculator is None:
+                raise RuntimeError("OrbCalculator 不可用。")
+            return OrbCalculator(model=self.ml_model_path, **self.calc_kwargs)
+        raise RuntimeError(f"未知 calc_type: {self.calc_type}")
 
-compute energy all pe/atom
-compute total_energy all reduce sum c_energy
-variable total_energy equal c_total_energy
+    def _hkl_spacing(self, hkl):
+        """返回晶面间距 (Angstrom)。"""
+        return float(self.crystal_structure.lattice.d_hkl(hkl))
 
-thermo_style    custom step c_total_energy
-run             0
-print           ${{total_energy}} file sampled_energy.dat screen no
-"""
+    def _termination_signature(self, slab):
+        """
+        使用 pymatgen 的 label_termination 生成端面标签。
+        返回 (top_label, bottom_label)，从而区分 A/B 与 B/A。
+        """
+        top_label = label_termination(slab, ftol=self.termination_ftol)
+        # 通过翻转 z 分数坐标获得底面标签
+        frac = slab.frac_coords.copy()
+        frac[:, 2] = (-frac[:, 2]) % 1.0
+        bottom_struct = Structure(slab.lattice, slab.species, frac, coords_are_cartesian=False)
+        bottom_label = label_termination(bottom_struct, ftol=self.termination_ftol)
+        return (top_label, bottom_label)
 
-    def get_lammps_relax_input(self, model_path, elements):
-        elem_str = " ".join(elements)
-        return f"""
-units           metal
-atom_style      atomic
-dimension       3
-boundary        p p p
-read_data       gb.data
+    def _get_termination_groups(self, hkl):
+        """
+        使用 SlabGenerator 生成不同 termination，并用 label_termination 分组。
+        返回: List[List[dict]]，每个 dict 包含 shift、slab 和 signature。
+        """
+        try:
+            slab_spacing = self._hkl_spacing(hkl)
+            sg = SlabGenerator(
+                initial_structure=self.crystal_structure,
+                miller_index=hkl,
+                min_slab_size=slab_spacing,
+                min_vacuum_size=0.0,
+                center_slab=False,
+                in_unit_planes=True
+            )
+            slabs = sg.get_slabs(ftol=self.termination_ftol, filter_out_sym_slabs=False)
+        except Exception:
+            slabs = []
 
-pair_style      {self.potential_type}
-pair_coeff      * * {model_path} {elem_str}
+        if not slabs:
+            return []
 
-neighbor        2.0 bin
-neigh_modify    every 1 delay 0 check yes
-
-compute energy all pe/atom
-fix 1 all box/relax x 0.0
-
-min_style       cg
-minimize        0 1e-3 10000 10000
-
-dump            1 all custom 1 relaxed_gb.dat id element type x y z c_energy
-dump_modify     1 sort id element {elem_str}
-run             0
-"""
-
-    def get_lammps_anneal_input(self, model_path, elements, s_lo, s_hi, m_lo, m_hi):
-        elem_str = " ".join(elements)
-        return f"""
-units           metal
-atom_style      atomic
-dimension       3
-boundary        p p p
-read_data       gb.data
-
-pair_style      {self.potential_type}
-pair_coeff      * * {model_path} {elem_str}
-
-neighbor        2.0 bin
-neigh_modify    every 1 delay 0 check yes
-
-# 定义区域
-region          side1 block EDGE {s_lo} EDGE EDGE EDGE EDGE
-region          side2 block {s_hi} EDGE EDGE EDGE EDGE EDGE
-region          side union 2 side1 side2
-group           side region side
-
-region          middle block {m_lo} {m_hi} EDGE EDGE EDGE EDGE
-group           middle region middle
-
-region          bulk1 block {s_lo} {m_lo} EDGE EDGE EDGE EDGE
-group           bulk1 region bulk1
-fix             bk1_rigid bulk1 rigid single
-
-region          bulk2 block {m_hi} {s_hi} EDGE EDGE EDGE EDGE
-group           bulk2 region bulk2
-fix             bk2_rigid bulk2 rigid single
-
-group           bulk union bulk1 bulk2
-group           gb union side middle
-
-timestep        0.001
-compute         gb_temp gb temp/com
-compute         energy all pe/atom
-
-thermo          100
-thermo_style    custom step c_gb_temp
-
-fix             1 all box/relax x 0.0
-fix             nve bulk nve
-
-velocity        gb create {self.temp} {self.random_state} rot yes dist gaussian
-fix             nvt_s side nvt temp {self.temp} {self.temp} 0.1
-fix             nvt_m middle nvt temp {self.temp} {self.temp} 0.1
-
-run             {self.anneal_steps}
-
-unfix           nvt_s
-unfix           nvt_m
-fix             nvt_s side nvt temp {self.temp} 30.0 0.1
-fix             nvt_m middle nvt temp {self.temp} 30.0 0.1
-
-run             {self.cool_steps}
-
-velocity        all zero linear
-unfix           nvt_s
-unfix           nvt_m
-unfix           nve
-
-min_style       cg
-minimize        0 1e-3 10000 10000
-
-dump            1 all custom 1 annealed_final.dat id element type x y z c_energy
-dump_modify     1 sort id element {elem_str}
-run             0
-"""
-
-    def run_lammps(self, input_str):
-        with open('lammps.in', 'w') as f:
-            f.write(input_str)
-        cmd = "lmp -i lammps.in -log log.lammps"
-        subprocess.run(cmd.split(), check=True, capture_output=True)
+        groups = []
+        for slab in slabs:
+            shift = float(slab.shift) % 1.0
+            sig = self._termination_signature(slab)
+            placed = False
+            for grp in groups:
+                # 先要求端面标签一致（A/B 与 B/A 区分）
+                if sig == grp[0]["signature"]:
+                    grp.append({"shift": shift, "slab": slab, "signature": sig})
+                    placed = True
+                    break
+            if not placed:
+                groups.append([{"shift": shift, "slab": slab, "signature": sig}])
+        return groups
 
     def sample_energy(self, params):
-        """BO 采样函数"""
-        x, y, z, dp1, dp2, vx = params
+        """BO 采样函数（固定 dp1/dp2 来匹配等价端面）"""
+        x, y, z, vx = params
         v1, v2 = self.my_interface.CNID.T
         dydz = x * v1 + y * v2
         
         gb = self.my_interface.get_bicrystal(
             xyz_1=[self.rep_k, 1, 1], xyz_2=[self.rep_k, 1, 1],
-            dp1=dp1, dp2=dp2, dydz=dydz, dx=z, vx=vx, output=False
+            dp1=self.current_dp1, dp2=self.current_dp2,
+            dydz=dydz, dx=z, vx=vx, output=False
         )
         
-        # 写入 LAMMPS data 并计算能量
-        ld = LammpsData.from_structure(gb, atom_style='atomic')
-        ld.write_file('gb.data')
-        
-        input_str = self.get_lammps_static_input(self.ml_model_path, self.elements)
-        self.run_lammps(input_str)
-        
-        energy = float(np.loadtxt('sampled_energy.dat'))
+        atoms = AseAdaptor.get_atoms(gb)
+        atoms.calc = self.calc
+        energy = atoms.get_potential_energy()
         self.sampled_structures.append(gb)
         return energy
 
@@ -284,47 +382,84 @@ run             0
         v_cross_cart = np.dot(self.my_interface.lattice_1, self.my_interface.bicrystal_U1)
         h_single = get_height(v_cross_cart)
         self.rep_k = int(np.ceil(self.slab_length / h_single))
+
+        self.calc = self._build_calculator()
         
-        # 2. 贝叶斯优化
-        self.sampled_structures = []
-        search_space = [
-            Real(0, 1, name='x'), Real(0, 1, name='y'),
-            Real(self.z_range[0], self.z_range[1], name='z'),
-            Real(0, 1, name='dp1'), Real(0, 1, name='dp2'),
-            Real(0, 2.0, name='vx')
-        ]
-        
-        print(f"开始贝叶斯优化 (n_calls={self.trials})...")
-        res_bo = gp_minimize(self.sample_energy, search_space, n_calls=self.trials, random_state=self.random_state)
-        
-        best_idx = np.argmin(res_bo.func_vals)
-        best_gb = self.sampled_structures[best_idx]
-        print(f"BO 完成。最优能量: {res_bo.fun:.4f} eV")
-        
-        # 3. 结构弛豫 (Static Relax)
-        print("执行静态弛豫...")
-        ld = LammpsData.from_structure(best_gb, atom_style='atomic')
-        ld.write_file('gb.data')
-        relax_input = self.get_lammps_relax_input(self.ml_model_path, self.elements)
-        self.run_lammps(relax_input)
-        relaxed_stct = get_structure_from_dump_file('relaxed_gb.dat')
-        
-        # 4. 退火 (Annealing)
-        print("执行退火流程...")
-        if self.bulk_energies:
-            s_lo, s_hi, m_lo, m_hi = get_double_gb_positions('relaxed_gb.dat', self.elements, self.bulk_energies)
-            ld = LammpsData.from_structure(relaxed_stct, atom_style='atomic')
-            ld.write_file('gb.data')
-            anneal_input = self.get_lammps_anneal_input(self.ml_model_path, self.elements, s_lo, s_hi, m_lo, m_hi)
-            self.run_lammps(anneal_input)
-            final_stct = get_structure_from_dump_file('annealed_final.dat')
-        else:
-            print("警告: 未提供 bulk_energies，跳过退火步骤。")
-            final_stct = relaxed_stct
-            
+        # 2. 分组等价端面（基于GB超胞），再对每对等价端面做 BO
+        slab_structure = self.crystal_structure.copy()
+        slab_structure.make_supercell(np.array(self.my_interface.bicrystal_U1, dtype=int))
+        n_cart = get_normal_from_MI(self.crystal_structure.lattice.matrix.T, hkl)
+        hkl_sc = MID(lattice=slab_structure.lattice.matrix.T, n=n_cart, tol=1e-2)
+        term_pairs = _get_termination_pairs(
+            slab_structure,
+            hkl_sc,
+            termination_ftol=self.termination_ftol,
+            termination_tol=self.termination_tol,
+        )
+        print(f"共找到 {len(term_pairs)} 对等价端面，开始逐个优化...")
+        if not term_pairs:
+            raise RuntimeError("未找到等价端面组合（shift 不同）。请检查 termination_ftol/termination_tol。")
+
+        term_results = []
+        for dp1, dp2, signature in term_pairs:
+            self.current_dp1 = dp1
+            self.current_dp2 = dp2
+            self.sampled_structures = []
+            search_space = [
+                Real(0, 1, name='x'), Real(0, 1, name='y'),
+                Real(self.z_range[0], self.z_range[1], name='z'),
+                Real(0, 2.0, name='vx')
+            ]
+            print(f"  - 优化 termination pair=({dp1:.4f}, {dp2:.4f}) (n_calls={self.trials})")
+            res_bo = gp_minimize(self.sample_energy, search_space, n_calls=self.trials, random_state=self.random_state)
+            local_best_idx = np.argmin(res_bo.func_vals)
+            local_best_gb = self.sampled_structures[local_best_idx]
+            local_best_energy = res_bo.fun
+            gamma_jm2, area = self._compute_interface_energy(local_best_energy, local_best_gb)
+            term_results.append({
+                "dp1": dp1,
+                "dp2": dp2,
+                "signature": signature,
+                "best_structure": local_best_gb,
+                "best_energy": local_best_energy,
+                "interface_energy": gamma_jm2,
+                "area": area,
+                "bo_result": res_bo,
+            })
+
+        # 3. 选择界面能接近最低的端面
+        min_gamma = min(r["interface_energy"] for r in term_results)
+        selected = [r for r in term_results if r["interface_energy"] <= min_gamma + self.interface_energy_window]
+        print(f"最低界面能: {min_gamma:.4f} J/m^2，筛选 {len(selected)} 个端面进行结构优化...")
+
+        # 4. 对筛选结果做结构优化并保存
+        os.makedirs(self.output_dir, exist_ok=True)
+        saved_files = []
+        optimized_results = []
+        for idx, r in enumerate(selected, start=1):
+            print(f"  - 优化端面 {idx}/{len(selected)}: dp1={r['dp1']:.4f}, dp2={r['dp2']:.4f}")
+            atoms = AseAdaptor.get_atoms(r["best_structure"])
+            atoms.calc = self.calc
+            ecf = ExpCellFilter(atoms, mask=[True, False, False, False, False, False])
+            opt = LBFGS(ecf, logfile=None)
+            opt.run(fmax=0.05)
+            relaxed_stct = AseAdaptor.get_structure(atoms)
+            filename = os.path.join(self.output_dir, f"GB_term_{idx}_dp1_{r['dp1']:.4f}_dp2_{r['dp2']:.4f}.vasp")
+            Poscar(relaxed_stct).write_file(filename)
+            saved_files.append(filename)
+            optimized_results.append({
+                "dp1": r["dp1"],
+                "dp2": r["dp2"],
+                "signature": r["signature"],
+                "interface_energy": r["interface_energy"],
+                "relaxed_structure": relaxed_stct,
+                "file": filename,
+            })
+
         print("所有流程已完成。")
         return {
-            "final_structure": final_stct,
-            "bo_results": {"x": res_bo.x_iters, "y": res_bo.func_vals.tolist()},
-            "best_params": res_bo.x
+            "min_interface_energy": min_gamma,
+            "selected_count": len(selected),
+            "saved_files": saved_files,
+            "optimized_results": optimized_results,
         }

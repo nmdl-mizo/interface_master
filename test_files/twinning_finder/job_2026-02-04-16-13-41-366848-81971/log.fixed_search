@@ -1,0 +1,25 @@
+---Searching starts---
+axis theta dtheta n S du sigma1_max sigma2_max
+0.05 0.05 200 200
+-----------for theta-----------
+    -----for N-----
+N= 3 accepted
+--D accepted--
+D, det(D) = 1.0 
+--------------------------------
+Congrates, we found an appx CSL!
+U1 = 
+[[ 0  1 -1]
+ [ 1 -1 -1]
+ [-1  0 -1]]; sigma_1 = 3
+
+U2 = 
+[[-1  1 -1]
+ [ 1  0 -1]
+ [ 0 -1 -1]]; sigma_2 = 3
+
+D = 
+[[ 1.  0.  0.]
+ [-0.  1. -0.]
+ [ 0. -0.  1.]]
+

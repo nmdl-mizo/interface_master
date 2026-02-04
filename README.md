@@ -39,6 +39,10 @@ pip install .
 
 Tutorials are ready on [Google Colab](https://colab.research.google.com/github/nmdl-mizo/interface_master/blob/develop).
 
+## Twinning Search Tutorial
+
+We provide a dedicated twinning search tutorial (including CSL twinning search and interface generation) in the documentation and Colab notebooks. If you are looking for twinning-specific workflows, start there.
+
 ## How to cite
  If you use the interface_master, please cite the following articles [1][2].  
 [1] "interface_master: Python package building CSL and approximate CSL interfaces of any two lattices -- an effective tool for interface engineers"  

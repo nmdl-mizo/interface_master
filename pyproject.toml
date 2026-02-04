@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "interfacemaster"
+version = "1.1.7"
+description = "A program of calculating interface structure"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Yaoshu Xie", email = "ysxie@iis.u-tokyo.ac.jp"},
+]
+maintainers = [
+    {name = "Yaoshu Xie", email = "ysxie@iis.u-tokyo.ac.jp"},
+]
+keywords = [
+    "materials-science",
+    "crystallography",
+    "interface",
+    "CSL",
+    "grain-boundary",
+    "CNID",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+    "pymatgen",
+    "matplotlib",
+    "numpy",
+    "jobflow",
+    "scikit-optimize",
+    "tqdm",
+    "gb_code",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ipykernel",
+    "sphinx",
+    "pydata-sphinx-theme",
+    "nbsphinx",
+    "pytest",
+    "pytest-cov",
+]
+
+[project.urls]
+Homepage = "https://github.com/nmdl-mizo/interface_master"
+Documentation = "https://nmdl-mizo.github.io/interface_master/"
+Repository = "https://github.com/nmdl-mizo/interface_master"
+Issues = "https://github.com/nmdl-mizo/interface_master/issues"
+
+[tool.setuptools]
+packages = ["interfacemaster"]

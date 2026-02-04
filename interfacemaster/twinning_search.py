@@ -141,13 +141,35 @@ def calculate_approx_sigma(L1, R, max_sigma, du=0.08):
             return N
     return None
 
-def search_low_index_twinning(parent_file, child_file, max_strain=0.1, hkl_limit=4, max_sigma=100, ortho_only=False, tol_ortho=1e-2):
+def search_low_index_twinning(
+    parent,
+    child,
+    max_strain=0.1,
+    hkl_limit=4,
+    max_sigma=100,
+    ortho_only=False,
+    tol_ortho=1e-2,
+    max_atoms=None,
+    max_results=None,
+    prefilter_limit=None,
+    require_equivalent_terminations=False,
+    termination_ftol=0.25,
+    termination_tol=1e-3,
+    slab_length=10.0,
+    debug_filters=False,
+):
     """
     搜索低指数孪晶面，包含晶向、面法向及笛卡尔坐标轴，并进行对称性去重和单晶过滤。
+    parent/child: 可以是 Structure 实例或 CIF 文件路径。
+    max_atoms: 过滤掉生成的最小双晶胞原子数大于该阈值的候选。
+    max_results: 最多返回多少个候选（按 sigma/strain 排序后截断）。
+    prefilter_limit: 仅用于加速的预裁剪数量（在重过滤前截断）。
+    require_equivalent_terminations: 仅保留能生成等价端面配对的候选。
+    debug_filters: 打印过滤细节。
     """
     from interfacemaster.interface_generator import core
-    parent = Structure.from_file(parent_file)
-    child = Structure.from_file(child_file)
+    parent = parent if isinstance(parent, Structure) else Structure.from_file(parent)
+    child = child if isinstance(child, Structure) else Structure.from_file(child)
     variants, L_p = get_variants(parent, child)
     hkl_candidates = get_low_index_planes(hkl_limit)
     sga_parent = SpacegroupAnalyzer(parent)
@@ -304,7 +326,76 @@ def search_low_index_twinning(parent_file, child_file, max_strain=0.1, hkl_limit
             except: continue
         unique_results = ortho_results
 
+    # 先排序（用于后续预裁剪）
     unique_results.sort(key=lambda x: (x['sigma'], x['strain']))
+
+    # 预裁剪：在重过滤前先限制数量以加速（避免丢掉可生成端面的候选）
+    if prefilter_limit is not None:
+        unique_results = unique_results[:prefilter_limit]
+
+    # --- 原子数过滤 ---
+    if max_atoms is not None:
+        from interfacemaster.interface_generator import core
+        print(f"正在进行原子数过滤 (max_atoms={max_atoms})...")
+        filtered_results = []
+        my_interface = core(parent, parent, verbose=False)
+        for res in unique_results:
+            hkl_to_test = res['hkl']
+            if isinstance(hkl_to_test, str) and "Cartesian" in hkl_to_test:
+                try:
+                    hkl_to_test = MID(lattice=L_p, n=res['axis_cart'], tol=1e-2)
+                except:
+                    continue
+            my_interface.parse_limit(du=5e-2, S=5e-2, sgm1=max(100, res['sigma']), sgm2=max(100, res['sigma']), dd=5e-2)
+            try:
+                my_interface.search_fixed(res['rotation_matrix'], exact=False)
+                try:
+                    my_interface.compute_bicrystal(hkl_to_test, lim=20, normal_ortho=True, tol_ortho=tol_ortho)
+                except Exception:
+                    my_interface.compute_bicrystal(hkl_to_test, lim=20, normal_ortho=False)
+                # 原子数用超胞结构直接判断
+                stct = my_interface.get_bicrystal(
+                    xyz_1=[1, 1, 1],
+                    xyz_2=[1, 1, 1],
+                    output=False,
+                )
+                est_atoms = len(stct)
+                if debug_filters:
+                    print(f"  - atoms_est hkl {res['hkl']} sigma {res['sigma']} -> {est_atoms}")
+                if est_atoms <= max_atoms:
+                    filtered_results.append(res)
+            except Exception:
+                continue
+        unique_results = filtered_results
+
+    # --- 端面可生成性过滤 ---
+    if require_equivalent_terminations:
+        from interfacemaster.twinning_jobflow import count_equivalent_termination_pairs
+        print("正在进行端面可生成性过滤 (require_equivalent_terminations=True)...")
+        filtered_results = []
+        for res in unique_results:
+            if max_results is not None and len(filtered_results) >= max_results:
+                break
+            try:
+                n_pairs = count_equivalent_termination_pairs(
+                    res,
+                    parent,
+                    slab_length=slab_length,
+                    termination_ftol=termination_ftol,
+                    termination_tol=termination_tol,
+                )
+                if debug_filters:
+                    print(f"  - hkl {res['hkl']} sigma {res['sigma']} -> term_pairs {n_pairs}")
+                if n_pairs > 0:
+                    filtered_results.append(res)
+            except Exception:
+                continue
+        unique_results = filtered_results
+
+    # 最终排序并截断
+    unique_results.sort(key=lambda x: (x['sigma'], x['strain']))
+    if max_results is not None:
+        unique_results = unique_results[:max_results]
     print(f"最终找到 {len(unique_results)} 个独特界面候选。")
     for res in unique_results[:15]:
         print(f"  轴/面: {res['hkl']} | Sigma: {res['sigma']} | 角度: {np.degrees(np.arccos((np.trace(res['rotation_matrix'])-1)/2)):.1f}° | 类型: {res['type']}")
@@ -401,6 +492,62 @@ def generate_twinning_configs(result, parent_stct, thickness_limit=10.0, ml_mode
     else:
         print("警告: 未提供 ml_model，无法进行全局优化搜索。")
         return []
+
+def generate_single_gb_structure(
+    result,
+    parent_stct,
+    slab_length=10.0,
+    dp1=0.0,
+    dp2=0.0,
+    dx=0.0,
+    vx=0.0,
+    dydz=None,
+    tol_ortho=1e-2,
+    output_path="POSCAR_single_gb",
+):
+    """
+    直接生成一个孪晶界结构（不做优化）。
+    """
+    from interfacemaster.interface_generator import core, get_height
+
+    hkl = result["hkl"]
+    if isinstance(hkl, str) and "Cartesian" in hkl:
+        L_p = parent_stct.lattice.matrix.T
+        axis_cart = result["axis_cart"]
+        hkl = MID(lattice=L_p, n=axis_cart, tol=1e-2)
+
+    my_interface = core(parent_stct, parent_stct, verbose=False)
+    my_interface.parse_limit(du=5e-2, S=5e-2, sgm1=200, sgm2=200, dd=5e-2)
+    my_interface.search_fixed(result["rotation_matrix"], exact=False)
+
+    try:
+        my_interface.compute_bicrystal(hkl, lim=20, normal_ortho=True, tol_ortho=tol_ortho)
+    except Exception:
+        my_interface.compute_bicrystal(hkl, lim=20, normal_ortho=False)
+
+    v_cross_cart = np.dot(my_interface.lattice_1, my_interface.bicrystal_U1)
+    h_single = get_height(v_cross_cart)
+    v3_len = np.linalg.norm(v_cross_cart[:, 0])
+    print(f"[GB] hkl={hkl}, |v3|={v3_len:.3f} Å, h_single={h_single:.3f} Å")
+    rep_k = int(np.ceil(slab_length / h_single))
+
+    if dydz is None:
+        dydz = np.zeros(3)
+
+    stct = my_interface.get_bicrystal(
+        xyz_1=[rep_k, 1, 1],
+        xyz_2=[rep_k, 1, 1],
+        dp1=dp1,
+        dp2=dp2,
+        dydz=dydz,
+        dx=dx,
+        vx=vx,
+        output=False,
+    )
+
+    from pymatgen.io.vasp import Poscar
+    Poscar(stct).write_file(output_path)
+    return stct
 
 if __name__ == "__main__":
     import sys
