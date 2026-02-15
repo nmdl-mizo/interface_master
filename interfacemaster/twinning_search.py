@@ -129,6 +129,18 @@ def is_symmetry_equivalent(R1, R2, sym_ops, atol=1e-3):
                 return True
     return False
 
+def is_relative_symmetry_equivalent(R1, R2, sym_ops, atol=1e-3):
+    """
+    判断两个旋转矩阵是否只相差一个晶体对称操作：
+    若 R_rel = R2 * inv(R1) (或其逆) 与某个对称操作一致，则认为等价。
+    """
+    R_rel = np.dot(R2, inv(R1))
+    R_rel_inv = inv(R_rel)
+    for O in sym_ops:
+        if np.allclose(R_rel, O, atol=atol) or np.allclose(R_rel_inv, O, atol=atol):
+            return True
+    return False
+
 def calculate_approx_sigma(L1, R, max_sigma, du=0.08):
     """
     计算给定旋转下的最小近似 Sigma 值。
@@ -157,6 +169,7 @@ def search_low_index_twinning(
     termination_tol=1e-3,
     slab_length=10.0,
     debug_filters=False,
+    termination_check_timeout_s=30,
 ):
     """
     搜索低指数孪晶面，包含晶向、面法向及笛卡尔坐标轴，并进行对称性去重和单晶过滤。
@@ -166,6 +179,7 @@ def search_low_index_twinning(
     prefilter_limit: 仅用于加速的预裁剪数量（在重过滤前截断）。
     require_equivalent_terminations: 仅保留能生成等价端面配对的候选。
     debug_filters: 打印过滤细节。
+    termination_check_timeout_s: 单个候选做端面可生成性检查的超时秒数（超时则跳过该候选）。
     """
     from interfacemaster.interface_generator import core
     parent = parent if isinstance(parent, Structure) else Structure.from_file(parent)
@@ -253,8 +267,10 @@ def search_low_index_twinning(
         
         is_new = True
         for unique in unique_results:
-            # 1. 检查旋转矩阵是否对称等效
-            if sigma_cand == unique['sigma'] and is_symmetry_equivalent(R_cand, unique['rotation_matrix'], sym_ops):
+            # 1. 检查旋转矩阵是否一致（严格）
+            same_sigma = sigma_cand == unique['sigma']
+            rot_equiv = np.allclose(R_cand, unique['rotation_matrix'], atol=1e-3)
+            if same_sigma and rot_equiv:
                 # 2. 如果旋转等效，进一步检查 Miller 指数 (hkl) 是否也等效
                 # 注意：Cartesian 形式会是字符串，需要先转为 hkl
                 hkl_equivalent = False
@@ -311,7 +327,9 @@ def search_low_index_twinning(
                     hkl_to_test = MID(lattice=L_p, n=res['axis_cart'], tol=1e-2)
                 except: continue
             
-            my_interface.parse_limit(du=5e-2, S=5e-2, sgm1=max(100, res['sigma']), sgm2=max(100, res['sigma']), dd=5e-2)
+            # IMPORTANT: use the same CSL search limits as jobflow stage (sgm1/sgm2=200)
+            # to avoid inconsistent bicrystal_U1 between search and jobflow.
+            my_interface.parse_limit(du=5e-2, S=5e-2, sgm1=200, sgm2=200, dd=5e-2)
             try:
                 # 寻找近似 CSL
                 my_interface.search_fixed(res['rotation_matrix'], exact=False)
@@ -336,6 +354,7 @@ def search_low_index_twinning(
     # --- 原子数过滤 ---
     if max_atoms is not None:
         from interfacemaster.interface_generator import core
+        from interfacemaster.interface_generator import get_height
         print(f"正在进行原子数过滤 (max_atoms={max_atoms})...")
         filtered_results = []
         my_interface = core(parent, parent, verbose=False)
@@ -346,22 +365,33 @@ def search_low_index_twinning(
                     hkl_to_test = MID(lattice=L_p, n=res['axis_cart'], tol=1e-2)
                 except:
                     continue
-            my_interface.parse_limit(du=5e-2, S=5e-2, sgm1=max(100, res['sigma']), sgm2=max(100, res['sigma']), dd=5e-2)
+            # IMPORTANT: must match jobflow stage to avoid U1 mismatch (and atom count mismatch)
+            my_interface.parse_limit(du=5e-2, S=5e-2, sgm1=200, sgm2=200, dd=5e-2)
             try:
                 my_interface.search_fixed(res['rotation_matrix'], exact=False)
                 try:
                     my_interface.compute_bicrystal(hkl_to_test, lim=20, normal_ortho=True, tol_ortho=tol_ortho)
                 except Exception:
                     my_interface.compute_bicrystal(hkl_to_test, lim=20, normal_ortho=False)
-                # 原子数用超胞结构直接判断
+                # 原子数过滤必须与后续 jobflow 的 GB 构建口径一致：
+                # jobflow 会根据 slab_length 计算 rep_k，并用 xyz_1/xyz_2=[rep_k,1,1] 加厚双晶。
+                v_cross_cart = np.dot(my_interface.lattice_1, my_interface.bicrystal_U1)
+                h_single = get_height(v_cross_cart)
+                rep_k = int(np.ceil(slab_length / h_single)) if h_single > 1e-12 else 1
+                rep_k = max(1, rep_k)
+
+                # 用实际构建的 GB 结构判断（与后续 BO/Relax 相同）
                 stct = my_interface.get_bicrystal(
-                    xyz_1=[1, 1, 1],
-                    xyz_2=[1, 1, 1],
+                    xyz_1=[rep_k, 1, 1],
+                    xyz_2=[rep_k, 1, 1],
                     output=False,
                 )
                 est_atoms = len(stct)
                 if debug_filters:
-                    print(f"  - atoms_est hkl {res['hkl']} sigma {res['sigma']} -> {est_atoms}")
+                    print(
+                        f"  - atoms_est hkl {res['hkl']} sigma {res['sigma']} -> {est_atoms} "
+                        f"(rep_k={rep_k}, h_single={h_single:.3f}Å, slab_length={slab_length})"
+                    )
                 if est_atoms <= max_atoms:
                     filtered_results.append(res)
             except Exception:
@@ -371,26 +401,49 @@ def search_low_index_twinning(
     # --- 端面可生成性过滤 ---
     if require_equivalent_terminations:
         from interfacemaster.twinning_jobflow import count_equivalent_termination_pairs
+        import signal
+
+        class _TerminationCheckTimeout(Exception):
+            pass
+
+        def _alarm_handler(signum, frame):
+            raise _TerminationCheckTimeout()
+
+        old_handler = signal.getsignal(signal.SIGALRM)
+        signal.signal(signal.SIGALRM, _alarm_handler)
+
         print("正在进行端面可生成性过滤 (require_equivalent_terminations=True)...")
         filtered_results = []
-        for res in unique_results:
+        for idx, res in enumerate(unique_results, start=1):
             if max_results is not None and len(filtered_results) >= max_results:
                 break
             try:
+                if debug_filters:
+                    print(f"  [term-check start {idx}/{len(unique_results)}] hkl {res['hkl']} sigma {res['sigma']}")
+                if termination_check_timeout_s is not None and termination_check_timeout_s > 0:
+                    signal.alarm(int(termination_check_timeout_s))
                 n_pairs = count_equivalent_termination_pairs(
                     res,
                     parent,
                     slab_length=slab_length,
                     termination_ftol=termination_ftol,
                     termination_tol=termination_tol,
+                    debug=debug_filters,
                 )
+                signal.alarm(0)
                 if debug_filters:
                     print(f"  - hkl {res['hkl']} sigma {res['sigma']} -> term_pairs {n_pairs}")
                 if n_pairs > 0:
                     filtered_results.append(res)
+            except _TerminationCheckTimeout:
+                if debug_filters:
+                    print(f"  [term-check timeout] hkl {res['hkl']} sigma {res['sigma']} > {termination_check_timeout_s}s, skip")
+                continue
             except Exception:
+                signal.alarm(0)
                 continue
         unique_results = filtered_results
+        signal.signal(signal.SIGALRM, old_handler)
 
     # 最终排序并截断
     unique_results.sort(key=lambda x: (x['sigma'], x['strain']))
