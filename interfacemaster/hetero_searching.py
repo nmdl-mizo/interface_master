@@ -1,3 +1,5 @@
+from numpy import *
+from numpy.linalg import *
 from pymatgen.analysis.interfaces.substrate_analyzer import SubstrateAnalyzer
 from pymatgen.core.structure import Structure
 from pymatgen.analysis.interfaces.zsl import ZSLGenerator, ZSLMatch, reduce_vectors
@@ -5,8 +7,6 @@ from pymatgen.core.surface import SlabGenerator
 from interfacemaster.cellcalc import get_primitive_hkl, get_pri_vec_inplane, get_normal_index, get_normal_from_MI, rot
 from interfacemaster.interface_generator import core, convert_vector_index, get_disorientation
 from interfacemaster.tool import get_indices_from_cart
-from numpy import *
-from numpy.linalg import *
 import os
 import shutil
 import json
